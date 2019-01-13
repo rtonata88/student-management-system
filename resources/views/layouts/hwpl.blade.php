@@ -44,8 +44,10 @@
   <!-- Color picker plugins css -->
   <link href="{{asset('bower_components/clockpicker/asColorPicker.css')}}" rel="stylesheet">
 
+  <link href="{{asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.css')}}" rel="stylesheet" type="text/css" />
   <link href="{{asset('bower_components/datatables.net/css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
-  <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+  <link href="{{asset('bower_components/morris.js/morris.css')}}" rel="stylesheet" type="text/css" />
+
 
 
   <style>
@@ -82,7 +84,7 @@
       <div class="navbar-header">
         <div class="top-left-part">
           <!-- Logo -->
-          <a class="logo" href="/admin">
+          <a class="logo" href="/home">
             <!-- Logo icon image, you can use font-icon also --><b>
               <!--This is dark logo icon--><img src="{{asset('assets/plugins/images/admin-logo.png')}}" alt="home" class="dark-logo" /><!--This is light logo icon--><img src="{{asset('assets/plugins/images/admin-logo-dark.png')}}" alt="home" class="light-logo" />
             </b>
@@ -112,7 +114,7 @@
           </div>
           <ul class="nav" id="side-menu">
             <li style="padding: 70px 0 0;">
-              <a href="/admin" class="waves-effect"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>Dashboard</a>
+              <a href="/home" class="waves-effect"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>Dashboard</a>
             </li>
 
             <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-user fa-fw" aria-hidden="true"></i> <span class="hide-menu">Fruit Profiles<span class="fa arrow"></span></span></a>
@@ -122,136 +124,142 @@
               </ul>
             </li>
 
-              <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-bar-chart fa-fw"></i> <span class="hide-menu">Reports<span class="fa arrow"></span></span></a>
-                        <ul class="nav nav-second-level">
-                            <li> <a href="javascript:void(0)"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Periodic Reports</span></a> </li>
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-bar-chart fa-fw"></i> <span class="hide-menu">Reports<span class="fa arrow"></span></span></a>
+              <ul class="nav nav-second-level">
+                <li> <a href="/reports/periodic"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Periodic Reports</span></a> </li>
 
-                            <li> <a href="/report/internal/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Event Reports</span></a> </li>
+                <li> <a href="/report/internal/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Event Reports</span></a> </li>
 
-                            <li> <a href="/report/external/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">External Event Reports</span></a> </li>
-                        </ul>
-                    </li>
-
-              <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i> <span class="hide-menu">Events<span class="fa arrow"></span></span></a>
-                <ul class="nav nav-second-level">
-                  <li> <a href="/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Events</span></a> </li>
-                  <li> <a href="/external-events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">External Events</span></a> </li>
-                  <li> <a href="/event-check-in"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Guest Check In</span></a> </li>
-                </ul>
-              </li>
-
-              <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span class="hide-menu">Setup<span class="fa arrow"></span></span></a>
-                <ul class="nav nav-second-level">
-                  <li> <a href="/activity-types"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Activity Types</span></a> </li>
-                  <li> <a href="/cities"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Cities</span></a> </li>
-                  <li> <a href="/countries"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Countries</span></a> </li>
-                  <li> <a href="/departments"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Departments</span></a> </li>
-                  <li> <a href="/duties"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Duties</span></a> </li>
-                  <li> <a href="/event-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Event Types</span></a> </li>
-                  <li> <a href="/fruit-levels"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Levels</span></a> </li>
-                  <li> <a href="/fruit-roles"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Roles</span></a> </li>
-                  <li> <a href="/fruit-stages"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Stages</span></a> </li>
-                  <li> <a href="/industries"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Industries</span></a> </li>
-                  <li> <a href="/languages"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Languages</span></a> </li>
-                  <li> <a href="/maintainers"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Maintainers</span></a> </li>
-                  <li> <a href="/meeting-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Meeting Types</span></a> </li>
-                  <li> <a href="/organizations"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Organizations</span></a> </li>
-                  <li> <a href="/report-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Report Types</span></a> </li>
-                  <li> <a href="/teams"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Teams</span></a> </li>
-
-                </ul>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{{ route('logout') }}"
-                onclick="event.preventDefault();
-                document.getElementById('logout-form').submit();">
-                <i class="fa fa-sign-out fa-fw" aria-hidden="true"> </i> {{ __('Logout') }}
-              </a>
-
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-              </form>
+                <li> <a href="/report/external/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">External Event Reports</span></a> </li>
+              </ul>
             </li>
-          </ul>
 
-        </div>
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i> <span class="hide-menu">Events<span class="fa arrow"></span></span></a>
+              <ul class="nav nav-second-level">
+                <li> <a href="/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Events</span></a> </li>
+                <li> <a href="/external-events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">External Events</span></a> </li>
+                <li> <a href="/event-check-in"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Guest Check In</span></a> </li>
+              </ul>
+            </li>
+
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span class="hide-menu">Setup<span class="fa arrow"></span></span></a>
+              <ul class="nav nav-second-level">
+                <li> <a href="/titles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Titles</span></a> </li>
+                <li> <a href="/activity-types"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Activity Types</span></a> </li>
+                <li> <a href="/cities"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Cities</span></a> </li>
+                <li> <a href="/countries"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Countries</span></a> </li>
+                <li> <a href="/departments"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Departments</span></a> </li>
+                <li> <a href="/duties"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Duties</span></a> </li>
+                <li> <a href="/event-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Event Types</span></a> </li>
+                <li> <a href="/religions"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Religions</span></a> </li>
+                <li> <a href="/fruit-levels"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Levels</span></a> </li>
+                <li> <a href="/fruit-roles"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Roles</span></a> </li>
+                <li> <a href="/fruit-stages"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Stages</span></a> </li>
+                <li> <a href="/industries"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Industries</span></a> </li>
+                <li> <a href="/languages"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Languages</span></a> </li>
+                <li> <a href="/maintainers"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Maintainers</span></a> </li>
+                <li> <a href="/meeting-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Meeting Types</span></a> </li>
+                <li> <a href="/organizations"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Organizations</span></a> </li>
+                <li> <a href="/report-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Report Types</span></a> </li>
+                <li> <a href="/teams"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Teams</span></a> </li>
+
+              </ul>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ route('logout') }}"
+              onclick="event.preventDefault();
+              document.getElementById('logout-form').submit();">
+              <i class="fa fa-sign-out fa-fw" aria-hidden="true"> </i> {{ __('Logout') }}
+            </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              @csrf
+            </form>
+          </li>
+        </ul>
+
       </div>
-      <!-- ============================================================== -->
-      <!-- End Left Sidebar -->
-      <!-- ============================================================== -->
-      <!-- ============================================================== -->
-      <!-- Page Content -->
-      <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page Content -->
+    <!-- ============================================================== -->
 
-      <div id="page-wrapper">
-       @yield('content')
-       <!-- /.container-fluid -->
-       <footer class="footer text-center"> 2018 &copy; PHILIPS List</footer>
-     </div>
-     <!-- ============================================================== -->
-     <!-- End Page Content -->
-     <!-- ============================================================== -->
+    <div id="page-wrapper">
+     @yield('content')
+     <!-- /.container-fluid -->
+     <footer class="footer text-center"> 2018 &copy; PHILIPS List</footer>
    </div>
-   <!-- /#wrapper -->
-   <!-- jQuery -->
-   <script src="{{asset('assets/plugins/jquery/dist/jquery.min.js')}}"></script>
-   <!-- Bootstrap Core JavaScript -->
-   <script src="{{asset('assets/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-   <!-- Menu Plugin JavaScript -->
-   <script src="{{asset('assets/plugins/sidebar-nav/dist/sidebar-nav.min.js')}}"></script>
-   <!--slimscroll JavaScript -->
-   <script src="{{asset('assets/js/jquery.slimscroll.js')}}"></script>
-   <!--Wave Effects -->
-   <script src="{{asset('assets/js/waves.js')}}"></script>
-   <!--Counter js -->
-   <script src="{{asset('assets/plugins/waypoints/lib/jquery.waypoints.js')}}"></script>
-   <script src="{{asset('assets/plugins/counterup/jquery.counterup.min.js')}}"></script>
+   <!-- ============================================================== -->
+   <!-- End Page Content -->
+   <!-- ============================================================== -->
+ </div>
+ <!-- /#wrapper -->
+ <!-- jQuery -->
+ <script src="{{asset('assets/plugins/jquery/dist/jquery.min.js')}}"></script>
+ <!-- Bootstrap Core JavaScript -->
+ <script src="{{asset('assets/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+ <!-- Menu Plugin JavaScript -->
+ <script src="{{asset('assets/plugins/sidebar-nav/dist/sidebar-nav.min.js')}}"></script>
+ <!--slimscroll JavaScript -->
+ <script src="{{asset('assets/js/jquery.slimscroll.js')}}"></script>
+ <!--Wave Effects -->
+ <script src="{{asset('assets/js/waves.js')}}"></script>
+ <!--Counter js -->
+ <script src="{{asset('assets/plugins/waypoints/lib/jquery.waypoints.js')}}"></script>
+ <script src="{{asset('assets/plugins/counterup/jquery.counterup.min.js')}}"></script>
 
 
-   <!-- Date Picker Plugin JavaScript -->
-   <script src="{{asset('bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
+ <!-- Date Picker Plugin JavaScript -->
+ <script src="{{asset('bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
 
-   <!-- Sparkline chart JavaScript -->
-   <script src="{{asset('assets/plugins/jquery-sparkline/jquery.sparkline.min.js')}}"></script>
+ <!-- Sparkline chart JavaScript -->
+ <script src="{{asset('assets/plugins/jquery-sparkline/jquery.sparkline.min.js')}}"></script>
 
-   <!-- multi-select -->
-   <script src="{{asset('bower_components/multi-select/multi-select.js')}}"></script>
+ <!-- multi-select -->
+ <script src="{{asset('bower_components/multi-select/multi-select.js')}}"></script>
 
-   <!-- Select 2 -->
-   <script src="{{asset('bower_components/select2/dist/js/select2.full.min.js')}}"></script>
-   <!-- Gallery -->
-   <script type="text/javascript" src="{{asset('bower_components/gallery/js/animated-masonry-gallery.js')}}"></script>
-   <script type="text/javascript" src="{{asset('bower_components/gallery/js/jquery.isotope.min.js')}}"></script>
-   <script type="text/javascript" src="{{asset('bower_components/fancybox/ekko-lightbox.min.js')}}"></script>
+ <!-- Select 2 -->
+ <script src="{{asset('bower_components/select2/dist/js/select2.full.min.js')}}"></script>
+ <!-- Gallery -->
+ <script type="text/javascript" src="{{asset('bower_components/gallery/js/animated-masonry-gallery.js')}}"></script>
+ <script type="text/javascript" src="{{asset('bower_components/gallery/js/jquery.isotope.min.js')}}"></script>
+ <script type="text/javascript" src="{{asset('bower_components/fancybox/ekko-lightbox.min.js')}}"></script>
 
-   <!-- Custom Theme JavaScript -->
-   <script src="{{asset('assets/js/custom.min.js')}}"></script>
-   <script src="{{asset('assets/js/dashboard1.js')}}"></script>
-   <script src="{{asset('assets/plugins/toast-master/js/jquery.toast.js')}}"></script>
+ <!-- Custom Theme JavaScript -->
+ <script src="{{asset('assets/js/custom.min.js')}}"></script>
+ <script src="{{asset('assets/js/dashboard1.js')}}"></script>
+ <script src="{{asset('assets/plugins/toast-master/js/jquery.toast.js')}}"></script>
 
-   <!-- Form Wizard -->
-   <script src="{{asset('bower_components/moment/moment.js')}}"></script>
-   <script src="{{asset('bower_components/jquery-wizard-master/jquery.steps.min.js')}}"></script>
-   <script src="{{asset('bower_components/jquery-wizard-master/jquery.validate.min.js')}}"></script>
-   <script src="{{asset('bower_components/summernote/dist/summernote.min.js')}}"></script>
-   <script src="{{asset('bower_components/clockpicker/jquery-clockpicker.min.js')}}"></script>
-   <script src="{{asset('bower_components/typeahead/typeahead.bundle.js')}}"></script>
-   <!--  Data Tables -->
-   <script src="{{asset('bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+ <!-- Form Wizard -->
+ <script src="{{asset('bower_components/moment/moment.js')}}"></script>
+ <script src="{{asset('bower_components/jquery-wizard-master/jquery.steps.min.js')}}"></script>
+ <script src="{{asset('bower_components/jquery-wizard-master/jquery.validate.min.js')}}"></script>
+ <script src="{{asset('bower_components/summernote/dist/summernote.min.js')}}"></script>
+ <script src="{{asset('bower_components/clockpicker/jquery-clockpicker.min.js')}}"></script>
+ <script src="{{asset('bower_components/typeahead/typeahead.bundle.js')}}"></script>
+ <script src="{{asset('bower_components/morris.js/morris.js')}}"></script>
+ <script src="{{asset('bower_components/raphael/raphael.js')}}"></script>
+ <!--  Data Tables -->
+ <script src="{{asset('bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+ <script src="{{asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.js')}}"></script>
 
-   <!-- start - This is for export functionality only -->
-   <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-   <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-   <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-   <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-   <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-   <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-   <!-- end - This is for export functionality only --> 
+ <!-- start - This is for export functionality only -->
+ <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+ <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+ <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+ <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+ <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+ <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+ <!-- end - This is for export functionality only --> 
 
-   <script src="{{asset('js/peaceapp.js')}}"></script>
+ <script src="{{asset('js/peaceapp.js')}}"></script>
+ <script src="{{asset('js/charts.js')}}"></script>
 
-   <script>
+ <script>
     // Date Picker
     $('body').on('focus',".mydatepicker", function(){
       $(this).datepicker({
@@ -273,6 +281,12 @@
 
 
     jQuery(".select2").select2();
+    jQuery(".select2").on('select2:select', function(e){
+      var id = e.params.data.id;
+      var option = $(e.target).children('[value="'+id+'"]');
+      option.detach();
+      $(e.target).append(option).change();
+    });
   </script>
 
   <script type="text/javascript">
@@ -394,7 +408,7 @@
         $(".click2edit").summernote('destroy');
       }
 
-      $('#example23').DataTable({
+      $('#dataTable').DataTable({
         dom: 'Bfrtip',
         buttons: [
         'copy', 'csv', 'excel', 'pdf', 'print'
@@ -421,6 +435,8 @@
   </script>
 
   @stack('dataTableScript')
+  @stack('profiles')
+  @stack('googleCharts')
 
 </body>
 

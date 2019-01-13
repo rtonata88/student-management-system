@@ -97,6 +97,22 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{Form::label('sector[]', 'Select Sector:')}} <span class="text-danger">*</span>
+                                    {{Form::select('sector[]', $sectors, null, ['class' => 'form-control select2 select2-multiple', 'multiple'])}}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{Form::label('team[]', 'Select Team:')}} <span class="text-danger">*</span>
+                                    {{Form::select('team[]', $teams, null, ['class' => 'form-control select2 select2-multiple', 'multiple'])}}
+                                </div>
+                            </div>
+                        </div>
             </section>                
                 <h4 class="page-title"><strong>THEME</strong></h4>
                 <section>
@@ -174,15 +190,15 @@
                         <div class="form-group">
                             {{Form::label('path', 'SELECT PHOTOS')}}
                             {{Form::file('path[]', null, ['class' => 'form-control', 'required'])}}
-                            {{Form::text('description[]', null, ['class' => 'form-control', 'placeholder' => 'Caption', 'required'])}}
+                            {{Form::text('caption[]', null, ['class' => 'form-control', 'placeholder' => 'Caption', 'required'])}}
                         </div>
                         <div class="form-group">
                             {{Form::file('path[]', null, ['class' => 'form-control', 'required'])}}
-                            {{Form::text('description[]', null, ['class' => 'form-control', 'placeholder' => 'Caption', 'required'])}}
+                            {{Form::text('caption[]', null, ['class' => 'form-control', 'placeholder' => 'Caption', 'required'])}}
                         </div>
                         <div class="form-group">
                             {{Form::file('path[]', null, ['class' => 'form-control', 'required'])}}
-                            {{Form::text('description[]', null, ['class' => 'form-control', 'placeholder' => 'Caption', 'required'])}}
+                            {{Form::text('caption[]', null, ['class' => 'form-control', 'placeholder' => 'Caption', 'required'])}}
                         </div>
                     </div>
                 </div>

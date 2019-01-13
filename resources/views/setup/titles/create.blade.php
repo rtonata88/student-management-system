@@ -4,11 +4,11 @@
 <div class="container-fluid">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">COUNTRIES</h4> </div>
+            <h4 class="page-title">TITLES</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
                     <li><a href="/setup">Setup</a></li>
-                    <li class="active">Countries</li>
+                    <li class="active">Titles</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
@@ -17,18 +17,18 @@
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
                     <a href="/countries"> <span class="fa fa-arrow-circle-left"></span> Back</a>
-                    <h3 class="box-title">COUNTRY [NEW]</h3>
+                    <h3 class="box-title">TITLE [NEW]</h3>
                     @if ($errors->any())
                         @foreach ($errors->all() as $error)
                             <p class="text-danger">{{ $error }}</p>
                         @endforeach
                     @endif
 
-                     {!! Form::open(array('url' => '/countries', 'method' => 'post', 'class'=> 'form-horizontal')) !!}
+                     {!! Form::open(array('url' => '/titles', 'method' => 'post', 'class'=> 'form-horizontal')) !!}
                         <div class="form-group">
                           <div class="col-md-5">
-                            {{Form::label('name', 'Country Name')}}
-                            {{Form::text('name', null, ['class' => 'form-control'])}}
+                            {{Form::label('title', 'Title')}}
+                            {{Form::text('title', null, ['class' => 'form-control'])}}
                           </div>
                         </div>
 

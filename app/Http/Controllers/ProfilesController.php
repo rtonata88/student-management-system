@@ -19,6 +19,9 @@ use App\FruitStage;
 use App\Maintainer;
 use App\Team;
 use App\ProfileDocument;
+use App\ProfileAssistant;
+use App\OrganizationProfile;
+use App\Religion;
 use Auth;
 use Freshbitsweb\Laratables\Laratables;
 
@@ -74,7 +77,7 @@ class ProfilesController extends Controller
 		$languages = Language::pluck('name', 'id');
 		$sectors = Sector::pluck('name', 'id');
 		$countries = Country::pluck('name', 'id');
-		$titles = Title::pluck('title', 'title');
+		$titles = Title::pluck('title', 'id');
 		$gender = Gender::pluck('gender', 'id');
 		$organizations = Organization::pluck('name', 'id');
 		$cities = City::pluck('name', 'id');
@@ -83,15 +86,18 @@ class ProfilesController extends Controller
 		$fruit_levels = FruitLevel::pluck('level', 'id');
 		$fruit_stages = FruitStage::pluck('stage', 'id');
 		$maintainers = Maintainer::pluck('name', 'id');
+		$religions = Religion::pluck('name', 'id');
 		$sector_relationships = SectorRelationship::pluck('relationship', 'id');
 
-		return view('profiles.create', compact('languages', 'sectors', 'countries', 'titles', 'gender', 'organizations', 'cities', 'fruit_roles', 'teams', 'fruit_levels', 'fruit_stages', 'maintainers', 'sector_relationships'));
+		return view('profiles.create', compact('languages', 'sectors', 'countries', 'titles', 'gender', 'organizations', 'cities', 'fruit_roles', 'teams', 'fruit_levels', 'fruit_stages', 'maintainers', 'sector_relationships', 'religions', 'languages'));
 	}
 
 	public function show($slug){
 		$profile = Profile::whereSlug($slug)->first();
-		
-		return view('profiles.show', compact('profile'));
+
+		$organizations = $profile->organization_profile;
+		$assistants = $profile->profile_assistant;
+		return view('profiles.show', compact('profile', 'organizations', 'assistants'));
 	}
 
 	public function upload_document(Request $requests){
@@ -125,14 +131,13 @@ class ProfilesController extends Controller
 		return redirect()->back();
 
 	}
-
 	
 	public function edit($slug)
 	{
 		$languages = Language::pluck('name', 'id');
 		$sectors = Sector::pluck('name', 'id');
 		$countries = Country::pluck('name', 'id');
-		$titles = Title::pluck('title', 'title');
+		$titles = Title::pluck('title', 'id');
 		$gender = Gender::pluck('gender', 'id');
 		$organizations = Organization::pluck('name', 'id');
 		$cities = City::pluck('name', 'id');
@@ -142,10 +147,15 @@ class ProfilesController extends Controller
 		$fruit_stages = FruitStage::pluck('stage', 'id');
 		$maintainers = Maintainer::pluck('name', 'id');
 		$sector_relationships = SectorRelationship::pluck('relationship', 'id');
+		$religions = Religion::pluck('name', 'id');
 
 		$profile = Profile::whereSlug($slug)->first();
 
-		return view('profiles.edit', compact('profile','languages', 'sectors', 'countries', 'titles', 'gender', 'organizations', 'cities', 'fruit_roles', 'teams', 'fruit_levels', 'fruit_stages', 'maintainers', 'sector_relationships'));
+		$profile_organizations = $profile->organization_profile;
+		$assistants = $profile->profile_assistant;
+
+
+		return view('profiles.edit', compact('profile','languages', 'sectors', 'countries', 'titles', 'gender', 'organizations', 'cities', 'fruit_roles', 'teams', 'fruit_levels', 'fruit_stages', 'maintainers', 'sector_relationships', 'profile_organizations', 'assistants', 'religions'));
 	}
 
 	public function store(Request $requests)
@@ -167,40 +177,64 @@ class ProfilesController extends Controller
 
 		$profile = new Profile;
 
-		$profile->title 					= $requests->title;
 		$profile->fullname 					= $requests->fullname;
 		$profile->lastname 					= $requests->lastname;
-		$profile->slug						= str_slug($requests->title." ".$requests->fullname." ".$requests->lastname);
+		$profile->dob 						= $requests->dob;
+		$profile->slug						= str_slug($requests->fullname." ".$requests->lastname);
 		$profile->gender_id 				= $requests->gender_id;
 		$profile->bio 						= $requests->bio;
-		$profile->position 					= $requests->position;
-		$profile->organization_id 			= $requests->organization_id;
 		$profile->photo 					= $profile_photo;
 		$profile->sector_id 				= $requests->sector_id;
 		$profile->country_id 				= $requests->country_id;
 		$profile->city_id 					= $requests->city_id;
-		$profile->mobile_no 				= $requests->mobile_no;
-		$profile->work_number 				= $requests->work_number;
-		$profile->email 					= $requests->email;
-		$profile->assistant_name 			= $requests->assistant_name;
-		$profile->assistant_number 			= $requests->assistant_number;
 		$profile->date_networked 			= $requests->date_networked;
 		$profile->fruit_level_id 			= $requests->fruit_level_id;
 		$profile->fruit_stage_id 			= $requests->fruit_stage_id;
 		$profile->maintainer_id 			= $requests->maintainer_id;
 		$profile->fruit_role_id 			= $requests->fruit_role_id;
-		$profile->sector_relationship_id 	= $requests->sector_relationship_id;
+		$profile->religion_id 				= $requests->religion_id;
 		$profile->history 					= $requests->history;
-		$profile->language_id 				= $requests->language_id;
-		$profile->work_number2 				= $requests->work_number2;
-		$profile->work_number_other 		= $requests->work_number_other;
-		$profile->email2 					= $requests->email2;
-		$profile->mobile_no2 				= $requests->mobile_no2;
-		$profile->mobile_no_other			= $requests->mobile_no_other;
-		$profile->assistant_email			= $requests->assistant_email;
+		$profile->pre_poisoned 				= $requests->pre_poisoned;
+		$profile->cult_awareness 			= $requests->cult_awareness;
+		$profile->warp_attendee 			= $requests->warp_attendee;
 		$profile->team_id					= $requests->team_id;
 
 		$profile->save();
+		
+
+		$profile->title()->sync($requests->titles);
+		$profile->language()->sync($requests->languages);
+
+		foreach ($requests->organization as $key1 => $organization) {
+			if($organization){
+				$organization_profile = new OrganizationProfile;
+				$organization_profile->profile_id 		= $profile->id;
+				$organization_profile->organization_id 	= $organization;
+				$organization_profile->position 		= $requests->position[$key1];
+				$organization_profile->work_number 		= $requests->work_number[$key1];
+				$organization_profile->work_number2 	= $requests->work_number2[$key1];
+				$organization_profile->work_number_other = $requests->work_number_other[$key1];
+				$organization_profile->email 			= $requests->email[$key1];
+				$organization_profile->email2 			= $requests->email2[$key1];
+				$organization_profile->email_other 		= $requests->email_other[$key1];
+				$organization_profile->save();
+			}
+		}
+
+		foreach ($requests->assistant_name as $key2 => $assistant) {
+			if($assistant){
+				$assistant_profile = new ProfileAssistant;
+				$assistant_profile->profile_id = $profile->id;
+				$assistant_profile->assistant_name = $assistant;
+				$assistant_profile->assistant_email1 = $requests->assistant_email1[$key2];
+				$assistant_profile->assistant_email2 = $requests->assistant_email2[$key2];
+				$assistant_profile->assistant_email3 = $requests->assistant_email3[$key2];
+				$assistant_profile->assistant_number1 = $requests->assistant_number1[$key2];
+				$assistant_profile->assistant_number2 = $requests->assistant_number2[$key2];
+				$assistant_profile->assistant_number3 = $requests->assistant_number3[$key2];
+				$assistant_profile->save();
+			}
+		}
 
 		Session::flash('message', 'The record has been added, please confirm that it appears in the table below.');
 		return redirect('/profiles/'.$profile->slug);
@@ -234,44 +268,66 @@ class ProfilesController extends Controller
 			$thumbnail_photo->resize(150,150);
 			$thumbnail_photo->save($thumbnail_path.time()."_".$original_photo->getClientOriginalName());
 			$profile_photo = time()."_".$original_photo->getClientOriginalName();    
-			$profile->photo 					= $profile_photo;
+			$profile->photo = $profile_photo;
 		}
 
-		
-
-		$profile->title 					= $requests->title;
 		$profile->fullname 					= $requests->fullname;
 		$profile->lastname 					= $requests->lastname;
-		$profile->slug						= str_slug($requests->title." ".$requests->fullname." ".$requests->lastname);
+		$profile->dob 						= $requests->dob;
+		$profile->slug						= str_slug($requests->fullname." ".$requests->lastname);
 		$profile->gender_id 				= $requests->gender_id;
 		$profile->bio 						= $requests->bio;
-		$profile->position 					= $requests->position;
-		$profile->organization_id 			= $requests->organization_id;
+		$profile->photo 					= $profile_photo;
 		$profile->sector_id 				= $requests->sector_id;
 		$profile->country_id 				= $requests->country_id;
 		$profile->city_id 					= $requests->city_id;
-		$profile->mobile_no 				= $requests->mobile_no;
-		$profile->work_number 				= $requests->work_number;
-		$profile->email 					= $requests->email;
-		$profile->assistant_name 			= $requests->assistant_name;
-		$profile->assistant_number 			= $requests->assistant_number;
 		$profile->date_networked 			= $requests->date_networked;
 		$profile->fruit_level_id 			= $requests->fruit_level_id;
 		$profile->fruit_stage_id 			= $requests->fruit_stage_id;
 		$profile->maintainer_id 			= $requests->maintainer_id;
 		$profile->fruit_role_id 			= $requests->fruit_role_id;
-		$profile->sector_relationship_id 	= $requests->sector_relationship_id;
+		$profile->religion_id 				= $requests->religion_id;
 		$profile->history 					= $requests->history;
-		$profile->language_id 				= $requests->language_id;
-		$profile->work_number2 				= $requests->work_number2;
-		$profile->work_number_other 		= $requests->work_number_other;
-		$profile->email2 					= $requests->email2;
-		$profile->mobile_no2 				= $requests->mobile_no2;
-		$profile->mobile_no_other			= $requests->mobile_no_other;
-		$profile->assistant_email			= $requests->assistant_email;
+		$profile->pre_poisoned 				= $requests->pre_poisoned;
+		$profile->cult_awareness 			= $requests->cult_awareness;
+		$profile->warp_attendee 			= $requests->warp_attendee;
 		$profile->team_id					= $requests->team_id;
 
 		$profile->save();
+
+		$profile->title()->sync($requests->titles);
+		$profile->language()->sync($requests->languages);
+
+		foreach ($requests->organization as $key1 => $organization) {
+			if($organization){
+				$organization_profile = new OrganizationProfile;
+				$organization_profile->profile_id 		= $profile->id;
+				$organization_profile->organization_id 	= $organization;
+				$organization_profile->position 		= $requests->position[$key1];
+				$organization_profile->work_number 		= $requests->work_number[$key1];
+				$organization_profile->work_number2 	= $requests->work_number2[$key1];
+				$organization_profile->work_number_other = $requests->work_number_other[$key1];
+				$organization_profile->email 			= $requests->email[$key1];
+				$organization_profile->email2 			= $requests->email2[$key1];
+				$organization_profile->email_other 		= $requests->email_other[$key1];
+				$organization_profile->save();
+			}
+		}
+
+		foreach ($requests->assistant_name as $key2 => $assistant) {
+			if($assistant){
+				$assistant_profile = new ProfileAssistant;
+				$assistant_profile->profile_id = $profile->id;
+				$assistant_profile->assistant_name = $assistant;
+				$assistant_profile->assistant_email1 = $requests->assistant_email1[$key2];
+				$assistant_profile->assistant_email2 = $requests->assistant_email2[$key2];
+				$assistant_profile->assistant_email3 = $requests->assistant_email3[$key2];
+				$assistant_profile->assistant_number1 = $requests->assistant_number1[$key2];
+				$assistant_profile->assistant_number2 = $requests->assistant_number2[$key2];
+				$assistant_profile->assistant_number3 = $requests->assistant_number3[$key2];
+				$assistant_profile->save();
+			}
+		}
 
 		Session::flash('message', 'Record successfully updated.');
 		return redirect('/profiles/'.$profile->slug);

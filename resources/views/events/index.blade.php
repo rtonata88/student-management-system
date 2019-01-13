@@ -4,7 +4,8 @@
 <div class="container-fluid">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">EVENTS</h4> </div>
+            <h4 class="page-title">EVENTS</h4> 
+        </div>
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
             <a href="/events/create" target="_blank" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> CREATE EVENT</a>
             <ol class="breadcrumb">

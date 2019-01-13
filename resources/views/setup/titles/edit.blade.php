@@ -4,11 +4,11 @@
 <div class="container-fluid">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">COUNTRIES</h4> </div>
+            <h4 class="page-title">TITLES</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
                     <li><a href="/setup">Setup</a></li>
-                    <li class="active">Countries</li>
+                    <li class="active">Titles</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
@@ -16,12 +16,12 @@
         <div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
-                    <h3 class="box-title">{{$country->name}} [update]</h3>
-                     {!! Form::model($country, array('route'=>array('countries.show', $country->id), 'class'=>'form-horizontal', 'method'=>'PATCH')) !!}
+                    <h3 class="box-title">{{$title->title}} [update]</h3>
+                     {!! Form::model($title, array('route'=>array('titles.show', $title->slug), 'class'=>'form-horizontal', 'method'=>'PATCH')) !!}
                         <div class="form-group">
                           <div class="col-md-5">
-                            {{Form::label('name', 'Country Name')}}
-                            {{Form::text('name', null, ['class' => 'form-control'])}}
+                            {{Form::label('title', 'Title')}}
+                            {{Form::text('title', null, ['class' => 'form-control'])}}
                           </div>
                         </div>
 

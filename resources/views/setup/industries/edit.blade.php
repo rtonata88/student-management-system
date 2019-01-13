@@ -20,7 +20,7 @@
                      {!! Form::model($industry, array('route'=>array('industries.show', $industry->slug), 'class'=>'form-horizontal', 'method'=>'PATCH')) !!}
                         <div class="form-group">
                           <div class="col-md-5">
-                            {{Form::label('name', 'Fruit Level')}}
+                            {{Form::label('name', 'Industry Name')}}
                             {{Form::text('name', null, ['class' => 'form-control'])}}
                           </div>
                         </div>
@@ -37,7 +37,5 @@
                 </div>
             </div>
     </div>
-</div>
-</div>
 </div>
 @endsection

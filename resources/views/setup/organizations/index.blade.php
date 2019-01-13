@@ -26,7 +26,7 @@
                                 </div>                            
                                 @endif
                                 <div class="table-responsive">
-                                <table class="table">
+                                <table class="table table-striped border" id="dataTable">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -46,7 +46,7 @@
                                             <td>{{$index + 1}}</td>
                                             <td>{{$organization->name}}</td>
                                             <td>{{$organization->acronym}}</td>
-                                             <td>{{$organization->website}}</td>
+                                            <td>{{$organization->website}}</td>
                                             <td>{{$organization->industry->name}}</td>
                                             <td>{{$organization->sector->name}}</td>
                                             <td>{{$organization->country->name}}</td>

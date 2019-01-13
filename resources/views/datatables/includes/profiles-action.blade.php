@@ -1,3 +1,4 @@
 <div class="form-check">
-  <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
+  <a href="#" action="view" class="m-r-5"> <span class="fa fa-eye"></span> View </a> <strong>|</strong> 
+  <a href="#" action="update" class="m-r-5"> <span class="fa fa-edit"></span> Update </a> 
 </div>

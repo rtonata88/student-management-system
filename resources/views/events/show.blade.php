@@ -134,6 +134,13 @@
                             @endforeach
                         </ul>
 
+                        <h4 class="box-title m-t-10">Hosting teams (Sector)</font></h4>
+                        <ul class="list-icons">
+                            @foreach($event->team as $team)
+                            <li><span class="fa fa-caret-right text-info"></span> {{$team->name}} ({{$team->sector->name}})</li>
+                            @endforeach
+                        </ul>
+
                         <!-- <li><i class="fa fa-check text-success"></i> Sturdy structure</li> -->
                         <h4 class="box-title m-t-40">General Info</h4>
                         <div class="table-responsive">
@@ -241,6 +248,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     @foreach($event->participants as $index=>$participant)
                                     <tr>
                                         <td>{{$index + 1}}</td>
@@ -250,6 +258,7 @@
                                         <td>{{$participant->role->role_name}}</td>
                                         <td>{{$participant->profile->email}}</td>
                                         <td>
+
                                             @if($participant->rsvp_status == 'PENDING')
                                                 <span class="label label-default">PENDING</span>
                                             @elseif($participant->rsvp_status == 'RSVP')
@@ -337,8 +346,7 @@
                                                     <li><a href="{{route('other_participant.activityReport', ['Message', $other_participant->id, $event->slug])}}">Message Report</a></li>
                                                     <li class="divider"></li>
                                                     <li><a href="/events/other-attendees/{{$event->slug}}/delete/{{$other_participant->id}}" onclick="return confirm('are you sure you want to delete this invitation?')">Delete Invitation</a></li>
-                                                    <li><a href="#">Resend Email</a></li>
-                                                    
+                                                    <li><a href="#">Resend Email</a></li>                                                    
                                                 </ul>
                                             </div>
                                         </td>
@@ -434,31 +442,48 @@
                                                    <th>Organization</th>
                                                    <th>Gender</th>
                                                    <th>Country</th>
+                                                   <th>Role</th>
                                                    <th>Action</th>
                                                </tr>
                                            </thead>
                                     </table>
                                     @push('dataTableScript')
                                         <script>
+                                            var selected = new Array();
                                             $(document).ready(function() {
                                                 $('#profiles-table').DataTable({
                                                     serverSide: true,
                                                     processing: true,
                                                     responsive: true,
-                                                    ajax: "{{ route('profiles-table') }}",
+                                                    ajax: "{!! route('liaising-list', ['slug' => $event->slug]) !!}",
                                                     columns: [
                                                         { name: 'fullname' },
                                                         { name: 'lastname' },
                                                         { name: 'organization_id' },
                                                         { name: 'gender_id' },
                                                         { name: 'country_id' },
+                                                        { name: 'role', orderable: false, searchable: false },
                                                         { name: 'action', orderable: false, searchable: false }
                                                     ]
                                                 });
-                                                $('#profiles-table').on('click', 'tr', function () {
-                                                    alert('Clicked row id is: ' + $(this).data('id'));
+                                                $('#profiles-table').on('click', 'tr input', function () {
+                                                    var isChecked = $('#check_'+$(this).data('id')+':checkbox:checked').length > 0;
+                                                    var profile_id = $(this).data('id');
+
+                                                    if(isChecked) {                                                        
+                                                        selected.push(profile_id);
+                                                    } else {
+                                                        selected.splice(selected.indexOf(profile_id), 1 );
+                                                    }
                                                 });
                                             });
+
+                                            function remove(arr, value) {
+                                               return arr.filter(function(ele){
+                                                   return ele != value;
+                                               });
+
+                                            }
                                         </script>
                                     @endpush
                                 </div>

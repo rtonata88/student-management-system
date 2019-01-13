@@ -42,9 +42,12 @@ Route::resource('/sector-relationships', 'SectorRelationshipsController');
 Route::resource('/sectors', 'SectorsController');
 Route::resource('/teams', 'TeamsController');
 Route::resource('/activity-types', 'ActivityTypeController');
+Route::resource('/titles', 'TitlesController');
+Route::resource('/religions', 'ReligionsController');
 
 //PROFILES
 Route::resource('/profiles', 'ProfilesController');
+Route::get('/tbl-profiles', 'ProfilesController@getSimpleDatatablesData')->name('tbl-profiles');
 Route::post('/profiles/documents', 'ProfilesController@upload_document');
 Route::get('/profile/documents/{id}/download', 'ProfilesController@download_document');
 Route::get('/profile/documents/{id}/delete', 'ProfilesController@delete_document');
@@ -89,7 +92,7 @@ Route::get('/events/{slug}/{action}/{participant}', 'EventsController@manage');
 Route::post('/event-staff/add/{slug}', 'EventsController@invite_staff');
 Route::get('/event-staff/remove/{slug}', 'EventsController@remove_staff');
 
-Route::get('/profiles-data', 'ProfilesController@getSimpleDatatablesData')->name('profiles-table');
+Route::get('/liaising-list/{slug}', 'EventsController@getSimpleDatatablesData')->name('liaising-list');
 
 Route::get('/event-co-host/create/{slug}', 'EventCoHostsController@create');
 Route::post('/event-co-host/create/{slug}', 'EventCoHostsController@store')->name('co-hosts.create');
@@ -130,3 +133,8 @@ Route::post('report/events/create/{slug}', 'ReportsController@events_report_stor
 Route::post('report/events/edit/{slug}/{id}', 'ReportsController@events_report_update')->name('event.report.edit');
 Route::get('report/events/view/{slug}', 'ReportsController@events_report_view');
 Route::get('report/events/print/{slug}', 'ReportsController@events_report_print');
+
+Route::get('reports/periodic', 'ReportsController@periodic_index');
+Route::get('reports/sector/{sector}', 'ReportsController@sector_report');
+Route::post('/reports/periodic/filters/{sector}', 'ReportsController@report_filter');
+Route::get('/reports/periodic/excel/{sector}', 'ReportsController@export');

@@ -9,6 +9,8 @@ use App\ExternalEventParticipant;
 use App\EventReportConfiguration;
 use App\Country;
 use App\City;
+use App\Sector;
+use App\Team;
 use Auth;
 
 class ExternalEventsController extends Controller
@@ -28,17 +30,30 @@ class ExternalEventsController extends Controller
     	return view('external-events.index', compact('events'));
     }
 
+    public function show(){
+    	$event = Event::whereSlug($slug)->first();
+    	$countries = Country::pluck('name', 'id');
+		$cities = City::pluck('name', 'id');
+		$sectors = Sector::pluck('name', 'id');
+		$teams = Team::pluck('name', 'id');
+    	return view('external-events.show', compact('event', 'countries','cities','sectors', 'teams'));
+    }
+
     public function create(){
     	$countries = Country::pluck('name', 'id');
 		$cities = City::pluck('name', 'id');
-		return view('external-events.create', compact('countries','cities'));
+		$sectors = Sector::pluck('name', 'id');
+		$teams = Team::pluck('name', 'id');
+		return view('external-events.create', compact('countries','cities','sectors', 'teams'));
     }
 
     public function edit($slug){
     	$event = Event::whereSlug($slug)->first();
     	$countries = Country::pluck('name', 'id');
 		$cities = City::pluck('name', 'id');
-		return view('external-events.edit', compact('event', 'countries','cities'));
+		$sectors = Sector::pluck('name', 'id');
+		$teams = Team::pluck('name', 'id');
+		return view('external-events.edit', compact('event', 'countries','cities','sectors', 'teams'));
 
     }
 
@@ -85,6 +100,9 @@ class ExternalEventsController extends Controller
         $report->feedback_type = 'summary';
 		$report->summary = $request->summary_outcome;
 		$report->save();
+
+		$event->team()->sync($request->team);
+		$event->sector()->sync($request->sector);
 
 		return redirect('/external-events');
 

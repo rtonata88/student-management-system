@@ -30,4 +30,8 @@ class Activity extends Model
     {
         return $this->belongsTo('App\Event');
     }
+
+    public function liaising_activities(){
+        
+    }
 }

@@ -18,6 +18,7 @@ use App\User;
 use App\Sector;
 use App\Team;
 use App\EventStaff;
+use Freshbitsweb\Laratables\Laratables;
 
 use Auth;
 
@@ -34,6 +35,36 @@ class EventsController extends Controller
 
 		return view('events.index', compact('events'));
 	}
+
+	/**
+     * return data of the simple datatables.
+     *
+     * @return Json
+     */
+    public function getSimpleDatatablesData()
+    {
+        return Laratables::recordsOf(Profile::class);
+    }
+    /**
+     * return data of the Custom columns datatables.
+     *
+     * @return Json
+     */
+    public function getCustomColumnDatatablesData()
+    {
+        return Laratables::recordsOf(Profile::class);
+    }
+
+    /**
+     * return data of the Extra data datatables attribute data.
+     *
+     * @return Json
+     */
+    public function getExtraDataDatatablesAttributesData()
+    {
+        return Laratables::recordsOf(Profile::class);
+    }
+
 
 	public function create(){
 		$countries = Country::pluck('name', 'id');
@@ -182,36 +213,21 @@ class EventsController extends Controller
 				$event->team()->sync($requests->team);
 				$event->sector()->sync($requests->sector);
 
-				//Delete Event related models
-				$event->discussions()->delete();
-				$event->participant_roles()->delete();
-				$event->staff_roles()->delete();
+				
 
 				//Discussions
 				foreach ($requests->event_discussion as $discussion_key => $discussion_value) {
-					$discussion = new EventDiscussion;
-					$discussion->event_id = $event->id;
-					$discussion->discussion_point = $discussion_value;
-					$discussion->save();
-
+					EventDiscussion::firstOrCreate(['event_id' => $event->id, 'discussion_point' => $discussion_value]);
 				}
 
 				//Participant Roles
 				foreach ($requests->participant_roles as $participant_key => $participant_value) {
-					$participant = new EventParticipantRole;
-					$participant->event_id = $event->id;
-					$participant->role_name = $participant_value;
-					$participant->save();
-
+					EventParticipantRole::firstOrCreate(['event_id' => $event->id, 'role_name' => $participant_value]);
 				}
 
 				//Staff Roles
 				foreach ($requests->staff_roles as $staff_role_key => $staff_role_value) {
-					$staff_role = new EventStaffRole;
-					$staff_role->event_id = $event->id;
-					$staff_role->role_name = $staff_role_value;
-					$staff_role->save();
-
+					EventStaffRole::firstOrCreate(['event_id' => $event->id, 'role_name' => $staff_role_value]);;
 				}
 
 				//Create event activity log

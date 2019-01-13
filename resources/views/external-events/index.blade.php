@@ -24,8 +24,8 @@
                             <div class="panel-action">
                                     <div class="dropdown"> <a class="dropdown-toggle" id="examplePanelDropdown" data-toggle="dropdown" href="#" aria-expanded="false" role="button"><span class="fa fa-bars"></span></a>
                                         <ul class="dropdown-menu bullet dropdown-menu-right " aria-labelledby="examplePanelDropdown" role="menu" >
-                                            <li role="presentation"><a href="/events/{{$event->slug}}" role="menuitem">
-                                                <i class="icon wb-reply"></i> <span style="color:#000">View </span></a>
+                                            <li role="presentation"><a href="/report/events/edit/{{$event->slug}}" role="menuitem">
+                                                <i class="icon wb-reply"></i> <span style="color:#000">View Report </span></a>
                                             </li>
                                              <li role="presentation"><a href="/external-events/{{$event->slug}}/edit" role="menuitem">
                                                 <i class="icon wb-reply"></i> <span style="color:#000"> Edit</span></a>

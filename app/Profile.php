@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
+use Request;
 
 use DB;
 use \Nicolaslopezj\Searchable\SearchableTrait;
@@ -17,10 +19,6 @@ class Profile extends Model
             'profiles.lastname' => 3,
         ],
     ];
-
-    public function language(){
-    	return $this->belongsTo('App\Language');
-    }
 
     public function maintainer(){
     	return $this->belongsTo('App\Maintainer');
@@ -147,7 +145,35 @@ class Profile extends Model
      */
     public static function laratablesCustomAction($profile)
     {
-        return view('datatables.includes.profiles-action')->render();
+        $route = Route::currentRouteName();
+
+        if($route == 'liaising-list'){
+            $html = '<div class="form-check">
+                        <input class="form-check-input position-static" type="checkbox" data-id = "'.$profile->id.'" id="check_'.$profile->id.'" value="option1" aria-label="...">
+                    </div>';
+            return $html;
+        }
+
+        $html = '<div class="form-check">
+                  <a href="/profiles/'.$profile->slug.'" action="view" class="m-r-5"> <span class="fa fa-eye"></span> View </a> <strong>|</strong> 
+                  <a href="/profiles/'.$profile->slug.'/edit" action="update" class="m-r-5"> <span class="fa fa-edit"></span> Update </a> 
+                </div>';
+        return $html;
+    }
+
+    public static function laratablesCustomRole($profile)
+    {
+        $path = Request::path();
+        $slug = substr($path, (strrpos($path, '/')+1), strlen($path));
+        $event = DB::table('events')->select('id')->where('slug', $slug)->first();
+        $participant_roles = DB::table('event_participant_roles')->select('id', 'role_name')->where('event_id', $event->id)->get();
+        $html = '<select class="form-control" id="'.$profile->id.'" name="selected_role['.$profile->id.']">';
+        foreach ($participant_roles as $role) {
+           $html .= '<option value="'.$role->id.'"> '.$role->role_name.'</option>';
+        }
+        $html .='</select>';
+
+        return $html;
     }
 
 
@@ -182,8 +208,17 @@ class Profile extends Model
     public static function laratablesSearchName($query, $searchValue)
     {
         return $query->orWhere('fullname', 'like', '%'. $searchValue. '%')
-            ->orWhere('lastname', 'like', '%'. $searchValue. '%')
-        ;
+            ->orWhere('lastname', 'like', '%'. $searchValue. '%');
+    }
+
+    /**
+     * Additional columns to be loaded for datatables.
+     *
+     * @return array
+     */
+    public static function laratablesAdditionalColumns()
+    {
+        return ['slug'];
     }
 
     /**
@@ -194,6 +229,8 @@ class Profile extends Model
     public function laratablesRowData()
     {
         return [
+            // 'edit-url' => route('profiles.edit', ['slug' => $this->slug]),
+            // 'show-url' => route('profiles.show', ['slug' => $this->slug]),
             'id' => $this->id,
         ];
     }
@@ -208,6 +245,22 @@ class Profile extends Model
 
     public function check_ins(){
         return $this->hasMany('App\EventCheckIn');
+    }
+
+    public function title(){
+        return $this->belongsToMany('App\Title');
+    }
+
+    public function language(){
+        return $this->belongsToMany('App\Language');
+    }
+
+    public function organization_profile(){
+        return $this->hasMany('App\OrganizationProfile', 'profile_id');
+    }
+
+    public function profile_assistant(){
+        return $this->hasMany('App\ProfileAssistant');
     }
 
 }
