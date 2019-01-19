@@ -127,6 +127,7 @@
             <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-bar-chart fa-fw"></i> <span class="hide-menu">Reports<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
                 <li> <a href="/reports/periodic"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Periodic Reports</span></a> </li>
+                 <li> <a href="/reports/profiles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Profiles Report</span></a> </li>
 
                 <li> <a href="/report/internal/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Event Reports</span></a> </li>
 

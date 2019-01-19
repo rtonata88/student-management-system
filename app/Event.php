@@ -127,4 +127,19 @@ class Event extends Model
     public function sector(){
         return $this->belongsToMany('App\Sector');
     }
+
+    public function numberOfParticipantsPerRole($role){
+        
+        $event = $this;
+        return DB::table('event_participants')
+                        ->join('event_participant_roles', function($join) use ($event) {
+                            $join->on('event_participant_roles.id', '=', 'event_participants.participant_role_id') 
+                            ->where('event_participant_roles.event_id', '=',$this->id);
+                        })
+                        ->selectRaw('count(event_participants.participant_role_id) AS Number ')
+                        ->where('event_participant_roles.id', $role)
+                        ->where('event_participant_roles.event_id', $this->id)
+                        ->groupBy('event_participants.participant_role_id')
+                        ->first();
+    }
 }

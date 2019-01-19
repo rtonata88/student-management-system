@@ -134,4 +134,15 @@ class ActivityTeamReport extends Model
     				->whereRaw("DATE_FORMAT(`start_date`, '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'")
     				->get();
     }
+
+
+    public static function sectorsDashboardAnalysis(){
+        return DB::table('activities')
+            ->join('activity_profile', 'activity_profile.activity_id', '=', 'activities.id')
+            ->join('profiles', 'profiles.id', '=', 'activity_profile.profile_id')
+            ->join('sectors', 'sectors.id', '=', 'profiles.sector_id')  
+            ->selectRaw('sectors.name, count(*) as count')          
+            ->groupBy('profiles.sector_id')
+            ->get();
+    }
 }

@@ -71,6 +71,8 @@ Route::post('/media-coverage/{id}', 'MediaCoverageController@update')->name('med
 //EVENTS
 Route::resource('/events', 'EventsController');
 Route::get('/events/other-attendees/{slug}/{action}/{participant}', 'EventsController@manage_other_attendees');
+Route::post('/save-invite/{slug}', 'EventsController@saveInviteFromAjaxTable')->name('save-invite');
+Route::post('/update-invite/{slug}', 'EventsController@updateInviteFromAjaxTable')->name('update-invite');
 
 //EVENTS ACTIVITIES REPORT - MAIN ATENDEES
 Route::get('/events/activity-report/{type}/{person}/{event_slug}', 'ActivitiesController@create_activity_report_from_events')->name('main_attendees.activityReport');
@@ -135,6 +137,8 @@ Route::get('report/events/view/{slug}', 'ReportsController@events_report_view');
 Route::get('report/events/print/{slug}', 'ReportsController@events_report_print');
 
 Route::get('reports/periodic', 'ReportsController@periodic_index');
+Route::get('reports/profiles', 'ReportsController@getProfilesData');
 Route::get('reports/sector/{sector}', 'ReportsController@sector_report');
 Route::post('/reports/periodic/filters/{sector}', 'ReportsController@report_filter');
 Route::get('/reports/periodic/excel/{sector}', 'ReportsController@export');
+Route::post('/reports/profiles/excel', 'ReportsController@exportProfilesToExcel');

@@ -148,9 +148,24 @@ class Profile extends Model
         $route = Route::currentRouteName();
 
         if($route == 'liaising-list'){
-            $html = '<div class="form-check">
+
+            $path = Request::path();
+            $slug = substr($path, (strrpos($path, '/')+1), strlen($path));
+            $event = DB::table('events')->select('id')->where('slug', $slug)->first();
+            $event_participation = DB::table('event_participants')
+                                        ->select('profile_id')
+                                        ->where('profile_id', $profile->id)
+                                        ->where('event_id', $event->id)
+                                        ->first();
+            if(count($event_participation) > 0){
+                $html = '<div class="form-check">
+                        <input class="form-check-input position-static" type="checkbox" data-id = "'.$profile->id.'" id="check_'.$profile->id.'" checked aria-label="...">
+                    </div>';
+            } else {
+                $html = '<div class="form-check">
                         <input class="form-check-input position-static" type="checkbox" data-id = "'.$profile->id.'" id="check_'.$profile->id.'" value="option1" aria-label="...">
                     </div>';
+            }
             return $html;
         }
 
@@ -166,10 +181,26 @@ class Profile extends Model
         $path = Request::path();
         $slug = substr($path, (strrpos($path, '/')+1), strlen($path));
         $event = DB::table('events')->select('id')->where('slug', $slug)->first();
+        
         $participant_roles = DB::table('event_participant_roles')->select('id', 'role_name')->where('event_id', $event->id)->get();
-        $html = '<select class="form-control" id="'.$profile->id.'" name="selected_role['.$profile->id.']">';
+        $html = '<select class="form-control ajax-participant-role" data-id = "'.$profile->id.'" id="selected_role_'.$profile->id.'" name="selected_role['.$profile->id.']">';
+
+        $event_participation = DB::table('event_participants')
+                                        ->select('participant_role_id')
+                                        ->where('profile_id', $profile->id)
+                                        ->where('event_id', $event->id)
+                                        ->first();
+
         foreach ($participant_roles as $role) {
-           $html .= '<option value="'.$role->id.'"> '.$role->role_name.'</option>';
+            if(count($event_participation) == 0){
+                $html .= '<option value="'.$role->id.'"> '.$role->role_name.'</option>';
+            } else {
+                if($role->id == $event_participation->participant_role_id){
+                    $html .= '<option value="'.$role->id.'" selected> '.$role->role_name.'</option>';
+                }   else {
+                    $html .= '<option value="'.$role->id.'"> '.$role->role_name.'</option>';
+                }
+            }
         }
         $html .='</select>';
 

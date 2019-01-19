@@ -386,4 +386,26 @@ class EventsController extends Controller
 		EventStaff::destroy($id);
 		return redirect()->back();
 	}
+
+	public function saveInviteFromAjaxTable(Request $requests, $slug){
+		$event = Event::whereSlug($slug)->first();
+		$event_participation = EventParticipant::where('profile_id', $requests->profile_id)->where('event_id', $event->id)->first();
+		if(count($event_participation) == 0){
+			$event_participation = new EventParticipant;
+			$event_participation->event_id = $event->id;
+			$event_participation->profile_id = $requests->profile_id;
+			$event_participation->participant_role_id = $requests->role_id;
+			$event_participation->rsvp_status = 'PENDING';
+			$event_participation->save();
+		}
+	}
+
+	public function updateInviteFromAjaxTable(Request $requests, $slug){
+		$event = Event::whereSlug($slug)->first();
+		$event_participation = EventParticipant::where('profile_id', $requests->profile_id)->where('event_id', $event->id)->first();
+		if(count($event_participation) > 0){
+			$event_participation->participant_role_id = $requests->role_id;
+			$event_participation->save();
+		}
+	}
 }

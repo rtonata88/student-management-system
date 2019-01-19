@@ -21,7 +21,11 @@
                     <li>
                         <div class="sparklinedash"></div>
                     </li>
-                    <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple">4</span></li>
+                    <li class="text-right"><i class="ti-arrow-up text-purple"></i> 
+                        <span class="counter text-purple">
+                            {{$event->numberOfParticipantsPerRole($participant_role->id)->Number}}     
+                        </span>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -223,9 +227,6 @@
                              <button class="btn btn-info" data-toggle="modal" data-target="#profileData">
                                 <span class="fa fa-users"></span> GENERATE LIAISING LIST
                             </button>
-                            <button class="btn btn-info">
-                                <span class="fa fa-file-excel-o"></span> EXPORT LIST
-                            </button>
                         </div>
                         
 
@@ -234,13 +235,12 @@
                             
                         
                         <h4 class="box-title m-t-40">MAIN ATTENDEES</h4>
-                            <table class="table table-bordered" cellspacing="0" width="100%">
+                            <table class="table table-bordered" id="dataTable" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>NAME</th>
                                         <th>POSITION</th>
-                                        <th>ORGANIZATION</th>
                                         <th>ROLE</th>
                                         <th>EMAIL</th>
                                         <th>RSVP STATUS</th>
@@ -254,7 +254,6 @@
                                         <td>{{$index + 1}}</td>
                                         <td>{{$participant->profile->fullname}} {{$participant->profile->lastname}}</td>
                                         <td>{{$participant->profile->position}}</td>
-                                        <td>{{$participant->profile->organization->acronym}}</td>
                                         <td>{{$participant->role->role_name}}</td>
                                         <td>{{$participant->profile->email}}</td>
                                         <td>
@@ -439,7 +438,8 @@
                                                <tr>
                                                    <th>Fullname</th>
                                                    <th>Lastname</th>
-                                                   <th>Organization</th>
+                                                   <th>Sector</th>
+                                                   <th>Team</th>
                                                    <th>Gender</th>
                                                    <th>Country</th>
                                                    <th>Role</th>
@@ -449,7 +449,8 @@
                                     </table>
                                     @push('dataTableScript')
                                         <script>
-                                            var selected = new Array();
+                                            
+                                            //var profile_id = 0;
                                             $(document).ready(function() {
                                                 $('#profiles-table').DataTable({
                                                     serverSide: true,
@@ -459,9 +460,10 @@
                                                     columns: [
                                                         { name: 'fullname' },
                                                         { name: 'lastname' },
-                                                        { name: 'organization_id' },
-                                                        { name: 'gender_id' },
-                                                        { name: 'country_id' },
+                                                        { name: 'sector.name' },
+                                                        { name: 'team.name' },
+                                                        { name: 'gender.gender' },
+                                                        { name: 'country.name' },
                                                         { name: 'role', orderable: false, searchable: false },
                                                         { name: 'action', orderable: false, searchable: false }
                                                     ]
@@ -471,27 +473,31 @@
                                                     var profile_id = $(this).data('id');
 
                                                     if(isChecked) {                                                        
-                                                        selected.push(profile_id);
-                                                    } else {
-                                                        selected.splice(selected.indexOf(profile_id), 1 );
+                                                        $.ajax({
+                                                          url: "{!! route('save-invite', ['slug' => $event->slug]) !!}",
+                                                          type: 'POST',
+                                                          data: {'_token':"<?php echo csrf_token() ?>", 'profile_id':profile_id, 'role_id':$('#selected_role_'+profile_id).val()}
+                                                        });
                                                     }
                                                 });
+                                                
+
+                                                 $('#profiles-table').on('change', 'tr select', function () {
+                                                    var profile_id = $(this).data('id');
+                                                    $.ajax({
+                                                          url: "{!! route('update-invite', ['slug' => $event->slug]) !!}",
+                                                          type: 'POST',
+                                                          data: {'_token':"<?php echo csrf_token() ?>", 'profile_id':profile_id, 'role_id':$('#selected_role_'+profile_id).val()}
+                                                        });
+                                                });
                                             });
-
-                                            function remove(arr, value) {
-                                               return arr.filter(function(ele){
-                                                   return ele != value;
-                                               });
-
-                                            }
+                                            
                                         </script>
                                     @endpush
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">CANCEL</button>
-                                    <button type="submit" class="btn btn-success">
-                                             <span class="fa fa-save"></span> INVITE SELECTED
-                                         </button>
+                                    
                                 </div>
                                 </form>
                                 
