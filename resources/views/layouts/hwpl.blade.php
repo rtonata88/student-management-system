@@ -114,17 +114,37 @@
           </div>
           <ul class="nav" id="side-menu">
             <li style="padding: 70px 0 0;">
-              <a href="/home" class="waves-effect"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>Dashboard</a>
+              <a href="/home" class="waves-effect"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>DASHBOARD</a>
             </li>
 
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-user fa-fw" aria-hidden="true"></i> <span class="hide-menu">Fruit Profiles<span class="fa arrow"></span></span></a>
+             <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-users fa-fw" aria-hidden="true"></i> <span class="hide-menu">PROFILES<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
                 <li> <a href="/profiles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Profiles</span></a> </li>
-                <li> <a href="/profiles/create"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">New Profile</span></a> </li>
+                <li> <a href="/warp-attendees"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">WARP Attendees</span></a> </li>
               </ul>
             </li>
 
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-bar-chart fa-fw"></i> <span class="hide-menu">Reports<span class="fa arrow"></span></span></a>
+            <li>
+              <a href="/communication" class="waves-effect"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>COMMUNICATION</a>
+            </li>
+
+            <li>
+              <a href="/documentation" class="waves-effect"><i class="fa fa-files-o fa-fw" aria-hidden="true"></i>DOCUMENTATION</a>
+            </li>
+
+             <li>
+              <a href="/campaigns" class="waves-effect"><i class="fa fa-bullhorn fa-fw" aria-hidden="true"></i>CAMPAIGNS</a>
+            </li>
+
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i> <span class="hide-menu">EVENTS<span class="fa arrow"></span></span></a>
+              <ul class="nav nav-second-level">
+                <li> <a href="/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Events</span></a> </li>
+                <li> <a href="/external-events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">External Events</span></a> </li>
+                <li> <a href="/event-check-in"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Guest Check In</span></a> </li>
+              </ul>
+            </li>
+
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-bar-chart fa-fw"></i> <span class="hide-menu">REPORTS<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
                 <li> <a href="/reports/periodic"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Periodic Reports</span></a> </li>
                  <li> <a href="/reports/profiles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Profiles Report</span></a> </li>
@@ -135,15 +155,14 @@
               </ul>
             </li>
 
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i> <span class="hide-menu">Events<span class="fa arrow"></span></span></a>
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-lock fa-fw" aria-hidden="true"></i> <span class="hide-menu">ACCESS MANAGEMENT<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
-                <li> <a href="/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Events</span></a> </li>
-                <li> <a href="/external-events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">External Events</span></a> </li>
-                <li> <a href="/event-check-in"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Guest Check In</span></a> </li>
+                <li> <a href="/users"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Users</span></a> </li>
+                <li> <a href="/external-events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Roles</span></a> </li>
               </ul>
             </li>
 
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span class="hide-menu">Setup<span class="fa arrow"></span></span></a>
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span class="hide-menu">SETUP<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
                 <li> <a href="/titles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Titles</span></a> </li>
                 <li> <a href="/activity-types"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Activity Types</span></a> </li>
@@ -163,6 +182,7 @@
                 <li> <a href="/organizations"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Organizations</span></a> </li>
                 <li> <a href="/report-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Report Types</span></a> </li>
                 <li> <a href="/teams"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Teams</span></a> </li>
+                <li> <a href="/document-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Document Types</span></a> </li>
 
               </ul>
             </li>
@@ -414,6 +434,10 @@
         buttons: [
         'copy', 'csv', 'excel', 'pdf', 'print'
         ]
+      });
+
+      $('#dataTable2').DataTable({
+        dom: 'Bfrtip'
       });
       $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary m-r-10');
 

@@ -16,6 +16,7 @@ use App\ActivityTeamReport;
 use App\Team;
 use Excel;
 use App\Exports\PeriodicReportsExport;
+use App\Exports\ProfilesExport;
 use Freshbitsweb\Laratables\Laratables;
 
 class ReportsController extends Controller {
@@ -117,14 +118,13 @@ class ReportsController extends Controller {
      * @return Json
      */
     public function getProfilesData() {
-        $profiles = Profile::paginate(50);
+        $profiles = Profile::with('sector', 'team', 'country', 'gender')->get();;
         $teams = Team::pluck('name', 'id');
         return view('reports.profiles.index', compact('profiles', 'teams'));
     }
 
     public function exportProfilesToExcel(Request $requests){
-         $export = new PeriodicReportsExport($sector);
-        return Excel::download($export, $sector . '.xlsx');
+        return Excel::download(new ProfilesExport, 'profiles.xlsx');
     }
 
 
@@ -141,6 +141,8 @@ class ReportsController extends Controller {
     }
 
     public function report_filter(Request $requests, $sector) {
+
+
         $sector = Sector::where('name', $sector)->first();
 
         $teams = Team::where('sector_id', $sector->id)->pluck('name', 'id');
@@ -148,6 +150,7 @@ class ReportsController extends Controller {
         $media_coverage_report = ActivityTeamReport::media_coverage($sector->id, $requests->team_id, $requests->start_date, $requests->end_date);
         $events = ActivityTeamReport::events($sector->id, $requests->team_id, $requests->start_date, $requests->end_date);
 
+        
         $start_date = $requests->start_date;
         $end_date = $requests->end_date;
 

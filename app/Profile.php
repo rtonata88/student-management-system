@@ -169,9 +169,10 @@ class Profile extends Model
             return $html;
         }
 
-        $html = '<div class="form-check">
-                  <a href="/profiles/'.$profile->slug.'" action="view" class="m-r-5"> <span class="fa fa-eye"></span> View </a> <strong>|</strong> 
-                  <a href="/profiles/'.$profile->slug.'/edit" action="update" class="m-r-5"> <span class="fa fa-edit"></span> Update </a> 
+        $html = '<div class="form-check"> 
+                  <a href="/profiles/'.$profile->slug.'" action="view" class="m-r-5"> <span class="fa fa-eye"></span> </a> 
+                  <a href="/profiles/'.$profile->slug.'/edit" action="update" class="m-r-5"> <span class="fa fa-edit"></span> </a>
+                  
                 </div>';
         return $html;
     }

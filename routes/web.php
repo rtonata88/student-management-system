@@ -44,6 +44,17 @@ Route::resource('/teams', 'TeamsController');
 Route::resource('/activity-types', 'ActivityTypeController');
 Route::resource('/titles', 'TitlesController');
 Route::resource('/religions', 'ReligionsController');
+Route::resource('/users', 'UsersController');
+Route::resource('/documentation', 'DocumentationsController');
+Route::resource('/document-types', 'DocumentTypesController');
+Route::resource('/warp-attendees', 'WarpSummitAttendeesController');
+Route::resource('/campaigns', 'CampaignsController');
+Route::get('/campaign-report/{id}', 'CampaignsController@report_index')->name('campaigns.report');
+Route::post('/campaign-report/{id}', 'CampaignsController@report')->name('campaigns.report.save');
+Route::get('/documentation-download/{id}', 'DocumentationsController@download')->name('documentation-download');
+
+//USERS
+Route::get('/users/{id}/disable-or-enable', 'UsersController@disableEnableUser')->name('users.disableEnable');
 
 //PROFILES
 Route::resource('/profiles', 'ProfilesController');
@@ -141,4 +152,4 @@ Route::get('reports/profiles', 'ReportsController@getProfilesData');
 Route::get('reports/sector/{sector}', 'ReportsController@sector_report');
 Route::post('/reports/periodic/filters/{sector}', 'ReportsController@report_filter');
 Route::get('/reports/periodic/excel/{sector}', 'ReportsController@export');
-Route::post('/reports/profiles/excel', 'ReportsController@exportProfilesToExcel');
+Route::post('/reports/profiles/excel', 'ReportsController@exportProfilesToExcel')->name('export-profiles');

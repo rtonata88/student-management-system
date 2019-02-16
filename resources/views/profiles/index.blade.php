@@ -7,6 +7,7 @@
             <h4 class="page-title">FRUIT PROFILES</h4> 
         </div>
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <a href="/profiles/create" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD PROFILE</a>
             <ol class="breadcrumb">
                 <li class="active">Fruit Profiles</li>
            </ol>
@@ -22,9 +23,9 @@
              <tr>
                  <th>Fullname</th>
                  <th>Lastname</th>
-                 <th>Sector</th>
+                 <th>Mobile</th>
+                 <th>Email</th>
                  <th>Team</th>
-                 <th>Gender</th>
                  <th>Country</th>
                  <th>Action</th>
              </tr>
@@ -37,6 +38,18 @@
  @push('dataTableScript')
  <script>
     $(document).ready(function() {
+        var popOverSettings = {
+            placement: 'top',
+            container: 'body',
+            html: true,
+            selector: '[data-toggle="popover"]', //Sepcify the selector here
+            content: function () {
+                return $('#popover-content').html();
+            }
+        }
+
+    $('body').popover(popOverSettings);
+
         $('#tbl-profiles').DataTable({
             serverSide: true,
             processing: true,
@@ -48,9 +61,9 @@
             columns: [
             { name: 'fullname' },
             { name: 'lastname' },
-            { name: 'sector.name' },
+            { name: 'mobile_no' },
+            { name: 'email' },
             { name: 'team.name' },
-            { name: 'gender.gender' },
             { name: 'country.name' },
             { name: 'action', orderable: false, searchable: false }
             ]

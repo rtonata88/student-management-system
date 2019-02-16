@@ -33,7 +33,7 @@
                                             </div>
                                         </div>
                                     </div>
-                            <button type="submit" class="btn btn-primary"><span class="fa fa-file-excel-o"></span> EXPORT TO EXCEL</button>
+                            <button type="submit" class="btn btn-success"><span class="fa fa-file-excel-o"></span> EXPORT TO EXCEL</button>
                             <button type="reset" class="btn btn-warning"><span class="fa fa-ban"></span> Reset</button>
                             {!! Form::close() !!}
                         </div>
@@ -41,7 +41,7 @@
                 </div>
                 <hr>
         <div class="col-md-12 col-lg-12 col-sm-12">
-          <table class="table table-hover" style="width:100%"> 
+          <table id="dataTable2" class="table table-striped table-bordered dataTable" style="width:100%"> 
             <thead>
              <tr>
                  <th>Firstnames</th>
@@ -65,7 +65,7 @@
                  @endforeach
              </tbody>
          </table>
-         {{$profiles->links()}}
+         
      </div>
  </div>
 </div>

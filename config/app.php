@@ -182,6 +182,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         ConsoleTVs\Charts\ChartsServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Laratrust\LaratrustServiceProvider::class,
 
     ],
 
@@ -236,6 +237,7 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Laratrust'   => Laratrust\LaratrustFacade::class,
 
     ],
 

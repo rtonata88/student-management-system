@@ -4,9 +4,11 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laratrust\Traits\LaratrustUserTrait;
 
 class User extends Authenticatable
 {
+    use LaratrustUserTrait;
     use Notifiable;
 
     /**
@@ -35,4 +37,22 @@ class User extends Authenticatable
     public function country(){
         return $this->belongsTo('App\Country');
     }
+
+    public function sector(){
+        return $this->belongsTo('App\Sector');
+    }
+
+    public function language(){
+        return $this->belongsTo('App\Language', 'prefered_language', 'id');
+    }
+
+    public function city(){
+        return $this->belongsTo('App\City');
+    }
+
+     public function department(){
+        return $this->belongsTo('App\Department');
+    }
+
+
 }

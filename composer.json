@@ -14,7 +14,8 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
         "maatwebsite/excel": "^3.1",
-        "nicolaslopezj/searchable": "1.*"
+        "nicolaslopezj/searchable": "1.*",
+        "santigarcor/laratrust": "4.0.*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^2.4",
