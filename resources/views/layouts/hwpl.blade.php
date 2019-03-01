@@ -114,55 +114,71 @@
           </div>
           <ul class="nav" id="side-menu">
             <li style="padding: 70px 0 0;">
-              <a href="/home" class="waves-effect"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>DASHBOARD</a>
+              <a href="/home" class="waves-effect"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>Dashboard</a>
             </li>
-
-             <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-users fa-fw" aria-hidden="true"></i> <span class="hide-menu">PROFILES<span class="fa arrow"></span></span></a>
+            @if(Auth::user()->hasRole('Profiles'))
+             <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-users fa-fw" aria-hidden="true"></i> <span class="hide-menu">Profiles<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
+                @if(Auth::user()->hasRole('Fruit Profiles'))
                 <li> <a href="/profiles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Profiles</span></a> </li>
+                @endif
+                @if(Auth::user()->hasRole('WARP Office Attendees'))
                 <li> <a href="/warp-attendees"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">WARP Attendees</span></a> </li>
+                @endif
               </ul>
             </li>
+            @endif
 
-            <li>
+<!--             <li>
               <a href="/communication" class="waves-effect"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>COMMUNICATION</a>
-            </li>
-
+            </li> -->
+            @if(Auth::user()->hasRole('Documentation'))
             <li>
-              <a href="/documentation" class="waves-effect"><i class="fa fa-files-o fa-fw" aria-hidden="true"></i>DOCUMENTATION</a>
+              <a href="/documentation" class="waves-effect"><i class="fa fa-files-o fa-fw" aria-hidden="true"></i>Documentation</a>
             </li>
-
+            @endif
+            @if(Auth::user()->hasRole('Campaign'))
              <li>
-              <a href="/campaigns" class="waves-effect"><i class="fa fa-bullhorn fa-fw" aria-hidden="true"></i>CAMPAIGNS</a>
+              <a href="/campaigns" class="waves-effect"><i class="fa fa-bullhorn fa-fw" aria-hidden="true"></i>Campaigns</a>
             </li>
-
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i> <span class="hide-menu">EVENTS<span class="fa arrow"></span></span></a>
+            @endif
+            @if(Auth::user()->hasRole('Events'))
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i> <span class="hide-menu">Events<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
+                @if(Auth::user()->hasRole('Internal Events'))
                 <li> <a href="/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Events</span></a> </li>
+                @endif
+                @if(Auth::user()->hasRole('External Events'))
                 <li> <a href="/external-events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">External Events</span></a> </li>
+                @endif
+                @if(Auth::user()->hasRole('Event Guest Check In'))
                 <li> <a href="/event-check-in"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Guest Check In</span></a> </li>
+                @endif
               </ul>
             </li>
-
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-bar-chart fa-fw"></i> <span class="hide-menu">REPORTS<span class="fa arrow"></span></span></a>
+            @endif
+            @if(Auth::user()->hasRole('Reports'))
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-bar-chart fa-fw"></i> <span class="hide-menu">Reports<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
+                <li> <a href="/reports/profiles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Profiles</span></a> </li>
+                <li> <a href="/reports/documentation"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Documentation</span></a> </li>
                 <li> <a href="/reports/periodic"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Periodic Reports</span></a> </li>
-                 <li> <a href="/reports/profiles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Profiles Report</span></a> </li>
-
                 <li> <a href="/report/internal/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Event Reports</span></a> </li>
 
                 <li> <a href="/report/external/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">External Event Reports</span></a> </li>
               </ul>
             </li>
-
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-lock fa-fw" aria-hidden="true"></i> <span class="hide-menu">ACCESS MANAGEMENT<span class="fa arrow"></span></span></a>
+            @endif
+            @if(Auth::user()->hasRole('Access Management'))
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-lock fa-fw" aria-hidden="true"></i> <span class="hide-menu">Access<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
                 <li> <a href="/users"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Users</span></a> </li>
-                <li> <a href="/external-events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Roles</span></a> </li>
+                <li> <a href="/roles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Roles</span></a> </li>
               </ul>
             </li>
-
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span class="hide-menu">SETUP<span class="fa arrow"></span></span></a>
+            @endif
+            @if(Auth::user()->hasRole('Setup'))
+            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span class="hide-menu">Setup<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
                 <li> <a href="/titles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Titles</span></a> </li>
                 <li> <a href="/activity-types"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Activity Types</span></a> </li>
@@ -186,6 +202,7 @@
 
               </ul>
             </li>
+            @endif
             <li>
               <a class="dropdown-item" href="{{ route('logout') }}"
               onclick="event.preventDefault();

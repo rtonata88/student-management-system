@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Team;
 use App\City;
+use App\Role;
 use App\Sector;
 use App\Country;
 use App\Language;
@@ -36,9 +37,10 @@ class UsersController extends Controller
     	$sectors = Sector::pluck('name', 'id');
     	$countries = Country::pluck('name', 'id');
     	$languages = Language::pluck('name', 'id');
+        $roles = Role::pluck('display_name', 'id');
     	$departments = Department::pluck('name', 'id');
 
-    	return view('users.create', compact('teams', 'sectors', 'countries', 'departments', 'cities', 'languages'));
+    	return view('users.create', compact('teams', 'sectors', 'countries', 'departments', 'cities', 'languages', 'roles'));
     }
 
     public function edit($id){
@@ -49,9 +51,10 @@ class UsersController extends Controller
     	$sectors = Sector::pluck('name', 'id');
     	$countries = Country::pluck('name', 'id');
     	$languages = Language::pluck('name', 'id');
+        $roles = Role::pluck('display_name', 'id');
     	$departments = Department::pluck('name', 'id');
 
-    	return view('users.edit', compact('user', 'teams', 'sectors', 'countries', 'departments', 'cities', 'languages'));
+    	return view('users.edit', compact('user', 'teams', 'sectors', 'countries', 'departments', 'cities', 'languages', 'roles'));
     }
 
     public function show($id){
@@ -85,6 +88,15 @@ class UsersController extends Controller
     	$user->prefered_language = $requests->language_id;
     	$user->save();
 
+        foreach ($requests->roles as $key) {
+            $role = Role::find($key);
+            $user->attachRole($role);      
+        }
+
+        $user->syncRoles($requests->roles);
+
+
+
     	Session::flash('message', 'Saved successfully, please confirm that the changes have taken effect in the table below.');
     	return redirect('/users');
     }
@@ -111,6 +123,14 @@ class UsersController extends Controller
     	$user->city_id = $requests->city_id;
     	$user->prefered_language = $requests->prefered_language;
     	$user->save();
+
+        foreach ($requests->roles as $key) {
+            $role = Role::find($key);
+            $user->syncRoles([$role->id]);      
+        }
+
+        $user->syncRoles($requests->roles);
+        
 
     	Session::flash('message', 'The record has been updated, please confirm that the changes have taken effect in the table below.');
     	return redirect('/users');

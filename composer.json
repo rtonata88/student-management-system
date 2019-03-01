@@ -14,6 +14,7 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
         "maatwebsite/excel": "^3.1",
+        "mohammad-fouladgar/eloquent-builder": "^0.5.1",
         "nicolaslopezj/searchable": "1.*",
         "santigarcor/laratrust": "4.0.*"
     },

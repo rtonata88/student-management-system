@@ -46,7 +46,6 @@
                     <table class="table table-hover table-bordered" style="width:100%"> 
                         <thead>
                             <tr>
-                               
                                 <th>Year Attended</th>
                                 <th>Name</th>
                                 <th>Organization (s)</th>
@@ -63,21 +62,13 @@
                                 <td>{{date('Y', strtotime($attendee->date_attended))}}</td>
                                 <td>{{$attendee->profile->fullname}} {{$attendee->profile->lastname}}</td>
                                 <td>
-                                    @if($attendee->profile->organization_profile)
-                                	<ul>
-                                	@foreach($attendee->profile->organization_profile as $organization)
-                                		{{$organization->organization->name}}
-                                	@endforeach
-                                	</ul>
+                                    @if($attendee->profile->organization_profile()->first())
+                                	{{$attendee->profile->organization_profile()->first()->organization->name}}
                                 	@endif
                                 </td>
                                 <td>
-                                     @if($attendee->profile->organization_profile)
-                                    <ul>
-                                    @foreach($attendee->profile->organization_profile as $organization)
-                                        {{$organization->position}}
-                                    @endforeach
-                                    </ul>
+                                    @if($attendee->profile->organization_profile()->first())
+                                        {{$attendee->profile->organization_profile()->first()->position}}
                                     @endif
                                 </td>
                                 <td>{{$attendee->financing}}</td>

@@ -14,9 +14,19 @@ use App\Sector;
 use App\Profile;
 use App\ActivityTeamReport;
 use App\Team;
+use App\Country;
+use App\Organization;
+use App\Documentation;
+use App\City;
+use App\FruitRole;
+use App\FruitLevel;
+use App\FruitStage;
+use App\DocumentationType;
 use Excel;
+use EloquentBuilder;
 use App\Exports\PeriodicReportsExport;
 use App\Exports\ProfilesExport;
+use App\Exports\DocumentationsExport;
 use Freshbitsweb\Laratables\Laratables;
 
 class ReportsController extends Controller {
@@ -52,10 +62,7 @@ class ReportsController extends Controller {
             array_push($activities, $report->Activity);
         }
 
-
-
         $activities = array_values(array_unique($activities));
-
 
         $legend = array_merge($legend, $activities);
 
@@ -117,14 +124,81 @@ class ReportsController extends Controller {
      *
      * @return Json
      */
-    public function getProfilesData() {
-        $profiles = Profile::with('sector', 'team', 'country', 'gender')->get();;
+    public function profiles() {
+        $profiles = '';
+        $sectors = Sector::pluck('name', 'id');
+        $countries = Country::pluck('name', 'id');
+        $organizations = Organization::pluck('name', 'id');
+        $cities = City::pluck('name', 'id');
+        $fruit_roles = FruitRole::pluck('role', 'id');
         $teams = Team::pluck('name', 'id');
-        return view('reports.profiles.index', compact('profiles', 'teams'));
+        $fruit_levels = FruitLevel::pluck('level', 'id');
+        $fruit_stages = FruitStage::pluck('stage', 'id');
+
+        return view('reports.profiles.index', compact('teams', 'profiles', 'sectors', 'countries', 'organizations', 'cities', 'fruit_stages', 'fruit_levels', 'fruit_roles'));
     }
+
+    public function searchProfiles(Request $request){
+        $profiles = Profile::with('team', 'country');
+        $profiles = EloquentBuilder::to($profiles, $request->except(['_token']));
+        $profiles = $profiles->paginate(25);
+
+
+        $sectors = Sector::pluck('name', 'id');
+        $countries = Country::pluck('name', 'id');
+        $organizations = Organization::pluck('name', 'id');
+        $cities = City::pluck('name', 'id');
+        $fruit_roles = FruitRole::pluck('role', 'id');
+        $teams = Team::pluck('name', 'id');
+        $fruit_levels = FruitLevel::pluck('level', 'id');
+        $fruit_stages = FruitStage::pluck('stage', 'id');
+
+        session()->put('user_filter', $request->except(['_token']));
+
+        return view('reports.profiles.index', compact('profiles', 'teams', 'profiles', 'sectors', 'countries', 'organizations', 'cities', 'fruit_stages', 'fruit_levels', 'fruit_roles'));
+    }
+
+    public function documentation() {
+        $documentations = '';
+        $sectors = Sector::pluck('name', 'id');
+        $countries = Country::pluck('name', 'id');
+        $documentation_type = DocumentationType::pluck('type', 'id');
+
+        return view('reports.documentations.index', 
+            compact('documentations', 'sectors', 'countries', 'documentation_type'));
+    }
+
+    public function searchDocumentations(Request $request){
+        $documentations = Documentation::select('profiles.fullname', 'profiles.lastname', 'genders.gender', 'profiles.dob', 'profiles.position', 'organizations.name as organization', 'sectors.name as sector', 'countries.name as country', 'cities.name as city', 'profiles.mobile_no', 'profiles.work_number', 'profiles.email', 'documentations.effective_date', 'documentation_types.type')
+            ->join('profiles', 'profiles.id', '=', 'documentations.id')
+            ->leftJoin('genders', 'genders.id', '=', 'profiles.gender_id')
+            ->leftjoin('organizations', 'organizations.id', '=', 'profiles.organization_id')
+            ->leftJoin('sectors', 'sectors.id', '=', 'profiles.sector_id')
+            ->leftJoin('countries', 'countries.id', '=', 'profiles.country_id')
+            ->leftJoin('cities', 'cities.id', '=', 'profiles.city_id')
+            ->leftjoin('documentation_types', 'documentation_types.id', '=', 'documentations.documentation_type_id');
+
+        $documentations = EloquentBuilder::to($documentations, $request->except(['_token']));
+        $documentations = $documentations->paginate(25);
+
+
+        $sectors = Sector::pluck('name', 'id');
+        $countries = Country::pluck('name', 'id');
+        $documentation_type = DocumentationType::pluck('type', 'id');
+
+        session()->put('documentation_filter', $request->except(['_token']));
+
+        return view('reports.documentations.index', 
+            compact('profiles', 'teams', 'documentations', 'sectors', 'countries', 'organizations', 'cities', 'documentation_type'));
+    }
+
 
     public function exportProfilesToExcel(Request $requests){
         return Excel::download(new ProfilesExport, 'profiles.xlsx');
+    }
+
+    public function exportDocumentationsToExcel(Request $requests){
+        return Excel::download(new DocumentationsExport, 'profiles.xlsx');   
     }
 
 

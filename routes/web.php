@@ -52,6 +52,7 @@ Route::resource('/campaigns', 'CampaignsController');
 Route::get('/campaign-report/{id}', 'CampaignsController@report_index')->name('campaigns.report');
 Route::post('/campaign-report/{id}', 'CampaignsController@report')->name('campaigns.report.save');
 Route::get('/documentation-download/{id}', 'DocumentationsController@download')->name('documentation-download');
+Route::resource('/roles', 'RolesController');
 
 //USERS
 Route::get('/users/{id}/disable-or-enable', 'UsersController@disableEnableUser')->name('users.disableEnable');
@@ -148,8 +149,12 @@ Route::get('report/events/view/{slug}', 'ReportsController@events_report_view');
 Route::get('report/events/print/{slug}', 'ReportsController@events_report_print');
 
 Route::get('reports/periodic', 'ReportsController@periodic_index');
-Route::get('reports/profiles', 'ReportsController@getProfilesData');
+Route::get('reports/profiles', 'ReportsController@profiles');
+Route::get('reports/documentation', 'ReportsController@documentation');
 Route::get('reports/sector/{sector}', 'ReportsController@sector_report');
 Route::post('/reports/periodic/filters/{sector}', 'ReportsController@report_filter');
 Route::get('/reports/periodic/excel/{sector}', 'ReportsController@export');
-Route::post('/reports/profiles/excel', 'ReportsController@exportProfilesToExcel')->name('export-profiles');
+Route::post('/reports/profiles/search', 'ReportsController@searchProfiles')->name('search-profiles');
+Route::post('/reports/documentation/search', 'ReportsController@searchDocumentations')->name('search-documentation');
+Route::get('/reports/profiles/excel', 'ReportsController@exportProfilesToExcel')->name('export-profiles');
+Route::get('/reports/documentations/excel', 'ReportsController@exportDocumentationsToExcel')->name('export-documentations');

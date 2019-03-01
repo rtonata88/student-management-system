@@ -117,6 +117,16 @@
                     </div>
                 </div>
 
+                <div class="row">
+                         <div class="form-group">
+                            <div class="col-sm-6">
+                              {{Form::label('roles', 'Access', array('class' => 'control-label'))}}
+                              {{Form::select('roles[]', $roles,null ,array('class' => 'form-control select2', 'multiple', 'required'))}}
+                              <div class="help-block text-info">Ctrl + Click on the role - to assign  a permission to multiple roles</div>
+                              </div>
+                          </div>
+                </div>  
+
                 <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
                 <button type="reset" class="btn btn-warning"><span class="fa fa-ban"></span> Reset</button>
                 {!! Form::close() !!}

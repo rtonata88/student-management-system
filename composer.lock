@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8483a61559175a6eb5c3f854f43f997e",
+    "content-hash": "40fc262b2371a2d88f2d3e1d11dabc23",
     "packages": [
         {
             "name": "balping/json-raw-encoder",
@@ -1302,6 +1302,66 @@
                 "mathematics"
             ],
             "time": "2018-10-13T23:28:42+00:00"
+        },
+        {
+            "name": "mohammad-fouladgar/eloquent-builder",
+            "version": "v0.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mohammad-fouladgar/eloquent-builder.git",
+                "reference": "b22e6ad9549ad2409e51d1edcee9bab5c064a924"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mohammad-fouladgar/eloquent-builder/zipball/b22e6ad9549ad2409e51d1edcee9bab5c064a924",
+                "reference": "b22e6ad9549ad2409e51d1edcee9bab5c064a924",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "~5.5.0|~5.6.0|~5.7.0",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0.0",
+                "orchestra/testbench": "~3.5.0|~3.6.0|~3.7.0",
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^7.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Fouladgar\\EloquentBuilder\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "EloquentBuilder": "Fouladgar\\EloquentBuilder\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fouladgar\\EloquentBuilder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mohammad Fouladgar",
+                    "email": "mohammadfouladgarphp@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "keywords": [
+                "eloquent",
+                "eloquent-builder",
+                "filter",
+                "laravel",
+                "search"
+            ],
+            "time": "2018-11-07T23:18:30+00:00"
         },
         {
             "name": "monolog/monolog",

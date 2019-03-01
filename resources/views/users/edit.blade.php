@@ -101,6 +101,16 @@
                     </div>
                 </div>
 
+                 <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                          {{Form::label('roles', 'Roles', array('class' => 'control-label'))}}
+                          {{Form::select('roles[]', $roles, $user->roles->pluck('id')->toArray() ,array('class' => 'form-control select2', 'multiple', 'required'))}}
+                          <div class="help-block text-info">Ctrl + Click on the role - to assign  a user to multiple roles and permissions</div>
+                          </div>
+                      </div>
+                </div>  
+
                 <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
                 <button type="reset" class="btn btn-warning"><span class="fa fa-ban"></span> Reset</button>
                 {!! Form::close() !!}
