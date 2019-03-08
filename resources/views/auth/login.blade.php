@@ -43,12 +43,7 @@
                         <button class="btn btn-info btn-lg btn-block btn-rounded text-uppercase waves-effect waves-light" type="submit">Log In</button>
                       </div>
                     </div>
-                    
-                    <div class="form-group m-b-0">
-                      <div class="col-sm-12 text-center">
-                        <p>Don't have an access? <a href="/register" class="text-primary m-l-5"><b>Request for Access</b></a></p>
-                      </div>
-                    </div>
+                  
                   </form>
                   <form class="form-horizontal" id="recoverform" action="index.html">
                     <div class="form-group ">

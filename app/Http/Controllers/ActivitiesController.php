@@ -56,7 +56,7 @@ class ActivitiesController extends Controller
 
 		if($request->is('messages/*'))
 		{
-			$activity_type = "Message";
+			$activity_type = "Text Message (SMS)";
 			$activity_title= "MESSAGE REPORT";
 		}
 
@@ -92,9 +92,9 @@ class ActivitiesController extends Controller
 			$activity_title= "EMAIL REPORT";
 		}
 
-		if($type == 'Message')
+		if($type == 'Text Message (SMS)')
 		{
-			$activity_type = "Message";
+			$activity_type = "Text Message (SMS)";
 			$activity_title= "MESSAGE REPORT";
 		}
 
@@ -128,9 +128,9 @@ class ActivitiesController extends Controller
 			$activity_title= "EMAIL REPORT";
 		}
 
-		if($type == 'Message')
+		if($type == 'Text Message (SMS)')
 		{
-			$activity_type = "Message";
+			$activity_type = "Text Message (SMS)";
 			$activity_title= "MESSAGE REPORT";
 		}
 
@@ -169,9 +169,9 @@ class ActivitiesController extends Controller
 			$activity_title= "EMAIL REPORT";
 		}
 
-		if($activity_type == "Message")
+		if($activity_type == "Text Message (SMS)")
 		{
-			$activity_type = "Message";
+			$activity_type = "Text Message (SMS)";
 			$activity_title= "MESSAGE REPORT";
 		}
 
@@ -208,9 +208,9 @@ class ActivitiesController extends Controller
 			$activity_title= "EMAIL REPORT";
 		}
 
-		if($activity_type == "Message")
+		if($activity_type == "Text Message (SMS)")
 		{
-			$activity_type = "Message";
+			$activity_type = "Text Message (SMS)";
 			$activity_title= "MESSAGE REPORT";
 		}
 
@@ -226,10 +226,10 @@ class ActivitiesController extends Controller
 
 	public function edit(Request $request, $activity_type, $id)
 	{
-		$profile_id = Session::get('profile_id');
+		$profile_slug = session()->get('profile');
 		$activity_type = Session::get('activity_type');
-		
-		$profile = Profile::whereSlug($profile_id)->first();
+		$profile = Profile::whereSlug($profile_slug)->first();
+
 		if($activity_type == "Meeting")
 		{
 			$activity_title= "POST MEETING REPORT";
@@ -246,9 +246,9 @@ class ActivitiesController extends Controller
 			$activity_title= "EMAIL REPORT";
 		}
 
-		if($activity_type == "Message")
+		if($activity_type == "Text Message (SMS)")
 		{
-			$activity_type = "Message";
+			$activity_type = "Text Message (SMS)";
 			$activity_title= "MESSAGE REPORT";
 		}
 
@@ -257,20 +257,22 @@ class ActivitiesController extends Controller
 		$sectors = Sector::pluck('name', 'id');
 		$teams = Team::pluck('name', 'id');
 		$users = User::where('id', '<>', Auth::user()->id)->pluck('name', 'id');
-		$profiles = Profile::selectRaw('id, CONCAT(fullname," ",lastname) AS name')->where('id', '<>', $profile_id)->pluck('name', 'id');
+		$profiles = Profile::selectRaw('id, CONCAT(fullname," ",lastname) AS name')->where('slug', '<>', $profile_slug)->pluck('name', 'id');
 
 		return view('activities.edit', compact('activity', 'sectors', 'teams', 'users', 'activity_type', 'activity_title', 'profiles', 'profile'));
 	}
 
-	public function store(Request $requests, $id, $event_slug)
+	public function store(Request $requests)
 	{
 
 		$activity = new Activity;
+		
 		$activity->activity_type_id = ActivityType::where('name', $requests->activity_type)->first()->id;
 		if($requests->activity_type != 'Meeting'){
 			$activity->direction = $requests->direction;
 		}
 		$activity->when = $requests->when;
+		$activity->venue = $requests->where;
 		$activity->outcome = $requests->outcome;
 		$activity->why = $requests->why;
 		$activity->save();
@@ -319,6 +321,7 @@ class ActivitiesController extends Controller
 		}
 		
 		$profile = Profile::find($requests->profile_id);
+
 		Session::flash('message', 'Activity successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click <strong><a href="/profiles/'.$profile->slug.'" >go to profile</a></strong>');
 
 		

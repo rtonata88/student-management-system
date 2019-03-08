@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>Philips List - Admin Panel</title>
+  <title>The PEACE App</title>
   <!-- Bootstrap Core CSS -->
   <link href="{{asset('assets/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
   <link href="{{asset('css/typeahead.css')}}" rel="stylesheet">
@@ -228,7 +228,7 @@
     <div id="page-wrapper">
      @yield('content')
      <!-- /.container-fluid -->
-     <footer class="footer text-center"> 2018 &copy; PHILIPS List</footer>
+     <footer class="footer text-center"> {{date('Y')}} &copy; The PEACE<i>App</i></footer>
    </div>
    <!-- ============================================================== -->
    <!-- End Page Content -->

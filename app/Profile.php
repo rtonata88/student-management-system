@@ -267,6 +267,12 @@ class Profile extends Model
         ];
     }
 
+    public function laratablesRoleRelationQuery(){
+        return function ($query) {
+            $query->with(['sector', 'language', 'country', 'city', 'organization']);
+        };
+    }
+
     public static function get_guest($guest_id){
         return DB::table('profiles')
                 ->select('profiles.id as profile_id','profiles.fullname', 'profiles.lastname', 'profiles.email', 'profiles.mobile_no', 'profiles.work_number', 'organizations.name')
@@ -295,4 +301,35 @@ class Profile extends Model
         return $this->hasMany('App\ProfileAssistant');
     }
 
+    public static function getProfilesByCountry(){
+        return DB::table('profiles')
+                ->join('countries', 'countries.id', '=', 'profiles.country_id')
+                ->selectRaw('countries.name as country, count(*) number_of_profiles')
+                ->groupBy('profiles.country_id')
+                ->get();
+    }
+
+    public static function getProfilesByStatus(){
+        return DB::table('profiles')
+                ->join('fruit_levels', 'fruit_levels.id', '=', 'profiles.fruit_level_id')
+                ->selectRaw('fruit_levels.level as status, count(*) number_of_profiles')
+                ->groupBy('profiles.fruit_level_id')
+                ->get();
+    }
+
+
+    public static function getProfilesByRole(){
+         return DB::table('profiles')
+                ->join('fruit_roles', 'fruit_roles.id', '=', 'profiles.fruit_role_id')
+                ->selectRaw('fruit_roles.role as role, count(*) number_of_profiles')
+                ->groupBy('profiles.fruit_role_id')
+                ->get();
+    }
+    public static function getProfilesByStage(){
+         return DB::table('profiles')
+                ->join('fruit_stages', 'fruit_stages.id', '=', 'profiles.fruit_stage_id')
+                ->selectRaw('fruit_stages.stage as stage, count(*) number_of_profiles')
+                ->groupBy('profiles.fruit_stage_id')
+                ->get();
+    }
 }

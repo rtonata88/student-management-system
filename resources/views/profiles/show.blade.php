@@ -20,50 +20,40 @@
           <div class="card-body">
             <div class="row">
              <div class="col-md-2 col-xs-6 b-r"> 
-                <a href="/activities/meetings/{{$profile->slug}}">
                     <strong>MEETINGS <small><span class="counter">{{$profile->meetings_count()}}</span></small></strong>
-                </a>
                 <br>
                 <p class="text-muted">
-                    <a href="/meetings/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Add New</a> <br>
+                    <a href="/meetings/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
                 </p>
 
             </div> 
             <div class="col-md-2 col-xs-6 b-r">
-                <a href="/activities/calls/{{$profile->slug}}">
                     <strong>CALLS <small><span class="counter">{{$profile->calls_count()}}</span></small></strong>
-                </a>
                 <br>
                 <p class="text-muted">
-                    <a href="/calls/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Add New</a> <br>
+                    <a href="/calls/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
                 </p>
             </div> 
             <div class="col-md-2 col-xs-6 b-r"> 
-                <a href="/activities/emails/{{$profile->slug}}">
                     <strong>EMAILS <small><span class="counter">{{$profile->emails_count()}}</span></small></strong>
-                </a>
                 <br>
                 <p class="text-muted">
-                    <a href="/emails/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Add New</a> <br>
+                    <a href="/emails/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
                 </p>
             </div> 
             <div class="col-md-2 col-xs-6"> 
-               <a href="/activities/messages/{{$profile->slug}}">
                 <strong>MESSAGES <small><span class="counter">{{$profile->messages_count()}}</span></small></strong>
-            </a>
             <br>
             <p class="text-muted">
-                <a href="/messages/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Add New</a> <br>
+                <a href="/messages/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
             </p>
 
         </div> 
         <div class="col-md-2 col-xs-6"> 
-           <a href="/media-coverage/{{$profile->slug}}">
             <strong>MEDIA COVERAGE <small><span class="counter">{{$profile->coverage_count()}}</span></small></strong>
-        </a>
         <br>
         <p class="text-muted">
-            <a href="/media-coverage/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Add New</a> <br>
+            <a href="/media-coverage/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
         </p>
 
     </div> 
@@ -133,7 +123,7 @@
         </div>
     </div>
     <div class="col-md-8 col-xs-12">
-        <div class="white-box">
+        <div class="row white-box">
             <!-- .tabs -->
             <ul class="nav nav-tabs tabs customtab">
                 <li class="active tab">
@@ -146,18 +136,17 @@
                     <a href="#settings" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-cog"></i></span> <span class="hidden-xs">Profile Documents</span> </a>
                 </li>
             </ul>
+        </div>
             <!-- /.tabs -->
             <div class="tab-content">
                 <!-- .tabs 1 -->
-                <div class="tab-pane active" id="home">    
-                    <div class="steamline">
-                        @forelse($profile->activities as $activity)
-                        <div class="sl-item">
-                            <div class="sl-left"> <span class="fa fa-at"></span> </div>
-                            <div class="sl-right">
-
-                                <div class="m-l-40"><a href="#" class="text-info"> <span class="box-title">{{$activity->activity_type->name}} Report</span></a> <span class="sl-date"></span>
-                                    <hr>
+                <div class="tab-pane active" id="home">  
+                    @forelse($profile->activities as $activity)
+                    <div class="row white-box">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-uppercase mb-0"><strong>{{$activity->activity_type->name}} Report</strong></h5>
+                                <hr>
                                     <p>
                                         @if($activity->activity_type->name != "Meeting")
                                         <strong>Direction:</strong> {{$activity->direction}} <br>
@@ -172,18 +161,19 @@
                                         <img src="{{ asset('storage/'.$photo->path) }}" alt="user" class="col-md-3 col-xs-12" />
                                         @endforeach
                                     </div>
-                                </div>
                             </div>
                         </div>
-                        @empty
+                    </div> 
+                    @empty
                         No activities recorded for this profile
-                        @endforelse
-                    </div>
+                        @endforelse 
                 </div>
                 <!-- /.tabs1 -->
                 <!-- .tabs2 -->
                 <div class="tab-pane" id="profile">
-
+                    <div class="row white-box">
+                        
+                    
 
                     <div class="row">
                         <div class="col-md-8 col-xs-6 b-r"> <strong>Full Name</strong>
@@ -289,9 +279,11 @@
                     <span class="fa fa-edit"></span> Update Profile
                 </a>
             </div>
+            </div>
             <!-- /.tabs2 -->
             <!-- .tabs3 -->
             <div class="tab-pane" id="settings">
+                <div class="row white-box">
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -321,10 +313,10 @@
                     <span class="fa fa-upload"></span> Upload Document
                 </a>
             </div>
+            </div>
         </div>
         <!-- /.tabs3 -->
     </div>
-</div>
 </div>
 </div>
 <!-- /.row -->

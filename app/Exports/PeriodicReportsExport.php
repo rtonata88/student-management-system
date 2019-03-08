@@ -24,7 +24,7 @@ class PeriodicReportsExport implements WithMultipleSheets, WithHeadings, WithStr
     public function sheets(): array
     {
     	$sheets = [];
-    	for($i=0; $i<5; $i++){
+    	for($i=0; $i<7; $i++){
     		$sheets[] =  new ReportSheets($this->sector, $i);
     	}
 

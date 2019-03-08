@@ -52,6 +52,7 @@ class ReportSheets implements FromCollection, WithTitle, WithHeadings
     	$meetings 	= $this->get_meeting_activities($team_report, $start_date, $end_date);
     	$media 		= $this->get_media_activities($team_report, $start_date, $end_date);
     	$events 	= $this->get_event_activities($team_report, $start_date, $end_date);
+        $messages   = $this->get_message_activities($team_report, $start_date, $end_date);
     	
     	$activity_report = collect();
     	foreach ($team_report as $key => $value) {
@@ -59,7 +60,7 @@ class ReportSheets implements FromCollection, WithTitle, WithHeadings
     	}
 
     	
-    	$report = [0=>$activity_report, 1=>$meetings, 2=>$calls, 3=>$emails, 4=>$events, 5=>$media];
+    	$report = [0=>$activity_report, 1=>$meetings, 2=>$calls, 3=>$emails, 4=>$events, 5=>$media, 6=>$messages];
 
     	return $report[$this->key]; 
     }
@@ -67,7 +68,7 @@ class ReportSheets implements FromCollection, WithTitle, WithHeadings
 
     public function title(): string
     {
-    	$titles = [0=>'Daily Report Summary', 1=>'Meetings Summary', 2=>'Call Summary', 3=>'Email Summary', 4=>'Event Summary', 5=>'Articles'];
+    	$titles = [0=>'Daily Report Summary', 1=>'Meetings Summary', 2=>'Call Summary', 3=>'Email Summary', 4=>'Event Summary', 5=>'Articles', 6 => 'Messages'];
     	return $titles[$this->key];
     }
 
@@ -80,6 +81,7 @@ class ReportSheets implements FromCollection, WithTitle, WithHeadings
     		3=>array('Fullname', 'Lastname', 'Position', 'Organisation', 'Country','Incoming /Outgoing', 'Purpose of Email',	'Outcome'),
     		4=>array('Event Type',	'Name',	'Description',	'Purpose of Event', 'Date', 'Time', 'Outcome'),
     		5=>array('Coutry',	'Media House', 'Publishing Date', 'Title', 'Platform', 'Short Summary', 'URL', 'Location'),
+            6=>array('Fullname', 'Lastname', 'Position', 'Organisation', 'Country','Incoming /Outgoing', 'Purpose of Email',    'Outcome'),
     	];
     	return $headings[$this->key];
 
@@ -108,6 +110,18 @@ class ReportSheets implements FromCollection, WithTitle, WithHeadings
     		}
     	}
     	return $emails;
+    }
+
+    private function get_message_activities($team_report, $start_date, $end_date){
+        $activity = $team_report->where('Activity', 'Text Message (SMS)');
+        $emails = collect();
+        foreach($activity as $activity){
+            $activities = ActivityTeamReport::get_activities($activity->sector_id, $activity->team_id, $activity->activity_type_id, $start_date, $end_date);
+            foreach ($activities as $key => $value) {
+                $emails->push(collect($value)->only('country', 'fullname', 'lastname', 'organization', 'position', 'direction', 'why', 'outcome'));
+            }
+        }
+        return $emails;
     }
 
     private function get_meeting_activities($team_report, $start_date, $end_date){

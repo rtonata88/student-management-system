@@ -145,4 +145,29 @@ class ActivityTeamReport extends Model
             ->groupBy('profiles.sector_id')
             ->get();
     }
+
+    public static function getReportByTeam($activity_type_id, $start_date, $end_date){
+        $activities = DB::table('activities')
+                        ->join('activity_profile', 'activity_profile.activity_id', '=', 'activities.id')
+                        ->join('profiles', 'activity_profile.profile_id', '=', 'profiles.id')
+                        ->join('teams', 'teams.id', '=', 'profiles.team_id')
+                        ->selectRaw('teams.name AS Team, count(activities.activity_type_id) AS Occurence ')
+                        ->where('activity_type_id', $activity_type_id)
+                        ->whereRaw("DATE_FORMAT(`when`, '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'")
+                        ->groupBy('profiles.team_id')
+                        ->get();
+
+        return $activities;
+    }
+
+    public static function getEventReportsByTeam($event_type, $start_date, $end_date){
+       return DB::table('events')
+                    ->join('event_team', 'event_team.event_id', '=', 'events.id')
+                    ->join('teams', 'teams.id', '=', 'event_team.team_id')
+                    ->selectRaw('teams.name as Team, events.event_type, count(*) as Occurence')
+                    ->where('events.event_type', '=', $event_type)
+                    ->whereRaw("DATE_FORMAT(`start_date`, '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'")
+                    ->groupBy(['event_team.team_id', 'events.event_type'])
+                    ->get();
+    }
 }

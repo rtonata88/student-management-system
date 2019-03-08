@@ -60,6 +60,15 @@
                         </div>
                     </div> 
                 </div>
+                     <div class="row">
+                        <div class="col-md-5">
+                      <div class="form-group">
+                        {{Form::label('where', 'Where')}}
+                        {{Form::text('where', null, ['class' => 'form-control', 'placeholder' => 'Where', 'autocomplete'=>'off', 'required'])}}
+
+                        </div>
+                    </div>
+                    </div>
                 <div class="row">
                     <div class="col-md-5">
                         <div class="form-group">

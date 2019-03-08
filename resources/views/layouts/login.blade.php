@@ -35,7 +35,7 @@
               <div class="inner-panel">
                   <a href="javascript:void(0)" class="p-20 di"></a>
                   <div class="lg-content">
-                      <h2><strong>PHILIPS</strong>List</h2>
+                      <h2><strong>The PEACE</strong><i>App</i></h2>
                       <p class="text-muted">Enlightening to Cultivate Talented Individuals with the Values and Spirit of Peace</p>
                   </div>
               </div>

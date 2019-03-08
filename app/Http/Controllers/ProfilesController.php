@@ -37,8 +37,13 @@ class ProfilesController extends Controller
 
 	public function index()
 	{
-		$profiles = Profile::with(['sector', 'language', 'country', 'city', 'organization'])->paginate(50);
-		//$profiles = Laratables::recordsOf(Profile::class);
+		$user = Auth::user();
+		if($user->hasRole('department leader')){
+			$profiles = Profile::with(['sector', 'language', 'country', 'city', 'organization'])->paginate(50);
+		} else {
+			$profiles = Profile::where('team_id', $user->team_id)->with(['sector', 'language', 'country', 'city', 'organization'])->paginate(50);
+		}
+	
 
 		return view('profiles.index', compact('profiles'));
 	}
@@ -49,7 +54,16 @@ class ProfilesController extends Controller
      */
     public function getSimpleDatatablesData()
     {
-        return Laratables::recordsOf(Profile::class);
+        return Laratables::recordsOf(Profile::class, 
+        		function($query){
+        			$user = Auth::user();
+        			if($user->hasRole('department leader')){
+        				return $query;
+        			} else {
+        				return $query->where('team_id', $user->team_id);
+        			}
+
+        		});
     }
     /**
      * return data of the Custom columns datatables.

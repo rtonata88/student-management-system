@@ -69,7 +69,7 @@
     <div>
      @yield('content')
      <!-- /.container-fluid -->
-     <footer class="footer text-center"> 2018 &copy; PHILIPS List</footer>
+     <footer class="footer text-center"> {{date('Y')}} &copy; The PEACE <i>App</i></footer>
    </div>
    <!-- ============================================================== -->
    <!-- End Page Content -->
