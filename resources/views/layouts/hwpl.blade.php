@@ -33,7 +33,7 @@
   <link href="{{asset('bower_components/jquery-wizard-master/steps.css')}}" rel="stylesheet">
 
   <!-- summernotes CSS -->
-  <link href="{{asset('bower_components/summernote/dist/summernote.css')}}" rel="stylesheet" />
+  <link href="{{asset('bower_components/summernote/summernote.css')}}" rel="stylesheet" />
 
 
   <!-- Page CSS -->
@@ -275,7 +275,7 @@
  <script src="{{asset('bower_components/moment/moment.js')}}"></script>
  <script src="{{asset('bower_components/jquery-wizard-master/jquery.steps.min.js')}}"></script>
  <script src="{{asset('bower_components/jquery-wizard-master/jquery.validate.min.js')}}"></script>
- <script src="{{asset('bower_components/summernote/dist/summernote.min.js')}}"></script>
+ <script src="{{asset('bower_components/summernote/summernote.min.js')}}"></script>
  <script src="{{asset('bower_components/clockpicker/jquery-clockpicker.min.js')}}"></script>
  <script src="{{asset('bower_components/typeahead/typeahead.bundle.js')}}"></script>
  <script src="{{asset('bower_components/morris.js/morris.js')}}"></script>
