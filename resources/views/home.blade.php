@@ -48,7 +48,7 @@
                         <div class="sparklinedash"></div>
                     </li>
                     <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-info">
-                            @if(count($sectors->where('name', 'HWPL')->first()))
+                            @if(!empty($sectors->where('name', 'HWPL')->first()))
                             {{$sectors->where('name', 'HWPL')->first()->count}}
                             @else
                             0
@@ -65,7 +65,7 @@
                         <div class="sparklinedash2"></div>
                     </li>
                     <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple">
-                            @if(count($sectors->where('name', 'IPYG')->first()))
+                            @if(!empty($sectors->where('name', 'IPYG')->first()))
                             {{$sectors->where('name', 'IPYG')->first()->count}}
                             @else
                             0
@@ -82,7 +82,7 @@
                         <div class="sparklinedash3"></div>
                     </li>
                     <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-danger">
-                            @if(count($sectors->where('name', 'IWPG')->first()))
+                            @if(!empty($sectors->where('name', 'IWPG')->first()))
                             {{$sectors->where('name', 'IWPG')->first()->count}}
                             @else
                             0
