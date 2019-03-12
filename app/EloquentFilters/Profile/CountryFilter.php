@@ -17,6 +17,6 @@ class CountryFilter implements Filter
      */
     public function apply(Builder $builder, $value): Builder
     {
-        return $builder->where('country_id', '=', $value);
+        return $builder->where('profiles.country_id', '=', $value);
     }
 }
