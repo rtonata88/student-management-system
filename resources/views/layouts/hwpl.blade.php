@@ -125,6 +125,10 @@
                 @if(Auth::user()->hasRole('WARP Office Attendees'))
                 <li> <a href="/warp-attendees"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">WARP Attendees</span></a> </li>
                 @endif
+
+                @if(Auth::user()->hasRole('Maintainer Assignment'))
+                <li> <a href="/maintainer-assignment"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Maintainer Assignment</span></a> </li>
+                @endif
               </ul>
             </li>
             @endif
@@ -161,6 +165,7 @@
             <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-bar-chart fa-fw"></i> <span class="hide-menu">Reports<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
                 <li> <a href="/reports/profiles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Profiles</span></a> </li>
+                <li> <a href="/reports/warp-attendees"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">WARP Attendees</span></a> </li>
                 <li> <a href="/reports/documentation"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Documentation</span></a> </li>
                 <li> <a href="/reports/periodic"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Periodic Reports</span></a> </li>
                 <li> <a href="/report/internal/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Event Reports</span></a> </li>

@@ -28,6 +28,8 @@ use App\Exports\PeriodicReportsExport;
 use App\Exports\ProfilesExport;
 use App\Exports\DocumentationsExport;
 use Freshbitsweb\Laratables\Laratables;
+use App\WarpSummitAttendee;
+use Session;
 
 class ReportsController extends Controller {
 
@@ -136,6 +138,25 @@ class ReportsController extends Controller {
         $fruit_stages = FruitStage::pluck('stage', 'id');
 
         return view('reports.profiles.index', compact('teams', 'profiles', 'sectors', 'countries', 'organizations', 'cities', 'fruit_stages', 'fruit_levels', 'fruit_roles'));
+    }
+
+    public function WarpAttendees(){
+        $attendees = '';
+        return view('reports.warp.index', compact('attendees'));
+    }
+
+     public function WarpAttendeesSearch(Request $request){
+        $year_from = intval(date('Y', strtotime($request->date_from)));
+        $year_to = intval(date('Y', strtotime($request->date_to)));
+        if($year_from == $year_to){
+            $attendees = WarpSummitAttendee::whereYear('date_attended', $year_from)->get();
+        } else if ($year_from < $year_to){
+            $attendees = WarpSummitAttendee::whereBetween('date_attended',[$request->date_from, $request->date_to])->get();
+        } else if ($year_from > $year_to){
+            $attendees = '';
+            Session::flash('message', 'The Date To cannot be earlier than Date From ');
+        }
+        return view('reports.warp.index', compact('attendees'));
     }
 
     public function searchProfiles(Request $request){

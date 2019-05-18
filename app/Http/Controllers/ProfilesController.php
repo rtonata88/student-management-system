@@ -284,14 +284,12 @@ class ProfilesController extends Controller
 			$profile_photo = time()."_".$original_photo->getClientOriginalName();    
 			$profile->photo = $profile_photo;
 		}
-
 		$profile->fullname 					= $requests->fullname;
 		$profile->lastname 					= $requests->lastname;
 		$profile->dob 						= $requests->dob;
-		$profile->slug						= str_slug($requests->fullname." ".$requests->lastname);
+		//$profile->slug						= str_slug($requests->fullname." ".$requests->lastname);
 		$profile->gender_id 				= $requests->gender_id;
 		$profile->bio 						= $requests->bio;
-		$profile->photo 					= $profile_photo;
 		$profile->sector_id 				= $requests->sector_id;
 		$profile->country_id 				= $requests->country_id;
 		$profile->city_id 					= $requests->city_id;
@@ -351,6 +349,11 @@ class ProfilesController extends Controller
 	public function typeahead($q)
 	{
 		return Profile::search($q)->get();
+	}
+
+	public function print($slug){
+		$profile = Profile::whereSlug($slug)->first();
+		return view('profiles.print', compact('profile'));
 	}
 
 }

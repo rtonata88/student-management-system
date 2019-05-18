@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 use DB;
 
-class Event extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+
+class Event extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+    
     public function discussions()
     {
         return $this->hasMany('App\EventDiscussion');

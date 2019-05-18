@@ -4,8 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Activity extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+
+class Activity extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     public function profiles()
     {
         return $this->belongsToMany('App\Profile');

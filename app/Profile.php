@@ -8,11 +8,14 @@ use Request;
 
 use DB;
 use \Nicolaslopezj\Searchable\SearchableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Profile extends Model
+
+class Profile extends Model implements Auditable
 {
     use SearchableTrait;
-
+    use \OwenIt\Auditing\Auditable;
+    
     protected $searchable = [
         'columns' => [
             'profiles.fullname' => 5,
@@ -69,11 +72,23 @@ class Profile extends Model
     }
 
     public function activities(){
-        return $this->belongsToMany('App\Activity')->orderBy('created_at', 'desc');
+        return $this->belongsToMany('App\Activity')->orderBy('when', 'desc');
+    }
+
+    public function events(){
+        return $this->belongsToMany('App\Event', 'event_participants')->orderBy('start_date', 'desc');
     }
 
     public function documents(){
         return $this->hasMany('App\ProfileDocument');
+    }
+
+    public function warp_summit(){
+        return $this->hasMany('App\WarpSummitAttendee');
+    }
+
+    public function documentation(){
+        return $this->hasMany('App\Documentation');
     }
 
     public function meetings_count(){

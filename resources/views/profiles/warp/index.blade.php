@@ -60,7 +60,7 @@
                             @foreach($attendees as $attendee)
                             <tr>
                                 <td>{{date('Y', strtotime($attendee->date_attended))}}</td>
-                                <td>{{$attendee->profile->fullname}} {{$attendee->profile->lastname}}</td>
+                                <td><a href="/profiles/{{$attendee->profile->slug}}" >{{$attendee->profile->fullname}} {{$attendee->profile->lastname}}</a></td>
                                 <td>
                                     @if($attendee->profile->organization_profile()->first())
                                 	{{$attendee->profile->organization_profile()->first()->organization->name}}

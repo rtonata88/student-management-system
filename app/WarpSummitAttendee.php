@@ -5,8 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class WarpSummitAttendee extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+
+class WarpSummitAttendee extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
 
 	protected $fillable = ['date_attended', 'profile_id', 'current_or_former', 'financing', 'user'];
 

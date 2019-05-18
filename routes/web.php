@@ -42,6 +42,7 @@ Route::resource('/report-types', 'ReportTypesController');
 Route::resource('/fruit-roles', 'FruitRolesController');
 Route::resource('/fruit-stages', 'FruitStagesController');
 Route::resource('/maintainers', 'MaintainersController');
+Route::resource('/maintainer-assignment', 'MaintainerAssignmentController');
 Route::resource('/meeting-types', 'MeetingTypesController');
 Route::resource('/sector-relationships', 'SectorRelationshipsController');
 Route::resource('/sectors', 'SectorsController');
@@ -68,6 +69,7 @@ Route::get('/tbl-profiles', 'ProfilesController@getSimpleDatatablesData')->name(
 Route::post('/profiles/documents', 'ProfilesController@upload_document');
 Route::get('/profile/documents/{id}/download', 'ProfilesController@download_document');
 Route::get('/profile/documents/{id}/delete', 'ProfilesController@delete_document');
+Route::get('/profile/print/{slug}', 'ProfilesController@print');
 
 //ACTIVITIES
 Route::get('/meetings/create/{profileSlug}', 'ActivitiesController@create');
@@ -163,3 +165,6 @@ Route::post('/reports/profiles/search', 'ReportsController@searchProfiles')->nam
 Route::post('/reports/documentation/search', 'ReportsController@searchDocumentations')->name('search-documentation');
 Route::get('/reports/profiles/excel', 'ReportsController@exportProfilesToExcel')->name('export-profiles');
 Route::get('/reports/documentations/excel', 'ReportsController@exportDocumentationsToExcel')->name('export-documentations');
+Route::get('/reports/warp-attendees', 'ReportsController@WarpAttendees');
+Route::post('/reports/warp-attendees/search', 'ReportsController@WarpAttendeesSearch')->name('search-warp');
+Route::get('/export-warp-summit-attendees', 'ReportsController@exportWarpSummitAttendees')->name('export-warp-summit-attendees');

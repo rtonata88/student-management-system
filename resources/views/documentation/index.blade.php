@@ -11,7 +11,28 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <div class="white-box">
+    <div class="row">
+        @foreach($statistics as $document_counter)
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">{{$document_counter->type}}</h3>
+                <ul class="list-inline two-part">
+                    <li>
+                        <div class="sparklinedash"></div>
+                    </li>
+                    <li class="text-right"><i class="ti-arrow-up text-success"></i> 
+                        <span class="counter text-info">
+                            {{$document_counter->counter}}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    @endforeach
+    </div>
+    
+
+    <div class="row white-box">
         <div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 @if(Session::has('message'))

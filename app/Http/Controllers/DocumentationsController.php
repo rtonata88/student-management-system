@@ -27,7 +27,8 @@ class DocumentationsController extends Controller
     public function index()
     {
         $documents = Documentation::with('profile', 'document_types', 'files')->get();
-        return view('documentation.index', compact('documents'));
+        $statistics = $this->getCountPerDocumentType();
+        return view('documentation.index', compact('documents', 'statistics'));
     }
 
     /**
@@ -171,5 +172,9 @@ class DocumentationsController extends Controller
 
         $extension = substr($documentation->files->path,strpos($documentation->files->path, "."));
         return response()->download(storage_path('app').'/public/'.$documentation->files->path, $file_name."".$extension);
+    }
+
+    private function getCountPerDocumentType(){
+        return Documentation::getCountPerDocumentType();
     }
 }

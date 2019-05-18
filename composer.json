@@ -16,6 +16,7 @@
         "maatwebsite/excel": "^3.1",
         "mohammad-fouladgar/eloquent-builder": "^0.5.1",
         "nicolaslopezj/searchable": "1.*",
+        "owen-it/laravel-auditing": "^8.0",
         "santigarcor/laratrust": "4.0.*"
     },
     "require-dev": {

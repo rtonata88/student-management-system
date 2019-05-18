@@ -58,7 +58,6 @@
                 </div>
 
                 <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
-                <button type="reset" class="btn btn-warning"><span class="fa fa-ban"></span> Reset</button>
                 {!! Form::close() !!}
             </div>
         </div>
