@@ -15,7 +15,7 @@ class Profile extends Model implements Auditable
 {
     use SearchableTrait;
     use \OwenIt\Auditing\Auditable;
-    
+
     protected $searchable = [
         'columns' => [
             'profiles.fullname' => 5,
@@ -28,47 +28,47 @@ class Profile extends Model implements Auditable
     }
 
     public function fruit_role(){
-    	return $this->belongsTo('App\FruitRole');	
+    	return $this->belongsTo('App\FruitRole');
     }
 
     public function fruit_stage(){
-    	return $this->belongsTo('App\FruitStage');	
+    	return $this->belongsTo('App\FruitStage');
     }
 
     public function fruit_level(){
-    	return $this->belongsTo('App\FruitLevel');	
+    	return $this->belongsTo('App\FruitLevel');
     }
 
     public function sector_relationship(){
-    	return $this->belongsTo('App\SectorRelationship');	
+    	return $this->belongsTo('App\SectorRelationship');
     }
 
     public function sector(){
-    	return $this->belongsTo('App\Sector');	
+    	return $this->belongsTo('App\Sector');
     }
 
     public function country(){
-    	return $this->belongsTo('App\Country');	
+    	return $this->belongsTo('App\Country');
     }
 
     public function city(){
-    	return $this->belongsTo('App\City');	
+    	return $this->belongsTo('App\City');
     }
 
     public function organization(){
-    	return $this->belongsTo('App\Organization');	
+    	return $this->belongsTo('App\Organization');
     }
 
     public function gender(){
-    	return $this->belongsTo('App\Gender');	
+    	return $this->belongsTo('App\Gender');
     }
 
     public function team(){
-    	return $this->belongsTo('App\Team');	
+    	return $this->belongsTo('App\Team');
     }
 
     public function photos(){
-        return $this->hasMany('App\ActivityPhoto');    
+        return $this->hasMany('App\ActivityPhoto');
     }
 
     public function activities(){
@@ -148,7 +148,7 @@ class Profile extends Model implements Auditable
         ->join('media_coverages', 'media_coverages.profile_id', '=', 'profiles.id')
         ->select('media_coverages.id')
         ->where('profiles.id', '=', $this->id)
-        ->count()); 
+        ->count());
  }
 
 
@@ -184,10 +184,10 @@ class Profile extends Model implements Auditable
             return $html;
         }
 
-        $html = '<div class="form-check"> 
-                  <a href="/profiles/'.$profile->slug.'" action="view" class="m-r-5"> <span class="fa fa-eye"></span> </a> 
+        $html = '<div class="form-check">
+                  <a href="/profiles/'.$profile->slug.'" action="view" class="m-r-5"> <span class="fa fa-eye"></span> </a>
                   <a href="/profiles/'.$profile->slug.'/edit" action="update" class="m-r-5"> <span class="fa fa-edit"></span> </a>
-                  
+
                 </div>';
         return $html;
     }
@@ -197,7 +197,7 @@ class Profile extends Model implements Auditable
         $path = Request::path();
         $slug = substr($path, (strrpos($path, '/')+1), strlen($path));
         $event = DB::table('events')->select('id')->where('slug', $slug)->first();
-        
+
         $participant_roles = DB::table('event_participant_roles')->select('id', 'role_name')->where('event_id', $event->id)->get();
         $html = '<select class="form-control ajax-participant-role" data-id = "'.$profile->id.'" id="selected_role_'.$profile->id.'" name="selected_role['.$profile->id.']">';
 

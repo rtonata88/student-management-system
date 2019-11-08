@@ -73,7 +73,7 @@
    <div class="form-group">
     {{Form::label('languages[]', 'Language (s)')}}<span class="text-danger">*</span>
     {{Form::select('languages[]', $languages, $profile->language()->pluck('language_id'), ['class' => 'form-control select2 select2-multiple', 'required', 'multiple'])}}
-    <span class="help-text"><small>You may select more than one title</small></span>
+    <span class="help-text"><small>You may select more than one language</small></span>
   </div>
 </div>
 
@@ -99,6 +99,7 @@
     <thead>
       <th>Organization Name</th>
       <th>Position</th>
+      <th>Department</th>
       <th>Work Number</th>
       <th>Email</th>
     </thead>
@@ -107,8 +108,17 @@
       <tr>
         <td>{{$profile_organization->organization->name}}</td>
         <td>{{$profile_organization->position}}</td>
-        <td>{{$profile_organization->work_number}}</td>
-        <td>{{$profile_organization->work_number}}</td>
+        <td>{{$profile_organization->department}}</td>
+        <td>
+          {{$profile_organization->work_number}} <br>
+          {{$profile_organization->work_number2}}
+          {{$profile_organization->work_number_other}}
+        </td>
+        <td>
+          {{$profile_organization->email}} <br>
+          {{$profile_organization->email2}} <br>
+          {{$profile_organization->email_other}}
+        </td>
       </tr>
       @empty
       Not affiliated to any organizations use the fields below to affiliate an organization to this profile
@@ -116,6 +126,7 @@
       <tr>
         <td>{{Form::select('organization[]', $organizations, null, ['class' => 'form-control', 'placeholder'=>'Select organization'])}}</td>
         <td>{{Form::text('position[]',null, ['class' => 'form-control', 'placeholder' => 'Type here'])}}</td>
+        <td>{{Form::text('department[]',null, ['class' => 'form-control', 'placeholder' => 'Type here'])}}</td>
         <td>
           {{Form::text('work_number[]',null, ['class' => 'form-control', 'placeholder'=>'Primary Work Number'])}}
           {{Form::text('work_number2[]',null, ['class' => 'form-control', 'placeholder'=>'Secondary Work Number'])}}

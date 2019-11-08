@@ -34,14 +34,14 @@
                         <div class="form-group">
                           <div class="col-md-5">
                             {{Form::label('name', 'Organization Name')}}
-                            {{Form::text('name', null, ['class' => 'form-control'])}}
+                            {{Form::text('name', null, ['class' => 'form-control', 'required'])}}
                           </div>
                         </div>
 
                         <div class="form-group">
                           <div class="col-md-5">
                             {{Form::label('acronym', 'Acronym (short name)')}}
-                            {{Form::text('acronym', null, ['class' => 'form-control'])}}
+                            {{Form::text('acronym', null, ['class' => 'form-control', 'required'])}}
                           </div>
                         </div>
 
@@ -49,6 +49,13 @@
                           <div class="col-md-5">
                             {{Form::label('website', 'Website')}}
                             {{Form::text('website', 'www.', ['class' => 'form-control'])}}
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-md-5">
+                            {{Form::label('platform', 'Platform')}}
+                            {{Form::select('platform', ['Online' => 'Online', 'Print'=>'Print', 'Broadcast'=>'Broadcast', 'Radio'=>'Radio'], null, ['class' => 'form-control', 'placeholder'=>'Select One'])}}
                           </div>
                         </div>
 

@@ -64,7 +64,7 @@ class TeamsController extends Controller
 
 	public function update(Request $requests, $id)
 	{
-		$team =  Team::whereSlug($id)->first();
+		$team =  Team::find($id);
 
 		$team->language_id		= $requests->language_id;
 		$team->name 			= $requests->name;

@@ -43,7 +43,7 @@ class ProfilesController extends Controller
 		} else {
 			$profiles = Profile::where('team_id', $user->team_id)->with(['sector', 'language', 'country', 'city', 'organization'])->paginate(50);
 		}
-	
+
 
 		return view('profiles.index', compact('profiles'));
 	}
@@ -54,7 +54,7 @@ class ProfilesController extends Controller
      */
     public function getSimpleDatatablesData()
     {
-        return Laratables::recordsOf(Profile::class, 
+        return Laratables::recordsOf(Profile::class,
         		function($query){
         			$user = Auth::user();
         			if($user->hasRole('department leader')){
@@ -145,7 +145,7 @@ class ProfilesController extends Controller
 		return redirect()->back();
 
 	}
-	
+
 	public function edit($slug)
 	{
 		$languages = Language::pluck('name', 'id');
@@ -183,10 +183,10 @@ class ProfilesController extends Controller
 
 			$thumbnail_photo->save($original_path.time()."_".$original_photo->getClientOriginalName());
 			$thumbnail_photo->resize(150,150);
-			$thumbnail_photo->save($thumbnail_path.time()."_".$original_photo->getClientOriginalName()); 
+			$thumbnail_photo->save($thumbnail_path.time()."_".$original_photo->getClientOriginalName());
 			$profile_photo = time()."_".$original_photo->getClientOriginalName();
 		}
-		
+
 
 
 		$profile = new Profile;
@@ -214,7 +214,7 @@ class ProfilesController extends Controller
 		$profile->team_id					= $requests->team_id;
 
 		$profile->save();
-		
+
 
 		$profile->title()->sync($requests->titles);
 		$profile->language()->sync($requests->languages);
@@ -225,6 +225,7 @@ class ProfilesController extends Controller
 				$organization_profile->profile_id 		= $profile->id;
 				$organization_profile->organization_id 	= $organization;
 				$organization_profile->position 		= $requests->position[$key1];
+				$organization_profile->department 		= $requests->department[$key1];
 				$organization_profile->work_number 		= $requests->work_number[$key1];
 				$organization_profile->work_number2 	= $requests->work_number2[$key1];
 				$organization_profile->work_number_other = $requests->work_number_other[$key1];
@@ -272,7 +273,7 @@ class ProfilesController extends Controller
 					unlink(public_path()."/fruit_profiles/photos/".$profile->photo);
 				}
 			}
-			
+
 			$original_photo		= $requests->file('photo');
 			$thumbnail_photo 	= Image::make($original_photo);
 			$thumbnail_path 	= public_path().'/fruit_profiles/thumbnail/';
@@ -281,7 +282,7 @@ class ProfilesController extends Controller
 			$thumbnail_photo->save($original_path.time()."_".$original_photo->getClientOriginalName());
 			$thumbnail_photo->resize(150,150);
 			$thumbnail_photo->save($thumbnail_path.time()."_".$original_photo->getClientOriginalName());
-			$profile_photo = time()."_".$original_photo->getClientOriginalName();    
+			$profile_photo = time()."_".$original_photo->getClientOriginalName();
 			$profile->photo = $profile_photo;
 		}
 		$profile->fullname 					= $requests->fullname;
@@ -316,6 +317,7 @@ class ProfilesController extends Controller
 				$organization_profile->profile_id 		= $profile->id;
 				$organization_profile->organization_id 	= $organization;
 				$organization_profile->position 		= $requests->position[$key1];
+				$organization_profile->department 		= $requests->department[$key1];
 				$organization_profile->work_number 		= $requests->work_number[$key1];
 				$organization_profile->work_number2 	= $requests->work_number2[$key1];
 				$organization_profile->work_number_other = $requests->work_number_other[$key1];

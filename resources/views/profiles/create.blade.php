@@ -57,7 +57,7 @@
      <div class="form-group">
       {{Form::label('languages[]', 'Language (s)')}}<span class="text-danger">*</span>
       {{Form::select('languages[]', $languages, null, ['class' => 'form-control select2 select2-multiple', 'required', 'multiple'])}}
-      <span class="help-text"><small>You may select more than one title</small></span>
+      <span class="help-text"><small>You may select more than one language</small></span>
     </div>
   </div>
 
@@ -84,6 +84,7 @@
         <th>#</th>
         <th>Organization Name</th>
         <th>Position</th>
+        <th>Department</th>
         <th>Work Number</th>
         <th>Email</th>
       </thead>
@@ -92,6 +93,7 @@
           <td>1</td>
           <td>{{Form::select('organization[]', $organizations, null, ['class' => 'form-control', 'required', 'placeholder'=>'Select organization'])}}</td>
           <td>{{Form::text('position[]',null, ['class' => 'form-control', 'required', 'placeholder' => 'Type here'])}}</td>
+          <td>{{Form::text('department[]',null, ['class' => 'form-control', 'placeholder' => 'Type here'])}}</td>
           <td>
             {{Form::text('work_number[]',null, ['class' => 'form-control', 'placeholder'=>'Primary Work Number'])}}
             {{Form::text('work_number2[]',null, ['class' => 'form-control', 'placeholder'=>'Secondary Work Number'])}}

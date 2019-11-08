@@ -21,9 +21,9 @@
                                 </a></h3>
                                  @if(Session::has('message'))
                                 <div class="alert alert-success alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> 
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     {{ Session::get('message') }}
-                                </div>                            
+                                </div>
                                 @endif
                                 <div class="table-responsive">
                                 <table class="table table-striped border" id="dataTable">
@@ -33,6 +33,7 @@
                                             <th>NAME</th>
                                             <th>ACRONYM</th>
                                             <th>WEBSITE</th>
+                                            <th>PLATFORM</th>
                                             <th>INDUSTRY</th>
                                             <th>SECTOR</th>
                                             <th>COUNTRY</th>
@@ -47,11 +48,12 @@
                                             <td>{{$organization->name}}</td>
                                             <td>{{$organization->acronym}}</td>
                                             <td>{{$organization->website}}</td>
+                                            <td>{{$organization->platform}}</td>
                                             <td>{{$organization->industry->name}}</td>
                                             <td>{{$organization->sector->name}}</td>
                                             <td>{{$organization->country->name}}</td>
                                             <td>{{$organization->language->name}}</td>
-                                           
+
                                             <td>
                                                 <a href="/organizations/{{$organization->slug}}"> <span class="fa fa-pencil"></span> Edit</a>
                                            </td>

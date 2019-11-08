@@ -24,44 +24,44 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-2 col-xs-6 b-r"> 
+                <div class="col-md-2 col-xs-6 b-r">
                     <strong>MEETINGS <small><span class="counter">{{$profile->meetings_count()}}</span></small></strong>
                     <br>
                     <p class="text-muted">
                         <a href="/meetings/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
                     </p>
 
-                </div> 
+                </div>
                 <div class="col-md-2 col-xs-6 b-r">
                     <strong>CALLS <small><span class="counter">{{$profile->calls_count()}}</span></small></strong>
                     <br>
                     <p class="text-muted">
                         <a href="/calls/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
                     </p>
-                </div> 
-                <div class="col-md-2 col-xs-6 b-r"> 
+                </div>
+                <div class="col-md-2 col-xs-6 b-r">
                     <strong>EMAILS <small><span class="counter">{{$profile->emails_count()}}</span></small></strong>
                     <br>
                     <p class="text-muted">
                         <a href="/emails/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
                     </p>
-                </div> 
-                <div class="col-md-2 col-xs-6"> 
+                </div>
+                <div class="col-md-2 col-xs-6">
                     <strong>MESSAGES <small><span class="counter">{{$profile->messages_count()}}</span></small></strong>
                     <br>
                     <p class="text-muted">
                         <a href="/messages/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
                     </p>
 
-                </div> 
-                <div class="col-md-2 col-xs-6"> 
+                </div>
+                <div class="col-md-2 col-xs-6">
                     <strong>MEDIA COVERAGE <small><span class="counter">{{$profile->coverage_count()}}</span></small></strong>
                     <br>
                     <p class="text-muted">
                         <a href="/media-coverage/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
                     </p>
 
-                </div> 
+                </div>
             </div>
         </div>
     </div>
@@ -69,12 +69,12 @@
     <div class="row">
         <div class="col-md-4 col-xs-12">
             <div class="white-box">
-                <div class="user-bg"> 
+                <div class="user-bg">
                     @if($profile->photo)
-                    <img width="100%" alt="user" src="/fruit_profiles/photos/{{$profile->photo}}"> 
+                    <img width="100%" alt="user" src="/fruit_profiles/photos/{{$profile->photo}}">
                     @else
                     <center>
-                        <img  alt="user" src="/fruit_profiles/photos/no-image.png" > 
+                        <img  alt="user" src="/fruit_profiles/photos/no-image.png" >
                     </center>
 
                     @endif
@@ -95,10 +95,11 @@
                     <!-- .row -->
                     <div class="row m-t-10">
                         <div class="col-md-6 b-r"><strong>Appointed Role</strong>
-                            <p>{{$profile->fruit_role->role}}</p>
+
+                            <p>{{ $profile->fruit_role->role}}</p>
                         </div>
                         <div class="col-md-6"><strong>Fruit Stage</strong>
-                            <p>{{$profile->fruit_stage->stage}}</p>
+                            <p>{{ $profile->fruit_stage->stage}}</p>
                         </div>
                     </div>
                     <div class="row m-t-10">
@@ -152,7 +153,7 @@
             <!-- /.tabs -->
             <div class="tab-content">
                 <!-- .tabs 1 -->
-                <div class="tab-pane active" id="home">  
+                <div class="tab-pane active" id="home">
                     @forelse($profile->activities as $activity)
                     <div class="row white-box">
                         <div class="card">
@@ -175,10 +176,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     @empty
                     No activities recorded for this profile
-                    @endforelse 
+                    @endforelse
                 </div>
                 <!-- /.tabs1 -->
                 <!-- .tabs2 -->
@@ -219,6 +220,8 @@
                             </div>
                         </div>
                         <br>
+
+
                         <div class="row">
                             <div class="col-md-6 col-xs-8 b-r"> <strong>Country</strong>
                                 <br>
@@ -229,26 +232,50 @@
                                 <p class="text-muted">{{$profile->city->name}}</p>
                             </div>
                         </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-8 b-r"> <strong>Mobile Numbers</strong>
+                                <br>
+                                <p class="text-muted">{{$profile->mobile_no}} <br>
+                                {{$profile->mobile_no2}} <br> {{$profile->mobile_no_other}}</p>
+                            </div>
+                            <div class="col-md-6 col-xs-6"> <strong>Emails</strong>
+                                <br>
+                                <p class="text-muted">{{$profile->email}} <br>
+                                {{$profile->email2}} </p>
+                            </div>
+                        </div>
 
-                        <h6 class="m-t-10"><strong>AFFILIATE ORGANIZATIONS</strong></h6>
                         <table class="table table-bordered">
                             <thead>
                             <th>#</th>
                             <th>Organization Name</th>
                             <th>Position</th>
+                            <th>Department</th>
+                            <th>Website</th>
                             <th>Work Number</th>
                             <th>Email</th>
                             </thead>
                             <tbody>
-                                @forelse($organizations as $index=>$organization)
-                                <tr>
-                                    <td>{{$index + 1}}</td>
-                                    <td>{{$organization->organization->name}}</td>
-                                    <td>{{$organization->position}}</td>
-                                    <td>{{$organization->work_number}}</td>
-                                    <td>{{$organization->work_number}}</td>
-                                </tr>
-                                @empty
+                              @forelse($organizations as $index=>$profile_organization)
+                              <tr>
+                                <td>{{$index + 1}}</td>
+                                <td>{{$profile_organization->organization->name}}</td>
+                                <td>{{$profile_organization->position}}</td>
+                                <td>{{$profile_organization->department}}</td>
+                                <td><a href="http://{{$profile_organization->organization->website}}" target="_blank">{{$profile_organization->organization->website}}</a></td>
+                                <td>
+                                  {{$profile_organization->work_number}} <br>
+                                  {{$profile_organization->work_number2}}
+                                  {{$profile_organization->work_number_other}}
+                                </td>
+                                <td>
+                                  {{$profile_organization->email}} <br>
+                                  {{$profile_organization->email2}} <br>
+                                  {{$profile_organization->email_other}}
+                                </td>
+                              </tr>
+                              @empty
                                 Not affiliated to any organizations
                                 @endforelse
                             </tbody>
@@ -312,10 +339,10 @@
                                     <tr>
                                         <td>{{$index + 1}}</td>
                                         <td>{{$document->description}}</td>
-                                        <td>{{$document->user->name}}</td>                                           
+                                        <td>{{$document->user->name}}</td>
                                         <td>
                                             <a href="/profile/documents/{{$document->id}}/download"> <span class="fa fa-download"></span></a> <strong>|</strong>
-                                            <a href="/profile/documents/{{$document->id}}/delete"> <span class="fa fa-trash"></span></a> 
+                                            <a href="/profile/documents/{{$document->id}}/delete"> <span class="fa fa-trash"></span></a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -348,7 +375,7 @@
                                         <td>{{$index + 1}}</td>
                                         <td>{{$document->document_types->type}}</td>
                                         <td>{{$document->effective_date}}</td>
-                                        <td>{{$document->file_location}}</td>                                           
+                                        <td>{{$document->file_location}}</td>
                                         <td>
                                             <a href="{{route('documentation.edit', $document->id)}}">  <span class="fa fa-pencil"></span> </a> |
                                             @if($document->files)
@@ -363,7 +390,7 @@
                     </div>
                 </div>
 
-                <div class="tab-pane active" id="events"> 
+                <div class="tab-pane active" id="events">
                     @forelse($profile->events as $event)
                     <div class="row white-box">
                         <div class="card">
@@ -384,14 +411,14 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     @empty
                     No events recorded for this profile
-                    @endforelse 
+                    @endforelse
                 </div>
                 <!-- /.tabs3 -->
 
-                <div class="tab-pane active" id="other-information"> 
+                <div class="tab-pane active" id="other-information">
                     <div class="row white-box">
                         <h4 class="page-title"><strong>WARP SUMMIT ATTENDANCE</strong></h4>
                         <hr>
@@ -410,7 +437,7 @@
                                     <tr>
                                         <td>{{$index + 1}}</td>
                                         <td>{{date('Y', strtotime($summit->date_attended))}}</td>
-                                        <td>{{$summit->financing}}</td>                                           
+                                        <td>{{$summit->financing}}</td>
                                         <td>
                                            <a href="{{route('warp-attendees.edit', $summit->id)}}"> <span class="fa fa-pencil"></span> Edit</a>
                                         </td>
@@ -442,13 +469,13 @@
                                 {{Form::text('description', null, ['class' => 'form-control', 'placeholder' => 'Type here'])}}
                                 {{Form::hidden('profile', $profile->slug, ['class' => 'form-control', 'placeholder' => 'Type here'])}}
                             </div>
-                        </div> 
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 {{Form::label('document', 'Select file')}}
                                 {{Form::file('document', null, ['class' => 'form-control'])}}
                             </div>
-                        </div> 
+                        </div>
                     </div>
 
                 </div>

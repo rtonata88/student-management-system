@@ -44,6 +44,12 @@
                             {{Form::text('website', null, ['class' => 'form-control'])}}
                           </div>
                         </div>
+                        <div class="form-group">
+                          <div class="col-md-5">
+                            {{Form::label('platform', 'Platform')}}
+                            {{Form::select('platform', ['Online' => 'Online', 'Print'=>'Print', 'Broadcast'=>'Broadcast', 'Radio'=>'Radio'], null, ['class' => 'form-control', 'placeholder'=>'Select One'])}}
+                          </div>
+                        </div>
 
                          <div class="form-group">
                           <div class="col-md-5">
