@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">USERS</h4> 
+            <h4 class="page-title">USERS</h4>
         </div>
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
             <a href="{{route('users.create')}}" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD USER</a>
@@ -19,14 +19,14 @@
             <div class="col-md-12 col-lg-12 col-sm-12">
                 @if(Session::has('message'))
                 <div class="alert alert-success alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> 
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     {{ Session::get('message') }}
-                </div>                            
+                </div>
                 @endif
                 <div class="table-responsive">
 
 
-                    <table id="dataTable" class="table table-hover" style="width:100%"> 
+                    <table id="dataTable" class="table table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Name</th>

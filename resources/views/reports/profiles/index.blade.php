@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">FRUIT PROFILES REPORT</h4> 
+            <h4 class="page-title">FRUIT PROFILES REPORT</h4>
         </div>
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
             <ol class="breadcrumb">
@@ -82,9 +82,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">STAGE</label>
+                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">ROLE</label>
                                     <div class="col-sm-4">
-                                        {{Form::select('stage', $fruit_levels, null, ['class' => 'form-control select','placeholder'=>'All Stages'])}}
+                                        {{Form::select('role', $fruit_roles, null, ['class' => 'form-control select','placeholder'=>'All Roles'])}}
                                     </div>
                                 </div>
                                 <div class="form-actions">
@@ -104,7 +104,7 @@
             @if($profiles)
             <strong>{{$profiles->total()}} Results Found</strong>, <a href="{{route('export-profiles')}}">export to excel</a>
             <div class="col-md-12 col-lg-12 col-sm-12">
-                <table id="dataTable2" class="table table-striped table-bordered dataTable" style="width:100%"> 
+                <table id="dataTable2" class="table table-striped table-bordered dataTable" style="width:100%">
                     <thead>
                         <tr>
                             <th>Firstnames</th>
