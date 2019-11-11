@@ -87,6 +87,12 @@
                                         {{Form::select('role', $fruit_roles, null, ['class' => 'form-control select','placeholder'=>'All Roles'])}}
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">STAGE</label>
+                                    <div class="col-sm-4">
+                                        {{Form::select('stage', $fruit_stages, null, ['class' => 'form-control select','placeholder'=>'All Stages'])}}
+                                    </div>
+                                </div>
                                 <div class="form-actions">
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-info">SEARCH</button>
