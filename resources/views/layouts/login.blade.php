@@ -1,5 +1,5 @@
 
-<!DOCTYPE html>  
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -8,7 +8,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="icon" type="image/png" sizes="16x16" href="{{asset('plugins/images/favicon.png')}}">
-<title>PHILIPS List - Login</title>
+<title>PEACEBase - Login</title>
 <!-- Bootstrap Core CSS -->
 <link href="{{asset('assets/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
 <!-- animation CSS -->
@@ -35,13 +35,13 @@
               <div class="inner-panel">
                   <a href="javascript:void(0)" class="p-20 di"></a>
                   <div class="lg-content">
-                      <h2><strong>The PEACE</strong><i>App</i></h2>
-                      <p class="text-muted">Enlightening to Cultivate Talented Individuals with the Values and Spirit of Peace</p>
+                      <h2>#<strong>PEACE</strong>Base</h2>
+                      <p class="text-muted">We are the messengers of peace born in this era with the mission to build a peaceful world and to leave it as a legacy to future generations.</p>
                   </div>
               </div>
       </div>
       @yield('content')
-  
+
 </section>
 <!-- jQuery -->
 <script src="{{asset('assets/plugins/jquery/dist/jquery.min.js')}}"></script>

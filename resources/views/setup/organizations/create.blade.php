@@ -4,11 +4,11 @@
 <div class="container-fluid">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">ORGANIZATIONS</h4> </div>
+            <h4 class="page-title">ORGANISATIONS</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
                     <li><a href="/setup">Setup</a></li>
-                    <li class="active">Organizations</li>
+                    <li class="active">Organisations</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
@@ -55,28 +55,28 @@
                         <div class="form-group">
                           <div class="col-md-5">
                             {{Form::label('platform', 'Platform')}}
-                            {{Form::select('platform', ['Online' => 'Online', 'Print'=>'Print', 'Broadcast'=>'Broadcast', 'Radio'=>'Radio'], null, ['class' => 'form-control', 'placeholder'=>'Select One'])}}
+                            {{Form::select('platform', ['Online' => 'Online', 'Print'=>'Print', 'Broadcast'=>'Broadcast', 'Radio'=>'Radio'], null, ['class' => 'form-control', 'placeholder'=>'Not Applicable'])}}
                           </div>
                         </div>
 
                          <div class="form-group">
                           <div class="col-md-5">
                             {{Form::label('industry_id', 'Industry')}}
-                            {{Form::select('industry_id', $industries, null, ['class' => 'form-control select'])}}
+                            {{Form::select('industry_id', $industries, null, ['class' => 'form-control select', 'placeholder'=>'Select'])}}
                           </div>
                         </div>
 
                         <div class="form-group">
                           <div class="col-md-5">
                             {{Form::label('sector_id', 'Sector')}}
-                            {{Form::select('sector_id', $sectors, null, ['class' => 'form-control select'])}}
+                            {{Form::select('sector_id', $sectors, null, ['class' => 'form-control select', 'placeholder'=>'Select'])}}
                           </div>
                         </div>
 
                         <div class="form-group">
                           <div class="col-md-5">
                             {{Form::label('country_id', 'Country')}}
-                            {{Form::select('country_id', $countries, null, ['class' => 'form-control select'])}}
+                            {{Form::select('country_id', $countries, null, ['class' => 'form-control select', 'placeholder'=>'Select'])}}
                           </div>
                         </div>
 

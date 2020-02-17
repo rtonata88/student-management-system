@@ -4,21 +4,21 @@
 <div class="container-fluid">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">FRUIT PROFILES</h4> 
+            <h4 class="page-title">PROFILES</h4>
         </div>
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
             <a href="/profiles/create" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD PROFILE</a>
             <ol class="breadcrumb">
-                <li class="active">Fruit Profiles</li>
+                <li class="active">Profiles</li>
            </ol>
         </div>
        <!-- /.col-lg-12 -->
     </div>
     <div class="white-box">
     <div class="row">
-        
+
         <div class="col-md-12 col-lg-12 col-sm-12">
-          <table id="tbl-profiles" class="table table-hover" style="width:100%"> 
+          <table id="tbl-profiles" class="table table-hover" style="width:100%">
             <thead>
              <tr>
                  <th>Fullname</th>

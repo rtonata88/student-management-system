@@ -28,7 +28,7 @@
                                 {{Form::select('users[]', $users, null, ['class' => 'form-control select2 select2-multiple', 'multiple'])}}
                                 <small><span class="help-text">Please include all representatives in attendance apart from yourself [<strong>{{Auth::user()->name}}</strong>]. If you were the only representative, please leave this field blank.</span></small>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                     @if($activity_type != 'Meeting')
                     <div class="row">
@@ -36,9 +36,9 @@
                             <div class="form-group">
 
                                 {{Form::label('direction', 'Direction')}}
-                                {{Form::select('direction', ['Out' => 'Out Going', 'In'=>'In Coming'], null, ['class' => 'form-control'])}}
+                                {{Form::select('direction', ['Out' => 'Out Going', 'In'=>'In Coming'], null, ['class' => 'form-control', 'placeholder'=>'Select'])}}
                             </div>
-                        </div> 
+                        </div>
                     </div>
                     @endif
                     <div class="row">
@@ -52,7 +52,7 @@
 
                             <small><span class="help-text">Please include all other fruits that were in attendance apart from <strong>{{$profile->fullname}} {{$profile->lastname}}. </strong> Leave this field blank if there were no other fruits.</span></small>
                         </div>
-                    </div> 
+                    </div>
                     </div>
                     <div class="row">
                         <div class="col-md-5">

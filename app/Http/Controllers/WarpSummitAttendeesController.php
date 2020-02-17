@@ -63,7 +63,8 @@ class WarpSummitAttendeesController extends Controller
     public function store(Request $request)
     {
         WarpSummitAttendee::create($request->all());
-        Session::flash('message', 'The record has been added, please confirm that it appears in the table below.');
+        Profile::where('id', $request->profile_id)->update(['warp_attendee'=>'Yes']);
+        Session::flash('message', 'The record has been added, and the fruit profile has been updated accordingly.');
         return redirect('/warp-attendees');
 
     }
@@ -113,6 +114,10 @@ class WarpSummitAttendeesController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $attendee = WarpSummitAttendee::find($id);
+      Profile::where('id', $attendee->profile_id)->update(['warp_attendee'=>'No']);
+      $attendee->delete();
+      Session::flash('message', 'The record has been deleted and the Fruit Profile has been updated accordingly.');
+      return redirect()->back();
     }
 }

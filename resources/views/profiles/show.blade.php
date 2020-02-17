@@ -13,7 +13,7 @@
             <h4 class="page-title">{{$profile->fullname}} {{$profile->lastname}} [<a href="/profiles/{{$profile->slug}}/edit">Update Profile</a>]</h4> </div>
         <div class="col-lg-9 col-sm-8 col-md-3 col-xs-12">
             <ol class="breadcrumb">
-                <li><a href="/profiles">Fruit Profiles</a></li>
+                <li><a href="/profiles">Contact Profiles</a></li>
                 <li class="active">Detail</li>
             </ol>
         </div>
@@ -83,10 +83,14 @@
                 <div class="user-btm-box">
                     <!-- .row -->
                     <div class="row m-t-10">
-                        <div class="col-md-6 b-r"><strong>Date Networked</strong>
-                            <p>{{$profile->date_networked}}</p>
+                        <div class="col-md-6 b-r"><strong>Languages</strong>
+                          <p>
+                          @foreach($profile->language as $language)
+                            {{$language->name}}.
+                          @endforeach
+                          </p>
                         </div>
-                        <div class="col-md-6"><strong>Maintainer</strong>
+                        <div class="col-md-6"><strong>Responsible Staff</strong>
                             <p>{{$profile->maintainer->name}}</p>
                         </div>
                     </div>
@@ -94,23 +98,42 @@
                     <hr>
                     <!-- .row -->
                     <div class="row m-t-10">
-                        <div class="col-md-6 b-r"><strong>Appointed Role</strong>
+                        <div class="col-md-6 b-r"><strong>Status/Appointed Role</strong>
 
                             <p>{{ $profile->fruit_role->role}}</p>
                         </div>
-                        <div class="col-md-6"><strong>Fruit Stage</strong>
+                        <div class="col-md-6"><strong>Level</strong>
                             <p>{{ $profile->fruit_stage->stage}}</p>
                         </div>
                     </div>
+                    <hr>
                     <div class="row m-t-10">
-                        <div class="col-md-6 b-r"><strong>Fruit Level</strong>
+                        <div class="col-md-6 b-r"><strong>Rank</strong>
                             <p>{{$profile->fruit_level->level}}</p>
+                        </div>
+                        <div class="col-md-6 b-r"><strong>Date of Birth</strong>
+                            <p>{{$profile->dob}}</p>
                         </div>
 
                     </div>
                     <!-- /.row -->
                     <hr>
                     <!-- .row -->
+                    <div class="row m-t-10">
+                        <div class="col-md-6 b-r"><strong>Cult Awareness</strong>
+                            <p>{{$profile->cult_awareness}}</p>
+                        </div>
+                        <div class="col-md-6 b-r"><strong>Pre-poisoned</strong>
+                            <p>{{$profile->pre_poisoned}}</p>
+                        </div>
+                    </div>
+                    <div class="row m-t-10">
+                        <div class="col-md-6 b-r"><strong>WARP Attendee</strong>
+                            <p>{{$profile->warp_attendee}}</p>
+                        </div>
+
+                    </div>
+                    <hr>
                     <div class="row m-t-10">
                         <div class="col-md-12"><strong>History</strong>
                             <p>{{$profile->history}}</p>
@@ -134,19 +157,19 @@
                 <!-- .tabs -->
                 <ul class="nav nav-tabs tabs customtab">
                     <li class="active tab">
-                        <a href="#home" data-toggle="tab"> <span class="visible-xs"><i class="fa fa-home"></i></span> <span class="hidden-xs">Activity Timeline</span> </a>
+                        <a href="#home" data-toggle="tab" aria-expanded="true"> Activity Timeline</a>
                     </li>
                     <li class="tab">
-                        <a href="#events" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-cog"></i></span> <span class="hidden-xs">Events</span> </a>
+                        <a href="#events" data-toggle="tab" aria-expanded="false"> Events</a>
                     </li>
                     <li class="tab">
-                        <a href="#profile" data-toggle="tab"> <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Profile Details</span> </a>
+                        <a href="#profile" data-toggle="tab" aria-expanded="false"> Profile Details</a>
                     </li>
                     <li class="tab">
-                        <a href="#settings" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-cog"></i></span> <span class="hidden-xs">Profile Documents</span> </a>
+                        <a href="#settings" data-toggle="tab" aria-expanded="false"> Profile Documents </a>
                     </li>
                     <li class="tab">
-                        <a href="#other-information" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-cog"></i></span> <span class="hidden-xs">Other Information</span> </a>
+                        <a href="#other-information" data-toggle="tab" aria-expanded="false"> Other Information</a>
                     </li>
                 </ul>
             </div>
@@ -165,6 +188,7 @@
                                     <strong>Direction:</strong> {{$activity->direction}} <br>
                                     @endif
                                     <strong>Where:</strong> {{$activity->venue}} <br>
+                                    <strong>who:</strong> @foreach($activity->users as $rep) {{$rep->name}}<br> @endforeach
                                     <strong>When:</strong> {{$activity->when}} <br>
                                     <strong>Why</strong>  <br>{{$activity->why}}<br> <br>
                                     <strong>Outcome</strong>  <br>{{$activity->outcome}}
@@ -181,6 +205,33 @@
                     No activities recorded for this profile
                     @endforelse
                 </div>
+                <div class="tab-pane" id="events">
+                    @forelse($profile->events as $event)
+                    <div class="row white-box">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-uppercase mb-0"><strong>{{$event->name}}: <i>{{$event->theme}}</i></strong></h5>
+                                <hr>
+                                <p>
+                                    <strong>Event Type:</strong> {{$event->event_type}}<br>
+                                    <strong>Start Date:</strong> {{$event->start_date}} {{$event->start_time}} <br>
+                                    <strong>End Date:</strong> {{$event->end_date}} {{$event->end_time}} <br>
+                                    <strong>Where: </strong>  <br>{{$event->address_line1}}<br> {{$event->address_line2}}<br>
+                                    <strong>Description</strong>  <br>{{$event->description}}
+                                </p>
+                                <div class="m-t-20 row">
+                                    @foreach($event->photos as $photo)
+                                    <a href="{{ url('storage/'.$photo->path) }}" data-toggle="lightbox" data-effect="mfp-zoom-in" data-gallery="multiimages" data-title="{{$photo->caption}}"><img src="{{ url('storage/'.$photo->path) }}" alt="gallery" class="all studio col-md-3 col-xs-12" /></a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    No events recorded for this profile
+                    @endforelse
+                </div>
+                <!-- /.tabs3 -->
                 <!-- /.tabs1 -->
                 <!-- .tabs2 -->
                 <div class="tab-pane" id="profile">
@@ -276,7 +327,7 @@
                                 </td>
                               </tr>
                               @empty
-                                Not affiliated to any organizations
+                                Not affiliated to any organisation
                                 @endforelse
                             </tbody>
                         </table>
@@ -390,35 +441,7 @@
                     </div>
                 </div>
 
-                <div class="tab-pane active" id="events">
-                    @forelse($profile->events as $event)
-                    <div class="row white-box">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-uppercase mb-0"><strong>{{$event->name}}: <i>{{$event->theme}}</i></strong></h5>
-                                <hr>
-                                <p>
-                                    <strong>Event Type:</strong> {{$event->event_type}}<br>
-                                    <strong>Start Date:</strong> {{$event->start_date}} {{$event->start_time}} <br>
-                                    <strong>End Date:</strong> {{$event->end_date}} {{$event->end_time}} <br>
-                                    <strong>Where: </strong>  <br>{{$event->address_line1}}<br> {{$event->address_line2}}<br>
-                                    <strong>Description</strong>  <br>{{$event->description}}
-                                </p>
-                                <div class="m-t-20 row">
-                                    @foreach($event->photos as $photo)
-                                    <a href="{{ url('storage/'.$photo->path) }}" data-toggle="lightbox" data-effect="mfp-zoom-in" data-gallery="multiimages" data-title="{{$photo->caption}}"><img src="{{ url('storage/'.$photo->path) }}" alt="gallery" class="all studio col-md-3 col-xs-12" /></a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @empty
-                    No events recorded for this profile
-                    @endforelse
-                </div>
-                <!-- /.tabs3 -->
-
-                <div class="tab-pane active" id="other-information">
+                <div class="tab-pane" id="other-information">
                     <div class="row white-box">
                         <h4 class="page-title"><strong>WARP SUMMIT ATTENDANCE</strong></h4>
                         <hr>
@@ -439,7 +462,8 @@
                                         <td>{{date('Y', strtotime($summit->date_attended))}}</td>
                                         <td>{{$summit->financing}}</td>
                                         <td>
-                                           <a href="{{route('warp-attendees.edit', $summit->id)}}"> <span class="fa fa-pencil"></span> Edit</a>
+                                           <a href="{{route('warp-attendees.edit', $summit->id)}}"> <span class="fa fa-pencil"></span> Edit</a> |
+                                           <a href="{{route('warp-attendees.delete', $summit->id)}}"> <span class="fa fa-trash"></span> Delete</a>
                                         </td>
                                     </tr>
                                     @endforeach

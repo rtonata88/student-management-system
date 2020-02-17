@@ -4,12 +4,12 @@
 <div class="container-fluid">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">FRUIT MEDIA COVERAGE</h4> </div>
+            <h4 class="page-title">CONTACT MEDIA COVERAGE</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
                     <li><a href="/profiles">Fruit Profiles</a></li>
                     <li><a href="/profiles/{{$profile->slug}}">Profile</a></li>
-                    <li class="active">Media Covorage Timeline</li>
+                    <li class="active">Media Coverage Timeline</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
@@ -30,8 +30,8 @@
                                             <p><strong>Date: </strong>{{$coverage->when}}</a> <br>
                                             <strong>Title: </strong>{{$coverage->title}}</a> <br>
                                             <strong>Platform: </strong>{{$coverage->platform}}</a></p>
-                                            
-                                                    <p> {{$coverage->short_summary}}</p> 
+
+                                                    <p> {{$coverage->short_summary}}</p>
                                             <br>
                                             <div class="m-t-20 row">
                                                 <div id="gallery">
@@ -39,20 +39,20 @@
                                                        <div id="gallery-content-center">
                                                            @foreach($coverage->photos as $photo)
                                                            <a href="{{ asset('storage/'.$photo->path) }}" data-toggle="lightbox" data-effect="mfp-zoom-in" data-gallery="multiimages" data-title="{{$photo->caption}}"><img src="{{ asset('storage/'.$photo->path) }}" alt="gallery" class="all studio col-md-3 col-xs-12" /></a>
-                                                           
+
                                                            @endforeach
                                                        </div>
                                                    </div>
                                                 </div>
-                                               
+
                                             </div>
-                                           
-                                            
+
+
                                         </div>
                                     </div>
                                 </div>
                         @endforeach
-                    </div>         
+                    </div>
                 </div>
             </div>
         </div>

@@ -93,7 +93,7 @@ class ProfilesController extends Controller
 		$countries = Country::pluck('name', 'id');
 		$titles = Title::pluck('title', 'id');
 		$gender = Gender::pluck('gender', 'id');
-		$organizations = Organization::pluck('name', 'id');
+		$organizations = Organization::orderBy('name')->get()->pluck('name', 'id');
 		$cities = City::pluck('name', 'id');
 		$fruit_roles = FruitRole::pluck('role', 'id');
 		$teams = Team::pluck('name', 'id');

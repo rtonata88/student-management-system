@@ -30,20 +30,13 @@
                         @endif
                       </div>
                     </div>
-                    <div class="form-group">
-                      <div class="col-md-12">
-                        <div class="checkbox checkbox-info pull-left p-t-0">
-                          <input id="checkbox-signup" type="checkbox">
-                          <label for="checkbox-signup"> Remember me </label>
-                        </div>
-                        <a href="javascript:void(0)" id="to-recover" class="text-dark pull-right"><i class="fa fa-lock m-r-5"></i> Forgot password?</a> </div>
-                    </div>
+          
                     <div class="form-group text-center m-t-20">
                       <div class="col-xs-12">
                         <button class="btn btn-info btn-lg btn-block btn-rounded text-uppercase waves-effect waves-light" type="submit">Log In</button>
                       </div>
                     </div>
-                  
+
                   </form>
                   <form class="form-horizontal" id="recoverform" action="index.html">
                     <div class="form-group ">
@@ -64,6 +57,6 @@
                     </div>
                   </form>
                 </div>
-      </div> 
+      </div>
 
-  @endsection           
+  @endsection

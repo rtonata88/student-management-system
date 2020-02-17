@@ -78,7 +78,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    The PEACE <i>App</i> 
+                    <strong><span style="color:#0068B7">PEACE</span></strong><span style="color:#f9c032">Base</span> 
                 </div>
 
                 <div class="links">

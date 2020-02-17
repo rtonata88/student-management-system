@@ -75,7 +75,7 @@
                             <td style="background-color: #eaebed"><strong>Fruit Stage</strong></td>
                             <td> {{ @$profile->fruit_stage->stage}} </td>
 
-                            <td style="background-color: #eaebed"><strong>Maintainer</strong></td>
+                            <td style="background-color: #eaebed"><strong>Responsible Staff</strong></td>
                             <td> {{$profile->maintainer->name}} </td>
                         </tr>
                         <tr>

@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>The PEACE App</title>
+  <title>PEACEBase</title>
   <!-- Bootstrap Core CSS -->
   <link href="{{asset('assets/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
   <link href="{{asset('css/typeahead.css')}}" rel="stylesheet">
@@ -86,7 +86,6 @@
           <!-- Logo -->
           <a class="logo" href="/home">
             <!-- Logo icon image, you can use font-icon also --><b>
-              <!--This is dark logo icon--><img src="{{asset('assets/plugins/images/admin-logo.png')}}" alt="home" class="dark-logo" /><!--This is light logo icon--><img src="{{asset('assets/plugins/images/admin-logo-dark.png')}}" alt="home" class="light-logo" />
             </b>
             <!-- Logo text image you can use text also --><span class="hidden-xs">
               <!--This is dark logo text--><img src="{{asset('assets/plugins/images/admin-text.png')}}" alt="home" class="dark-logo" /><!--This is light logo text--><img src="{{asset('assets/plugins/images/admin-text-dark.png')}}" alt="home" class="light-logo" />
@@ -127,7 +126,7 @@
                 @endif
 
                 @if(Auth::user()->hasRole('Maintainer Assignment'))
-                <li> <a href="/maintainer-assignment"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Maintainer Assignment</span></a> </li>
+                <li> <a href="/maintainer-assignment"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Staff Assignment</span></a> </li>
                 @endif
               </ul>
             </li>
@@ -185,26 +184,26 @@
             @if(Auth::user()->hasRole('Setup'))
             <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span class="hide-menu">Setup<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
-                <li> <a href="/titles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Titles</span></a> </li>
-                <li> <a href="/activity-types"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Activity Types</span></a> </li>
                 <li> <a href="/cities"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Cities</span></a> </li>
                 <li> <a href="/countries"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Countries</span></a> </li>
                 <li> <a href="/departments"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Departments</span></a> </li>
+                <li> <a href="/document-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Document Types</span></a> </li>
                 <li> <a href="/duties"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Duties</span></a> </li>
                 <li> <a href="/event-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Event Types</span></a> </li>
-                <li> <a href="/religions"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Religions</span></a> </li>
+                <li> <a href="/activity-types"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Activity Types</span></a> </li>
                 <li> <a href="/fruit-levels"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Levels</span></a> </li>
                 <li> <a href="/fruit-roles"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Roles</span></a> </li>
                 <li> <a href="/fruit-stages"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Stages</span></a> </li>
+                <li> <a href="/titles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Titles</span></a> </li>
                 <li> <a href="/industries"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Industries</span></a> </li>
                 <li> <a href="/languages"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Languages</span></a> </li>
-                <li> <a href="/maintainers"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Maintainers</span></a> </li>
+                <li> <a href="/maintainers"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Staff</span></a> </li>
                 <li> <a href="/meeting-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Meeting Types</span></a> </li>
-                <li> <a href="/organizations"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Organizations</span></a> </li>
+                <li> <a href="/organizations"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Organisations</span></a> </li>
+                <li> <a href="/religions"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Religions</span></a> </li>
                 <li> <a href="/report-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Report Types</span></a> </li>
                 <li> <a href="/teams"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Teams</span></a> </li>
-                <li> <a href="/document-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Document Types</span></a> </li>
-
+                <li> <a href="/titles"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Titles</span></a> </li>
               </ul>
             </li>
             @endif
@@ -233,7 +232,7 @@
     <div id="page-wrapper">
      @yield('content')
      <!-- /.container-fluid -->
-     <footer class="footer text-center"> {{date('Y')}} &copy; The PEACE<i>App</i></footer>
+     <footer class="footer text-center"> {{date('Y')}} &copy; PEACE<i>Base</i></footer>
    </div>
    <!-- ============================================================== -->
    <!-- End Page Content -->
@@ -297,7 +296,7 @@
  <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
- <!-- end - This is for export functionality only --> 
+ <!-- end - This is for export functionality only -->
 
  <script src="{{asset('js/peaceapp.js')}}"></script>
  <script src="{{asset('js/charts.js')}}"></script>
@@ -307,7 +306,7 @@
     $('body').on('focus',".mydatepicker", function(){
       $(this).datepicker({
         autoclose: true,
-        todayHighlight: true, 
+        todayHighlight: true,
         format: 'yyyy-mm-dd',
       });
     })

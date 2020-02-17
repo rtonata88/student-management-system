@@ -53,6 +53,7 @@ Route::resource('/religions', 'ReligionsController');
 Route::resource('/users', 'UsersController');
 Route::resource('/documentation', 'DocumentationsController');
 Route::resource('/document-types', 'DocumentTypesController');
+Route::get('/warp-attendees/delete/{id}', 'WarpSummitAttendeesController@destroy')->name('warp-attendees.delete');
 Route::resource('/warp-attendees', 'WarpSummitAttendeesController');
 Route::resource('/campaigns', 'CampaignsController');
 Route::get('/campaign-report/{id}', 'CampaignsController@report_index')->name('campaigns.report');

@@ -142,11 +142,11 @@ class ActivitiesController extends Controller
 
 		$profile = Profile::whereSlug($person)->first();
 
-		return view('events.activities.create-other_attendees', compact('profile', 'sectors', 'teams', 'users', 'activity_type', 'activity_title', 'event', 'route', 'participant', 'type'));		
+		return view('events.activities.create-other_attendees', compact('profile', 'sectors', 'teams', 'users', 'activity_type', 'activity_title', 'event', 'route', 'participant', 'type'));
 	}
 
 	public function edit_activity_report_from_events($id){
-		
+
 		$activity = Activity::find($id);
 		$activity_type = $activity->activity_type->name;
 		$event = Event::find($activity->event->id)->first();
@@ -175,7 +175,7 @@ class ActivitiesController extends Controller
 			$activity_title= "MESSAGE REPORT";
 		}
 
-		
+
 		$sectors = Sector::pluck('name', 'id');
 		$teams = Team::pluck('name', 'id');
 		$users = User::where('id', '<>', Auth::user()->id)->pluck('name', 'id');
@@ -214,12 +214,12 @@ class ActivitiesController extends Controller
 			$activity_title= "MESSAGE REPORT";
 		}
 
-		
+
 		$sectors = Sector::pluck('name', 'id');
 		$teams = Team::pluck('name', 'id');
 		$users = User::where('id', '<>', Auth::user()->id)->pluck('name', 'id');
 
-	
+
 
 		return view('events.activities.edit-other_attendees', compact('activity', 'sectors', 'teams', 'users', 'activity_type', 'activity_title', 'event', 'route', 'participant', 'activity_type'));
 	}
@@ -253,7 +253,7 @@ class ActivitiesController extends Controller
 		}
 
 		$activity = Activity::find($id);
-		
+
 		$sectors = Sector::pluck('name', 'id');
 		$teams = Team::pluck('name', 'id');
 		$users = User::where('id', '<>', Auth::user()->id)->pluck('name', 'id');
@@ -266,12 +266,13 @@ class ActivitiesController extends Controller
 	{
 
 		$activity = new Activity;
-		
+
 		$activity->activity_type_id = ActivityType::where('name', $requests->activity_type)->first()->id;
 		if($requests->activity_type != 'Meeting'){
 			$activity->direction = $requests->direction;
 		}
 		$activity->when = $requests->when;
+		$activity->time = $requests->time;
 		$activity->venue = $requests->where;
 		$activity->outcome = $requests->outcome;
 		$activity->why = $requests->why;
@@ -290,8 +291,8 @@ class ActivitiesController extends Controller
 			$fruits = Profile::whereIn('id', [$requests->profile_id])->get();
 			$activity->profiles()->sync([$requests->profile_id]);
 		}
-		
-		
+
+
 
 		//ACTIVITY USERS
 		if(is_array($requests->users))
@@ -302,13 +303,13 @@ class ActivitiesController extends Controller
 		} else {
 			$activity->users()->sync(Auth::user()->id);
 		}
-		
+
 
 		// ACTIVITY PHOTOS
 		if(isset($requests->photos)){
 			foreach ($fruits as $fruit) {
 				foreach ($requests->photos as $key => $photo) {
-					if (!is_null($photo)) {	
+					if (!is_null($photo)) {
 						$photo = $photo->store('activity-photos/'.$fruit->slug, 'public');
 						$activity_photo = new ActivityPhoto;
 						$activity_photo->activity_id = $activity->id;
@@ -319,12 +320,12 @@ class ActivitiesController extends Controller
 				}
 			}
 		}
-		
+
 		$profile = Profile::find($requests->profile_id);
 
 		Session::flash('message', 'Activity successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click <strong><a href="/profiles/'.$profile->slug.'" >go to profile</a></strong>');
 
-		
+
 		session()->put('profile', $profile->slug);
 		session()->put('activity_type', $requests->activity_type);
 
@@ -344,10 +345,10 @@ class ActivitiesController extends Controller
 		$activity->participant_id 	= $person;
 		$activity->when 			= $requests->when;
 		$activity->time 			= $requests->time;
-		$activity->outcome 			= $requests->outcome;
+		$activity->outcome 		= $requests->outcome;
 		$activity->why 				= $requests->why;
 		$activity->save();
-		
+
 
 		//ACTIVITY USERS
 		if(is_array($requests->users))
@@ -362,7 +363,7 @@ class ActivitiesController extends Controller
 		// ACTIVITY PHOTOS
 		if(isset($requests->photos)){
 			foreach ($requests->photos as $key => $photo) {
-				if (!is_null($photo)) {	
+				if (!is_null($photo)) {
 					$photo = $photo->store('events/'.$event->id.'/activity-photos/'.$requests->id.'/'.$activity->id, 'public');
 					$activity_photo = new EventActivityPhoto;
 					$activity_photo->activity_id = $activity->id;
@@ -372,14 +373,14 @@ class ActivitiesController extends Controller
 				}
 			}
 		}
-		
+
 		Session::flash('message', 'Activity successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click <strong><a href="/events/'.$event->slug.'" >go to event page</a></strong>');
 
-		
+
 		session()->put('particant_id', $person);
 		session()->put('activity_type', $requests->activity_type);
 		session()->put('activity_id', $activity->id);
-		
+
 		return redirect()->route('edit.other_participant.activityReport', $activity->id);
 	}
 
@@ -405,7 +406,7 @@ class ActivitiesController extends Controller
 		//ACTIVITY PROFILES
 		if(is_array($requests->profiles))
 		{
-			
+
 			$profiles = $requests->profiles;
 			if(!array_key_exists($requests->profile_id, $profiles)){
 				array_push($profiles, $requests->profile_id);
@@ -416,8 +417,8 @@ class ActivitiesController extends Controller
 			$fruits = Profile::whereIn('id', [$requests->profile_id])->get();
 			$activity->profiles()->sync([$requests->profile_id]);
 		}
-		
-		
+
+
 		//ACTIVITY USERS
 		if(is_array($requests->users))
 		{
@@ -427,12 +428,12 @@ class ActivitiesController extends Controller
 		} else {
 			$activity->users()->sync(Auth::user()->id);
 		}
-		
+
 		// ACTIVITY PHOTOS
 		if(isset($requests->photos)){
 			foreach ($fruits as $fruit) {
 				foreach ($requests->photos as $key => $photo) {
-					if (!is_null($photo)) {	
+					if (!is_null($photo)) {
 						$photo = $photo->store('events/photos/activities/'.$event->id.'/'.$fruit->id, 'public');
 						$activity_photo = new ActivityPhoto;
 						$activity_photo->activity_id = $activity->id;
@@ -443,11 +444,11 @@ class ActivitiesController extends Controller
 				}
 			}
 		}
-		
+
 		$profile = Profile::find($requests->profile_id);
 		Session::flash('message', 'Activity successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click <strong><a href="/events/'.$event->slug.'" >go to event page</a></strong>');
 
-		
+
 		session()->put('profile_id', $profile->slug);
 		session()->put('activity_type', $requests->activity_type);
 
@@ -458,7 +459,7 @@ class ActivitiesController extends Controller
 	public function update(Request $requests, $activity_id, $profileSlug)
 	{
 		$activity = Activity::find($activity_id);
-		
+
 		if($activity->activity_type->name != 'Meeting'){
 			$activity->direction = $requests->direction;
 		}
@@ -470,7 +471,7 @@ class ActivitiesController extends Controller
 		//ACTIVITY PROFILES
 		if(is_array($requests->profiles))
 		{
-			
+
 			$profiles = $requests->profiles;
 			if(!array_key_exists($requests->profile_id, $profiles)){
 				array_push($profiles, $requests->profile_id);
@@ -481,8 +482,8 @@ class ActivitiesController extends Controller
 			$fruits = Profile::whereIn('id', [$requests->profile_id])->get();
 			$activity->profiles()->sync([$requests->profile_id]);
 		}
-		
-		
+
+
 
 		//ACTIVITY USERS
 		if(is_array($requests->users))
@@ -493,13 +494,13 @@ class ActivitiesController extends Controller
 		} else {
 			$activity->users()->sync(Auth::user()->id);
 		}
-		
+
 
 		// ACTIVITY PHOTOS
 		if(isset($requests->photos)){
 			foreach ($fruits as $fruit) {
 				foreach ($requests->photos as $key => $photo) {
-					if (!is_null($photo)) {	
+					if (!is_null($photo)) {
 						$photo = $photo->store('activity-photos/'.$fruit->slug, 'public');
 						$activity_photo = new ActivityPhoto;
 						$activity_photo->activity_id = $activity->id;
@@ -510,18 +511,18 @@ class ActivitiesController extends Controller
 				}
 			}
 		}
-		
+
 
 		Session::flash('message', 'Activity successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click the <strong>Go to Profile</strong> link below.');
 
-		
+
 
 
 		return redirect('/activities/'.$requests->activity_type.'/'.$activity->id.'/edit');
 	}
 
 	public function update_activity_report_from_events(Request $requests, $id){
-		
+
 
 		$activity = Activity::find($id);
 		$event = $activity->event;
@@ -551,8 +552,8 @@ class ActivitiesController extends Controller
 			$fruits = Profile::whereIn('id', [$requests->profile_id])->get();
 			$activity->profiles()->sync([$requests->profile_id]);
 		}
-		
-		
+
+
 		//ACTIVITY USERS
 		if(is_array($requests->users))
 		{
@@ -562,12 +563,12 @@ class ActivitiesController extends Controller
 		} else {
 			$activity->users()->sync(Auth::user()->id);
 		}
-		
+
 		// ACTIVITY PHOTOS
 		if(isset($requests->photos)){
 			foreach ($fruits as $fruit) {
 				foreach ($requests->photos as $key => $photo) {
-					if (!is_null($photo)) {	
+					if (!is_null($photo)) {
 						$photo = $photo->store('events/photos/activities/'.$event->id.'/'.$fruit->id, 'public');
 						$activity_photo = new ActivityPhoto;
 						$activity_photo->activity_id = $activity->id;
@@ -578,11 +579,11 @@ class ActivitiesController extends Controller
 				}
 			}
 		}
-		
+
 		$profile = Profile::find($requests->profile_id);
 		Session::flash('message', 'Activity successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click <strong><a href="/events/'.$event->slug.'" >go to event page</a></strong>');
 
-		
+
 		session()->put('profile_id', $profile->slug);
 		session()->put('activity_type', $requests->activity_type);
 
@@ -600,7 +601,7 @@ class ActivitiesController extends Controller
 		$activity->outcome = $requests->outcome;
 		$activity->why = $requests->why;
 		$activity->save();
-		
+
 
 		//ACTIVITY USERS
 		if(is_array($requests->users))
@@ -611,12 +612,12 @@ class ActivitiesController extends Controller
 		} else {
 			$activity->users()->sync(Auth::user()->id);
 		}
-		
+
 
 		// ACTIVITY PHOTOS
 		if(isset($requests->photos)){
 			foreach ($requests->photos as $key => $photo) {
-				if (!is_null($photo)) {	
+				if (!is_null($photo)) {
 					$photo = $photo->store('activity-photos/'.$fruit->slug, 'public');
 					$activity_photo = new ActivityPhoto;
 					$activity_photo->activity_id = $activity->id;
@@ -626,7 +627,7 @@ class ActivitiesController extends Controller
 				}
 			}
 	}
-	
+
 	Session::flash('message', 'Activity successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click <strong><a href="/events/'.$activity->event->slug.'" >go to event page</a></strong>');
 
 		return redirect()->route('edit.other_participant.activityReport', $activity->id);

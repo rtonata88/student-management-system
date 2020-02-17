@@ -4,11 +4,11 @@
 <div class="container-fluid">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">ORGANIZATIONS</h4> </div>
+            <h4 class="page-title">ORGANISATIONS</h4> </div>
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
             <ol class="breadcrumb">
                 <li><a href="/setup">Setup</a></li>
-                 <li class="active">Organizations</li>
+                 <li class="active">Organisations</li>
             </ol>
         </div>
         <!-- /.col-lg-12 -->
@@ -25,6 +25,10 @@
                                     {{ Session::get('message') }}
                                 </div>
                                 @endif
+                                <div class="alert alert-warning alert-rounded"> <i class="ti-user"></i>
+                                    The Platform column in the table below applies to media organisations only.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                                </div>
                                 <div class="table-responsive">
                                 <table class="table table-striped border" id="dataTable">
                                     <thead>
@@ -32,7 +36,6 @@
                                             <th>#</th>
                                             <th>NAME</th>
                                             <th>ACRONYM</th>
-                                            <th>WEBSITE</th>
                                             <th>PLATFORM</th>
                                             <th>INDUSTRY</th>
                                             <th>SECTOR</th>
@@ -45,10 +48,9 @@
                                      @foreach($organizations as $index=>$organization)
                                         <tr>
                                             <td>{{$index + 1}}</td>
-                                            <td>{{$organization->name}}</td>
+                                            <td><a href="{{$organization->website}}" target="_blank">{{$organization->name}}</a></td>
                                             <td>{{$organization->acronym}}</td>
-                                            <td>{{$organization->website}}</td>
-                                            <td>{{$organization->platform}}</td>
+                                            <td>@if($organization->platform) {{$organization->platform}} @else N/A @endif</td>
                                             <td>{{$organization->industry->name}}</td>
                                             <td>{{$organization->sector->name}}</td>
                                             <td>{{$organization->country->name}}</td>

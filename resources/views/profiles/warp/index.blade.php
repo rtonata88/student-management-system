@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row bg-title">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">WARP SUMMIT ATTENDEES</h4> 
+            <h4 class="page-title">WARP SUMMIT ATTENDEES</h4>
         </div>
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
             <a href="{{route('warp-attendees.create')}}" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD ATTENDANCE</a>
@@ -36,14 +36,14 @@
             <div class="col-md-12 col-lg-12 col-sm-12">
                 @if(Session::has('message'))
                 <div class="alert alert-success alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> 
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     {{ Session::get('message') }}
-                </div>                            
+                </div>
                 @endif
                 <div class="table-responsive">
 
 
-                    <table class="table table-hover table-bordered" style="width:100%"> 
+                    <table class="table table-hover table-bordered" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Year Attended</th>
@@ -74,8 +74,9 @@
                                 <td>{{$attendee->financing}}</td>
                                 <td>{{$attendee->profile->country->name}}</td>
                                 <td>{{$attendee->profile->city->name}}</td>
-                                <td>   
-                                	<a href="{{route('warp-attendees.edit', $attendee->id)}}"> <span class="fa fa-pencil"></span> Edit</a>
+                                <td>
+                                	<a href="{{route('warp-attendees.edit', $attendee->id)}}"> <span class="fa fa-pencil"></span> Edit</a> |
+                                  <a href="{{route('warp-attendees.delete', $attendee->id)}}"> <span class="fa fa-trash"></span> Delete</a>
                                 </td>
                             </tr>
                             @endforeach

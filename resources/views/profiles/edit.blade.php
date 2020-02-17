@@ -4,7 +4,7 @@
 <div class="container-fluid">
   <div class="row bg-title">
     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-      <h4 class="page-title">FRUIT PROFILES</h4> </div>
+      <h4 class="page-title">CONTACT PROFILES</h4> </div>
       <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
         <ol class="breadcrumb">
           <li><a href="/profiles">Profiles</a></li>
@@ -63,7 +63,7 @@
 
     <div class="col-md-4">
      <div class="form-group">
-      {{Form::label('dob', 'DOB')}}
+      {{Form::label('dob', 'Date of Birth')}}
       {{Form::text('dob', null, ['class' => 'form-control mydatepicker'])}}
     </div>
   </div>
@@ -87,17 +87,17 @@
 <div class="col-md-4">
   <div class="form-group">
 
-    {{Form::label('fullname', 'Fullname')}}<span class="text-danger">*</span>
+    {{Form::label('fullname', 'First Names')}}<span class="text-danger">*</span>
     {{Form::text('fullname',null, ['class' => 'form-control', 'required', 'placeholder' => 'Type here'])}}
   </div>
 </div>
 
 </div>
-<h6 class="m-t-10"><strong>AFFILIATE ORGANIZATIONS</strong></h6>
+<h6 class="m-t-10"><strong>ORGANISATION DETAILS</strong></h6>
 <div class="row">
   <table class="table table-bordered">
     <thead>
-      <th>Organization Name</th>
+      <th>Organisation Name</th>
       <th>Position</th>
       <th>Department</th>
       <th>Work Number</th>
@@ -121,7 +121,7 @@
         </td>
       </tr>
       @empty
-      Not affiliated to any organizations use the fields below to affiliate an organization to this profile
+      Not affiliated to any organisations use the fields below to affiliate an organization to this profile
       @endforelse
       <tr>
         <td>{{Form::select('organization[]', $organizations, null, ['class' => 'form-control', 'placeholder'=>'Select organization'])}}</td>
@@ -152,7 +152,7 @@
 </fieldset>
 <br>
 <fieldset>
-  <h6 class="m-t-10"><strong>ASSISTANT INFORMATION</strong></h6>
+  <h6 class="m-t-10"><strong>ASSISTANT DETAILS</strong></h6>
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -208,21 +208,21 @@
      <div class="form-group">
 
       {{Form::label('sector_id', 'Sector')}}<span class="text-danger">*</span>
-      {{Form::select('sector_id', $sectors, null, ['class' => 'form-control select', 'required'])}}
+      {{Form::select('sector_id', $sectors, null, ['class' => 'form-control select', 'placeholder'=>'Select','required'])}}
     </div>
   </div>
   <div class="col-md-4">
    <div class="form-group">
 
     {{Form::label('team_id', 'Team')}}<span class="text-danger">*</span>
-    {{Form::select('team_id', $teams, null, ['class' => 'form-control select', 'required'])}}
+    {{Form::select('team_id', $teams, null, ['class' => 'form-control select', 'placeholder'=>'Select', 'required'])}}
   </div>
 </div>
 <div class="col-md-4">
  <div class="form-group">
 
   {{Form::label('religion_id', 'Religion')}}<span class="text-danger">*</span>
-  {{Form::select('religion_id', $religions, null, ['class' => 'form-control select', 'required'])}}
+  {{Form::select('religion_id', $religions, null, ['class' => 'form-control select', 'placeholder'=>'Unknown','required'])}}
 </div>
 </div>
 </div>
@@ -231,14 +231,14 @@
     <div class="form-group">
 
       {{Form::label('country_id', 'Country')}}<span class="text-danger">*</span>
-      {{Form::select('country_id', $countries, null, ['class' => 'form-control', 'required'])}}
+      {{Form::select('country_id', $countries, null, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
     </div>
   </div>
   <div class="col-md-6">
     <div class="form-group">
 
       {{Form::label('city_id', 'City')}}<span class="text-danger">*</span>
-      {{Form::select('city_id', $cities, null, ['class' => 'form-control', 'required'])}}
+      {{Form::select('city_id', $cities, null, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
     </div>
   </div>
 
@@ -252,23 +252,23 @@
     <div class="col-md-4">
      <div class="form-group">
 
-      {{Form::label('fruit_level_id', 'Level')}}<span class="text-danger">*</span>
-      {{Form::select('fruit_level_id', $fruit_levels, null, ['class' => 'form-control select', 'required'])}}
+      {{Form::label('fruit_level_id', 'Rank')}}<span class="text-danger">*</span>
+      {{Form::select('fruit_level_id', $fruit_levels, null, ['class' => 'form-control select', 'placeholder'=>'Select', 'required'])}}
     </div>
   </div>
   <div class="col-md-4">
    <div class="form-group">
 
-    {{Form::label('fruit_stage_id', 'Fruit Stage')}}<span class="text-danger">*</span>
-    {{Form::select('fruit_stage_id', $fruit_stages, null, ['class' => 'form-control select', 'required'])}}
+    {{Form::label('fruit_stage_id', 'Contact Stage')}}<span class="text-danger">*</span>
+    {{Form::select('fruit_stage_id', $fruit_stages, null, ['class' => 'form-control select', 'placeholder'=>'Select', 'required'])}}
   </div>
 </div>
 
 <div class="col-md-4">
  <div class="form-group">
 
-  {{Form::label('fruit_role_id', 'Status')}}<span class="text-danger">*</span>
-  {{Form::select('fruit_role_id', $fruit_roles, null, ['class' => 'form-control select', 'required'])}}
+  {{Form::label('fruit_role_id', 'Status/Appointed Role')}}<span class="text-danger">*</span>
+  {{Form::select('fruit_role_id', $fruit_roles, null, ['class' => 'form-control select', 'placeholder'=>'None', 'required'])}}
 </div>
 </div>
 </div>
@@ -277,13 +277,13 @@
     <div class="form-group">
 
       {{Form::label('pre_poisoned', 'Pre-poisoned')}}<span class="text-danger">*</span>
-      {{Form::select('pre_poisoned', ['Not sure' => 'Not Sure', 'No' => 'No', 'Yes' => 'Yes'], null, ['class' => 'form-control', 'required'])}}
+      {{Form::select('pre_poisoned', ['Not sure' => 'Not Sure', 'No' => 'No', 'Yes' => 'Yes'], null, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
     </div>
   </div>
   <div class="col-md-4">
     <div class="form-group">
       {{Form::label('cult_awareness', 'Cult-Awareness')}}<span class="text-danger">*</span>
-      {{Form::select('cult_awareness', ['Not sure' => 'Not Sure', 'No' => 'No', 'Yes' => 'Yes'], null, ['class' => 'form-control', 'required'])}}
+      {{Form::select('cult_awareness', ['Not sure' => 'Not Sure', 'No' => 'No', 'Yes' => 'Yes'], null, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
     </div>
   </div>
   <div class="col-md-4">
@@ -297,16 +297,18 @@
   <div class="col-md-4">
     <div class="form-group">
 
-      {{Form::label('maintainer_id', 'Maintainer')}}<span class="text-danger">*</span>
-      {{Form::select('maintainer_id', $maintainers, null, ['class' => 'form-control', 'required'])}}
+      {{Form::label('maintainer_id', 'Responsible Staff')}}<span class="text-danger">*</span>
+      {{Form::select('maintainer_id', $maintainers, null, ['class' => 'form-control', 'placeholder'=>'Select','required'])}}
     </div>
   </div>
+  {{--
   <div class="col-md-4">
     <div class="form-group">
       {{Form::label('sector_relationship_id', 'Relationship with Sector')}}<span class="text-danger">*</span>
-      {{Form::select('sector_relationship_id', $sector_relationships, null, ['class' => 'form-control', 'required'])}}
+      {{Form::select('sector_relationship_id', $sector_relationships, null, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
     </div>
   </div>
+  --}}
   <div class="col-md-4">
     <div class="form-group">
       {{Form::label('date_networked', 'Date Networked')}}<span class="text-danger">*</span>
