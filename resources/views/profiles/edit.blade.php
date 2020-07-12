@@ -227,21 +227,27 @@
 </div>
 </div>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div class="form-group">
 
       {{Form::label('country_id', 'Country')}}<span class="text-danger">*</span>
       {{Form::select('country_id', $countries, null, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div class="form-group">
 
       {{Form::label('city_id', 'City')}}<span class="text-danger">*</span>
       {{Form::select('city_id', $cities, null, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
     </div>
   </div>
+  <div class="col-md-4">
+    <div class="form-group">
 
+      {{Form::label('platform', 'Platform (Media contacts)')}}<span class="text-danger">*</span>
+      {{Form::select('platform', ['NA' => 'Not Applicable', 'online' => 'Online', 'radio' => 'Radio', 'website' => 'Website', 'print' => 'Print', 'broadcast' => 'Broadcast'], $profile->platform, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
+    </div>
+  </div>
 </div>
 </fieldset>
 
@@ -267,7 +273,7 @@
 <div class="col-md-4">
  <div class="form-group">
 
-  {{Form::label('fruit_role_id', 'Status/Appointed Role')}}<span class="text-danger">*</span>
+  {{Form::label('fruit_role_id', 'Appointed Role')}}<span class="text-danger">*</span>
   {{Form::select('fruit_role_id', $fruit_roles, null, ['class' => 'form-control select', 'placeholder'=>'None', 'required'])}}
 </div>
 </div>

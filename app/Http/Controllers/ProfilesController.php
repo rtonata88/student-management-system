@@ -201,6 +201,7 @@ class ProfilesController extends Controller
 		$profile->sector_id 				= $requests->sector_id;
 		$profile->country_id 				= $requests->country_id;
 		$profile->city_id 					= $requests->city_id;
+		$profile->platform					= $requests->platform;
 		$profile->date_networked 			= $requests->date_networked;
 		$profile->fruit_level_id 			= $requests->fruit_level_id;
 		$profile->fruit_stage_id 			= $requests->fruit_stage_id;
@@ -296,6 +297,7 @@ class ProfilesController extends Controller
 		$profile->city_id 					= $requests->city_id;
 		$profile->date_networked 			= $requests->date_networked;
 		$profile->fruit_level_id 			= $requests->fruit_level_id;
+		$profile->platform					= $requests->platform;
 		$profile->fruit_stage_id 			= $requests->fruit_stage_id;
 		$profile->maintainer_id 			= $requests->maintainer_id;
 		$profile->fruit_role_id 			= $requests->fruit_role_id;

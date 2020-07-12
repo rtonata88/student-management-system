@@ -118,7 +118,7 @@
             @if(Auth::user()->hasRole('Profiles'))
              <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-users fa-fw" aria-hidden="true"></i> <span class="hide-menu">Profiles<span class="fa arrow"></span></span></a>
               <ul class="nav nav-second-level">
-                @if(Auth::user()->hasRole('Fruit Profiles'))
+                @if(Auth::user()->hasRole('Profiles'))
                 <li> <a href="/profiles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Profiles</span></a> </li>
                 @endif
                 @if(Auth::user()->hasRole('WARP Office Attendees'))
@@ -194,14 +194,13 @@
                 <li> <a href="/fruit-levels"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Levels</span></a> </li>
                 <li> <a href="/fruit-roles"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Roles</span></a> </li>
                 <li> <a href="/fruit-stages"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Stages</span></a> </li>
-                <li> <a href="/titles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Titles</span></a> </li>
                 <li> <a href="/industries"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Industries</span></a> </li>
                 <li> <a href="/languages"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Languages</span></a> </li>
-                <li> <a href="/maintainers"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Staff</span></a> </li>
                 <li> <a href="/meeting-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Meeting Types</span></a> </li>
                 <li> <a href="/organizations"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Organisations</span></a> </li>
                 <li> <a href="/religions"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Religions</span></a> </li>
                 <li> <a href="/report-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Report Types</span></a> </li>
+                <li> <a href="/maintainers"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Staff</span></a> </li>
                 <li> <a href="/teams"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Teams</span></a> </li>
                 <li> <a href="/titles"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Titles</span></a> </li>
               </ul>

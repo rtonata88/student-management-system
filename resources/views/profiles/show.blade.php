@@ -98,7 +98,7 @@
                     <hr>
                     <!-- .row -->
                     <div class="row m-t-10">
-                        <div class="col-md-6 b-r"><strong>Status/Appointed Role</strong>
+                        <div class="col-md-6 b-r"><strong>Appointed Role</strong>
 
                             <p>{{ $profile->fruit_role->role}}</p>
                         </div>
@@ -131,9 +131,17 @@
                         <div class="col-md-6 b-r"><strong>WARP Attendee</strong>
                             <p>{{$profile->warp_attendee}}</p>
                         </div>
+                        <div class="col-md-6 b-r"><strong>Religion</strong>
+                            <p>{{$profile->religion->name}}</p>
+                        </div>
 
                     </div>
                     <hr>
+                    <div class="row m-t-10">
+                        <div class="col-md-6 b-r"><strong>Platform</strong>
+                            <p>{{$profile->platform}}</p>
+                        </div>
+                    </div>
                     <div class="row m-t-10">
                         <div class="col-md-12"><strong>History</strong>
                             <p>{{$profile->history}}</p>
@@ -186,9 +194,13 @@
                                 <p>
                                     @if($activity->activity_type->name != "Meeting")
                                     <strong>Direction:</strong> {{$activity->direction}} <br>
+                                    @else
+                                    <strong>Type:</strong> {{$activity->meeting_type}} <br>
                                     @endif
+                                    @if($activity->activity_type->name == "Meeting")
                                     <strong>Where:</strong> {{$activity->venue}} <br>
-                                    <strong>who:</strong> @foreach($activity->users as $rep) {{$rep->name}}<br> @endforeach
+                                    @endif
+                                    <strong>Staff:</strong> @foreach($activity->users as $rep) {{$rep->name}}, @endforeach<br>
                                     <strong>When:</strong> {{$activity->when}} <br>
                                     <strong>Why</strong>  <br>{{$activity->why}}<br> <br>
                                     <strong>Outcome</strong>  <br>{{$activity->outcome}}
@@ -236,11 +248,8 @@
                 <!-- .tabs2 -->
                 <div class="tab-pane" id="profile">
                     <div class="row white-box">
-
-
-
                         <div class="row">
-                            <div class="col-md-8 col-xs-6 b-r"> <strong>Full Name</strong>
+                            <div class="col-md-6 col-xs-6 b-r"> <strong>Full Name</strong>
                                 <br>
                                 <p class="text-muted">@foreach($profile->title as $title) {{$title->title}} @endforeach {{$profile->fullname}} {{$profile->lastname}}</p>
                             </div>

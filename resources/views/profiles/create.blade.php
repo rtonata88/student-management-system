@@ -82,7 +82,7 @@
   <table class="table table-bordered">
       <thead>
         <th>#</th>
-        <th>Organization Name</th>
+        <th>Organisation Name</th>
         <th>Position</th>
         <th>Department</th>
         <th>Work Number</th>
@@ -109,6 +109,7 @@
           <td>2</td>
           <td>{{Form::select('organization[]', $organizations, null, ['class' => 'form-control', 'placeholder'=>'Select organisation'])}}</td>
           <td>{{Form::text('position[]',null, ['class' => 'form-control', 'required', 'placeholder' => 'Type here'])}}</td>
+          <td>{{Form::text('department[]',null, ['class' => 'form-control', 'placeholder' => 'Type here'])}}</td>
           <td>
             {{Form::text('work_number[]',null, ['class' => 'form-control', 'placeholder'=>'Primary Work Number'])}}
             {{Form::text('work_number2[]',null, ['class' => 'form-control', 'placeholder'=>'Secondary Work Number'])}}
@@ -124,6 +125,7 @@
           <td>3</td>
           <td>{{Form::select('organization[]', $organizations, null, ['class' => 'form-control', 'placeholder'=>'Select organisation'])}}</td>
           <td>{{Form::text('position[]',null, ['class' => 'form-control', 'required', 'placeholder' => 'Type here'])}}</td>
+          <td>{{Form::text('department[]',null, ['class' => 'form-control', 'placeholder' => 'Type here'])}}</td>
           <td>
             {{Form::text('work_number[]',null, ['class' => 'form-control', 'placeholder'=>'Primary Work Number'])}}
             {{Form::text('work_number2[]',null, ['class' => 'form-control', 'placeholder'=>'Secondary Work Number'])}}
@@ -236,18 +238,25 @@
 </div>
 </div>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div class="form-group">
 
       {{Form::label('country_id', 'Country')}}<span class="text-danger">*</span>
       {{Form::select('country_id', $countries, null, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div class="form-group">
 
       {{Form::label('city_id', 'City')}}<span class="text-danger">*</span>
       {{Form::select('city_id', $cities, null, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+
+      {{Form::label('platform', 'Platform (Media contacts)')}}<span class="text-danger">*</span>
+      {{Form::select('platform', ['NA' => 'Not Applicable', 'online' => 'Online', 'radio' => 'Radio', 'website' => 'Website', 'print' => 'Print', 'broadcast' => 'Broadcast'], null, ['class' => 'form-control', 'placeholder'=>'Select', 'required'])}}
     </div>
   </div>
 
@@ -276,7 +285,7 @@
 <div class="col-md-4">
  <div class="form-group">
 
-  {{Form::label('fruit_role_id', 'Status/Appointed Role')}}<span class="text-danger">*</span>
+  {{Form::label('fruit_role_id', 'Appointed Role')}}<span class="text-danger">*</span>
   {{Form::select('fruit_role_id', $fruit_roles, null, ['class' => 'form-control select', 'placeholder'=>'None','required'])}}
 </div>
 </div>

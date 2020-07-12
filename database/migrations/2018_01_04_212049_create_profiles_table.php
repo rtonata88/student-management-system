@@ -25,6 +25,7 @@ class CreateProfilesTable extends Migration
             $table->integer('sector_id');
             $table->integer('country_id');
             $table->integer('city_id');
+            $table->string('platform');
             $table->string('mobile_no')->nullable();
             $table->string('work_number')->nullable();
             $table->string('email')->nullable();

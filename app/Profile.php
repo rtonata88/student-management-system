@@ -308,6 +308,10 @@ class Profile extends Model implements Auditable
         return $this->belongsToMany('App\Language');
     }
 
+    public function religion(){
+        return $this->belongsTo('App\Religion');
+    }
+
     public function organization_profile(){
         return $this->hasMany('App\OrganizationProfile', 'profile_id');
     }

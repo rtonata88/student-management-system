@@ -24,9 +24,9 @@
                         <div class="col-md-5">
                             <div class="form-group">
 
-                                {{Form::label('users[]', 'Representatives')}}
+                                {{Form::label('users[]', 'Staff')}}
                                 {{Form::select('users[]', $users, null, ['class' => 'form-control select2 select2-multiple', 'multiple'])}}
-                                <small><span class="help-text">Please include all representatives in attendance apart from yourself [<strong>{{Auth::user()->name}}</strong>]. If you were the only representative, please leave this field blank.</span></small>
+                                <small><span class="help-text">Please include all staff associated with the {{$activity_type}} apart from yourself [<strong>{{Auth::user()->name}}</strong>]. If you were the only representative, please leave this field blank.</span></small>
                             </div>
                         </div>
                     </div>
@@ -37,6 +37,16 @@
 
                                 {{Form::label('direction', 'Direction')}}
                                 {{Form::select('direction', ['Out' => 'Out Going', 'In'=>'In Coming'], null, ['class' => 'form-control', 'placeholder'=>'Select'])}}
+                            </div>
+                        </div>
+                    </div>
+                    @else
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+
+                                {{Form::label('meeting_type', 'Type')}}
+                                {{Form::select('meeting_type', ['InPerson' => 'In Person', 'Video'=>'Video', 'Telephonic' => 'Telephonic'], null, ['class' => 'form-control', 'placeholder'=>'Select'])}}
                             </div>
                         </div>
                     </div>
@@ -54,6 +64,7 @@
                         </div>
                     </div>
                     </div>
+                    @if($activity_type == 'Meeting')
                     <div class="row">
                         <div class="col-md-5">
                       <div class="form-group">
@@ -63,6 +74,7 @@
                         </div>
                     </div>
                     </div>
+                    @endif
                    <div class="row">
                     <div class="col-md-5">
                       <div class="form-group">

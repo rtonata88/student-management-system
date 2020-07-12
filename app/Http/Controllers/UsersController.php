@@ -45,7 +45,6 @@ class UsersController extends Controller
 
     public function edit($id){
     	$user = User::find($id);
-
     	$teams = Team::pluck('name', 'id');
     	$cities = City::pluck('name', 'id');
     	$sectors = Sector::pluck('name', 'id');
@@ -68,7 +67,7 @@ class UsersController extends Controller
     		'username' => 'required|string|max:255|unique:users',
             'email' => 'required|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
-       
+
         ]);
 
 
@@ -90,7 +89,7 @@ class UsersController extends Controller
 
         foreach ($requests->roles as $key) {
             $role = Role::find($key);
-            $user->attachRole($role);      
+            $user->attachRole($role);
         }
 
         $user->syncRoles($requests->roles);
@@ -108,10 +107,10 @@ class UsersController extends Controller
 
     	$this->validate($requests, [
             'email' => 'required|max:255|email|unique:users,id,'.$id,
-       
+
         ]);
 
-    	
+
 
     	$user->name = $requests->name;
     	$user->email = $requests->email;
@@ -126,11 +125,11 @@ class UsersController extends Controller
 
         foreach ($requests->roles as $key) {
             $role = Role::find($key);
-            $user->syncRoles([$role->id]);      
+            $user->syncRoles([$role->id]);
         }
 
         $user->syncRoles($requests->roles);
-        
+
 
     	Session::flash('message', 'The record has been updated, please confirm that the changes have taken effect in the table below.');
     	return redirect('/users');

@@ -270,6 +270,8 @@ class ActivitiesController extends Controller
 		$activity->activity_type_id = ActivityType::where('name', $requests->activity_type)->first()->id;
 		if($requests->activity_type != 'Meeting'){
 			$activity->direction = $requests->direction;
+		} else {
+			$activity->meeting_type = $requests->meeting_type;
 		}
 		$activity->when = $requests->when;
 		$activity->time = $requests->time;
@@ -462,6 +464,8 @@ class ActivitiesController extends Controller
 
 		if($activity->activity_type->name != 'Meeting'){
 			$activity->direction = $requests->direction;
+		} else {
+			$activity->meeting_type = $requests->meeting_type;
 		}
 		$activity->when = $requests->when;
 		$activity->outcome = $requests->outcome;
