@@ -54,6 +54,17 @@
   #profiles-table tbody tr {
     cursor: pointer;
   }
+  .floating-action-button {
+  position: relative;
+  top: 100px;
+  margin-left: 50px;
+}
+ul.dropdown-menu {
+  box-shadow: none;
+  border: 0;
+  min-width:0;
+  background:transparent
+}
 </style>
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -283,6 +294,7 @@
  <script src="{{asset('bower_components/typeahead/typeahead.bundle.js')}}"></script>
  <script src="{{asset('bower_components/morris.js/morris.js')}}"></script>
  <script src="{{asset('bower_components/raphael/raphael.js')}}"></script>
+ <script src="http://malsup.github.com/jquery.form.js"></script>
  <!--  Data Tables -->
  <script src="{{asset('bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
  <script src="{{asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.js')}}"></script>
@@ -295,6 +307,8 @@
  <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+
+
  <!-- end - This is for export functionality only -->
 
  <script src="{{asset('js/peaceapp.js')}}"></script>
@@ -464,8 +478,16 @@
 
       $('#events-tabs a').click(function(e) {
         e.preventDefault();
+        e.stopImmediatePropagation();
         $(this).tab('show');
       });
+      $('#profiles-tab a').click(function(e) {
+        $('html,body').stop().animate({
+              scrollTop: $( $(this).attr('href') ).offset().top - $('.x-navbar').height()
+            },700 ,'swing');
+
+        });
+      
 
     // store the currently selected tab in the hash value
     $("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
@@ -481,6 +503,7 @@
 
   @stack('dataTableScript')
   @stack('profiles')
+  @stack('contactsJS')
   @stack('googleCharts')
 
 </body>

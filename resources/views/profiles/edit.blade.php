@@ -93,11 +93,10 @@
 </div>
 
 </div>
-<h6 class="m-t-10"><strong>ORGANISATION DETAILS</strong></h6>
 <div class="row">
   <table class="table table-bordered">
     <thead>
-      <th>Organisation Name</th>
+      <th>Organisation</th>
       <th>Position</th>
       <th>Department</th>
       <th>Work Number</th>
@@ -152,7 +151,6 @@
 </fieldset>
 <br>
 <fieldset>
-  <h6 class="m-t-10"><strong>ASSISTANT DETAILS</strong></h6>
   <table class="table table-bordered">
     <thead>
       <tr>

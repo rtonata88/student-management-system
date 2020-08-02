@@ -25,7 +25,7 @@ class ActivityTeamReport extends Model
     					})
     					->join('teams', 'teams.id', '=', 'profiles.team_id')
     					->join('sectors', function($join) use ($sector_id) {
-    						$join->on('sectors.id', '=', 'teams.sector_id')	
+    						$join->on('sectors.id', '=', 'teams.sector_id')
     						->where('teams.sector_id', '=',$sector_id);
     					})
     					->join('activity_types', 'activity_types.id', '=', 'activities.activity_type_id')
@@ -63,13 +63,13 @@ class ActivityTeamReport extends Model
 					->join('teams', 'teams.id', '=', 'event_team.team_id')
     				->join('sectors', 'sectors.id', '=', 'teams.sector_id')
     				->selectRaw('sectors.id AS sector_id,`sectors`.`name` AS `Sector`, teams.id team_id, teams.name as Team,
-										case 
-											when `events`.`event_type` = "internal" then "Events Hosted" 
-											when `events`.`event_type` = "external" then "Events Attended" 
+										case
+											when `events`.`event_type` = "internal" then "Events Hosted"
+											when `events`.`event_type` = "external" then "Events Attended"
 										end AS `Activity`,
 										count(`events`.`name`) AS `Occurence`')
     				->where('sectors.id', $sector_id)
-    				
+
     				->whereRaw("DATE_FORMAT(`start_date`, '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'")
     				->groupBy('teams.name', 'events.event_type');
 
@@ -91,7 +91,7 @@ class ActivityTeamReport extends Model
     					->join('teams', 'teams.id', '=', 'profiles.team_id')
     					->join('organizations', 'organizations.id', '=', 'profiles.organization_id')
     					->select('profiles.fullname', 'profiles.lastname', 'profiles.position', 'organizations.name as organization', 'countries.name as country',
-    							 'activities.direction','activities.when', 'activities.time', 'activities.why', 'activities.outcome', 
+    							 'activities.direction','activities.when', 'activities.time', 'activities.why', 'activities.outcome',
     							'activities.venue')
     					->where('sectors.id', $sector_id)
     					->where('teams.id', $team_id)
@@ -99,7 +99,7 @@ class ActivityTeamReport extends Model
     					->whereRaw("DATE_FORMAT(`when`, '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'")
     					->get();
 
-    		
+
     	return $activities;
     }
 
@@ -119,7 +119,7 @@ class ActivityTeamReport extends Model
 	    				->whereRaw("DATE_FORMAT(`when`, '%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."'")
 	    				->get();
 
-    		
+
     	return $coverage;
     }
 
@@ -136,12 +136,13 @@ class ActivityTeamReport extends Model
     }
 
 
-    public static function sectorsDashboardAnalysis(){
+    public static function sectorsDashboardAnalysis($user){
         return DB::table('activities')
             ->join('activity_profile', 'activity_profile.activity_id', '=', 'activities.id')
             ->join('profiles', 'profiles.id', '=', 'activity_profile.profile_id')
-            ->join('sectors', 'sectors.id', '=', 'profiles.sector_id')  
-            ->selectRaw('sectors.name, count(*) as count')          
+            ->join('sectors', 'sectors.id', '=', 'profiles.sector_id')
+            ->where('profiles.team_id', '=', $user->team_id)
+            ->selectRaw('sectors.name, count(*) as count')
             ->groupBy('profiles.sector_id')
             ->get();
     }

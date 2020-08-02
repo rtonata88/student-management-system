@@ -99,7 +99,7 @@
                         <div class="sparklinedash"></div>
                     </li>
                     <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">
-                            {{$profiles}}
+                            {{count($profiles)}}
                         </span></li>
                 </ul>
             </div>
@@ -112,7 +112,7 @@
     <!-- ============================================================== -->
     <!-- table -->
     <!-- ============================================================== -->
-    <h4 class="box-title">SECTOR ACTIVITIES 
+    <h4 class="box-title">SECTOR ACTIVITIES
                         @if(Auth::user()->hasRole('Reports'))
                         | <small><span class="fa fa-share"></span> <a href="/reports/periodic">PERIODIC REPORTS</a></small>
                         @endif

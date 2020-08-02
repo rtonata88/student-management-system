@@ -20,6 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/load/about/{profile}/{section}', 'ProfilesController@loadEditSection');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

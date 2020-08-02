@@ -9,420 +9,147 @@
 {{($profile->profile_organization)}}
 <div class="container-fluid">
     <div class="row bg-title">
-        <div class="col-lg-3 col-md-9 col-sm-4 col-xs-12">
+        <div class="col-lg-6 col-md-9 col-sm-12 col-xs-12">
             <h4 class="page-title">{{$profile->fullname}} {{$profile->lastname}} [<a href="/profiles/{{$profile->slug}}/edit">Update Profile</a>]</h4> </div>
-        <div class="col-lg-9 col-sm-8 col-md-3 col-xs-12">
-            <ol class="breadcrumb">
+          <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <!-- <ol class="breadcrumb">
                 <li><a href="/profiles">Contact Profiles</a></li>
                 <li class="active">Detail</li>
-            </ol>
+            </ol> -->
         </div>
         <!-- /.col-lg-12 -->
     </div>
     <!-- row -->
 
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-2 col-xs-6 b-r">
-                    <strong>MEETINGS <small><span class="counter">{{$profile->meetings_count()}}</span></small></strong>
-                    <br>
-                    <p class="text-muted">
-                        <a href="/meetings/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
-                    </p>
 
-                </div>
-                <div class="col-md-2 col-xs-6 b-r">
-                    <strong>CALLS <small><span class="counter">{{$profile->calls_count()}}</span></small></strong>
-                    <br>
-                    <p class="text-muted">
-                        <a href="/calls/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
-                    </p>
-                </div>
-                <div class="col-md-2 col-xs-6 b-r">
-                    <strong>EMAILS <small><span class="counter">{{$profile->emails_count()}}</span></small></strong>
-                    <br>
-                    <p class="text-muted">
-                        <a href="/emails/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
-                    </p>
-                </div>
-                <div class="col-md-2 col-xs-6">
-                    <strong>MESSAGES <small><span class="counter">{{$profile->messages_count()}}</span></small></strong>
-                    <br>
-                    <p class="text-muted">
-                        <a href="/messages/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
-                    </p>
-
-                </div>
-                <div class="col-md-2 col-xs-6">
-                    <strong>MEDIA COVERAGE <small><span class="counter">{{$profile->coverage_count()}}</span></small></strong>
-                    <br>
-                    <p class="text-muted">
-                        <a href="/media-coverage/create/{{$profile->slug}}"><span class="fa fa-plus"></span> Report New</a> <br>
-                    </p>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <hr>
     <div class="row">
-        <div class="col-md-4 col-xs-12">
+        <div class="col-md-3 col-xs-12">
             <div class="white-box">
-                <div class="user-bg">
-                    @if($profile->photo)
-                    <img width="100%" alt="user" src="/fruit_profiles/photos/{{$profile->photo}}">
-                    @else
-                    <center>
-                        <img  alt="user" src="/fruit_profiles/photos/no-image.png" >
-                    </center>
+              <h5><strong>RECORD NEW ACTIVITY</strong></h5>
+              <ul>
+                  <li><a href="/meetings/create/{{$profile->slug}}">Meeting</a> <br></li>
+                  <li><a href="/calls/create/{{$profile->slug}}">Call</a></li>
+                  <li><a href="/emails/create/{{$profile->slug}}">Email</a></li>
+                  <li><a href="/messages/create/{{$profile->slug}}">Message</a></li>
+                  <li><a href="/media-coverage/create/{{$profile->slug}}">Media Coverage</a></li>
+              </ul>
 
-                    @endif
-
-                </div>
-                <div class="user-btm-box">
-                    <!-- .row -->
-                    <div class="row m-t-10">
-                        <div class="col-md-6 b-r"><strong>Languages</strong>
-                          <p>
-                          @foreach($profile->language as $language)
-                            {{$language->name}}.
-                          @endforeach
-                          </p>
-                        </div>
-                        <div class="col-md-6"><strong>Responsible Staff</strong>
-                            <p>{{$profile->maintainer->name}}</p>
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                    <hr>
-                    <!-- .row -->
-                    <div class="row m-t-10">
-                        <div class="col-md-6 b-r"><strong>Appointed Role</strong>
-
-                            <p>{{ $profile->fruit_role->role}}</p>
-                        </div>
-                        <div class="col-md-6"><strong>Level</strong>
-                            <p>{{ $profile->fruit_stage->stage}}</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row m-t-10">
-                        <div class="col-md-6 b-r"><strong>Rank</strong>
-                            <p>{{$profile->fruit_level->level}}</p>
-                        </div>
-                        <div class="col-md-6 b-r"><strong>Date of Birth</strong>
-                            <p>{{$profile->dob}}</p>
-                        </div>
-
-                    </div>
-                    <!-- /.row -->
-                    <hr>
-                    <!-- .row -->
-                    <div class="row m-t-10">
-                        <div class="col-md-6 b-r"><strong>Cult Awareness</strong>
-                            <p>{{$profile->cult_awareness}}</p>
-                        </div>
-                        <div class="col-md-6 b-r"><strong>Pre-poisoned</strong>
-                            <p>{{$profile->pre_poisoned}}</p>
-                        </div>
-                    </div>
-                    <div class="row m-t-10">
-                        <div class="col-md-6 b-r"><strong>WARP Attendee</strong>
-                            <p>{{$profile->warp_attendee}}</p>
-                        </div>
-                        <div class="col-md-6 b-r"><strong>Religion</strong>
-                            <p>{{$profile->religion->name}}</p>
-                        </div>
-
-                    </div>
-                    <hr>
-                    <div class="row m-t-10">
-                        <div class="col-md-6 b-r"><strong>Platform</strong>
-                            <p>{{$profile->platform}}</p>
-                        </div>
-                    </div>
-                    <div class="row m-t-10">
-                        <div class="col-md-12"><strong>History</strong>
-                            <p>{{$profile->history}}</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <h5><strong>Quick Actions</strong></h5>
-                    <ul>
-                        <li><a href="#upload-documents" data-toggle="modal" data-target="#upload-documents">Upload Document</a></li>
-                        <li><a href="/profiles/{{$profile->slug}}/edit">Update Profile</a></li>
-                        <li><a href="#" onclick="myFunction('{{$profile->slug}}')">Print Profile</a></li>
-                    </ul>
-
-                    <!-- /.row -->
-
-                </div>
             </div>
         </div>
-        <div class="col-md-8 col-xs-12">
-            <div class="row white-box">
-                <!-- .tabs -->
-                <ul class="nav nav-tabs tabs customtab">
-                    <li class="active tab">
-                        <a href="#home" data-toggle="tab" aria-expanded="true"> Activity Timeline</a>
-                    </li>
-                    <li class="tab">
-                        <a href="#events" data-toggle="tab" aria-expanded="false"> Events</a>
-                    </li>
-                    <li class="tab">
-                        <a href="#profile" data-toggle="tab" aria-expanded="false"> Profile Details</a>
-                    </li>
-                    <li class="tab">
-                        <a href="#settings" data-toggle="tab" aria-expanded="false"> Profile Documents </a>
-                    </li>
-                    <li class="tab">
-                        <a href="#other-information" data-toggle="tab" aria-expanded="false"> Other Information</a>
-                    </li>
+        <div class="col-md-6 col-xs-12">
+            <div class="white-boxs">
+                    <!-- Nav tabs -->
+                <ul class="nav nav-tabs tabcontent-border" role="tablist" id="profiles-tab">
+                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#activity-timeline" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Activities</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#events-attended" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Events</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#documents" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Documents</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#about" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">About</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#contacts" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Contact</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#relationship" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Relationship</span></a> </li>
                 </ul>
+                <!-- Tab panes -->
             </div>
-            <!-- /.tabs -->
-            <div class="tab-content">
-                <!-- .tabs 1 -->
-                <div class="tab-pane active" id="home">
-                    @forelse($profile->activities as $activity)
-                    <div class="row white-box">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-uppercase mb-0"><strong>{{$activity->activity_type->name}} Report</strong></h5>
-                                <hr>
-                                <p>
-                                    @if($activity->activity_type->name != "Meeting")
-                                    <strong>Direction:</strong> {{$activity->direction}} <br>
-                                    @else
-                                    <strong>Type:</strong> {{$activity->meeting_type}} <br>
-                                    @endif
-                                    @if($activity->activity_type->name == "Meeting")
-                                    <strong>Where:</strong> {{$activity->venue}} <br>
-                                    @endif
-                                    <strong>Staff:</strong> @foreach($activity->users as $rep) {{$rep->name}}, @endforeach<br>
-                                    <strong>When:</strong> {{$activity->when}} <br>
-                                    <strong>Why</strong>  <br>{{$activity->why}}<br> <br>
-                                    <strong>Outcome</strong>  <br>{{$activity->outcome}}
-                                </p>
-                                <div class="m-t-20 row">
-                                    @foreach($activity->photos as $photo)
-                                    <img src="{{ asset('storage/'.$photo->path) }}" alt="user" class="col-md-3 col-xs-12" />
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @empty
-                    No activities recorded for this profile
-                    @endforelse
-                </div>
-                <div class="tab-pane" id="events">
-                    @forelse($profile->events as $event)
-                    <div class="row white-box">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-uppercase mb-0"><strong>{{$event->name}}: <i>{{$event->theme}}</i></strong></h5>
-                                <hr>
-                                <p>
-                                    <strong>Event Type:</strong> {{$event->event_type}}<br>
-                                    <strong>Start Date:</strong> {{$event->start_date}} {{$event->start_time}} <br>
-                                    <strong>End Date:</strong> {{$event->end_date}} {{$event->end_time}} <br>
-                                    <strong>Where: </strong>  <br>{{$event->address_line1}}<br> {{$event->address_line2}}<br>
-                                    <strong>Description</strong>  <br>{{$event->description}}
-                                </p>
-                                <div class="m-t-20 row">
-                                    @foreach($event->photos as $photo)
-                                    <a href="{{ url('storage/'.$photo->path) }}" data-toggle="lightbox" data-effect="mfp-zoom-in" data-gallery="multiimages" data-title="{{$photo->caption}}"><img src="{{ url('storage/'.$photo->path) }}" alt="gallery" class="all studio col-md-3 col-xs-12" /></a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @empty
-                    No events recorded for this profile
-                    @endforelse
-                </div>
-                <!-- /.tabs3 -->
-                <!-- /.tabs1 -->
-                <!-- .tabs2 -->
-                <div class="tab-pane" id="profile">
-                    <div class="row white-box">
-                        <div class="row">
-                            <div class="col-md-6 col-xs-6 b-r"> <strong>Full Name</strong>
-                                <br>
-                                <p class="text-muted">@foreach($profile->title as $title) {{$title->title}} @endforeach {{$profile->fullname}} {{$profile->lastname}}</p>
-                            </div>
-                            <div class="col-md-3 col-xs-6"> <strong>Gender</strong>
-                                <br>
-                                <p class="text-muted">{{$profile->gender->gender}}</p>
-                            </div>
-                        </div>
-                        <br>
-                        @if($profile->bio)
-                        <div class="row">
-                            <div class="col-md-12 col-xs-8"> <strong>Bio</strong>
-                                <br>
-                                <p class="text-muted">{{$profile->bio}}</p>
-                            </div>
-                        </div>
-                        @endif
-                        <hr>
-
-                        <div class="row">
-                            <div class="col-md-6 col-xs-6 b-r"> <strong>Sector</strong>
-                                <br>
-                                <p class="text-muted">{{$profile->sector->name}}</p>
-                            </div>
-                            <div class="col-md-6 col-xs-6"> <strong>Team</strong>
-                                <br>
-                                <p class="text-muted">{{$profile->team->name}}</p>
-                            </div>
-                        </div>
-                        <br>
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-xs-8 b-r"> <strong>Country</strong>
-                                <br>
-                                <p class="text-muted">{{$profile->country->name}}</p>
-                            </div>
-                            <div class="col-md-6 col-xs-6"> <strong>City</strong>
-                                <br>
-                                <p class="text-muted">{{$profile->city->name}}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-6 col-xs-8 b-r"> <strong>Mobile Numbers</strong>
-                                <br>
-                                <p class="text-muted">{{$profile->mobile_no}} <br>
-                                {{$profile->mobile_no2}} <br> {{$profile->mobile_no_other}}</p>
-                            </div>
-                            <div class="col-md-6 col-xs-6"> <strong>Emails</strong>
-                                <br>
-                                <p class="text-muted">{{$profile->email}} <br>
-                                {{$profile->email2}} </p>
-                            </div>
-                        </div>
-
-                        <table class="table table-bordered">
-                            <thead>
-                            <th>#</th>
-                            <th>Organization Name</th>
-                            <th>Position</th>
-                            <th>Department</th>
-                            <th>Website</th>
-                            <th>Work Number</th>
-                            <th>Email</th>
-                            </thead>
-                            <tbody>
-                              @forelse($organizations as $index=>$profile_organization)
-                              <tr>
-                                <td>{{$index + 1}}</td>
-                                <td>{{$profile_organization->organization->name}}</td>
-                                <td>{{$profile_organization->position}}</td>
-                                <td>{{$profile_organization->department}}</td>
-                                <td><a href="http://{{$profile_organization->organization->website}}" target="_blank">{{$profile_organization->organization->website}}</a></td>
-                                <td>
-                                  {{$profile_organization->work_number}} <br>
-                                  {{$profile_organization->work_number2}}
-                                  {{$profile_organization->work_number_other}}
-                                </td>
-                                <td>
-                                  {{$profile_organization->email}} <br>
-                                  {{$profile_organization->email2}} <br>
-                                  {{$profile_organization->email_other}}
-                                </td>
-                              </tr>
-                              @empty
-                                Not affiliated to any organisation
-                                @endforelse
-                            </tbody>
-                        </table>
-
-                        <h6 class="m-t-10"><strong>ASSISTANTS</strong></h6>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Assistant Name</th>
-                                    <th>Assistant Email</th>
-                                    <th>Assistant Number</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($assistants as $index=>$assistant)
-                                <tr>
-                                    <td>{{$index + 1}}</td>
-                                    <td>{{$assistant->assistant_name}}</td>
-                                    <td>
-                                        <strong>P</strong>: {{$assistant->assistant_email1}} <br>
-                                        <strong>S</strong>: {{$assistant->assistant_email2}} <br>
-                                        <strong>O</strong>: {{$assistant->assistant_email3}} <br>
-                                    </td>
-                                    <td>
-                                        <strong>P</strong>: {{$assistant->assistant_number1}} <br>
-                                        <strong>S</strong>: {{$assistant->assistant_number2}} <br>
-                                        <strong>O</strong>: {{$assistant->assistant_number3}} <br>
-                                    </td>
-                                </tr>
-                                @empty
-                                No assistants
-                                @endforelse
-                            </tbody>
-                        </table>
-
-                        <hr>
-                        <a href="/profiles/{{$profile->slug}}/edit" class="btn btn-success">
-                            <span class="fa fa-edit"></span> Update Profile
-                        </a>
+            <div class="tab-content tabcontent-border">
+                <div class="tab-pane active" id="activity-timeline" role="tabpanel">
+                    <div class="p-12">
+                      @forelse($profile->activities as $activity)
+                      <div class="white-box">
+                          <div class="card">
+                              <div class="card-body">
+                                  <h5 class="card-title text-uppercase mb-0"><strong>{{$activity->activity_type->name}} Report</strong></h5>
+                                  <hr>
+                                  <p>
+                                      @if($activity->activity_type->name != "Meeting")
+                                      <strong>Direction:</strong> {{$activity->direction}} <br>
+                                      @else
+                                      <strong>Type:</strong> {{$activity->meeting_type}} <br>
+                                      @endif
+                                      @if($activity->activity_type->name == "Meeting")
+                                      <strong>Where:</strong> {{$activity->venue}} <br>
+                                      @endif
+                                      <strong>Staff:</strong> @foreach($activity->users as $rep) {{$rep->name}}, @endforeach<br>
+                                      <strong>When:</strong> {{$activity->when}} <br>
+                                      <strong>Why</strong>  <br>{{$activity->why}}<br> <br>
+                                      <strong>Outcome</strong>  <br>{{$activity->outcome}}
+                                  </p>
+                                  <div class="m-t-20 row">
+                                      @foreach($activity->photos as $photo)
+                                      <img src="{{ asset('storage/'.$photo->path) }}" alt="user" class="col-md-3 col-xs-12" />
+                                      @endforeach
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      @empty
+                          No activities recorded for this profile.
+                      @endforelse
                     </div>
                 </div>
-                <!-- /.tabs2 -->
-                <!-- .tabs3 -->
-                <div class="tab-pane" id="settings">
+                <div class="tab-pane  p-4 b-r b-l" id="events-attended" role="tabpanel">
+                  @forelse($profile->events as $event)
+                  <div class="row white-box">
+                      <div class="card">
+                          <div class="card-body">
+                              <h5 class="card-title text-uppercase mb-0"><strong>{{$event->name}}: <i>{{$event->theme}}</i></strong></h5>
+                              <hr>
+                              <p>
+                                  <strong>Event Type:</strong> {{$event->event_type}}<br>
+                                  <strong>Start Date:</strong> {{$event->start_date}} {{$event->start_time}} <br>
+                                  <strong>End Date:</strong> {{$event->end_date}} {{$event->end_time}} <br>
+                                  <strong>Where: </strong>  <br>{{$event->address_line1}}<br> {{$event->address_line2}}<br>
+                                  <strong>Description</strong>  <br>{{$event->description}}
+                              </p>
+                              <div class="m-t-20 row">
+                                  @foreach($event->photos as $photo)
+                                  <a href="{{ url('storage/'.$photo->path) }}" data-toggle="lightbox" data-effect="mfp-zoom-in" data-gallery="multiimages" data-title="{{$photo->caption}}"><img src="{{ url('storage/'.$photo->path) }}" alt="gallery" class="all studio col-md-3 col-xs-12" /></a>
+                                  @endforeach
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  @empty
+                  No events recorded for this profile
+                  @endforelse
+                </div>
+                <div class="tab-pane p-4" id="documents" role="tabpanel">
+                  <div class="row white-box">
+                      <h4 class="page-title"><strong>PERSONAL DOCUMENTS</strong> | <a href="#" data-toggle="modal" data-target="#upload-documents">
+                          <span class="fa fa-upload"></span> Upload New
+                      </a></h4>
+                      <div class="table-responsive" style="font-size: 12px;">
+                          <table class="table">
+                              <thead>
+                                  <tr>
+                                      <th>DESCRIPTION</th>
+                                      <th>UPLOADED BY</th>
+                                      <th>ACTION</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  @foreach($profile->documents as $index=>$document)
+                                  <tr>
+                                      <td>{{$document->description}}</td>
+                                      <td>{{$document->user->name}}</td>
+                                      <td>
+                                          <a href="/profile/documents/{{$document->id}}/download"> <span class="fa fa-download"></span></a> <strong>|</strong>
+                                          <a href="/profile/documents/{{$document->id}}/delete"> <span class="fa fa-trash"></span></a>
+                                      </td>
+                                  </tr>
+                                  @endforeach
+                              </tbody>
+                          </table>
+                          <hr>
+
+                      </div>
+                    </div>
+
                     <div class="row white-box">
-                        <h4 class="page-title"><strong>PERSONAL DOCUMENTS</strong></h4>
-                        <div class="table-responsive">
+                        <h4 class="page-title"><strong>RELATED DOCUMENTATION </strong></h4>
+                        <hr>
+                        <div class="table-responsive" style="font-size: 12px;">
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>DESCRIPTION</th>
-                                        <th>UPLOADED BY</th>
-                                        <th>ACTION</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($profile->documents as $index=>$document)
-                                    <tr>
-                                        <td>{{$index + 1}}</td>
-                                        <td>{{$document->description}}</td>
-                                        <td>{{$document->user->name}}</td>
-                                        <td>
-                                            <a href="/profile/documents/{{$document->id}}/download"> <span class="fa fa-download"></span></a> <strong>|</strong>
-                                            <a href="/profile/documents/{{$document->id}}/delete"> <span class="fa fa-trash"></span></a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <hr>
-                            <a href="#" data-toggle="modal" data-target="#upload-documents" class="btn btn-success">
-                                <span class="fa fa-upload"></span> Upload Document
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="row white-box">
-                        <h4 class="page-title"><strong>DOCUMENTATIONS</strong></h4>
-                        <hr>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
                                         <th>DOCUMENT TYPE</th>
                                         <th>EFFECTIVE DATE</th>
                                         <th>LOCATION</th>
@@ -432,7 +159,6 @@
                                 <tbody>
                                    @foreach($profile->documentation as $index=>$document)
                                     <tr>
-                                        <td>{{$index + 1}}</td>
                                         <td>{{$document->document_types->type}}</td>
                                         <td>{{$document->effective_date}}</td>
                                         <td>{{$document->file_location}}</td>
@@ -447,43 +173,262 @@
                                 </tbody>
                             </table>
                         </div>
+                      </div>
+              </div>
+
+                <div class="tab-pane p-4" id="about" role="tabpanel">
+                    <div class="row white-box about-section">
+                      <div class="user-bg">
+                          @if($profile->photo)
+                          <img width="100%" alt="user" src="/fruit_profiles/photos/{{$profile->photo}}" class="img-circle">
+                          @else
+                          <center>
+                              <img  alt="user" src="/fruit_profiles/photos/no-image.png" class="img-circle">
+                          </center>
+                          @endif
+                      </div>
+
+                    <br>
+                    <br>
+                    
+                      <br>
+                        <div class="table-responsive">
+                          <table class="table">
+                              <tbody>
+                                <tr>
+                                    <td><strong>Full name</strong></td>
+                                    <td> @foreach($profile->title as $title) {{$title->title}} @endforeach {{$profile->fullname}} {{$profile->lastname}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gender</strong></td>
+                                    <td> {{$profile->gender->gender}} </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Date of Birth</strong></td>
+                                    <td> {{$profile->dob}} </td>
+                                </tr>
+                                @if($profile->bio)
+                                <tr>
+                                    <td><strong>Bio</strong></td>
+                                    <td> {{$profile->bio}} </td>
+                                </tr>
+                                @endif
+                                <tr>
+                                    <td><strong>Country</strong></td>
+                                    <td> {{$profile->country->name}} </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>City</strong></td>
+                                    <td> {{$profile->city->name}} </td>
+                                </tr>
+                                  <tr>
+                                      <td><strong>Languages</strong></td>
+                                      <td>   @foreach($profile->language as $language)
+                                              {{$language->name}}.
+                                            @endforeach
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td><strong>Responsible Staff</strong></td>
+                                      <td>{{$profile->maintainer->name}}</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                    </div>
+                  <div class="row white-box other-information-secion">
+                    <h4 class="page-title"><strong>OTHER INFORMATION</strong></h4>
+                      <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Platform (Media only)</strong></td>
+                                    <td> {{$profile->platform}} </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>History</strong></td>
+                                    <td> {{$profile->history}} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane p-4" id="contacts" role="tabpanel">
+                  <div class="row white-box contacts-section">
+                    <h4 class="page-title"><strong>CONTACT INFORMATION</strong></h4>
+                    <div class="table-responsive">
+                      <table class="table">
+                          <tbody>
+                              <tr>
+                                  <td><strong>Mobile</strong></td>
+                                  <td> {{$profile->mobile_no}} <br>
+                                {{$profile->mobile_no2}} <br> {{$profile->mobile_no_other}} </td>
+                              </tr>
+                              <tr>
+                                  <td><strong>Email</strong></td>
+                                  <td> {{$profile->email}} <br>
+                                      {{$profile->email2}} </td>
+                              </tr>
+
+                          </tbody>
+                      </table>
+                  </div>
+                  <h4 class="page-title"><strong>ORGANISATION</strong></h4>
+                  @forelse($organizations as $index=>$profile_organization)
+                  <div class="table-responsive">
+                    <h6 class="page-title"><strong>{{$profile_organization->organization->name}}</strong></h6>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td><strong>Position</strong></td>
+                                <td> {{$profile_organization->position}} </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Department</strong></td>
+                                <td> {{$profile_organization->department}} </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Website</strong></td>
+                                <td> <a href="http://{{$profile_organization->organization->website}}" target="_blank">{{$profile_organization->organization->website}}</a> </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Number</strong></td>
+                                <td> {{$profile_organization->work_number}} <br>
+                                {{$profile_organization->work_number2}}
+                                {{$profile_organization->work_number_other}} </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email</strong></td>
+                                <td> {{$profile_organization->email}} <br>
+                                {{$profile_organization->email2}} <br>
+                                {{$profile_organization->email_other}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                @empty
+                  Not affiliated to any organisation
+                @endforelse
+
+                <h4 class="page-title"><strong>ASSISTANTS</strong></h4>
+                @forelse($assistants as $index=>$assistant)
+                <div class="table-responsive">
+                  <h6 class="page-title"><strong>{{$assistant->assistant_name}}</strong></h6>
+                  <table class="table">
+                      <tbody>
+                          <tr>
+                              <td><strong>Email</strong></td>
+                              <td>
+                                <strong>P</strong>: {{$assistant->assistant_email1}} <br>
+                                <strong>S</strong>: {{$assistant->assistant_email2}} <br>
+                                <strong>O</strong>: {{$assistant->assistant_email3}} <br></td>
+                          </tr>
+                          <tr>
+                              <td><strong>Number</strong></td>
+                              <td>
+                                <strong>P</strong>: {{$assistant->assistant_number1}} <br>
+                                <strong>S</strong>: {{$assistant->assistant_number2}} <br>
+                                <strong>O</strong>: {{$assistant->assistant_number3}} <br>
+                               </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              @empty
+                No assistants
+              @endforelse
+                  </div>
+                </div>
+                <div class="tab-pane p-4" id="relationship" role="tabpanel">
+                  <div class="row white-box relationship-section">
+                    <div class="table-responsive">
+                      <table class="table">
+                          <tbody>
+                              <tr>
+                                  <td><strong>Sector</strong></td>
+                                  <td> {{$profile->sector->name}}</td>
+                              </tr>
+                              <tr>
+                                  <td><strong>Team</strong></td>
+                                  <td> {{$profile->team->name}} </td>
+                              </tr>
+                              <tr>
+                                  <td><strong>Appointed Role</strong></td>
+                                  <td> {{ $profile->fruit_role->role}} </td>
+                              </tr>
+                              <tr>
+                                  <td><strong>Level</strong></td>
+                                  <td> {{ $profile->fruit_stage->stage}} </td>
+                              </tr>
+                              <tr>
+                                  <td><strong>Rank</strong></td>
+                                  <td> {{$profile->fruit_level->level}} </td>
+                              </tr>
+                              <tr>
+                                  <td><strong>Cult Awareness</strong></td>
+                                  <td> {{$profile->cult_awareness}} </td>
+                              </tr>
+                              <tr>
+                                  <td><strong>Pre-Poisoned</strong></td>
+                                  <td> {{$profile->pre_poisoned}} </td>
+                              </tr>
+                              <tr>
+                                  <td><strong>WARP Attendee</strong></td>
+                                  <td> {{$profile->warp_attendee}} </td>
+                              </tr>
+                              <tr>
+                                  <td><strong>Religion</strong></td>
+                                  <td> {{$profile->religion->name}} </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+                </div>
+                <div class="row white-box">
+                    <h4 class="page-title"><strong>WARP SUMMIT ATTENDANCE</strong></h4>
+                    <hr>
+                    <div class="table-responsive" style="font-size: 12px;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>YEAR ATTENDED</th>
+                                    <th>FINANCING</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               @foreach($profile->warp_summit as $index=>$summit)
+                                <tr>
+                                    <td>{{date('Y', strtotime($summit->date_attended))}}</td>
+                                    <td>{{$summit->financing}}</td>
+                                    <td>
+                                       <a href="{{route('warp-attendees.edit', $summit->id)}}"> <span class="fa fa-pencil"></span> Edit</a> |
+                                       <a href="{{route('warp-attendees.delete', $summit->id)}}"> <span class="fa fa-trash"></span> Delete</a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
-                <div class="tab-pane" id="other-information">
-                    <div class="row white-box">
-                        <h4 class="page-title"><strong>WARP SUMMIT ATTENDANCE</strong></h4>
-                        <hr>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>YEAR ATTENDED</th>
-                                        <th>FINANCING</th>
-                                        <th>ACTION</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                   @foreach($profile->warp_summit as $index=>$summit)
-                                    <tr>
-                                        <td>{{$index + 1}}</td>
-                                        <td>{{date('Y', strtotime($summit->date_attended))}}</td>
-                                        <td>{{$summit->financing}}</td>
-                                        <td>
-                                           <a href="{{route('warp-attendees.edit', $summit->id)}}"> <span class="fa fa-pencil"></span> Edit</a> |
-                                           <a href="{{route('warp-attendees.delete', $summit->id)}}"> <span class="fa fa-trash"></span> Delete</a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="col-md-3 col-xs-12">
+            <div class="white-box">
+              <h5><strong>QUICK ACCESS</strong></h5>
+              <ul>
+                <li><a href="#upload-documents" data-toggle="modal" data-target="#upload-documents">Upload Document</a></li>
+                      <li><a href="/profiles/{{$profile->slug}}/edit">Update Profile</a></li>
+                      <li><a href="#" onclick="myFunction('{{$profile->slug}}')">Print Profile</a></li>
+              </ul>
+
+            </div>
+        </div>
+</div>
+
     <!-- /.row -->
 
     <!-- sample modal content -->
@@ -522,5 +467,8 @@
         </div>
     </div>
 </div>
+@push('contactsJS')
+<script src="{{asset('js/contacts.js')}}"></script>
+@endpush
 <!-- /.container-fluid -->
 @endsection

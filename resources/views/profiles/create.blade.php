@@ -82,7 +82,7 @@
   <table class="table table-bordered">
       <thead>
         <th>#</th>
-        <th>Organisation Name</th>
+        <th>Organisation</th>
         <th>Position</th>
         <th>Department</th>
         <th>Work Number</th>

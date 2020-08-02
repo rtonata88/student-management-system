@@ -11,6 +11,8 @@ use App\EventReport;
 use App\Profile;
 use App\ActivityType;
 
+use Auth;
+
 class HomeController extends Controller
 {
     /**
@@ -30,32 +32,33 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $sectors = ActivityTeamReport::sectorsDashboardAnalysis();
-        $data = $this->sectorByTeamGraph();
+        $user = Auth::user();
+        $sectors = ActivityTeamReport::sectorsDashboardAnalysis($user);
+        $data = $this->sectorByTeamGraph($user);
 
-        $profiles = Profile::count();
+        $profiles = Profile::where('team_id', $user->team_id)->get();
 
-        $profiles_by_country = $this->getProfilesByCountry();
-        $profiles_by_status = $this->getProfilesByStatus();
-        $profiles_by_role = $this->getProfilesByRole();
-        $profiles_by_stage = $this->getProfilesByStage();
-        $email_activities = $this->getEmailActivitiesByTeam(date('Y-m-01'), date('Y-m-d'));
-        $meeting_activities = $this->getMeetingActivitiesByTeam(date('Y-m-01'), date('Y-m-d'));
-        $call_activities = $this->getCallActivitiesByTeam(date('Y-m-01'), date('Y-m-d'));
-        $message_activities = $this->getMessageActivitiesByTeam(date('Y-m-01'), date('Y-m-d'));
-        $internal_events_by_team = $this->getInternalEventReportsByTeam(date('Y-m-01'), date('Y-m-d'));
-        $external_events_by_team = $this->getExternalEventReportsByTeam(date('Y-m-01'), date('Y-m-d'));
-        
+        $profiles_by_country = $this->getProfilesByCountry($user);
+        $profiles_by_status = $this->getProfilesByStatus($user);
+        $profiles_by_role = $this->getProfilesByRole($user);
+        $profiles_by_stage = $this->getProfilesByStage($user);
+        $email_activities = $this->getEmailActivitiesByTeam($user, date('Y-m-01'), date('Y-m-d'));
+        $meeting_activities = $this->getMeetingActivitiesByTeam($user, date('Y-m-01'), date('Y-m-d'));
+        $call_activities = $this->getCallActivitiesByTeam($user, date('Y-m-01'), date('Y-m-d'));
+        $message_activities = $this->getMessageActivitiesByTeam($user, date('Y-m-01'), date('Y-m-d'));
+        $internal_events_by_team = $this->getInternalEventReportsByTeam($user, date('Y-m-01'), date('Y-m-d'));
+        $external_events_by_team = $this->getExternalEventReportsByTeam($user, date('Y-m-01'), date('Y-m-d'));
+
         return view('home', compact('sectors', 'data', 'profiles', 'profiles_by_country', 'profiles_by_status', 'profiles_by_role', 'profiles_by_stage', 'email_activities', 'message_activities', 'call_activities', 'meeting_activities', 'internal_events_by_team', 'external_events_by_team'));
     }
 
 
-    private function sectorByTeamGraph(){
+    private function sectorByTeamGraph($user){
         $activity_report = ActivityReport::all();
         $media_coverage = MediaCoverageReport::all();
         $event_reports = EventReport::all();
 
-        
+
         foreach ($media_coverage as $key => $coverage) {
            $activity_report->push($coverage);
         }
@@ -63,7 +66,7 @@ class HomeController extends Controller
          foreach ($event_reports as $key => $event) {
            $activity_report->push($event);
         }
-       
+
         //Get Unique Activities contained in the report and make them chart legend
         $legend = array('Activities');
         $activities = array();
@@ -75,8 +78,8 @@ class HomeController extends Controller
 
 
         $activities = array_values(array_unique($activities));
-    
-        
+
+
         $legend = array_merge($legend, $activities);
 
         array_push($data, $legend);
@@ -87,23 +90,23 @@ class HomeController extends Controller
             if($key > 0){
                 $activity = $sector->where('Activity', $value)->first();
                 if(count($activity) == 0){
-                    array_push($report, 0); 
+                    array_push($report, 0);
                 } else {
                     array_push($report, $activity->Occurence);
                 }
             }
         }
 
-        
+
         array_push($data, $report);
-      
+
         $report = array('IPYG');
         $sector = $activity_report->where('Sector', 'IPYG');
         foreach ($legend as $key => $value) {
             if($key > 0){
                 $activity = $sector->where('Activity', $value)->first();
                 if(count($activity) == 0){
-                    array_push($report, 0); 
+                    array_push($report, 0);
                 } else {
                     array_push($report, $activity->Occurence);
                 }
@@ -111,14 +114,14 @@ class HomeController extends Controller
         }
 
         array_push($data, $report);
-      
+
         $report = array('IWPG');
         $sector = $activity_report->where('Sector', 'IWPG');
         foreach ($legend as $key => $value) {
             if($key > 0){
                 $activity = $sector->where('Activity', $value)->first();
                 if(count($activity) == 0){
-                    array_push($report, 0); 
+                    array_push($report, 0);
                 } else {
                     array_push($report, $activity->Occurence);
                 }
@@ -130,8 +133,8 @@ class HomeController extends Controller
         return json_encode($data);
     }
 
-    private function getProfilesByCountry(){
-        $profiles_by_country = Profile::getProfilesByCountry();
+    private function getProfilesByCountry($user){
+        $profiles_by_country = Profile::getProfilesByCountry($user);
 
         $data = array();
         array_push($data, array('Countries', 'Profiles'));
@@ -140,11 +143,11 @@ class HomeController extends Controller
             array_push($data, array($profiles->country, $profiles->number_of_profiles));
         }
 
-        return json_encode($data); 
+        return json_encode($data);
     }
 
-    private function getProfilesByStatus(){
-        $profiles_by_status = Profile::getProfilesByStatus();
+    private function getProfilesByStatus($user){
+        $profiles_by_status = Profile::getProfilesByStatus($user);
 
         $data = array();
         array_push($data, array('Status', 'Profiles'));
@@ -153,11 +156,11 @@ class HomeController extends Controller
             array_push($data, array($profiles->status, $profiles->number_of_profiles));
         }
 
-        return json_encode($data); 
+        return json_encode($data);
     }
 
-    private function getProfilesByRole(){
-        $profiles_by_role = Profile::getProfilesByRole();
+    private function getProfilesByRole($user){
+        $profiles_by_role = Profile::getProfilesByRole($user);
 
         $data = array();
         array_push($data, array('Appointed Role', 'Profiles'));
@@ -166,11 +169,11 @@ class HomeController extends Controller
             array_push($data, array($profiles->role, $profiles->number_of_profiles));
         }
 
-        return json_encode($data); 
+        return json_encode($data);
     }
 
-    private function getProfilesByStage(){
-        $profiles_by_stage = Profile::getProfilesByStage();
+    private function getProfilesByStage($user){
+        $profiles_by_stage = Profile::getProfilesByStage($user);
 
         $data = array();
         array_push($data, array('Stage', 'Profiles'));
@@ -179,10 +182,10 @@ class HomeController extends Controller
             array_push($data, array($profiles->stage, $profiles->number_of_profiles));
         }
 
-        return json_encode($data); 
+        return json_encode($data);
     }
 
-    private function getEmailActivitiesByTeam($start_date, $end_date){
+    private function getEmailActivitiesByTeam($user, $start_date, $end_date){
         $activity_type_id = $this->getActivityId('Email');
         $report_by_activity = ActivityTeamReport::getReportByTeam($activity_type_id, $start_date, $end_date);
 
@@ -192,10 +195,10 @@ class HomeController extends Controller
         foreach($report_by_activity as $activity){
             array_push($data, array($activity->Team, $activity->Occurence));
         }
-        return json_encode($data); 
+        return json_encode($data);
     }
 
-    private function getMeetingActivitiesByTeam($start_date, $end_date){
+    private function getMeetingActivitiesByTeam($user, $start_date, $end_date){
         $activity_type_id = $this->getActivityId('Meeting');
         $report_by_activity = ActivityTeamReport::getReportByTeam($activity_type_id, $start_date, $end_date);
 
@@ -205,10 +208,10 @@ class HomeController extends Controller
         foreach($report_by_activity as $activity){
             array_push($data, array($activity->Team, $activity->Occurence));
         }
-        return json_encode($data); 
+        return json_encode($data);
     }
 
-    private function getCallActivitiesByTeam($start_date, $end_date){
+    private function getCallActivitiesByTeam($user, $start_date, $end_date){
         $activity_type_id = $this->getActivityId('Call');
         $report_by_activity = ActivityTeamReport::getReportByTeam($activity_type_id, $start_date, $end_date);
 
@@ -218,10 +221,10 @@ class HomeController extends Controller
         foreach($report_by_activity as $activity){
             array_push($data, array($activity->Team, $activity->Occurence));
         }
-        return json_encode($data); 
+        return json_encode($data);
     }
 
-    private function getMessageActivitiesByTeam($start_date, $end_date){
+    private function getMessageActivitiesByTeam($user, $start_date, $end_date){
         $activity_type_id = $this->getActivityId('Text Message (SMS)');
         $report_by_activity = ActivityTeamReport::getReportByTeam($activity_type_id, $start_date, $end_date);
 
@@ -231,11 +234,11 @@ class HomeController extends Controller
         foreach($report_by_activity as $activity){
             array_push($data, array($activity->Team, $activity->Occurence));
         }
-        return json_encode($data); 
+        return json_encode($data);
     }
 
 
-    private function getInternalEventReportsByTeam($start_date, $end_date){
+    private function getInternalEventReportsByTeam($user, $start_date, $end_date){
         $report_by_activity = ActivityTeamReport::getEventReportsByTeam('internal', $start_date, $end_date);
 
         $data = array();
@@ -244,10 +247,10 @@ class HomeController extends Controller
         foreach($report_by_activity as $activity){
             array_push($data, array($activity->Team, $activity->Occurence));
         }
-        return json_encode($data); 
+        return json_encode($data);
     }
 
-    private function getExternalEventReportsByTeam($start_date, $end_date){
+    private function getExternalEventReportsByTeam($user, $start_date, $end_date){
         $report_by_activity = ActivityTeamReport::getEventReportsByTeam('external', $start_date, $end_date);
 
         $data = array();
@@ -256,7 +259,7 @@ class HomeController extends Controller
         foreach($report_by_activity as $activity){
             array_push($data, array($activity->Team, $activity->Occurence));
         }
-        return json_encode($data); 
+        return json_encode($data);
     }
 
     private function getActivityId($activity_name){

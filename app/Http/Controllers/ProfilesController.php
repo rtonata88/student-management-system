@@ -23,6 +23,8 @@ use App\ProfileAssistant;
 use App\OrganizationProfile;
 use App\Religion;
 use Auth;
+use View;
+use Response;
 use Freshbitsweb\Laratables\Laratables;
 
 use Session;
@@ -358,6 +360,37 @@ class ProfilesController extends Controller
 	public function print($slug){
 		$profile = Profile::whereSlug($slug)->first();
 		return view('profiles.print', compact('profile'));
+	}
+
+	public function loadEditSection($profile, $section)
+	{
+
+		$profile = Profile::whereSlug($profile)->first();
+		$languages = Language::pluck('name', 'id');
+		$sectors = Sector::pluck('name', 'id');
+		$countries = Country::pluck('name', 'id');
+		$titles = Title::pluck('title', 'id');
+		$gender = Gender::pluck('gender', 'id');
+		$organizations = Organization::orderBy('name')->get()->pluck('name', 'id');
+		$cities = City::pluck('name', 'id');
+		$fruit_roles = FruitRole::pluck('role', 'id');
+		$teams = Team::pluck('name', 'id');
+		$fruit_levels = FruitLevel::pluck('level', 'id');
+		$fruit_stages = FruitStage::pluck('stage', 'id');
+		$maintainers = Maintainer::pluck('name', 'id');
+		$religions = Religion::pluck('name', 'id');
+		$sector_relationships = SectorRelationship::pluck('relationship', 'id');
+
+		switch ($section) {
+			case 'about':
+						$html = View::make('profiles.forms.about', compact('profile','languages', 'sectors', 'countries', 'titles', 'gender', 'organizations', 'cities', 'fruit_roles', 'teams', 'fruit_levels', 'fruit_stages', 'maintainers', 'sector_relationships', 'profile_organizations', 'assistants', 'religions'))->render();
+						return Response::json(['html' => $html]);
+				break;
+
+			default:
+				// code...
+				break;
+		}
 	}
 
 }
