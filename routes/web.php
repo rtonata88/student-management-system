@@ -20,7 +20,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/load/about/{profile}/{section}', 'ProfilesController@loadEditSection');
+Route::get('/load/{profile}/{section}', 'ProfilesController@loadEditSection');
+Route::get('/detach/{profile}/{section}', 'ProfilesController@detach');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -72,6 +73,10 @@ Route::post('/profiles/documents', 'ProfilesController@upload_document');
 Route::get('/profile/documents/{id}/download', 'ProfilesController@download_document');
 Route::get('/profile/documents/{id}/delete', 'ProfilesController@delete_document');
 Route::get('/profile/print/{slug}', 'ProfilesController@print');
+Route::get('/profile/ajax/show/{slug}/{section}', 'ProfilesController@loadShowSection')->name('profiles.ajax.show');
+Route::get('/profile/ajax/entity/{slug}/{entity}', 'ProfilesController@loadAddNewEntityForm')->name('profiles.ajax.new-entity');
+Route::get('/profile/cancel/{section}/{slug}/', 'ProfilesController@cancelEdit');
+Route::get('/profile/add/{entity}/{slug}/', 'ProfilesController@addNewEntity');
 
 //ACTIVITIES
 Route::get('/meetings/create/{profileSlug}', 'ActivitiesController@create');

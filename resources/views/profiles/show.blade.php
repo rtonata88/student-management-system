@@ -178,19 +178,24 @@
 
                 <div class="tab-pane p-4" id="about" role="tabpanel">
                     <div class="row white-box about-section">
-                      <div class="user-bg">
+                      <br>
+                      <div class="user-bg text-center">
                           @if($profile->photo)
-                          <img width="100%" alt="user" src="/fruit_profiles/photos/{{$profile->photo}}" class="img-circle">
+                          <img alt="user" src="/fruit_profiles/thumbnail/{{$profile->photo}}" class="img-circle">
                           @else
                           <center>
                               <img  alt="user" src="/fruit_profiles/photos/no-image.png" class="img-circle">
                           </center>
                           @endif
                       </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="pull-right">
+                            <a href="#" slug="{{$profile->slug}}" class="edit-btn" section="about"><span class="fa fa-pencil"></span> Edit</a></a>
 
-                    <br>
-                    <br>
-                    
+                          </div>
+                        </div>
+                      </div>
                       <br>
                         <div class="table-responsive">
                           <table class="table">
@@ -237,6 +242,7 @@
                       </div>
                     </div>
                   <div class="row white-box other-information-secion">
+
                     <h4 class="page-title"><strong>OTHER INFORMATION</strong></h4>
                       <div class="table-responsive">
                         <table class="table">
@@ -255,8 +261,19 @@
                   </div>
                 </div>
                 <div class="tab-pane p-4" id="contacts" role="tabpanel">
+
                   <div class="row white-box contacts-section">
-                    <h4 class="page-title"><strong>CONTACT INFORMATION</strong></h4>
+
+                    <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="page-title"><strong>PERSONAL CONTACT INFORMATION</strong></h4>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="pull-right">
+                      <a href="#" slug="{{$profile->slug}}" class="edit-btn" section="contact"><span class="fa fa-pencil"></span> Edit</a></a>
+                      </div>
+                    </div>
+                  </div>
                     <div class="table-responsive">
                       <table class="table">
                           <tbody>
@@ -274,11 +291,24 @@
                           </tbody>
                       </table>
                   </div>
-                  <h4 class="page-title"><strong>ORGANISATION</strong></h4>
+
+                 <h4 class="page-title"><strong>ORGANISATIONS</strong></h4>
                   @forelse($organizations as $index=>$profile_organization)
-                  <div class="table-responsive">
-                    <h6 class="page-title"><strong>{{$profile_organization->organization->name}}</strong></h6>
-                    <table class="table">
+                  <div class="table-responsive organisation-{{$profile_organization->id}}">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <h6 class="page-title"><strong>{{$profile_organization->organization->name}}</strong></h6>
+
+                      </div>
+                      <div class="col-md-4">
+                        <div class="pull-right">
+                          <a href="#" slug="{{$profile->slug}}" class="edit-btn" id="{{$profile_organization->id}}" section="organisation"><span class="fa fa-pencil"></span> Edit</a> |
+                          <a href="#" slug="{{$profile->slug}}" class="delete-btn" id="{{$profile_organization->id}}" section="organisation"><span class="fa fa-trash"></span> Detach</a>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <table class="table" style="background-color: #fcfcfc; border: 1px solid #dbd9d9">
                         <tbody>
                             <tr>
                                 <td><strong>Position</strong></td>
@@ -295,7 +325,7 @@
                             <tr>
                                 <td><strong>Number</strong></td>
                                 <td> {{$profile_organization->work_number}} <br>
-                                {{$profile_organization->work_number2}}
+                                {{$profile_organization->work_number2}} <br>
                                 {{$profile_organization->work_number_other}} </td>
                             </tr>
                             <tr>
@@ -310,13 +340,33 @@
                 @empty
                   Not affiliated to any organisation
                 @endforelse
-
+                <h5>
+                <div class="new-organisation-section"></div>
+                <div class="row">
+                  <div class="col-md-12">
+                      <a  href="#organisationsModal" data-toggle="modal" class="add-organisation-btn"><strong> <span class="fa fa-plus-circle"></span> Add organisation</strong></a>
+                  </div>
+                  @include('profiles.forms.create-organisation', ['organizations_list'=>$organizations_list])
+                </div>
+              </h5>
+              <hr>
                 <h4 class="page-title"><strong>ASSISTANTS</strong></h4>
                 @forelse($assistants as $index=>$assistant)
-                <div class="table-responsive">
-                  <h6 class="page-title"><strong>{{$assistant->assistant_name}}</strong></h6>
-                  <table class="table">
+                <div class="table-responsive assistant-{{$assistant->id}}">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="pull-right">
+                        <a href="#" slug="{{$profile->slug}}" class="edit-btn" id="{{$assistant->id}}" section="assistant"><span class="fa fa-pencil"></span> Edit</a> |
+                        <a href="#" slug="{{$profile->slug}}" class="delete-btn" id="{{$assistant->id}}" section="assistant"><span class="fa fa-trash"></span> Delete</a>
+                      </div>
+                    </div>
+                  </div>
+                  <table class="table" style="background-color: #fcfcfc; border: 1px solid #dbd9d9">
                       <tbody>
+                        <tr>
+                            <td><strong>Name</strong></td>
+                            <td>{{$assistant->assistant_name}}</td>
+                        </tr>
                           <tr>
                               <td><strong>Email</strong></td>
                               <td>
@@ -338,10 +388,28 @@
               @empty
                 No assistants
               @endforelse
+              <h5>
+                  <div class="new-assistant-section"></div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <a  href="#assistantsModal" data-toggle="modal" class="add-assistant-btn"><strong> <span class="fa fa-plus-circle"></span> Add assistant</strong></a>
+                    </div>
+                    @include('profiles.forms.create-assistant')
                   </div>
-                </div>
+                </h5>
+              </div>
+
+              </div>
                 <div class="tab-pane p-4" id="relationship" role="tabpanel">
                   <div class="row white-box relationship-section">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="pull-right">
+                        <a href="#" slug="{{$profile->slug}}" class="edit-btn" section="relationship"><span class="fa fa-pencil"></span> Edit</a></a>
+                        </div>
+                      </div>
+                    </div>
+
                     <div class="table-responsive">
                       <table class="table">
                           <tbody>

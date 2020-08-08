@@ -1,7 +1,8 @@
 <div class="row white-box edit-about-section">
-  <div class="user-bg">
+  <div class="spinner"></div>
+  <div class="user-bg text-center">
       @if($profile->photo)
-      <img width="100%" alt="user" src="/fruit_profiles/photos/{{$profile->photo}}" >
+      <img alt="user" src="/fruit_profiles/thumbnail/{{$profile->photo}}" class="img-circle">
       @else
       <center>
           <img  alt="user" src="/fruit_profiles/photos/no-image.png" >
@@ -18,13 +19,13 @@
             <tr>
               <td><strong>Photo</strong> </td>
               <td>
-                  {{Form::file('photo', null, ['class' => 'form-control'])}}
+                  {{Form::file('photo', null, ['class' => 'form-control', 'id'=>'photo'])}}
               </td>
             </tr>
             <tr>
                 <td><strong>Titles</strong></td>
                 <td>
-                    {{Form::select('titles[]', $titles, $profile->title()->pluck('title_id'), ['class' => 'form-control select2 select2-multiple', 'required', 'multiple'])}}
+                    {{Form::select('titles[]', $titles, $profile->title()->pluck('title_id'), ['class' => 'form-control select2 select2-multiple','id'=>'titles' ,'required', 'multiple'])}}
                     <div class="help-block text-info">
                         Ctrl + Click on the Title - to select multiple titles
                     </div>
@@ -64,7 +65,7 @@
               <tr>
                   <td><strong>Languages</strong></td>
                   <td>
-                    {{Form::select('language_id', $languages, $profile->language()->pluck('language_id'), ['class' => 'form-control select2', 'multiple'])}}
+                    {{Form::select('languages[]', $languages, $profile->language()->pluck('language_id'), ['class' => 'form-control select2', 'id'=>'languages' ,'multiple'])}}
                     <div class="help-block text-info">
                         Ctrl + Click on the Language - to select multiple languages
                     </div>
@@ -86,8 +87,8 @@
       </table>
   </div>
   <div class="pull-right">
+    <a  href="" class="cancel-btn" section="about"><strong>Cancel</strong></a>
     <button type="submit" class="btn btn-default save-btn" section="about"><span class="fa fa-check-circle"></span> Save </button>
-     <a  href="" class="cancel-btn" section="about"><strong>Cancel</strong></a>
   </div>
 
 </div>
