@@ -72,7 +72,7 @@ class Profile extends Model implements Auditable
     }
 
     public function activities(){
-        return $this->belongsToMany('App\Activity')->orderBy('when', 'desc');
+        return $this->belongsToMany('App\Activity')->orderBy('when', 'desc')->orderBy('time', 'desc');
     }
 
     public function events(){

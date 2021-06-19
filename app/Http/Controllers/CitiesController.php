@@ -35,10 +35,12 @@ class CitiesController extends Controller
     	return view('setup.cities.create', compact('countries', 'languages'));
     }
 
-   	public function edit($slug)
+   	public function edit($id)
    	{
-   		$city = City::whereSlug($slug)->first();
-   		return view('setup.city.edit', compact('city'));
+   		$city = City::find($id);
+      $countries = Country::pluck('name', 'id');
+    	$languages = Language::pluck('name', 'id');
+   		return view('setup.cities.edit', compact('city', 'countries', 'languages'));
    	}
 
 
@@ -66,13 +68,14 @@ class CitiesController extends Controller
             'name' => 'required|max:255|unique:countries',
        
         ]);
-      $city              = City::find($id);
-      $city->language_id = $request->language_id;
-      $city->name        = $request->country_id;
-      $city->name        = $request->name;
+        
+      $city = City::find($id);
+      $city->language_id = $requests->language_id;
+      $city->name = $requests->name;
+      $city->country_id = $requests->country_id;
       $city->save();
-
+      
       Session::flash('message', 'The record has been updated, please confirm that the changes have taken effect in the table below.');
-      return redirect('/activity-types');
+      return redirect('/cities');
     }
 }

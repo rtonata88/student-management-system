@@ -86,6 +86,8 @@ class DocumentTypesController extends Controller
         $type->type = $request->type;
         $type->description = $request->description;
         $type->save();
+
+        return redirect('/document-types');
     }
 
     /**

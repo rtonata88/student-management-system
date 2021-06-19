@@ -1,43 +1,48 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Setup</li>
+    <li class="breadcrumb-item"> <a href="/fruit-stages"> Fruit stages </a></li>
+    <li class="breadcrumb-item active">Edit </li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">FRUIT STAGES</h4> </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                    <li><a href="/setup">Setup</a></li>
-                    <li class="active">Fruit Stages</li>
-                </ol>
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+         <div class="card-header">
+                <strong>Fruit stages</strong> | <a href="/fruit-stages"> Back</a>
+             
             </div>
-            <!-- /.col-lg-12 -->
-        </div>
-        <div class="row">
-            <div class="col-md-12 col-lg-12 col-sm-12">
-                <div class="white-box">
-                    <h3 class="box-title">{{$fruit_stage->stage}} [update]</h3>
-                     {!! Form::model($fruit_stage, array('route'=>array('fruit-stages.show', $fruit_stage->id), 'class'=>'form-horizontal', 'method'=>'PATCH')) !!}
-                        <div class="form-group">
-                          <div class="col-md-5">
-                            {{Form::label('stage', 'Fruit Stage')}}
-                            {{Form::text('stage', null, ['class' => 'form-control'])}}
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <div class="col-md-5">
-                            {{Form::label('language_id', 'Language')}}
-                            {{Form::select('language_id', $languages, null, ['class' => 'form-control select'])}}
-                          </div>
-                        </div>
-                        <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
-                        <button type="reset" class="btn btn-warning"><span class="fa fa-ban"></span> Reset</button>
-                    {!! Form::close() !!}
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <p class="text-danger">{{ $error }}</p>
+                @endforeach
+            @endif
+             {!! Form::model($fruit_stage, array('route'=>array('fruit-stages.show', $fruit_stage->id), 'class'=>'form-horizontal', 'method'=>'PATCH')) !!}
+            <div class="card">
+            
+                <div class="col-md-5">
+                    <div class="form-group">
+                        {{Form::label('stage', 'Fruit stage')}}
+                        {{Form::text('stage', null, ['class' => 'form-control'])}}
+                    </div>
                 </div>
-            </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                       {{Form::label('language_id', 'Language')}}
+                    {{Form::select('language_id', $languages, null, ['class' => 'form-control select'])}}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
+                    <button type="reset" class="btn"><span class="fa fa-ban"></span> Reset</button>
+                </div>
+                {!! Form::close() !!}
+        </div>
     </div>
-</div>
-</div>
 </div>
 @endsection

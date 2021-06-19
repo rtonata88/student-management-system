@@ -97,8 +97,8 @@
                     <div class="tab-pane active p-2" id="activity-timeline" role="tabpanel">
                             @forelse($profile->activities as $activity)
                                 <span class="text-uppercase pb-1">
-                                    <strong><mark>{{$activity->activity_type->name}} Report</mark></strong>
-                                </span>
+                                    <strong><mark>{{$activity->activity_type->name}} Report</mark></strong> 
+                                </span> | <a href="/activities/{{$activity->activity_type->name}}/{{$activity->id}}/{{$profile->slug}}/edit">Update report</a>
                                 <p>
                                     @if($activity->activity_type->name != "Meeting")
                                     <strong>Direction:</strong> {{$activity->direction}} <br>
@@ -109,16 +109,18 @@
                                     <strong>Where:</strong> {{$activity->venue}} <br>
                                     @endif
                                     <strong>Staff:</strong> @foreach($activity->users as $rep) {{$rep->name}}, @endforeach<br>
-                                    <strong>When:</strong> {{$activity->when}} <br>
+                                    <strong>When:</strong> {{$activity->when}} {{$activity->time}} <br>
                                     <strong>Why</strong>  <br>{{$activity->why}}<br> <br>
                                     <strong>Outcome</strong>  <br>{{$activity->outcome}}
                                 </p>
-                                <div class="m-t-20 row">
-                                    @foreach($activity->photos as $photo)
-                                    <img src="{{ asset('storage/'.$photo->path) }}" alt="user" class="col-md-3 col-xs-12" />
-                                    @endforeach
-                                </div>
-
+                                    @forelse($activity->photos->where('profile_id', $profile->id) as $photo)
+                                    <a href="{{ url('storage/'.$photo->path) }}" target="_blank" data-toggle="lightbox" data-effect="mfp-zoom-in" data-gallery="multiimages" data-title="{{$photo->caption}}">
+                                        <img src="{{ url('storage/'.$photo->path) }}" alt="{{$photo->caption}}" class="all studio col-md-3 col-xs-12" style="background-color: rgba(245, 245, 245, 0.5); padding: 5px; border-radius: 5px;" />
+                                    </a>
+                                    @empty
+                                    <mark><em>This report does not have any photos</em></mark>
+                                    @endforelse
+                                <br>
                                 <span class="text-center">
                                     <em>The End</em>
                                 </span>

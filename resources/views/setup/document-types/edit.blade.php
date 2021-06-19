@@ -4,8 +4,8 @@
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
     <li class="breadcrumb-item">Setup</li>
-    <li class="breadcrumb-item"> <a href="/departments"> Departments </a></li>
-    <li class="breadcrumb-item active">Edit </li>
+    <li class="breadcrumb-item"> <a href="/document-types"> Document types </a></li>
+    <li class="breadcrumb-item active">Create </li>
     <!-- Breadcrumb Menu-->
     </ol>
 </div>
@@ -14,22 +14,22 @@
 <div class="row">
     <div class="col-md-12 col-xs-12">
          <div class="card-header">
-                <strong>Departments</strong> | <a href="/departments"> Back</a>
+                <strong>Document types</strong> | <a href="/document-types"> Back</a>
              
             </div>
-             {!! Form::model($department, array('route'=>array('departments.show', $department->id), 'class'=>'form-horizontal', 'method'=>'PATCH')) !!}
+              {!! Form::model($document_type, array('route'=>array('document-types.update', $document_type->id), 'class'=>'form-horizontal', 'method'=>'PATCH')) !!}
             <div class="card">
            
                 <div class="col-md-5">
                     <div class="form-group">
-                         {{Form::label('name', 'Department Name')}}
-                            {{Form::text('name', null, ['class' => 'form-control'])}}
+                         {{Form::label('type', 'Document Type')}}
+                        {{Form::text('type', null, ['class' => 'form-control'])}}
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        {{Form::label('language_id', 'Language')}}
-                        {{Form::select('language_id', $languages, null, ['class' => 'form-control select'])}}
+                       {{Form::label('description', 'Description')}}
+                    {{Form::text('description', null, ['class' => 'form-control'])}}
                     </div>
                 </div>
                 <div class="card-footer">

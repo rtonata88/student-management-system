@@ -86,8 +86,9 @@ Route::get('/calls/create/{profileSlug}', 'ActivitiesController@create');
 Route::get('/emails/create/{profileSlug}', 'ActivitiesController@create');
 Route::get('/messages/create/{profileSlug}', 'ActivitiesController@create');
 Route::post('/activities', 'ActivitiesController@store');
-Route::get('/activities/{activity_type}/{id}/edit', 'ActivitiesController@edit');
-Route::post('/activities/{activity_id}/{id}/edit', 'ActivitiesController@update')->name('activities.edit');
+Route::get('/activities/{activity_type}/{id}/{profile_slug}/edit', 'ActivitiesController@edit');
+Route::post('/activities/{activity_id}/{profile_slug}/edit', 'ActivitiesController@update')->name('activities.edit');
+Route::get('/delete/activity/photo/{id}', 'ActivitiesController@deletePhoto')->name('delete.activity.photo');
 
 //MEDIA COVARAGE
 Route::get('/media-coverage/{profileSlug}', 'MediaCoverageController@index');

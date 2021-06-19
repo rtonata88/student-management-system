@@ -18,9 +18,9 @@
                 <strong>{{$activity_title}}</strong> | 
                     <a href="/profiles/{{$profile->slug}}"> 
                       <svg class="c-icon c-icon-lg">
-                        <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-left')}}"></use>
+                        <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
                     </svg>
-                     Back</a>
+                     Go to profile</a>
             </div>
             <div class="card-body">
                 @if(Session::has('message'))
@@ -28,7 +28,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> 
                     {!! Session::get('message') !!}
                 </div>                            
-                @endif
+                @endif  
                 {!! Form::model($activity, array('route'=>array('activities.edit', $activity->id, $profile->slug), 'class'=>'form-horizontal form-material', 'method'=>'POST', 'enctype="multipart/form-data"')) !!}
 
                 <div class="row">
@@ -51,6 +51,15 @@
                             </div>
                         </div> 
                     </div>
+                    @else  
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                                {{Form::label('meeting_type', 'Type')}}
+                                {{Form::select('meeting_type', ['InPerson' => 'In Person', 'Video'=>'Video', 'Telephonic' => 'Telephonic'], null, ['class' => 'form-control', 'placeholder'=>'Select'])}}
+                            </div>
+                        </div>
+                    </div>
                     @endif
                 <div class="row">
                     <div class="col-md-5">
@@ -69,7 +78,7 @@
                         <div class="col-md-5">
                       <div class="form-group">
                         {{Form::label('where', 'Where')}}
-                        {{Form::text('where', null, ['class' => 'form-control', 'placeholder' => 'Where', 'autocomplete'=>'off', 'required'])}}
+                        {{Form::text('where', $activity->venue, ['class' => 'form-control', 'placeholder' => 'Where', 'autocomplete'=>'off', 'required'])}}
 
                         </div>
                     </div>
@@ -78,14 +87,14 @@
                     <div class="col-md-5">
                         <div class="form-group">
                             {{Form::label('when', 'When')}}
-                            {{Form::text('when', null, ['class' => 'form-control mydatepicker', 'placeholder' => 'Click here', 'autocomplete'=>'off', 'required'])}}
+                            {{Form::date('when', $activity->when, ['class' => 'form-control mydatepicker', 'placeholder' => 'Click here', 'autocomplete'=>'off', 'required'])}}
 
                         </div>
                     </div>
                     <div class="col-md-5">
                       <div class="form-group">
                         {{Form::label('time', 'Time')}}
-                        {{Form::text('time', null, ['class' => 'form-control timepicker', 'placeholder' => 'Click here', 'autocomplete'=>'off', 'required'])}}
+                        {{Form::time('time', null, ['class' => 'form-control timepicker', 'placeholder' => 'Click here', 'autocomplete'=>'off', 'required'])}}
 
                         </div>
                     </div>
@@ -107,24 +116,20 @@
                 </div>
             </div>
             @if($activity_type == 'Meeting')
-            <div class="row">
-                <a href=""> <span class="fa fa-edit"></span> Photo Management</a>
-             <div id="gallery">
-                <div id="gallery-content">
-                    <div id="gallery-content-center">
-                        @foreach($profile->photos as $photo)
-                        <a href="{{ asset('storage/'.$photo->path) }}" data-toggle="lightbox" data-effect="mfp-zoom-in" data-gallery="multiimages" data-title="{{$profile->fullname}} {{$profile->lastname}}"><img src="{{ asset('storage/'.$photo->path) }}" alt="gallery" class="all studio" /></a>
-                        
-                        @endforeach
-                    </div>
-                </div>
-             </div>
-             </div>
+                <strong>Uploaded photos</strong> <br>
+                @forelse($activity->photos->where('profile_id', $profile->id) as $photo)
+                <a href="{{ url('storage/'.$photo->path) }}" target="_blank" data-toggle="lightbox" data-effect="mfp-zoom-in" data-gallery="multiimages" data-title="{{$photo->caption}}">
+                    <img src="{{ url('storage/'.$photo->path) }}" alt="{{$photo->caption}}" class="all studio col-md-3 col-xs-12" style="background-color: rgba(245, 245, 245, 0.5); padding: 5px; border-radius: 5px;" />
+                </a>
+                <a href="{{route('delete.activity.photo', $photo->id)}}" class="btn btn-sm btn-danger" onclick="return confirm('are you sure you want to delete this photo?')">x</a>
+                @empty
+                There are no uploaded photos.
+                @endforelse
              <hr>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        {{Form::label('photos', 'Photos')}}
+                        {{Form::label('photos', 'Upload photos')}} <br>
                         {{Form::file('photos[]', null, ['class' => 'form-control'])}}
                     </div>
                     <div class="form-group">

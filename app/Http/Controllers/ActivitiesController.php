@@ -56,7 +56,7 @@ class ActivitiesController extends Controller
 
 		if($request->is('messages/*'))
 		{
-			$activity_type = "Text Message (SMS)";
+			$activity_type = "TextMessage";
 			$activity_title= "MESSAGE REPORT";
 		}
 
@@ -208,7 +208,7 @@ class ActivitiesController extends Controller
 			$activity_title= "EMAIL REPORT";
 		}
 
-		if($activity_type == "Text Message (SMS)")
+		if($activity_type == "TextMessage (SMS)")
 		{
 			$activity_type = "Text Message (SMS)";
 			$activity_title= "MESSAGE REPORT";
@@ -224,10 +224,8 @@ class ActivitiesController extends Controller
 		return view('events.activities.edit-other_attendees', compact('activity', 'sectors', 'teams', 'users', 'activity_type', 'activity_title', 'event', 'route', 'participant', 'activity_type'));
 	}
 
-	public function edit(Request $request, $activity_type, $id)
+	public function edit(Request $request, $activity_type, $id, $profile_slug)
 	{
-		$profile_slug = session()->get('profile');
-		$activity_type = Session::get('activity_type');
 		$profile = Profile::whereSlug($profile_slug)->first();
 
 		if($activity_type == "Meeting")
@@ -258,7 +256,7 @@ class ActivitiesController extends Controller
 		$teams = Team::pluck('name', 'id');
 		$users = User::where('id', '<>', Auth::user()->id)->pluck('name', 'id');
 		$profiles = Profile::selectRaw('id, CONCAT(fullname," ",lastname) AS name')->where('slug', '<>', $profile_slug)->pluck('name', 'id');
-
+		
 		return view('activities.edit', compact('activity', 'sectors', 'teams', 'users', 'activity_type', 'activity_title', 'profiles', 'profile'));
 	}
 
@@ -266,7 +264,7 @@ class ActivitiesController extends Controller
 	{
 
 		$activity = new Activity;
-
+		
 		$activity->activity_type_id = ActivityType::where('name', $requests->activity_type)->first()->id;
 		if($requests->activity_type != 'Meeting'){
 			$activity->direction = $requests->direction;
@@ -331,7 +329,7 @@ class ActivitiesController extends Controller
 		session()->put('profile', $profile->slug);
 		session()->put('activity_type', $requests->activity_type);
 
-		return redirect('/activities/'.$requests->activity_type.'/'.$activity->id.'/edit');
+		return redirect('/profiles/'.$profile->slug);
 	}
 
 	public function store_event_other_activities(Request $requests, $type, $person, $event_slug)
@@ -458,7 +456,7 @@ class ActivitiesController extends Controller
 	}
 
 
-	public function update(Request $requests, $activity_id, $profileSlug)
+	public function update(Request $requests, $activity_id, $profile_slug)
 	{
 		$activity = Activity::find($activity_id);
 
@@ -466,8 +464,12 @@ class ActivitiesController extends Controller
 			$activity->direction = $requests->direction;
 		} else {
 			$activity->meeting_type = $requests->meeting_type;
+		
+		
 		}
+		$activity->venue = $requests->where;
 		$activity->when = $requests->when;
+		$activity->time = $requests->time;
 		$activity->outcome = $requests->outcome;
 		$activity->why = $requests->why;
 		$activity->save();
@@ -519,10 +521,7 @@ class ActivitiesController extends Controller
 
 		Session::flash('message', 'Activity successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click the <strong>Go to Profile</strong> link below.');
 
-
-
-
-		return redirect('/activities/'.$requests->activity_type.'/'.$activity->id.'/edit');
+		return redirect('/profiles/'.$profile_slug);
 	}
 
 	public function update_activity_report_from_events(Request $requests, $id){
@@ -635,5 +634,11 @@ class ActivitiesController extends Controller
 	Session::flash('message', 'Activity successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click <strong><a href="/events/'.$activity->event->slug.'" >go to event page</a></strong>');
 
 		return redirect()->route('edit.other_participant.activityReport', $activity->id);
+	}
+
+	public function deletePhoto($id){
+		ActivityPhoto::destroy($id);
+
+		return redirect()->back();
 	}
 }
