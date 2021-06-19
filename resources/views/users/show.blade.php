@@ -1,36 +1,32 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Access Management</li>
+    <li class="breadcrumb-item"><a href="{{route('users.index')}}">Users</a> </li>
+    <li class="breadcrumb-item active">View </li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">USER</h4> 
-        </div>
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-            <ol class="breadcrumb">
-                <li class="active">User</li>
-            </ol>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <!-- Column -->
-    <div class="col-lg-12 white-box">
+<div class="row">
+    <div class="col-md-12 col-xs-12">
         <div class="card">
-            <div class="card-body">
-                <a href="/users"> <span class="fa fa-arrow-circle-left"></span> Back</a>
-                <h3 class="card-title"><strong>{{$user->name}}</strong> <small>@if($user->approved == 1)
-                                        <span class="text-success">Active</span>
+            <div class="card-header">
+                 <strong>{{$user->name}}</strong> @if($user->approved == 1)
+                                        <span class="badge badge-success">Active</span>
                                     @else
-                                        <span class="text-danger">Disabled</span>
-                                    @endif</small></h3>
-                <h6 class="card-subtitle">{{$user->username}}</h6>
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-6">
-                        <div class="white-box text-center"> <img src="/fruit_profiles/photos/no-image.png" class="img-responsive"> </div>
-                    </div>
-                    <div class="col-lg-9 col-md-9 col-sm-6">
-                            <div class="table-responsive">
-                            <table class="table">
+                                        <span class="badge badge-warning">Disabled</span>
+                                    @endif
+                                    <br>
+                <em>({{$user->username}})</em>
+            </div>
+            <div class="card-body">
+                    <div class="row">
+                    <div class="col-md-12">
+                           <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                                 <tbody>
                                     <tr>
                                         <td width="390"><strong>Email</strong></td>
@@ -64,15 +60,25 @@
                                         <td><strong>Prefered Language</strong></td>
                                         <td> {{$user->language->name}} </td>
                                     </tr>
+
+                                    <tr>
+                                        <td><strong>Roles</strong></td>
+                                        <td> 
+                                            @foreach($user->roles as $role)
+                                                {{$role->display_name}} <br>
+                                            @endforeach
+                                         </td>
+                                    </tr>
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
+                            <hr>
+                    <a href="/users"> <span class="fa fa-arrow-circle-left"></span> Back</a>
                     </div>
                     
                 </div>
             </div>
         </div>
     </div>
-    <!-- Column -->
-    @endsection
+</div>
+@endsection
+

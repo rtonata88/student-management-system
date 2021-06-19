@@ -1,6 +1,5 @@
 @extends('layouts.hwpl')
 
-@section('content')
 @push('googleCharts')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -24,35 +23,29 @@
     </script>
 
 @endpush
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">PERIODIC / <small>REPORTS</small></h4> </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                    <li><a href="/reports">Reports</a></li>
-                    <li class="active">Periodic</li>
-                </ol>
-            </div>
-            <!-- /.col-lg-12 -->
-    </div>
-    <div class="row">
-        <div class="col-md-12 col-lg-12 col-sm-12">
-            <div class="white-box">
-                <!-- .row -->
-                <div class="row">
-                    <div class="col-md-12 col-lg-12">
-                        <div class="white-box">
-                            <h3 class="box-title">Sector Activities</h3>
-                            <div id="columnchart_material" style="width: auto; height: 400px;"></div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12 col-lg-12">
-                        <div class="white-box">                            
-                            <table class="table">
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Reports</li>
+    <li class="breadcrumb-item active">Periodic </li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
+@section('content')
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Sector activities</strong> 
+            </div>
+            <div class="card-body">
+                <div id="columnchart_material" style="width: auto; height: 400px;"></div>
+                <br>
+                <strong>Data</strong>
+                <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                                 <thead>
                                     @foreach($data1 as $key => $titles)
                                     <tr>
@@ -88,10 +81,6 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

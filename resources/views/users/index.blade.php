@@ -1,32 +1,29 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Access Management</li>
+    <li class="breadcrumb-item">Users </li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">USERS</h4>
-        </div>
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-            <a href="{{route('users.create')}}" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD USER</a>
-            <ol class="breadcrumb">
-                <li class="active">Users</li>
-            </ol>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <div class="white-box">
-        <div class="row">
-            <div class="col-md-12 col-lg-12 col-sm-12">
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <a href="{{route('users.create')}}" class="btn btn-primary waves-effect waves-light"> ADD USER</a>
+            </div>
+            <div class="card-body">
                 @if(Session::has('message'))
                 <div class="alert alert-success alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     {{ Session::get('message') }}
                 </div>
                 @endif
-                <div class="table-responsive">
-
-
-                    <table id="dataTable" class="table table-hover" style="width:100%">
+                <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -52,30 +49,49 @@
                                 <td>{{$user->country->name}}</td>
                                 <td>
                                     @if($user->approved == 1)
-                                        <span class="label label-success">Active</span>
+                                        <span class="badge badge-success">Active</span>
                                     @else
-                                        <span class="label label-danger">Disabled</span>
+                                        <span class="badge badge-warning">Disabled</span>
                                     @endif
                                 </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-outline dropdown-toggle waves-effect waves-light" type="button"> <i class="fa fa-align-justify m-r-5"></i> <span class="caret"></span></button>
-                                        <ul role="menu" class="dropdown-menu dropdown-menu-right">
-                                            <li><a href="{{route('users.edit', $user->id)}}">Edit</a></li>
-                                            <li><a href="{{route('users.show', $user->id)}}">View</a></li>
-                                            @if($user->approved == 1)
-                                                <li><a href="{{route('users.disableEnable', $user->id)}}">Disable</a></li>
-                                            @else
-                                                <li><a href="{{route('users.disableEnable', $user->id)}}">Enable</a></li>
-                                            @endif
-                                        </ul>
-                                    </div>
+                                <td class="text-center">
+                                    <div class="dropdown">
+                                    <span class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <svg class="c-icon">
+                                            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-menu')}}"></use>
+                                            </svg>
+                                    </span>
+                                    <div class="dropdown-menu dropdown-menu-right pt-0">
+                                        <a class="dropdown-item" href="{{route('users.show', $user->id)}}">
+                                            <svg class="c-icon mr-2">
+                                            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-search')}}"></use>
+                                            </svg> View 
+                                        </a>
+                                        <a class="dropdown-item" href="{{route('users.edit', $user->id)}}">
+                                            <svg class="c-icon mr-2">
+                                            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
+                                            </svg> Edit 
+                                        </a>
+                                        @if($user->approved == 1)
+                                        <a class="dropdown-item" href="{{route('users.disableEnable', $user->id)}}">
+                                            <svg class="c-icon mr-2">
+                                            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-x-circle')}}"></use>
+                                            </svg> Disable
+                                        </a>
+                                        @else
+                                        <a class="dropdown-item" href="{{route('users.disableEnable', $user->id)}}">
+                                            <svg class="c-icon mr-2">
+                                            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check-circle')}}"></use>
+                                            </svg> Enable
+                                        </a>
+                                        @endif
+                            </div>
+                        </div>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-                </div>
             </div>
         </div>
     </div>

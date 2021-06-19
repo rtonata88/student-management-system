@@ -57,5 +57,9 @@ class User extends Authenticatable implements Auditable
         return $this->belongsTo('App\Department');
     }
 
+    public function roles(){
+        return $this->belongsToMany('App\Role');
+    }
+
 
 }

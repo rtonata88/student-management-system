@@ -1,17 +1,16 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Reports</li>
+    <li class="breadcrumb-item active"><a href="#">Post Event Report </a></li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">EVENTS</h4> </div>
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-            <ol class="breadcrumb">
-                 <li class="active">Events</li>
-            </ol>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
+
         
             <div class="row">
                 @foreach($events as $event)
