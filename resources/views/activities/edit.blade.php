@@ -1,23 +1,28 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Management</li>
+    <li class="breadcrumb-item"><a href="/profiles">Profiles </a></li>
+    <li class="breadcrumb-item active">{{$activity_title}}</li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">FRUIT ACTIVITY</h4> </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                    <li><a href="/profiles">Fruit Profiles</a></li>
-                    <li><a href="/profiles/{{$profile->slug}}">Profile</a></li>
-                    <li class="active">New {{$activity_type}}</li>
-                </ol>
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>{{$activity_title}}</strong> | 
+                    <a href="/profiles/{{$profile->slug}}"> 
+                      <svg class="c-icon c-icon-lg">
+                        <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-left')}}"></use>
+                    </svg>
+                     Back</a>
             </div>
-            <!-- /.col-lg-12 -->
-        </div>
-        <div class="col-md-12 col-lg-12 col-sm-12">
-            <div class="white-box">
-                <a href="/profiles/{{$profile->slug}}"> <span class="fa fa-user"></span> Profile Page</a>
-                <h3 class="box-title">{{$activity_title}} [EDIT]</h3>
+            <div class="card-body">
                 @if(Session::has('message'))
                 <div class="alert alert-success alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> 

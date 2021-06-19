@@ -1,57 +1,67 @@
 @extends('layouts.hwpl')
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Management</li>
+    <li class="breadcrumb-item active"><a href="/maintainer-assignment">Staff Assignment </a></li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">STAFF ASSIGNMENTS</h4> </div>
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-            <ol class="breadcrumb">
-                <li><a href="/profiles">Profiles</a></li>
-                <li class="active">Staff Assignments</li>
-            </ol>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-
-    <div class="row">
-        <div class="white-box">
-            @if(Session::has('message'))
-                <div class="alert alert-success alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    {{ Session::get('message') }}
-                </div>
-                @endif
-
-            {!! Form::open(array('route'=>array('maintainer-assignment.store'), 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"', 'method'=>'POST')) !!}
-            <div class="row">
-                <div class="form-group">
-
-                    {{Form::label('countries[]', 'COUNTRIES FILTER')}}
-                    {{Form::select('countries[]', $countries, null, ['class' => 'form-control select2 select2-multiple', 'multiple'])}}
-                </div>
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+            <strong>Staff Assignment </strong> | 
+                <a href="/maintainer-assignment">
+                <svg class="c-icon">
+                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-circle-left')}}"></use>
+                </svg>
+                Back</a>
             </div>
+            <div class="card-body">
+                    @if(Session::has('message'))
+                        <div class="alert alert-success alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            {{ Session::get('message') }}
+                        </div>
+                        @endif
 
-
-            <div class="row">
-                <div class="form-group">
-
-                    {{Form::label('profiles[]', 'PROFILES FILTER')}}
-                    {{Form::select('profiles[]', $profiles, null, ['class' => 'form-control select2 select2-multiple', 'multiple'])}}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        {{Form::label('maintainer_id', 'SELECT STAFF')}}
-                        {{Form::select('maintainer_id', $maintainers, null, ['class' => 'form-control select2'])}}
-
+                    {!! Form::open(array('route'=>array('maintainer-assignment.store'), 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"', 'method'=>'POST')) !!}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                            {{Form::label('countries[]', 'Select countries')}}
+                            {{Form::select('countries[]', $countries, null, ['class' => 'form-control select2 select2-multiple', 'multiple', 'style'=>'height:200px'])}}
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                            {{Form::label('profiles[]', 'Select profiles')}}
+                            {{Form::select('profiles[]', $profiles, null, ['class' => 'form-control select2 select2-multiple', 'multiple', 'style'=>'height:200px'])}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{Form::label('maintainer_id', 'Select staff')}}
+                                {{Form::select('maintainer_id', $maintainers, null, ['class' => 'form-control select2'])}}
+
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
+                    {!! Form::close() !!}
                 </div>
             </div>
-            <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
-            {!! Form::close() !!}
         </div>
     </div>
 </div>

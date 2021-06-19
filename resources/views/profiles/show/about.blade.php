@@ -1,4 +1,4 @@
-<div class="row white-box about-section">
+<div class="row about-section">
   <div class="user-bg text-center">
       @if($profile->photo)
       <img  alt="user" src="/fruit_profiles/thumbnail/{{$profile->photo}}" class="img-circle">
@@ -17,8 +17,7 @@
 
   </div>
   <br>
-    <div class="table-responsive">
-      <table class="table">
+      <table class="table table-responsive-sm table-bordered table-striped table-sm">
           <tbody>
             <tr>
                 <td><strong>Full name</strong></td>
@@ -59,12 +58,10 @@
               </tr>
           </tbody>
       </table>
-  </div>
 </div>
 <div class="row white-box other-information-secion">
-<h4 class="page-title"><strong>OTHER INFORMATION</strong></h4>
-  <div class="table-responsive">
-    <table class="table">
+<strong>OTHER INFORMATION</strong>
+    <table class="table table-responsive-sm table-bordered table-striped table-sm" width="100%">
         <tbody>
             <tr>
                 <td><strong>Platform (Media only)</strong></td>
@@ -76,5 +73,4 @@
             </tr>
         </tbody>
     </table>
-</div>
 </div>

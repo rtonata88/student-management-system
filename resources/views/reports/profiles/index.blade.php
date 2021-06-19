@@ -1,116 +1,96 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Reports</li>
+    <li class="breadcrumb-item active">Profiles </li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">FRUIT PROFILES REPORT</h4>
-        </div>
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-            <ol class="breadcrumb">
-                <li class="active">Fruit Profiles</li>
-            </ol>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <div class="white-box">
-        <div class="row">
-            <div class="panel panel-default" style=" border: 1px solid #ddd">
-                <div class="panel-heading" style="background-color: #f5f5f5;">
-                    REPORT FILTER
-                </div>
-
-                <div class="panel-wrapper collapse in">
-                    <div class="panel-body">
-
-                        {!! Form::open(array('route' => array('search-profiles'), 'method' => 'post', 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"')) !!}
-
-                        <div class="row">
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label for="fname" class="col-sm-3 text-right control-label col-form-label">NAME</label>
-                                    <div class="col-sm-4">
-                                         {{Form::text('fullname', null, ['class' => 'form-control'])}}
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report filter</strong> 
+            </div>
+            <div class="card-body">
+                {!! Form::open(array('route' => array('search-profiles'), 'method' => 'post', 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"')) !!}
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label for="fname" class="text-right control-label col-form-label">Name</label>
+                                        {{Form::text('fullname', null, ['class' => 'form-control form-control-sm'])}}
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="lname" class="text-right control-label col-form-label">Surname</label>
+                                            {{Form::text('surname', null, ['class' => 'form-control form-control-sm'])}}
+                                    </div>
+                                
+                                
+                                    <div class="form-group col-md-4">
+                                        <label for="email1" class="text-right control-label col-form-label">Organisation</label>
+                                            {{Form::select('organization', $organizations, null, ['class' => 'form-control select form-control-sm','placeholder'=>'All Organisations'])}}
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">SURNAME</label>
-                                    <div class="col-sm-4">
-                                        {{Form::text('surname', null, ['class' => 'form-control'])}}
+                                <div class="row">
+                                    <div class="form-group col-md-3 col-xs-12">
+                                        <label for="email1" class="text-right control-label col-form-label">Position</label>
+                                            <input type="text" class="form-control form-control-sm" name="position">
+                                    </div>
+                                
+                                    <div class="form-group col-md-3 col-xs-12">
+                                        <label for="email1" class="text-right control-label col-form-label">City</label>
+                                            {{Form::select('city', $cities, null, ['class' => 'form-control select form-control-sm','placeholder'=>'All Cities'])}}
+                                    </div>
+                                    <div class="form-group col-md-3 col-xs-12">
+                                        <label for="email1" class="text-right control-label col-form-label">Country</label>
+                                            {{Form::select('country', $countries, null, ['class' => 'form-control select form-control-sm','placeholder'=>'All Countries'])}}
+                                    </div>
+                                     <div class="form-group col-md-3 col-xs-12">
+                                        <label for="email1" class="text-right control-label col-form-label">Sector</label>
+                                            {{Form::select('sector', $sectors, null, ['class' => 'form-control select form-control-sm','placeholder'=>'All Sectors'])}}
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">ORGANIZATION</label>
-                                    <div class="col-sm-4">
-                                          {{Form::select('organization', $organizations, null, ['class' => 'form-control select','placeholder'=>'All Organisations'])}}
+                                <div class="row">
+                                   
+                                    <div class="form-group col-md-3 col-xs-12">
+                                        <label for="email1" class="text-right control-label col-form-label">Team</label>
+                                            {{Form::select('team', $teams, null, ['class' => 'form-control select','placeholder'=>'All Teams'])}}
+                                    </div>
+                                    <div class="form-group col-md-3 col-xs-12">
+                                        <label for="email1" class="text-right control-label col-form-label">Status</label>
+                                            {{Form::select('status', $fruit_levels, null, ['class' => 'form-control select','placeholder'=>'All Statuses'])}}
+                                    </div>
+                                    <div class="form-group col-md-3 col-xs-12">
+                                        <label for="email1" class="text-right control-label col-form-label">Role</label>
+                                            {{Form::select('role', $fruit_roles, null, ['class' => 'form-control select','placeholder'=>'All Roles'])}}
+                                    </div>
+                                    <div class="form-group col-md-3 col-xs-12">
+                                        <label for="email1" class="text-right control-label col-form-label">Stage</label>
+                                            {{Form::select('stage', $fruit_stages, null, ['class' => 'form-control select','placeholder'=>'All Stages'])}}
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">POSITION</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" name="position">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">CITY</label>
-                                    <div class="col-sm-4">
-                                        {{Form::select('city', $cities, null, ['class' => 'form-control select','placeholder'=>'All Cities'])}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">COUNTRY</label>
-                                    <div class="col-sm-4">
-                                        {{Form::select('country', $countries, null, ['class' => 'form-control select','placeholder'=>'All Countries'])}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">SECTOR</label>
-                                    <div class="col-sm-4">
-                                        {{Form::select('sector', $sectors, null, ['class' => 'form-control select','placeholder'=>'All Sectors'])}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">TEAM</label>
-                                    <div class="col-sm-4">
-                                        {{Form::select('team', $teams, null, ['class' => 'form-control select','placeholder'=>'All Teams'])}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">STATUS</label>
-                                    <div class="col-sm-4">
-                                        {{Form::select('status', $fruit_levels, null, ['class' => 'form-control select','placeholder'=>'All Statuses'])}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">ROLE</label>
-                                    <div class="col-sm-4">
-                                        {{Form::select('role', $fruit_roles, null, ['class' => 'form-control select','placeholder'=>'All Roles'])}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">STAGE</label>
-                                    <div class="col-sm-4">
-                                        {{Form::select('stage', $fruit_stages, null, ['class' => 'form-control select','placeholder'=>'All Stages'])}}
-                                    </div>
-                                </div>
+                                <hr>
                                 <div class="form-actions">
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-info">SEARCH</button>
-                                        <button type="reset" class="btn btn-dark">Reset</button>
-                                    </div>
+                                        <button type="submit" class="btn btn-info">Search</button>
+                                        <button type="reset" class="btn">Reset</button>
                                 </div>
-
-                            </div>
-                        </div>
 
                         {!! Form::close() !!}
-                    </div>
-                </div>
             </div>
-            @if($profiles)
-            <strong>{{$profiles->total()}} Results Found</strong>, <a href="{{route('export-profiles')}}">export to excel</a>
-            <div class="col-md-12 col-lg-12 col-sm-12">
-                <table id="dataTable2" class="table table-striped table-bordered dataTable" style="width:100%">
+        </div>
+    </div>
+    <div class="col-md-12 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report results</strong> 
+            </div>
+            <div class="card-body">
+             @if($profiles)
+            <strong>{{$profiles->total()}} Results Found</strong>, <a href="{{route('export-profiles')}}">export to excel</a> <br>
+                <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                     <thead>
                         <tr>
                             <th>Firstnames</th>
@@ -134,9 +114,8 @@
                         @endforeach
                     </tbody>
                 </table>
-
-            </div>
             @endif
+            </div>
         </div>
     </div>
 </div>

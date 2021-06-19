@@ -1,194 +1,237 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Reports</li>
+    <li class="breadcrumb-item active"><a href="#">Post Event Report </a></li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
 <script type="text/javascript">
 function myFunction(slug) {
     var myWindow = window.open("/report/events/print/"+slug, "", "width=auto,height=auto");
 }
 </script>
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">POST EVENT REPORT</h4> </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                 <li class="active">Events</li>
-             </ol>
-         </div>
-         <!-- /.col-lg-12 -->
-     </div>
-
-     <div class="col-lg-12 col-md-12 col-sm-4 col-xs-12">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4 class="box-title m-t-20"><strong>EVENT /</strong> <small class="text-muted"> EVENT DETAILS AND STAFF MEMBERS</small></h4>
-                
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Date & time, location</strong>
                 <div class="pull-right">
-                    <a href="/report/events/edit/{{$event->slug}}" class="btn btn-primary btn-rounded"> <span class="fa fa-edit"></span>Edit Report</a>
-                    <button type="button" class="btn btn-default btn-rounded" onclick="myFunction('{{$event->slug}}')" ><i class="fa fa-print"></i> Print Report</button>
+                    <a href="/report/events/edit/{{$event->slug}}" class="btn btn-primary btn-sm"> <span class="fa fa-edit"></span>Edit Report</a>
+                    <button type="button" class="btn btn-default btn-sm" onclick="myFunction('{{$event->slug}}')" ><i class="fa fa-print"></i> Print Report</button>
                 </div>
             </div>
-            <div class="panel-wrapper collapse in">
-                <div class="panel-body">
-                    <p>
-                    <strong>EVENT NAME:</strong>
-                    
-                        {{$event->name}} (<i>{{$event->theme}}</i>)
-                    </p>
-                    <p>
-                        <strong>DESCRIPTION:</strong>
-                        {{$event->description}}
-                    </p>
-                    <p>
-                        <strong>PURPOSE/OBJECTIVES:</strong>
-                    {{$event->objectives}}
-                    </p>
-                    
-
-                <strong>THEME: {{$event->theme}}</strong>
-                <ul class="list-icons">
-                    @foreach($event->discussions as $discussion)
-                    <li><span class="fa fa-caret-right text-info"></span> {{$discussion->discussion_point}}</li>
-                    @endforeach
-                </ul>
-                <p>
-                <strong>GENERAL INFORMATION</strong>
-                <div class="table-responsive">
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td width="390"><strong>START DATE</strong></td>
-                                <td> {{$event->start_date}} {{$event->start_time}} </td>
-                            </tr>
-                            <tr>
-                                <td width="390"><strong>END DATE</strong></td>
-                                <td> {{$event->end_date}} {{$event->end_time}} </td>
-                            </tr>
-                            <tr>
-                                <td width="390"><strong>ADDRESS LINE 1</strong></td>
-                                <td> {{$event->address_line1}}</td>
-                            </tr>
-                            <tr>
-                                <td width="390"><strong>ADDRESS LINE 2</strong></td>
-                                <td> {{$event->address_line2}} </td>
-                            </tr>
-                            <tr>
-                                <td width="390"><strong>CITY</strong></td>
-                                <td> {{$event->city->name}}</td>
-                            </tr>
-                            <tr>
-                                <td width="390"><strong>COUNTRY</strong></td>
-                                <td> {{$event->country->name}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                </p>
-                <p>
-                <strong>STAFF</strong>
-                <div class="table-responsive">
-                    <table class="table">
-                        <tbody>
+            <div class="card-body">
+                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <tbody>
+                        <tr>
+                            <td width="390"><strong>Start date</strong></td>
+                            <td> {{$event->start_date}} {{$event->start_time}} </td>
+                        </tr>
+                        <tr>
+                            <td width="390"><strong>End date</strong></td>
+                            <td> {{$event->end_date}} {{$event->end_time}} </td>
+                        </tr>
+                        <tr>
+                            <td width="390"><strong>Address</strong></td>
+                            <td> {{$event->address_line1}}</td>
+                        </tr>
+                        <tr>
+                            <td width="390"><strong></strong></td>
+                            <td> {{$event->address_line2}} </td>
+                        </tr>
+                        <tr>
+                            <td width="390"><strong></strong></td>
+                            <td> {{$event->city->name}}</td>
+                        </tr>
+                        <tr>
+                            <td width="390"><strong></strong></td>
+                            <td> {{$event->country->name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+          </div>
+        </div>
+    </div> 
+</div>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Event details</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <tbody>
+                        <tr>
+                            <td width="390"><strong>Event name:</strong></td>
+                            <td> {{$event->name}} (<i>{{$event->theme}}</i>) </td>
+                        </tr>
+                         <!-- <tr>
+                            <td width="390"><strong>Theme:</strong></td>
+                            <td> {{$event->theme}}</td>
+                        </tr> -->
+                        <tr>
+                            <td width="390"><strong>Description</strong></td>
+                            <td>  {{$event->description}} </td>
+                        </tr>
+                        <tr>
+                            <td width="390"><strong>Purpose / objectives:</strong></td>
+                            <td> {{$event->objectives}}</td>
+                        </tr>
+                        <tr>
+                            <td width="390"><strong>Outcome:</strong></td>
+                            <td>  {{$event->report->summary}} </td>
+                        </tr>
+                       
+                        @if($event->type == 'external')
+                        <tr>
+                            <td width="390" colspan="2"><strong>Discussion</strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"> 
+                                <ul class="list-icons">
+                                    @foreach($event->discussions as $discussion)
+                                    <li>{{$discussion->discussion_point}}</li>
+                                    @endforeach
+                                </ul> 
+                            </td>
+                        </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Staff in attendance</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <tbody>
+                        @if($event->type == 'internal')
                             @foreach($event->event_staff as $index=>$staff)
+                                <tr>
+                                    <td width="390"><strong>{{$staff->user->name}} (<em>{{$staff->role->role_name}}</em>)</strong></td>
+                                    <td> {{$staff->user->country->name}} </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            @foreach($event->external_participants as $index=>$participant)
                             <tr>
-                                <td width="390"><strong>{{$staff->user->name}}</strong></td>
-                                <td> {{$staff->role->role_name}} </td>
-                                <td> {{$staff->user->country->name}} </td>
+                                <td width="390"><strong>{{$participant->fullname}} (<em>{{$participant->role}}</em>)</strong></td>
                             </tr>
                             @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                </p>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> 
+</div>
+@if($event->type == 'external')
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Summary outcome</strong>
+            </div>
+            <div class="card-body">
+                <textarea class="form-control summernote" rows="10" name="summary_outcome">{{$report_config->summary}}</textarea>
             </div>
         </div>
     </div>
 </div>
-
-     <div class="col-lg-12 col-md-12 col-sm-4 col-xs-12">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4 class="box-title m-t-20"><strong>LIAISING /</strong> <small class="text-muted"> STATISTICS, INVITED GUESTS AND GENERAL AUDIENCE</small></h4></div>
-            <div class="panel-wrapper collapse in">
-                <div class="panel-body">
-                    <p>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <tbody>
-                                    <tr>
-                                        <td width="390"><strong>RSVP</strong></td>
-                                        <td width="390"><strong>DECLINED</strong></td>
-                                        <td width="390"><strong>REVOKED</strong></td>
-                                        <td width="390"><strong>PENDING</strong></td>
-                                        <td width="390"><strong>ATTENDED</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center"> {{$event->count_attendees_status('RSVP')}} </td>
-                                        <td class="text-center"> {{$event->count_attendees_status('DECLINE')}} </td>
-                                        <td class="text-center"> {{$event->count_attendees_status('REVOKE')}}</td>
-                                        <td class="text-center"> {{$event->count_attendees_status('PENDING')}}</td>
-                                        <td class="text-center"> {{$event->check_ins()->count()}} </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+@endif 
+@if($event->type == 'internal')
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Liaising, statistics, invited guests and general audience</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <tbody>
+                        <tr>
+                            <td width="390"><strong>RSVP</strong></td>
+                            <td width="390"><strong>Declined</strong></td>
+                            <td width="390"><strong>Revoked</strong></td>
+                            <td width="390"><strong>Pending</strong></td>
+                            <td width="390"><strong>Attended</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"> {{$event->count_attendees_status('RSVP')}} </td>
+                            <td class="text-center"> {{$event->count_attendees_status('DECLINE')}} </td>
+                            <td class="text-center"> {{$event->count_attendees_status('REVOKE')}}</td>
+                            <td class="text-center"> {{$event->count_attendees_status('PENDING')}}</td>
+                            <td class="text-center"> {{$event->check_ins()->count()}} </td>
+                        </tr>
+                    </tbody>
+                </table>
                         </div>
                     </p>
-                    <strong>INVITED GUESTS</strong>
+                    <strong>Invited guests</strong>
                     <p>   
-                    <div class="table-responsive">
-                            <table class="table table-bordered" width="50%">
+                        <table class="table table-responsive-sm table-bordered table-striped table-sm">
                                 <tbody>
                                     <tr>
-                                        <td width="390"><strong>GUEST NAME</strong></td>
-                                        <td width="390"><strong>ROLE</strong></td>
-                                        <td width="390"><strong>ORGANIZATION</strong></td>
+                                        <td width="390"><strong>Guest name</strong></td>
+                                        <td width="390"><strong>Role</strong></td>
+                                        <td width="390"><strong>Organisation</strong></td>
                                     </tr>
                                     @foreach($event->guest_register() as $register)
-                                        @if(!is_null($register->profile_id))
-                                        <tr>
-                                            <td> {{$register->fullname}} {{$register->lastname}} </td>
-                                            <td> {{$event->guest_role($register->profile_id)->role_name}} </td>
-                                            <td> {{$event->organization($register->profile_id)->name}} </td>
-                                        </tr>
-                                        @endif
+                                    @if(!is_null($register->profile_id))
+                                    <tr>
+                                        <td> {{$register->fullname}} {{$register->lastname}} </td>
+                                        <td> {{$event->guest_role($register->profile_id)->role_name}} </td>
+                                        <td> {{$event->organization($register->profile_id)->name}} </td>
+                                    </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>                       
                     </p>
 
-                    <strong>GENERAL AUDIENCE</strong>
+                    <strong>General audience</strong>
                     <p>   
-                        <div class="table-responsive">
-                            <table class="table table-bordered" width="50%">
+                        <table class="table table-responsive-sm table-bordered table-striped table-sm">
                                 <tbody>
                                     <tr>
-                                        <td width="390"><strong>GUEST NAME</strong></td>
-                                        <td width="390"><strong>EMAIL</strong></td>
-                                        <td width="390"><strong>MOBILE NUMBER</strong></td>
+                                        <td width="390"><strong>Guest name</strong></td>
+                                        <td width="390"><strong>Email</strong></td>
+                                        <td width="390"><strong>Mobile number</strong></td>
                                     </tr>
                                     @foreach($event->guest_register() as $register)
-                                        @if(is_null($register->profile_id))
-                                        <tr>
-                                            <td> {{$register->fullname}} {{$register->lastname}} </td>
-                                            <td> {{$register->email}} </td>
-                                            <td> {{$register->mobile_no}} </td>
-                                        </tr>
-                                        @endif
+                                    @if(is_null($register->profile_id))
+                                    <tr>
+                                        <td> {{$register->fullname}} {{$register->lastname}} </td>
+                                        <td> {{$register->email}} </td>
+                                        <td> {{$register->mobile_no}} </td>
+                                    </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>             
                     </p>
                     @if($event->co_hosts)
-                    <strong>EVENT CO-HOSTS</strong>
+                    <strong>Event co-hosts</strong>
                     <p>   
-                        <div class="table-responsive">
-                            <table class="table table-bordered" width="50%">
+                        <table class="table table-responsive-sm table-bordered table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th>NAME</th>
-                                        <th>ADDRESS</th>
-                                        <th>CONTACT PERSONS</th>
-                                        <th>LOGO</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>Contact persons</th>
+                                        <th>logo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -219,169 +262,190 @@ function myFunction(slug) {
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>             
-                    </p>
+                        </p>
                     @endif
 
+                </div>
             </div>
         </div>
     </div>
-</div>
+@endif
+@if($event->type == 'internal')
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Feedback - Discussion outcome</strong>
+            </div>
+            <div class="card-body">
+                <p>
+                    As a rule of thumb, it's best to give a <strong>summary</strong> feedback for large events as opposed to <strong>detailed</strong> feedback. For small events such as the WARP Offices, you may provide <strong>detailed</strong> feedback. But do not feel discouraged to do a detailed outcome for large events.<br>
 
-     <div class="col-lg-12 col-md-12 col-sm-4 col-xs-12">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4 class="box-title m-t-20"><strong>FEEDBACK /</strong> <small class="text-muted"> DISCUSSION OUTCOME AND SWOT ANALYSIS</small></h4></div>
-            <div class="panel-wrapper collapse in">
-                <div class="panel-body">
-                    <p>
-                        <?php $feedback_type =  $event->report->feedback_type; ?>
-                        @if($feedback_type == 'both')
-                        <p>
-                            <strong>Feedback Type</strong>: Summary and Detailed<br>
-                        </p>
+                    <strong>Summary </strong>- Summary outcome of the discussions. <br>
+                    <strong>Detailed </strong>- Discussion outcome per guest/participant, what each participant has said during the event. <br>
+                </p>
+                <p>
+                <?php 
+                $feedback_type =  $event->report->feedback_type; 
+                ?>
+                @if($feedback_type == 'both')
+                <strong>Feedback Type</strong>: Summary and Detailed<br>
+                </p>
+
+                 <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <tbody>
                         @foreach($event->guest_register() as $register)
-                            @if(!is_null($register->profile_id))
-                                <p class="detailed-feedback m-t-20">
-                                    <strong>{{strtoupper($register->fullname)}} {{strtoupper($register->lastname)}}: </strong> <br>
-                                    <p>
-                                        {{$event->participant->feedback}}
-                                    </p>
-                                </p>
-                            @endif
+                        @if(!is_null($register->profile_id))
+                        <tr>
+                            <td>
+                                <strong>{{$register->fullname}} {{$register->lastname}}</strong>
+                            </td>
+                            <td>
+                               {{$event->participant->feedback}}
+                            </td>
+                        </tr>
+                        @endif
                         @endforeach
-
-                        <p class="m-t-20 summary-feedback">
-                            <strong>Summary Outcome</strong> <br>
-                            {{$event->report->summary}}
-                        </p>
-
-                        @elseif($feedback_type == 'detailed')
-                            <strong>FEEDBACK TYPE</strong>: Detailed<br>
-                            <span class="m-t-20"><strong>GUEST FEEDBACK</strong></span> <br>
-                            <hr>
-                            @foreach($event->guest_register() as $register)
-                                @if(!is_null($register->profile_id))
-                                <p class="detailed-feedback">
-                                    <strong>{{$register->fullname}} {{$register->lastname}}: </strong> <br>
-                                    <p>
-                                        {!!$event->guest_feedback($register->profile_id)->feedback!!}
-                                    </p>
-                                </p>
-                                 @endif
-                            @endforeach
-                        @else
-                            <strong>FEEDBACK TYPE</strong>: Summary<br>
-                            <p class="m-t-20 summary-feedback">
-                                <strong>Summary Outcome</strong> <br>
+                        <tr>
+                            <td><strong>Summary outcome</strong></td>
+                            <td>
+                               {{$event->report->summary}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                @elseif($feedback_type == 'detailed')
+                <strong>Feedback type</strong>: Detailed<br>
+                <span class="m-t-20"><strong>Guest feedback</strong></span> <br>
+                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <tbody>
+                        @foreach($event->guest_register() as $register)
+                        @if(!is_null($register->profile_id))
+                        <tr>
+                            <td>
+                                <strong>{{$register->fullname}} {{$register->lastname}}</strong>
+                            </td>
+                            <td>
+                               {{$event->participant->feedback}}
+                            </td>
+                        </tr>
+                        @endif
+                        @endforeach
+                    </tbody>
+                </table>
+                @else
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                        <tbody>
+                            <tr>
+                                <td><strong>Summary outcome</strong></td>
+                                <td>
                                 {{$event->report->summary}}
-                            </p>
-                        @endif
-                        </p>
-
-                        <p>
-                            <span class="m-t-20"><strong>SWOT ANALYSIS</strong></span> <br>
-                            
-                            <strong>Strengths</strong> <br>
-                            {{$event->report->summary}}
-                        </p>
-                        <p>
-                            <strong>Weaknesses</strong> <br>
-                            {{$event->report->summary}}
-                        </p>
-                        <p>
-                            <strong>Opportunities</strong> <br>
-                            {{$event->report->summary}}
-                        </p>
-                        <p>
-                            <strong>Threats</strong> <br>
-                            {{$event->report->summary}}
-                        </p>
-
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>SWOT analysis</strong>
+            </div>
+            <div class="card-body">
+                 <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <tbody>
+                        <tr>
+                            <td><strong>Strengths</strong></td>
+                            <td> {{$event->report->strengths}} </td>
+                        </tr>
+                         <tr>
+                            <td><strong>Weaknesses</strong></td>
+                            <td>{{$event->report->weaknesses}} </td>
+                        </tr>
+                         <tr>
+                            <td><strong>Opportunities</strong></td>
+                            <td>{{$event->report->opportunities}}</td>
+                        </tr>
+                         <tr>
+                            <td><strong>Threats</strong></td>
+                            <td>{{$event->report->threats}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
-     <div class="col-lg-12 col-md-12 col-sm-4 col-xs-12">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4 class="box-title m-t-20"><strong>MISCELLANEOUS /</strong> <small class="text-muted"> OTHER INFORMATION THAT SHOULD BE INCLUDED IN THIS REPORT</small></h4></div>
-            <div class="panel-wrapper collapse in">
-                <div class="panel-body">
-
-                    @foreach($event->report->misc_report() as $misc)
-                        <div class="panel panel-default" style=" border: 1px solid #ddd">
-                            <div class="panel-heading" style="background-color: #f5f5f5;">{{$misc->title}}
-                                <div class="panel-action">
-                                </div>
-                            </div>
-                            <div class="panel-wrapper collapse in">
-                                <div class="panel-body">
-                                    <p>
-                                        {!! $misc->content !!}
-                                    </p>
-
-                                    @if(count($misc->files) > 0)
-                                     <strong>Files that were uploaded for this section</strong>
-                                     <p>
-                                         If you would like these files to be part of the printed report, please download and print them seperately.
-                                     </p>
-                                        <ul>
-                                            @foreach($misc->files as $file)
-                                            <li>
-                                                <a href="/misc-file/download/{{$file->id}}">{{$file->description}}</a>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Miscellaneous - other information that should be included in this report</strong>
+            </div>
+            <div class="card-body">
+                <p>
+                    Click the checkbox on the right if you would like to include this in the report
+                </p>
+                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                    <thead>
+                        <th>Title</th>
+                        <th>Content</th>
+                    </thead>
+                    <tbody>
+                    @foreach($event->miscellaneous as $misc)
+                        <tr>
+                            <td>{{$misc->title}}</td>
+                            <td>{!! $misc->content !!}
+                                <br>
+                                @if(count($misc->files) > 0)
+                                    <strong>Files</strong>
+                                    <ul>
+                                        @foreach($misc->files as $file)
+                                        <li>
+                                            <a href="/misc-file/download/{{$file->id}}">{{$file->description}}</a>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+@endif
 
-     <div class="col-lg-12 col-md-12 col-sm-4 col-xs-12">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4 class="box-title m-t-20"><strong>GALLERY </strong> <small class="text-muted"></small></h4></div>
-            <div class="panel-wrapper collapse in">
-                <div class="panel-body">
-                      @foreach($event->photos as $index => $photo)
-                        <!-- /.usercard -->
-                        <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12" style="border: 1px solid #ddd">
-                            <div class="white-box">
-                                <div class="el-card-item">
-                                    <div class="el-card-avatar el-overlay-1"> <img src="{{ url('storage/'.$photo->path) }}" width="100%" alt="user" />
-                                    </div>
-                                    <div class="el-card-content">
-                                        <h3 class="box-title"><small><strong>{{$photo->caption}}</strong></small> </h3>
-                                        <br/> 
-                                    </div>
-                                </div>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Gallery</strong>
+            </div>
+            <div class="card-body">
+                    @foreach($event->photos as $photo)
+                    <div class="col-md-4 col-xs-12">
+                            <div class="user-bg"> 
+                                <img width="100%" alt="user" src="{{ url('storage/'.$photo->path) }}">
                             </div>
-                        </div>
-                        @if(($index + 1) % 2 == 0)
-                            <div class="clearfix"></div>
-                        @endif
-                        <!-- /.usercard-->
-                     @endforeach
-
-                </div>
+                            {{$photo->caption}}
+                    </div>                      
+                    @endforeach
                 <hr>
-                <div class="pull-right">
-                    <button type="button" class="btn btn-default btn-lg">
-                        <span class="fa fa-print"></span> Print
-                    </button>
-
-                    <a href="/report/events/edit/{{$event->slug}}" class="btn btn-primary btn-lg">
-                        <span class="fa fa-edit"></span> Edit
-                    </a>
+                <div class="float-left">
+                    <a href="/report/events/edit/{{$event->slug}}" class="btn btn-primary btn-sm"> <span class="fa fa-edit"></span>Edit Report</a>
+                    <button type="button" class="btn btn-default btn-sm" onclick="myFunction('{{$event->slug}}')" ><i class="fa fa-print"></i> Print Report</button>
                 </div>
+            </div>
         </div>
     </div>
-</div>
-
 </div>
 
 @endsection

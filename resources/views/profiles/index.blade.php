@@ -1,75 +1,61 @@
 @extends('layouts.hwpl')
-
-@section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">PROFILES</h4>
-        </div>
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-            <a href="/profiles/create" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD PROFILE</a>
-            <ol class="breadcrumb">
-                <li class="active">Profiles</li>
-           </ol>
-        </div>
-       <!-- /.col-lg-12 -->
-    </div>
-    <div class="white-box">
-    <div class="row">
-
-        <div class="col-md-12 col-lg-12 col-sm-12">
-          <table id="tbl-profiles" class="table table-hover" style="width:100%">
-            <thead>
-             <tr>
-                 <th>Fullname</th>
-                 <th>Lastname</th>
-                 <th>Mobile</th>
-                 <th>Email</th>
-                 <th>Team</th>
-                 <th>Country</th>
-                 <th>Action</th>
-             </tr>
-             </thead>
-         </table>
-     </div>
- </div>
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Management</li>
+    <li class="breadcrumb-item active"><a href="/profiles">Profiles </a></li>
+    <!-- Breadcrumb Menu-->
+    </ol>
 </div>
-
- @push('dataTableScript')
- <script>
-    $(document).ready(function() {
-        var popOverSettings = {
-            placement: 'top',
-            container: 'body',
-            html: true,
-            selector: '[data-toggle="popover"]', //Sepcify the selector here
-            content: function () {
-                return $('#popover-content').html();
-            }
-        }
-
-    $('body').popover(popOverSettings);
-
-        $('#tbl-profiles').DataTable({
-            serverSide: true,
-            processing: true,
-            responsive: true,
-            drawCallback: function () {
-                $('.dataTables_paginate > .pagination').addClass('pagination-sm');
-            },
-            ajax: "{{ route('tbl-profiles') }}",
-            columns: [
-            { name: 'fullname' },
-            { name: 'lastname' },
-            { name: 'mobile_no' },
-            { name: 'email' },
-            { name: 'team.name' },
-            { name: 'country.name' },
-            { name: 'action', orderable: false, searchable: false }
-            ]
-        });
-    });
-</script>
-@endpush
+@endsection
+@section('content')
+<div class="card">
+    <div class="card-header">
+        <div class="float-left">
+            <a href="/profiles/create" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD PROFILE</a>
+        </div>
+    </div>
+    <div class="card-body">
+            <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Fullname</th>
+                    <th>Lastname</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Team</th>
+                    <th>Country</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($profiles as $profile)
+                <tr>
+                    <td>{{$profile->fullname}}</td>
+                    <td>{{$profile->lastname}}</td>
+                    <td>{{$profile->mobile_no}}</td>
+                    <td>{{$profile->email}}</td>
+                    <td>{{$profile->team->name}}</td>
+                    <td>{{$profile->country->name}}</td>
+                    <td>
+                        <a href="/profiles/{{$profile->slug}}">
+                            <svg class="c-icon mr-2">
+                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-search')}}"></use>
+                            </svg>
+                        </a>
+                        <a href="/profiles/{{$profile->slug}}/edit">
+                            <svg class="c-icon mr-2">
+                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+                </tbody>
+                
+            </table>
+            {{ $profiles->links() }}
+    </div>
 </div>
 @endsection

@@ -1,80 +1,73 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Events</li>
+    <li class="breadcrumb-item "><a href="/events">Internal events </a></li>
+    <li class="breadcrumb-item active">Co-hosts</li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">CO-HOSTS / <small>New</small></h4> </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                    <li><a href="/events">Events</a></li>
-                    <li><a href="/events/{{$event->slug}}">{{$event->name}}</a></li>
-                    <li class="active">Co-hosts</li>
-                </ol>
+<div class="row">
+    <div class="col-md-8 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Add co-hosts to this event</strong> | 
+                <a href="/events/co-hosts/{{$co_host->event->slug}}">
+            <svg class="c-icon c-icon-lg">
+                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-left')}}"></use>
+            </svg>Back</a> 
             </div>
-            <!-- /.col-lg-12 -->
-        </div>
-        <div class="row">
-            <div class="col-md-12 col-lg-12 col-sm-12">
-                <div class="white-box">
-                    <a href="/events/{{$event->slug}}"> <span class="fa fa-calendar"></span> Event Page</a>
-                    <hr>
+            <div class="card-body">
                     {!! Form::open(array('route' => array('co-hosts.create', $event->slug), 'method' => 'post', 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"')) !!}
-                    <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                {{Form::label('name', 'Name')}}
+                                {{Form::label('name', 'Name of co-host')}}
                                 {{Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Type here', 'autocomplete'=>'off', 'required'])}}
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                           <div class="form-group">
-                            {{Form::label('address_line1', 'Address')}}
-                            {{Form::text('address_line1', null, ['class' => 'form-control', 'placeholder' => 'Address Line 1', 'autocomplete'=>'off', 'required'])}}
-                            {{Form::text('address_line2', null, ['class' => 'form-control', 'placeholder' => 'Address Line 2', 'autocomplete'=>'off', 'required'])}}
-                            {{Form::text('address_line3', null, ['class' => 'form-control', 'placeholder' => 'Address Line 3', 'autocomplete'=>'off'])}}
+                            {{Form::label('address_line1', 'Address information')}}
+                            {{Form::text('address_line1', null, ['class' => 'form-control', 'placeholder' => 'Address Line 1', 'autocomplete'=>'off', 'required'])}} </br>
+                            {{Form::text('address_line2', null, ['class' => 'form-control', 'placeholder' => 'Address Line 2', 'autocomplete'=>'off', 'required'])}} </br>
+                            {{Form::text('address_line3', null, ['class' => 'form-control', 'placeholder' => 'Address Line 3', 'autocomplete'=>'off'])}} </br>
                             {{Form::text('address_line4', null, ['class' => 'form-control', 'placeholder' => 'Address Line 4', 'autocomplete'=>'off'])}}
 
                         </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <h4 class="box-title m-t-5">Contact Persons</h4>
-                    <div class="event-co-hosts-contacts">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                {{Form::label('contact_person[]', 'Name')}}
-                                {{Form::text('contact_person[]', null, ['class' => 'form-control co-host-contact', 'placeholder' => 'First and lastname', 'autocomplete'=>'off', 'required'])}}
-                            </div>
-                        </div> 
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                {{Form::label('contact_number[]', 'Number')}}
-                                {{Form::text('contact_number[]', null, ['class' => 'form-control', 'placeholder' => 'Contact person First and lastname', 'autocomplete'=>'off', 'required'])}}
-                            </div>
-                        </div> 
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-
-                                {{Form::label('contact_email[]', 'Email')}}
-                                {{Form::text('contact_email[]', null, ['class' => 'form-control', 'placeholder' => 'Contact Person Email', 'autocomplete'=>'off', 'required'])}}
-                            </div>
                         </div>
-                    </div> 
-
-                    <span class="help-text">
-                        <a class="btn btn-default" id="btn-add-co-host-contact">
-                            <span class="fa fa-plus"></span> Add 
-                        </a>
-                        <a class="btn btn-danger" id="btn-remove-co-host-contact">
-                            <span class="fa fa-times"></span> Remove 
-                        </a>
-                    </span>
+                    <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                    <strong>Contact information</strong>
+                    
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm" id="co-host-table" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Contact person</th>
+                                <th>Contact number</th>
+                                <th>Email</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{Form::text('contact_person[]', null, ['class' => 'form-control co-host-contact', 'placeholder' => 'First and lastname', 'autocomplete'=>'off', 'required'])}}</td>
+                                <td>{{Form::text('contact_number[]', null, ['class' => 'form-control', 'placeholder' => 'Contact person First and lastname', 'autocomplete'=>'off', 'required'])}}</td>
+                                <td>{{Form::text('contact_email[]', null, ['class' => 'form-control', 'placeholder' => 'Contact Person Email', 'autocomplete'=>'off', 'required'])}}</td>
+                                <td>                                       
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                     <button class="btn btn-primary btn-sm" id="btn-add-co-host-contact">
+                        Add contact information
+                    </button>
+                </div>
                 </div>
 
                 <br>
@@ -86,9 +79,9 @@
                         </div>
                     </div>
                 </div>
-
-                <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
-                <button type="reset" class="btn btn-warning"><span class="fa fa-ban"></span> Reset</button>
+<hr>
+                <a href="/events/co-hosts/{{$co_host->event->slug}}" class="btn"> Cancel</a>
+                <button type="submit" class="btn btn-success"> Save</button>
                 {!! Form::close() !!}
             </div>
         </div>

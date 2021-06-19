@@ -1,83 +1,63 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Reports</li>
+    <li class="breadcrumb-item active">Documentation </li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">DOCUMENTATION REPORT</h4> 
-        </div>
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-            <ol class="breadcrumb">
-                <li class="active">Documentations</li>
-            </ol>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <div class="white-box">
-        <div class="row">
-            <div class="panel panel-default" style=" border: 1px solid #ddd">
-                <div class="panel-heading" style="background-color: #f5f5f5;">
-                    REPORT FILTER
-                </div>
-
-                <div class="panel-wrapper collapse in">
-                    <div class="panel-body">
-
-                        {!! Form::open(array('route' => array('search-documentation'), 'method' => 'post', 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"')) !!}
-
-                        <div class="row">
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">
-                                     TYPE</label>
-                                    <div class="col-sm-4">
-                                          {{Form::select('documentation', $documentation_type, null, ['class' => 'form-control select','placeholder'=>'All Documentations'])}}
-                                    </div>
+<div class="row">
+    <div class="col-md-4 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report filter</strong> 
+            </div>
+            <div class="card-body">
+                {!! Form::open(array('route' => array('search-documentation'), 'method' => 'post', 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"')) !!}
+                                <div class="form-group">
+                                    <label for="email1" class="text-right control-label col-form-label">
+                                     Type</label>
+                                    {{Form::select('documentation', $documentation_type, null, ['class' => 'form-control form-control-sm select','placeholder'=>'All Documentations'])}}
                                 </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">COUNTRY</label>
-                                    <div class="col-sm-4">
-                                        {{Form::select('country', $countries, null, ['class' => 'form-control select','placeholder'=>'All Countries'])}}
-                                    </div>
+                                <div class="form-group">
+                                    <label for="email1" class="text-right control-label col-form-label">Country</label>
+                                        {{Form::select('country', $countries, null, ['class' => 'form-control form-control-sm select','placeholder'=>'All Countries'])}}
                                 </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">SECTOR</label>
-                                    <div class="col-sm-4">
-                                        {{Form::select('sector', $sectors, null, ['class' => 'form-control select','placeholder'=>'All Sectors'])}}
-                                    </div>
+                                <div class="form-group">
+                                    <label for="email1" class="text-right control-label col-form-label">Sector</label>
+                                        {{Form::select('sector', $sectors, null, ['class' => 'form-control form-control-sm select','placeholder'=>'All Sectors'])}}
                                 </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">DATE FROM</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control mydatepicker" name="date_from">
-                                    </div>
+                                <div class="form-group">
+                                    <label for="email1" class="text-right control-label col-form-label">Date from</label>
+                                        <input type="date" class="form-control form-control-sm" name="date_from">
                                 </div>
-                                <div class="form-group row">
-                                    <label for="email1" class="col-sm-3 text-right control-label col-form-label">DATE TO</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control mydatepicker" name="date_to">
-                                    </div>
+                                <div class="form-group">
+                                    <label for="email1" class="text-right control-label col-form-label">Date to</label>
+                                        <input type="date" class="form-control form-control-sm" name="date_to">
                                 </div>
                                
-                              
+                              <hr>
                                 <div class="form-actions">
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-info">SEARCH</button>
-                                        <button type="reset" class="btn btn-dark">Reset</button>
-                                    </div>
+                                        <button type="submit" class="btn btn-info btn-sm">Search</button>
+                                        <button type="reset" class="btn btn-sm">Reset</button>
                                 </div>
-
-                            </div>
-                        </div>
-
                         {!! Form::close() !!}
-                    </div>
-                </div>
             </div>
-            @if($documentations)
+        </div>
+    </div>
+    <div class="col-md-8 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Report results</strong> 
+            </div>
+            <div class="card-body">
+                 @if($documentations)
             <strong>{{$documentations->total()}} Results Found</strong>, <a href="{{route('export-documentations')}}">export to excel</a>
-            <div class="col-md-12 col-lg-12 col-sm-12">
-                <table id="dataTable2" class="table table-striped table-bordered dataTable" style="width:100%"> 
+                <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                     <thead>
                         <tr>
                             <th>Document Type</th>
@@ -106,8 +86,8 @@
                     </tbody>
                 </table>
 
-            </div>
             @endif
+            </div>
         </div>
     </div>
 </div>

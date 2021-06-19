@@ -1,24 +1,27 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Events</li>
+    <li class="breadcrumb-item "><a href="/events">Internal events </a></li>
+    <li class="breadcrumb-item active">Co-hosts</li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">CO-HOST / <small>View</small></h4> </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                    <li><a href="/events">Events</a></li>
-                    <li><a href="/events/{{$co_host->event->slug}}">{{$co_host->event->name}}</a></li>
-                    <li class="active">Co-hosts</li>
-                </ol>
+<div class="row">
+    <div class="col-md-8 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Co-host information </strong> |  
+                <a href="/events/co-hosts/{{$co_host->event->slug}}">
+            <svg class="c-icon c-icon-lg">
+                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-left')}}"></use>
+            </svg>Back</a>
             </div>
-            <!-- /.col-lg-12 -->
-        </div>
-        <div class="row">
-            <div class="col-md-12 col-lg-12 col-sm-12">
-                <div class="white-box">
-                    <a href="/events/{{$co_host->event->slug}}"> <span class="fa fa-calendar"></span> {{$co_host->event->name}}</a>
-                    <hr>
+            <div class="card-body">
                     <h2 class="box-title m-t-5">{{$co_host->name}}</h2>
                     
                     <p>
@@ -47,8 +50,12 @@
                     
                 </div>
                 <hr>
-                <a href="/event-co-host/edit/{{$co_host->id}}" class="btn btn-info">
-                    <span class="fa fa-edit"></span> Edit
+                 <a href="/events/co-hosts/{{$co_host->event->slug}}">
+            <svg class="c-icon c-icon-lg">
+                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-left')}}"></use>
+            </svg>Back</a> 
+                <a href="/event-co-host/edit/{{$co_host->id}}" class="btn btn-primary btn-sm">
+                    Update co-host information
                 </a>
             </div>
         </div>

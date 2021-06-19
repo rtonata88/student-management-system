@@ -1,24 +1,29 @@
 @extends('layouts.hwpl')
 
-@section('content')
-<div class="container-fluid">
-  <div class="row bg-title">
-    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-      <h4 class="page-title">CONTACT PROFILES</h4> </div>
-      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-        <ol class="breadcrumb">
-          <li><a href="/profiles">Profiles</a></li>
-          <li class="active">Update</li>
-        </ol>
-      </div>
-      <!-- /.col-lg-12 -->
-    </div>
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+      <li class="breadcrumb-item">Management</li>
+      <li class="breadcrumb-item"><a href="/profiles">Profiles </a></li>
+      <li class="breadcrumb-item active">Edit</li>
+      <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 
-    <div class="row">
-      <div class="white-box">
-        <a href="/profiles/{{$profile->slug}}"> <span class="fa fa-arrow-circle-left"></span> Cancel</a>
-        <h3 class="box-title">{{$profile->fullname}} {{$profile->lastname}}</h3>
-        <hr>
+@section('content')
+<div class="card">
+    <div class="card-header">
+       <h4>{{$profile->fullname}} {{$profile->lastname}}</h4>
+       <p>Please complete all the required fields</p>
+        <a href="/profiles"> <span class="fa fa-arrow-circle-left"></span>  
+        <svg class="c-icon">
+          <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-circle-left')}}"></use>
+        </svg>
+        Back</a>
+    </div>
+    <div class="card-body">
         {!! Form::model($profile, array('route'=>array('profiles.show', $profile->slug), 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"', 'method'=>'PATCH')) !!}
         <div class="row">
          <div class="form-group">
@@ -335,7 +340,6 @@
 <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
 <button type="reset" class="btn btn-warning"><span class="fa fa-ban"></span> Reset</button>
 {!! Form::close() !!}
-</div>
 </div>
 </div>
 @endsection

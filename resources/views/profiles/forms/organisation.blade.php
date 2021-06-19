@@ -4,7 +4,7 @@
 
                     <div class="row">
                     <div class="col-md-8">
-                        <h4 class="page-title"><strong>PERSONAL CONTACT INFORMATION</strong></h4>
+                        <strong>Personal contact information</strong>
                     </div>
 
                   </div>
@@ -26,7 +26,7 @@
                           </tbody>
                       </table>
                   </div>
-                  <h4 class="page-title"><strong>ORGANISATION</strong></h4>
+                  <strong>Organisation</strong>
                   @foreach($profile->organization_profile->where('id', $organisation_id) as $index=>$profile_organization)
                   <div class="table-responsive">
                   <h6 class="page-title"><strong>{{$profile_organization->organization->name}}</strong></h6>
@@ -67,11 +67,10 @@
                   <button type="submit" class="btn btn-default save-btn" section="organisation"><span class="fa fa-check-circle"></span> Save </button>
                 </div>
                 <br>
-                <h4 class="page-title"><strong>ASSISTANTS</strong></h4>
+                <strong>Assistants</strong>
                 @forelse($assistants as $index=>$assistant)
-                <div class="table-responsive">
                   <h6 class="page-title"><strong>{{$assistant->assistant_name}}</strong></h6>
-                  <table class="table">
+                  <table class="table table-responsive-sm table-bordered table-striped table-sm">
                       <tbody>
                           <tr>
                               <td><strong>Email</strong></td>
@@ -90,7 +89,6 @@
                           </tr>
                       </tbody>
                   </table>
-              </div>
               @empty
                 No assistants
               @endforelse

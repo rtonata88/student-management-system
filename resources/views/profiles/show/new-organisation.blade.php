@@ -1,4 +1,4 @@
-<div class="table-responsive organisation-{{$profile_organization->id}}">
+<div class="organisation-{{$profile_organization->id}}">
   <div class="row">
     <div class="col-md-8">
       <h6 class="page-title"><strong>{{$profile_organization->organization->name}}</strong></h6>
@@ -12,7 +12,7 @@
     </div>
   </div>
   <br>
-  <table class="table" style="background-color: #fcfcfc; border: 1px solid #dbd9d9">
+  <table class="table table-responsive-sm table-bordered table-striped table-sm" style="background-color: #fcfcfc; border: 1px solid #dbd9d9">
       <tbody>
           <tr>
               <td><strong>Position</strong></td>

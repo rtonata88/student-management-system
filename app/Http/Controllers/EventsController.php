@@ -21,6 +21,7 @@ use App\EventStaff;
 use Freshbitsweb\Laratables\Laratables;
 
 use Auth;
+use Route;
 
 class EventsController extends Controller
 {
@@ -90,18 +91,69 @@ class EventsController extends Controller
 	}
 
 	public function show($slug){
+		$route = Route::currentRouteName();
+		switch ($route) {
+			case 'events.show':
+					$section_title = 'Event details';
+					$partial_file_path = 'events.partials.details';
+				break;
+			case 'event-details':
+					$section_title = 'Event details';
+					$partial_file_path = 'events.partials.details';
+				break;
+			case 'event-program':
+					$section_title = 'Program';
+					$partial_file_path = 'events.partials.program';
+				break;
+			case 'event-guests':
+					$section_title = 'Guest management';
+					$partial_file_path = 'events.partials.guests';
+				break;
+			case 'event-staff':
+					$section_title = 'Staff management';
+					$partial_file_path = 'events.partials.staff';
+				break;
+			case 'event-co-hosts':
+					$section_title = 'Co-host managemnt';
+					$partial_file_path = 'events.partials.cohosts';
+				break;
+			case 'event-media-coverage':
+					$section_title = 'Media coverage';
+					$partial_file_path = 'events.partials.media-coverage';
+				break;
+			case 'event-documents':
+					$section_title = 'Document management';
+					$partial_file_path = 'events.partials.documents';
+				break;
+			case 'event-other-details':
+					$section_title = 'Other information';
+					$partial_file_path = 'events.partials.others';
+				break;
+			case 'event-gallery':
+					$section_title = 'Gallery';
+					$partial_file_path = 'events.partials.gallery';
+				break;
+			default:
+				# code...
+				break;
+		}
+
+
 		$event = Event::whereSlug($slug)->with('participants')->first();
 
-		$profiles = Profile::selectRaw('id, CONCAT(fullname," ",lastname) AS name')
-						   ->whereNotIn('id', $event->participants->pluck('profile_id')->toarray())
-						   ->pluck('name', 'id');
+		$profiles_dro = Profile::selectRaw('id, CONCAT(fullname," ",lastname) AS name')
+						->whereNotIn('id', $event->participants->pluck('profile_id')->toarray())
+						->pluck('name', 'id');
+		
+		$profiles = Profile::whereNotIn('id', $event->participants->pluck('profile_id')->toarray())->paginate(10);
+
 		$participant_roles 	= $event->participant_roles->pluck('role_name', 'id');
 		$staff_roles 		= $event->staff_roles->pluck('role_name', 'id');
 		$event_staff 		= EventStaff::where('event_id', $event->id)->pluck('user_id');
+
 		$users = User::whereNotIn('id',$event_staff)->pluck('name', 'id');
 
-
-		return view('events.show', compact('event', 'profiles', 'participant_roles', 'staff_roles', 'users'));
+		return view('events.show', compact('event', 'profiles', 'participant_roles', 'staff_roles', 'users', 'section_title', 'partial_file_path'));
 	}
 
 	public function store(Request $requests)
@@ -185,7 +237,7 @@ class EventsController extends Controller
 					} else {
 						$send_mail = 0;
 					}
-					EventOrganization::create(['event_id' => $event->id, 'name' => $requests->name, 'participant_role_id' => $requests->participant_role_id, 'email' => $requests->email, 'send_mail' => $send_mail]);
+					EventOrganization::create(['event_id' => $event->id, 'name' => $requests->name, 'participant_role' => $requests->participant_role, 'email' => $requests->email, 'send_mail' => $send_mail]);
 
 					//Create event activity log
 					EventActivityLog::create(['event_id' => $event->id, 'action'=>'InviteAttendee', 'user_id'=>Auth::user()->id, 'description'=>"invited ".$requests->name]);
@@ -235,7 +287,7 @@ class EventsController extends Controller
 			break;
 		}
 
-		return redirect()->route('events.show', ['slug' => $event->slug]);
+		return redirect()->back();
 	}
 
 
@@ -305,7 +357,7 @@ class EventsController extends Controller
 				# code...
 				break;
 		}
-		return redirect()->route('events.show', ['slug' => $event->slug]);
+		return redirect()->back();
 	}
 
 	function manage_other_attendees($slug, $action, $participant = null)
@@ -367,7 +419,7 @@ class EventsController extends Controller
 				# code...
 				break;
 		}
-		return redirect()->route('events.show', ['slug' => $event->slug]);
+		return redirect()->back();
 	}
 
 
@@ -376,10 +428,10 @@ class EventsController extends Controller
 		$event_staff = new EventStaff;
 		$event_staff->event_id = $event->id;
 		$event_staff->user_id = $requests->staff_id;
-		$event_staff->role_id = $requests->staff_role_id;
+		$event_staff->responsibility = $requests->responsibility;
 		$event_staff->save();
 
-		return redirect()->route('events.show', ['slug' => $event->slug]);
+		return redirect()->back();
 	}
 
 	public function remove_staff($id){
@@ -394,7 +446,7 @@ class EventsController extends Controller
 			$event_participation = new EventParticipant;
 			$event_participation->event_id = $event->id;
 			$event_participation->profile_id = $requests->profile_id;
-			$event_participation->participant_role_id = $requests->role_id;
+			$event_participation->participant_role = $requests->participant_role;
 			$event_participation->rsvp_status = 'PENDING';
 			$event_participation->save();
 		}
@@ -404,7 +456,7 @@ class EventsController extends Controller
 		$event = Event::whereSlug($slug)->first();
 		$event_participation = EventParticipant::where('profile_id', $requests->profile_id)->where('event_id', $event->id)->first();
 		if(count($event_participation) > 0){
-			$event_participation->participant_role_id = $requests->role_id;
+			$event_participation->participant_role = $requests->participant_role;
 			$event_participation->save();
 		}
 	}

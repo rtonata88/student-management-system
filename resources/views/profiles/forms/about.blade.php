@@ -13,8 +13,7 @@
 <br>
 <br>
 {!! Form::model($profile, array('route'=>array('profiles.show', $profile->slug), 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"', 'method'=>'PATCH', 'id'=>'profile-edit-form')) !!}
-    <div class="table-responsive">
-      <table class="table">
+      <table class="table table-responsive-sm table-bordered table-striped table-sm">
           <tbody>
             <tr>
               <td><strong>Photo</strong> </td>
@@ -26,8 +25,8 @@
                 <td><strong>Titles</strong></td>
                 <td>
                     {{Form::select('titles[]', $titles, $profile->title()->pluck('title_id'), ['class' => 'form-control select2 select2-multiple','id'=>'titles' ,'required', 'multiple'])}}
-                    <div class="help-block text-info">
-                        Ctrl + Click on the Title - to select multiple titles
+                    <div class="help-block text-info p-2">
+                       <small>Ctrl + Click on the Title - to select multiple titles</small> 
                     </div>
                 </td>
             </tr>
@@ -85,10 +84,9 @@
               </tr>
           </tbody>
       </table>
-  </div>
   <div class="pull-right">
     <a  href="" class="cancel-btn" section="about"><strong>Cancel</strong></a>
-    <button type="submit" class="btn btn-default save-btn" section="about"><span class="fa fa-check-circle"></span> Save </button>
+    <button type="submit" class="btn btn-success save-btn" section="about"> Save </button>
   </div>
 
 </div>

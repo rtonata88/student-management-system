@@ -1,24 +1,27 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Events</li>
+    <li class="breadcrumb-item "><a href="/events">Internal events </a></li>
+    <li class="breadcrumb-item active">Co-hosts</li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">EVENT OTHER INFORMATION / <small>Edit</small></h4> </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                    <li><a href="/events">Events</a></li>
-                    <li><a href="/events/{{$misc->event->slug}}">{{$misc->event->name}}</a></li>
-                    <li class="active">Other Information</li>
-                </ol>
+<div class="row">
+    <div class="col-md-8 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Other information</strong> | 
+                <a href="/events/other-details/{{$misc->event->slug}}">
+            <svg class="c-icon c-icon-lg">
+                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-left')}}"></use>
+            </svg>Back</a> 
             </div>
-            <!-- /.col-lg-12 -->
-        </div>
-        <div class="row">
-            <div class="col-md-12 col-lg-12 col-sm-12">
-                <div class="white-box">
-                    <a href="/events/{{$misc->event->slug}}"> <span class="fa fa-calendar"></span> {{$misc->event->name}}</a>
-                    <hr>
+            <div class="card-body">
                     @if(Session::has('message'))
                         <div class="alert alert-success alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> 
@@ -38,7 +41,7 @@
                         <div class="col-md-12">
                           <div class="form-group">
                             {{Form::label('content', 'CONTENT')}}
-                            {{Form::textarea('content', null, ['class' => 'form-control summernote', 'required'])}}
+                            {{Form::textarea('content', null, ['class' => 'form-control', 'required'])}}
 
                         </div>
                     </div>
@@ -56,7 +59,7 @@
                     @endif
 
                      <div class="form-group">
-                        {{Form::label('path', 'ADD FILES (optional)')}}
+                        {{Form::label('path', 'ADD FILES (optional)')}} <br>
                         {{Form::file('path[]', null, ['class' => 'form-control', 'required'])}}
                         {{Form::text('description[]', null, ['class' => 'form-control', 'placeholder' => 'Description'])}}
                     </div>

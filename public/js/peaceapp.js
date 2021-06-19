@@ -1,4 +1,24 @@
+$(function() {
+	$('.summernote').summernote({
+		height: 350, // set editor height
+		minHeight: null, // set minimum height of editor
+		maxHeight: null, // set maximum height of editor
+		focus: true // set focus to editable area after initializing summernote
+		});
+	$('.inline-editor').summernote({
+		airMode: true
+	});
+
+
+});
+window.edit = function() {
+$(".click2edit").summernote()
+}, window.save = function() {
+$(".click2edit").summernote('destroy');
+}
 $(document).ready(function($) {
+	$('.data-table').DataTable();
+
 	//Discussion Points
 	$('#btn-add-discussion-point').on('click', function (){
 		var index = $('.event_discussion').length
@@ -47,48 +67,25 @@ $(document).ready(function($) {
 		$("#staff-role"+rm).remove()
 	})
 
-	$(".other-attendee").hide();
-	$( "#profile_y_n" ).change(function() {
-		var y_n = $(this).val();
-		if(y_n == 'y')
-		{
-			$(".other-attendee").hide();
-			$(".database-profile").show();
-		} else {
-			$(".other-attendee").show();
-			$(".database-profile").hide();
-		}
-	});
-
-
 	//Event Co-hosts
-	$('#btn-add-co-host-contact').on('click', function (){
+	$('#btn-add-co-host-contact').on('click', function (e){
+
+		e.preventDefault();
 		var index = $('.co-host-contact').length
 		
-		$(".event-co-hosts-contacts")
-		.append('<div id="co-host-contact'+index+'"><br>'+
-			' <div class="col-md-4">'+
-                '<div class="form-group">'+
-			'<input type="text" name="contact_person[]" class="form-control co-host-contact" placeholder="First and lastname"></div>'+
-			'</div>'+
-
-			' <div class="col-md-4">'+
-                '<div class="form-group">'+
-			'<input type="text" name="contact_number[]" class="form-control" placeholder="Contact Number"></div>'+
-			'</div>'+
-
-			' <div class="col-md-4">'+
-                '<div class="form-group">'+
-			'<input type="text" name="contact_email[]" class="form-control" placeholder="Email"></div>'+
-			'</div>'+
-			'</div>');
+		let html = '<tr>';
+		html += '<td><input type="text" name="contact_person[]" class="form-control co-host-contact" placeholder="First and lastname"></td>';
+		html += '<td><input type="text" name="contact_number[]" class="form-control" placeholder="Contact Number"></td>';
+		html += '<td><input type="text" name="contact_email[]" class="form-control" placeholder="Email"></td>';
+		html += "<td> <a class='btn btn-danger remove-cohost-contact text-white'>"+
+						"X"+
+					"</a>"+
+				"</td>";
+		html += '</tr>';
+		$("#co-host-table > tbody").append(html)
 	})
-
-	$('#btn-remove-co-host-contact').on('click', function (){
-		var index = $('.co-host-contact').length
-		var rm = (index-1);
-
-		$("#co-host-contact"+rm).remove()
+	$("#co-host-table").on('click', '.remove-cohost-contact', function () {
+		$(this).closest('tr').remove();
 	})
 	
 	$(document).on('change', 'input:radio[class^="feedback-type"]', function (event) {
@@ -148,7 +145,7 @@ $(document).ready(function($) {
 				'</td>' +
 				'<td class="text-center">' +
 				'<button class="btn btn-danger btn-rounded btn-remove">'+
-                    '<span class="fa fa-times"></span>'+
+                    'X'+
                 '</button>'+
 				'</td>' +
 				'</tr>'
@@ -162,6 +159,61 @@ $(document).ready(function($) {
 	});
 
 
+	$('#myInput').on('keyup', function(){
+		 // Declare variables
+		var input, filter, table, tr, td, i, txtValue;
+		input = document.getElementById("myInput");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("liaising-list-table");
+		tr = table.getElementsByTagName("tr");
 
+		let token = $('meta[name="csrf-token"]').attr('content');
+
+		let searchTerm = $(this).val();
+
+		if(searchTerm.length >= 3){
+			getProfiles(token, $(this).val());
+		}
+
+		// Loop through all table rows, and hide those who don't match the search query
+		for (i = 0; i < tr.length; i++) {
+			td = tr[i].getElementsByTagName("td")[0];
+			if (td) {
+			txtValue = td.textContent || td.innerText;
+			if (txtValue.toUpperCase().indexOf(filter) > -1) {
+				tr[i].style.display = "";
+			} else {
+				tr[i].style.display = "none";
+			}
+			}
+		}
+	})
 });
 
+function getProfiles(token, query){
+    
+    $.ajax({
+        type:'POST',
+        url:'/ajax/get-profile-info',
+        data:{ _token: token,
+                term: query 
+            },
+		success: function(results){
+			let html = '';
+			for(let result of results){
+				if($('#profiles-'+result.id).length == 0){
+					html += '<tr data="'+result.id+'" id="profiles-'+result.id+'">';
+					html += '<td>'+result.fullname+'</td>';
+					html += '<td>'+result.lastname+'</td>';
+					html += '<td>'+result.team+'</td>';
+					html += '<td>'+result.country+'</td>';
+					html += '<td> <input type="text" name="role['+result.id+'][]" id="" class="form-controls" placeholder="Example; Panelist, Guest Speaker, General"></td>';
+					html += '<td class="text-center"><input type="checkbox" data="'+result.id+'" id="check_"'+result.id+'" name="invite['+result.id+'][]"></td>';
+					html += '</tr>';
+				}
+			}
+			console.log(html)
+			$("#liaising-list-table > tbody").append(html);
+		}
+    });
+}

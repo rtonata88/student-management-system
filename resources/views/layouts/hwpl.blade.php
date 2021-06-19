@@ -1,291 +1,275 @@
 <!DOCTYPE html>
+<!--
+* CoreUI - Free Bootstrap Admin Template
+* @version v3.2.0
+* @link https://coreui.io
+* Copyright (c) 2020 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+-->
+
 <html lang="en">
+  <head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{{env('APP_NAME')}}</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="{{asset('new/assets/favicon/apple-icon-57x57.png')}}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{asset('new/assets/favicon/apple-icon-60x60.png')}}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{asset('new/assets/favicon/apple-icon-72x72.png')}}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('new/assets/favicon/apple-icon-76x76.png')}}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{asset('new/assets/favicon/apple-icon-114x114.png')}}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{asset('new/assets/favicon/apple-icon-120x120.png')}}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{asset('new/assets/favicon/apple-icon-144x144.png')}}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{asset('new/assets/favicon/apple-icon-152x152.png')}}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('new/assets/favicon/apple-icon-180x180.png')}}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{asset('new/assets/favicon/android-icon-192x192.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{asset('new/assets/favicon/favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{asset('new/assets/favicon/favicon-96x96.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('new/assets/favicon/favicon-16x16.png')}}">
+    <link rel="manifest" href="{{asset('new/assets/favicon/manifest.json')}}">
+    <meta name="msapplication-TileColor" content="#ffffff')}}">
+    <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png')}}">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Main styles for this application-->
+    <link href="{{asset('new/css/style.css')}}" rel="stylesheet">
+  
+    <link href="{{asset('new/node_modules/@coreui/chartjs/dist/css/coreui-chartjs.css')}}" rel="stylesheet">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <title>PEACEBase</title>
-  <!-- Bootstrap Core CSS -->
-  <link href="{{asset('assets/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-  <link href="{{asset('css/typeahead.css')}}" rel="stylesheet">
-  <!-- Menu CSS -->
-  <link href="{{asset('assets/plugins/sidebar-nav/dist/sidebar-nav.min.css')}}" rel="stylesheet">
-  <!-- animation CSS -->
-  <link href="{{asset('assets/css/animate.css')}}" rel="stylesheet">
-  <!-- Custom CSS -->
-  <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
-  <!-- Date picker plugins css -->
-  <link href="{{asset('bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}" rel="stylesheet" type="text/css" />
-  <!-- color CSS -->
-  <link href="{{asset('assets/css/colors/default.css')}}" id="theme" rel="stylesheet">
+    <!-- Datatables  -->
+    <link href="{{asset('assets/css/datatables.css')}}" rel="stylesheet">
+    
+    <!-- summernotes CSS -->
+    <link href="{{asset('bower_components/summernote/summernote.css')}}" rel="stylesheet" />
 
-  <!-- Page CSS -->
-  <link href="{{asset('bower_components/multi-select/multi-select.css')}}" rel="stylesheet" type="text/css" />
+  </head>
+  <body class="c-app">
+    <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
+      <div class="c-sidebar-brand d-lg-down-none">
+        <img class="c-sidebar-brand-full" width="118" height="46" src="{{asset('dist/img/logo.png')}}" />        
+        <img class="c-sidebar-brand-minimized" width="118" height="46" src="{{asset('dist/img/logo-dark.png')}}" />        
+        
+      </div>
+      <ul class="c-sidebar-nav">
+        <li class="c-sidebar-nav-item">
+          <a class="c-sidebar-nav-link" href="/home">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-speedometer')}}"></use>
+            </svg> Dashboard
+          </a>
+        </li>
+        <li class="c-sidebar-nav-title">MANAGEMENT</li>
+        @if(Auth::user()->hasRole('Profiles'))
+        @if(Auth::user()->hasRole('Profiles'))
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/profiles">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
+            </svg> Profiles</a></li>
+        @endif
+        @if(Auth::user()->hasRole('WARP Office Attendees'))
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/warp-attendees">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar-check')}}"></use>
+            </svg> WARP attendees</a></li>
+        @endif
+        @if(Auth::user()->hasRole('Maintainer Assignment'))
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/maintainer-assignment">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-user-plus')}}"></use>
+            </svg> Staff assignment</a></li>
+        @endif
+        @endif
+        @if(Auth::user()->hasRole('Documentation'))
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/documentation">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-folder-open')}}"></use>
+            </svg> Documentation</a></li>
+        @endif
+        @if(Auth::user()->hasRole('Campaign'))
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/campaigns">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bullhorn')}}"></use>
+            </svg> Campaigns</a></li>
+        @endif
+        
+        <li class="c-sidebar-nav-title">Events</li>
+        @if(Auth::user()->hasRole('External Events'))
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/external-events">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+            </svg> External events</a></li>
+        @endif
+        @if(Auth::user()->hasRole('Internal Events'))
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/events">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+            </svg> Internal events</a></li>
+        @endif
 
-  <!-- Gallery -->
-  <link rel="stylesheet" type="text/css" href="{{asset('bower_components/gallery/css/animated-masonry-gallery.css')}}" />
-  <link rel="stylesheet" type="text/css" href="{{asset('bower_components/fancybox/ekko-lightbox.min.css')}}" />
+        <li class="c-sidebar-nav-title">Reports</li>
+         @if(Auth::user()->hasRole('Reports'))
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/reports/profiles">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart-pie')}}"></use>
+            </svg> Profiles</a></li>
+       
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/reports/warp-attendees">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart-line')}}"></use>
+            </svg> WARP attendees</a></li>
 
-  <!-- Wizard CSS -->
-  <link href="{{asset('bower_components/jquery-wizard-master/steps.css')}}" rel="stylesheet">
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/reports/documentation">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart-pie')}}"></use>
+            </svg> Documentation</a></li>
 
-  <!-- summernotes CSS -->
-  <link href="{{asset('bower_components/summernote/summernote.css')}}" rel="stylesheet" />
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/reports/periodic">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bar-chart')}}"></use>
+            </svg> Periodic reports</a></li>
 
-
-  <!-- Page CSS -->
-  <link href="{{asset('bower_components/select2/dist/css/select2.css')}}" rel="stylesheet" type="text/css" />
-
-  <!-- Page plugins css -->
-  <link href="{{asset('bower_components/clockpicker/jquery-clockpicker.min.css')}}" rel="stylesheet">
-  <!-- Color picker plugins css -->
-  <link href="{{asset('bower_components/clockpicker/asColorPicker.css')}}" rel="stylesheet">
-
-  <link href="{{asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.css')}}" rel="stylesheet" type="text/css" />
-  <link href="{{asset('bower_components/datatables.net/css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css" />
-  <link href="{{asset('bower_components/morris.js/morris.css')}}" rel="stylesheet" type="text/css" />
-
-
-
-  <style>
-  #profiles-table tbody tr {
-    cursor: pointer;
-  }
-  .floating-action-button {
-  position: relative;
-  top: 100px;
-  margin-left: 50px;
-}
-ul.dropdown-menu {
-  box-shadow: none;
-  border: 0;
-  min-width:0;
-  background:transparent
-}
-
-.spinner {
-   position: absolute;
-   left: 50%;
-   top: 20%;
-   height:60px;
-   width:60px;
-   margin:0px auto;
-   -webkit-animation: rotation .6s infinite linear;
-   -moz-animation: rotation .6s infinite linear;
-   -o-animation: rotation .6s infinite linear;
-   animation: rotation .6s infinite linear;
-   border-left:6px solid rgba(0,174,239,.15);
-   border-right:6px solid rgba(0,174,239,.15);
-   border-bottom:6px solid rgba(0,174,239,.15);
-   border-top:6px solid rgba(0,174,239,.8);
-   border-radius:100%;
-}
-
-@-webkit-keyframes rotation {
-   from {-webkit-transform: rotate(0deg);}
-   to {-webkit-transform: rotate(359deg);}
-}
-@-moz-keyframes rotation {
-   from {-moz-transform: rotate(0deg);}
-   to {-moz-transform: rotate(359deg);}
-}
-@-o-keyframes rotation {
-   from {-o-transform: rotate(0deg);}
-   to {-o-transform: rotate(359deg);}
-}
-@keyframes rotation {
-   from {transform: rotate(0deg);}
-   to {transform: rotate(359deg);}
-}
-</style>
-
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-  <![endif]-->
-</head>
-
-<body class="fix-header">
-
-  <!-- ============================================================== -->
-  <!-- Preloader -->
-  <!-- ============================================================== -->
-  <div class="preloader">
-    <svg class="circular" viewBox="25 25 50 50">
-      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
-    </svg>
-  </div>
-  <!-- ============================================================== -->
-  <!-- Wrapper -->
-  <!-- ============================================================== -->
-  <div id="wrapper">
-    <!-- ============================================================== -->
-    <!-- Topbar header - style you can find in pages.scss -->
-    <!-- ============================================================== -->
-    <nav class="navbar navbar-default navbar-static-top m-b-0">
-      <div class="navbar-header">
-        <div class="top-left-part">
-          <!-- Logo -->
-          <a class="logo" href="/home">
-            <!-- Logo icon image, you can use font-icon also --><b>
-            </b>
-            <!-- Logo text image you can use text also --><span class="hidden-xs">
-              <!--This is dark logo text--><img src="{{asset('assets/plugins/images/admin-text.png')}}" alt="home" class="dark-logo" /><!--This is light logo text--><img src="{{asset('assets/plugins/images/admin-text-dark.png')}}" alt="home" class="light-logo" />
-            </span> </a>
-          </div>
-          <!-- /Logo -->
-          <ul class="nav navbar-top-links navbar-right pull-right">
-            <li>
-              <a class="profile-pic" href="#"> <img src="{{asset('assets/plugins/images/users/varun.png')}}" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">{{Auth::user()->name}}</b></a>
-            </li>
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/report/internal/events">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
+            </svg> Internal events</a></li>
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/report/external/events">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
+            </svg> External events</a></li>
+        @endif
+        @if(Auth::user()->hasRole('Access Management'))
+        <li class="c-sidebar-nav-title">Administration</li>
+          <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-lock-locked')}}"></use>
+            </svg> Access management</a>
+          <ul class="c-sidebar-nav-dropdown-items">
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/users"><span class="c-sidebar-nav-icon"></span> Users</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/roles"><span class="c-sidebar-nav-icon"></span> Roles</a></li>
           </ul>
-        </div>
-        <!-- /.navbar-header -->
-        <!-- /.navbar-top-links -->
-        <!-- /.navbar-static-side -->
-      </nav>
-      <!-- End Top Navigation -->
-      <!-- ============================================================== -->
-      <!-- Left Sidebar - style you can find in sidebar.scss  -->
-      <!-- ============================================================== -->
-      <div class="navbar-default sidebar" role="navigation">
-        <div class="sidebar-nav slimscrollsidebar">
-          <div class="sidebar-head">
-            <h3><span class="fa-fw open-close"><i class="ti-close ti-menu"></i></span> <span class="hide-menu">Navigation</span></h3>
-          </div>
-          <ul class="nav" id="side-menu">
-            <li style="padding: 70px 0 0;">
-              <a href="/home" class="waves-effect"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>Dashboard</a>
-            </li>
-            @if(Auth::user()->hasRole('Profiles'))
-             <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-users fa-fw" aria-hidden="true"></i> <span class="hide-menu">Profiles<span class="fa arrow"></span></span></a>
-              <ul class="nav nav-second-level">
-                @if(Auth::user()->hasRole('Profiles'))
-                <li> <a href="/profiles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Profiles</span></a> </li>
-                @endif
-                @if(Auth::user()->hasRole('WARP Office Attendees'))
-                <li> <a href="/warp-attendees"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">WARP Attendees</span></a> </li>
-                @endif
+        </li>
+        @endif
+        @if(Auth::user()->hasRole('Setup'))
+        <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-cog')}}"></use>
+            </svg> Setups</a>
+          <ul class="c-sidebar-nav-dropdown-items">
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/cities"><span class="c-sidebar-nav-icon"></span> Cities</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/countries"><span class="c-sidebar-nav-icon"></span> Countries</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/departments"><span class="c-sidebar-nav-icon"></span> Departments</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/document-types"><span class="c-sidebar-nav-icon"></span> Document types</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/duties"><span class="c-sidebar-nav-icon"></span> Duties</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/event-types"><span class="c-sidebar-nav-icon"></span> Event types</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/activity-types"><span class="c-sidebar-nav-icon"></span> Fruit activity types</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fruit-levels"><span class="c-sidebar-nav-icon"></span> Fruit levels</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fruit-roles"><span class="c-sidebar-nav-icon"></span> Fruit roles</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fruit-stages"><span class="c-sidebar-nav-icon"></span> Fruit stages</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/industries"><span class="c-sidebar-nav-icon"></span> Industries</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/languages"><span class="c-sidebar-nav-icon"></span> Languages</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/meeting-types"><span class="c-sidebar-nav-icon"></span> Meeting types</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/organizations"><span class="c-sidebar-nav-icon"></span> Organisations</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/religions"><span class="c-sidebar-nav-icon"></span> Religions</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/report-types"><span class="c-sidebar-nav-icon"></span> Report types</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/maintainers"><span class="c-sidebar-nav-icon"></span> Staff</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/teams"><span class="c-sidebar-nav-icon"></span> Teams</a></li>
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/titles"><span class="c-sidebar-nav-icon"></span> Titles</a></li>
+          </ul>
+        </li>
+        @endif
+      </ul>
+      <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
+    </div>
+    <div class="c-wrapper c-fixed-components">
+      <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+        <button class="c-header-toggler c-class-toggler d-lg-none mfe-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show">
+          <svg class="c-icon c-icon-lg">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-menu')}}"></use>
+          </svg>
+        </button><a class="c-header-brand d-lg-none" href="#">
+         <img src="{{asset('dist/img/logo-dark.png')}}" />        </a>
+        <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
+          <svg class="c-icon c-icon-lg">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-menu')}}"></use>
+          </svg>
+        </button>
+        <ul class="c-header-nav ml-auto mr-4">
+          <!-- <li class="c-header-nav-item d-md-down-none mx-2"><a class="c-header-nav-link" href="#">
+              <svg class="c-icon">
+                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bell')}}"></use>
+              </svg></a></li>
+          <li class="c-header-nav-item d-md-down-none mx-2"><a class="c-header-nav-link" href="#">
+              <svg class="c-icon">
+                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-list-rich')}}"></use>
+              </svg></a></li> -->
 
-                @if(Auth::user()->hasRole('Maintainer Assignment'))
-                <li> <a href="/maintainer-assignment"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Staff Assignment</span></a> </li>
-                @endif
-              </ul>
-            </li>
-            @endif
-
-<!--             <li>
-              <a href="/communication" class="waves-effect"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>COMMUNICATION</a>
-            </li> -->
-            @if(Auth::user()->hasRole('Documentation'))
-            <li>
-              <a href="/documentation" class="waves-effect"><i class="fa fa-files-o fa-fw" aria-hidden="true"></i>Documentation</a>
-            </li>
-            @endif
-            @if(Auth::user()->hasRole('Campaign'))
-             <li>
-              <a href="/campaigns" class="waves-effect"><i class="fa fa-bullhorn fa-fw" aria-hidden="true"></i>Campaigns</a>
-            </li>
-            @endif
-            @if(Auth::user()->hasRole('Events'))
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i> <span class="hide-menu">Events<span class="fa arrow"></span></span></a>
-              <ul class="nav nav-second-level">
-                @if(Auth::user()->hasRole('Internal Events'))
-                <li> <a href="/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Events</span></a> </li>
-                @endif
-                @if(Auth::user()->hasRole('External Events'))
-                <li> <a href="/external-events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">External Events</span></a> </li>
-                @endif
-                @if(Auth::user()->hasRole('Event Guest Check In'))
-                <li> <a href="/event-check-in"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Guest Check In</span></a> </li>
-                @endif
-              </ul>
-            </li>
-            @endif
-            @if(Auth::user()->hasRole('Reports'))
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-bar-chart fa-fw"></i> <span class="hide-menu">Reports<span class="fa arrow"></span></span></a>
-              <ul class="nav nav-second-level">
-                <li> <a href="/reports/profiles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Profiles</span></a> </li>
-                <li> <a href="/reports/warp-attendees"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">WARP Attendees</span></a> </li>
-                <li> <a href="/reports/documentation"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Documentation</span></a> </li>
-                <li> <a href="/reports/periodic"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Periodic Reports</span></a> </li>
-                <li> <a href="/report/internal/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Internal Event Reports</span></a> </li>
-
-                <li> <a href="/report/external/events"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">External Event Reports</span></a> </li>
-              </ul>
-            </li>
-            @endif
-            @if(Auth::user()->hasRole('Access Management'))
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-lock fa-fw" aria-hidden="true"></i> <span class="hide-menu">Access<span class="fa arrow"></span></span></a>
-              <ul class="nav nav-second-level">
-                <li> <a href="/users"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Users</span></a> </li>
-                <li> <a href="/roles"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Roles</span></a> </li>
-              </ul>
-            </li>
-            @endif
-            @if(Auth::user()->hasRole('Setup'))
-            <li> <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span class="hide-menu">Setup<span class="fa arrow"></span></span></a>
-              <ul class="nav nav-second-level">
-                <li> <a href="/cities"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Cities</span></a> </li>
-                <li> <a href="/countries"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Countries</span></a> </li>
-                <li> <a href="/departments"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Departments</span></a> </li>
-                <li> <a href="/document-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Document Types</span></a> </li>
-                <li> <a href="/duties"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Duties</span></a> </li>
-                <li> <a href="/event-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Event Types</span></a> </li>
-                <li> <a href="/activity-types"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Activity Types</span></a> </li>
-                <li> <a href="/fruit-levels"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Levels</span></a> </li>
-                <li> <a href="/fruit-roles"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Roles</span></a> </li>
-                <li> <a href="/fruit-stages"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Fruit Stages</span></a> </li>
-                <li> <a href="/industries"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Industries</span></a> </li>
-                <li> <a href="/languages"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Languages</span></a> </li>
-                <li> <a href="/meeting-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Meeting Types</span></a> </li>
-                <li> <a href="/organizations"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Organisations</span></a> </li>
-                <li> <a href="/religions"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Religions</span></a> </li>
-                <li> <a href="/report-types"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Report Types</span></a> </li>
-                <li> <a href="/maintainers"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Staff</span></a> </li>
-                <li> <a href="/teams"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Teams</span></a> </li>
-                <li> <a href="/titles"><i data-icon="7" class="linea-icon linea-basic fa-fw"></i><span class="hide-menu">Titles</span></a> </li>
-              </ul>
-            </li>
-            @endif
-            <li>
-              <a class="dropdown-item" href="{{ route('logout') }}"
-              onclick="event.preventDefault();
-              document.getElementById('logout-form').submit();">
-              <i class="fa fa-sign-out fa-fw" aria-hidden="true"> </i> {{ __('Logout') }}
+          <li class="c-header-nav-item dropdown">
+            <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              <div class="c-avatar">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-smile ')}}"></use>
+                </svg>
+              </div>
             </a>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-              @csrf
-            </form>
+            <div class="dropdown-menu dropdown-menu-right pt-0">
+              <div class="dropdown-header bg-light py-2"><strong>Account</strong></div><a class="dropdown-item" href="#">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bell')}}"></use>
+                </svg> Updates<span class="badge badge-info ml-auto">42</span></a><a class="dropdown-item" href="#">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-envelope-open')}}"></use>
+                </svg> Messages<span class="badge badge-success ml-auto">42</span></a><a class="dropdown-item" href="#">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-task')}}"></use>
+                </svg> Tasks<span class="badge badge-danger ml-auto">42</span></a><a class="dropdown-item" href="#">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-comment-square')}}"></use>
+                </svg> Comments<span class="badge badge-warning ml-auto">42</span></a>
+              <div class="dropdown-header bg-light py-2"><strong>Settings</strong></div><a class="dropdown-item" href="#">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
+                </svg> Profile</a><a class="dropdown-item" href="#">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-settings')}}"></use>
+                </svg> Settings</a><a class="dropdown-item" href="#">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-credit-card')}}"></use>
+                </svg> Payments<span class="badge badge-secondary ml-auto">42</span></a><a class="dropdown-item" href="#">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-file')}}"></use>
+                </svg> Projects<span class="badge badge-primary ml-auto">42</span></a>
+              <div class="dropdown-divider"></div><a class="dropdown-item" href="#">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-lock-locked')}}"></use>
+                </svg> Lock Account</a><a class="dropdown-item" href="#">
+                <svg class="c-icon mr-2">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-account-logout')}}"></use>
+                </svg> Logout</a>
+            </div>
           </li>
         </ul>
+        @yield('breadcrumb')
+      </header>
+      <div class="c-body">
+        <main class="c-main">
+          <div class="container-fluid">
+            <div class="fade-in">
+              
+              @yield('content')
 
+            </div>
+          </div>
+        </main>
+        <footer class="c-footer">
+          <div> &copy; {{date('Y')}} PEACE<i>base</i>.</div>
+        </footer>
       </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End Left Sidebar -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Page Content -->
-    <!-- ============================================================== -->
-
-    <div id="page-wrapper">
-     @yield('content')
-     <!-- /.container-fluid -->
-     <footer class="footer text-center"> {{date('Y')}} &copy; PEACE<i>Base</i></footer>
-   </div>
-   <!-- ============================================================== -->
-   <!-- End Page Content -->
-   <!-- ============================================================== -->
- </div>
- <!-- /#wrapper -->
- <!-- jQuery -->
+    <!-- CoreUI and necessary plugins-->
+    <script src="{{asset('new/node_modules/@coreui/coreui/dist/js/coreui.bundle.min.js')}}"></script>
+    
+    <!-- jQuery -->
  <script src="{{asset('assets/plugins/jquery/dist/jquery.min.js')}}"></script>
  <!-- Bootstrap Core JavaScript -->
  <script src="{{asset('assets/bootstrap/dist/js/bootstrap.min.js')}}"></script>
@@ -318,7 +302,7 @@ ul.dropdown-menu {
 
  <!-- Custom Theme JavaScript -->
  <script src="{{asset('assets/js/custom.min.js')}}"></script>
- <script src="{{asset('assets/js/dashboard1.js')}}"></script>
+ <!-- <script src="{{asset('assets/js/dashboard1.js')}}"></script> -->
  <script src="{{asset('assets/plugins/toast-master/js/jquery.toast.js')}}"></script>
 
  <!-- Form Wizard -->
@@ -330,20 +314,20 @@ ul.dropdown-menu {
  <script src="{{asset('bower_components/typeahead/typeahead.bundle.js')}}"></script>
  <script src="{{asset('bower_components/morris.js/morris.js')}}"></script>
  <script src="{{asset('bower_components/raphael/raphael.js')}}"></script>
- <script src="http://malsup.github.com/jquery.form.js"></script>
+ <!-- <script src="http://malsup.github.com/jquery.form.js"></script> -->
  <!--  Data Tables -->
  <script src="{{asset('bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
  <script src="{{asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.js')}}"></script>
 
  <!-- start - This is for export functionality only -->
- <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+ <!-- <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
  <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
  <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
  <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script> -->
 
 
 
@@ -353,198 +337,17 @@ ul.dropdown-menu {
  <script src="{{asset('js/peaceapp.js')}}"></script>
  <script src="{{asset('js/charts.js')}}"></script>
 
- <script>
-    // Date Picker
-    $('body').on('focus',".mydatepicker", function(){
-      $(this).datepicker({
-        autoclose: true,
-        todayHighlight: true,
-        format: 'yyyy-mm-dd',
-      });
-    })
-
-    // Clock pickers
-    $('body').on('focus',".timepicker", function(){
-      $(this).clockpicker({
-        placement: 'bottom',
-        align: 'left',
-        autoclose: true,
-        'default': 'now'
-      });
-    });
-
-
-    jQuery(".select2").select2();
-    jQuery(".select2").on('select2:select', function(e){
-      var id = e.params.data.id;
-      var option = $(e.target).children('[value="'+id+'"]');
-      option.detach();
-      $(e.target).append(option).change();
-    });
-  </script>
-
-  <script type="text/javascript">
-    $(document).ready(function($) {
-        // delegate calls to data-toggle="lightbox"
-        $(document).delegate('*[data-toggle="lightbox"]:not([data-gallery="navigateTo"])', 'click', function(event) {
-          event.preventDefault();
-          return $(this).ekkoLightbox({
-            onShown: function() {
-              if (window.console) {
-                return console.log('Checking our the events huh?');
-              }
-            },
-            onNavigate: function(direction, itemIndex) {
-              if (window.console) {
-                return console.log('Navigating ' + direction + '. Current item: ' + itemIndex);
-              }
-            }
-          });
-        });
-        //Programatically call
-        $('#open-image').click(function(e) {
-          e.preventDefault();
-          $(this).ekkoLightbox();
-        });
-        $('#open-youtube').click(function(e) {
-          e.preventDefault();
-          $(this).ekkoLightbox();
-        });
-        // navigateTo
-        $(document).delegate('*[data-gallery="navigateTo"]', 'click', function(event) {
-          event.preventDefault();
-          var lb;
-          return $(this).ekkoLightbox({
-            onShown: function() {
-              lb = this;
-              $(lb.modal_content).on('click', '.modal-footer a', function(e) {
-                e.preventDefault();
-                lb.navigateTo(2);
-              });
-            }
-          });
-        });
-      });
-    </script>
-    <script type="text/javascript">
-      $(".tab-wizard").steps({
-        headerTag: "h6",
-        bodyTag: "section",
-        transitionEffect: "fade",
-        titleTemplate: '<span class="step">#index#</span> #title#',
-        labels: {
-          finish: "Submit"
-        },
-        onFinished: function (event, currentIndex) {
-          swal("Form Submitted!", "The event has been created, if you were not setting it up, you can still edit it");
-
-        }
-      });
-
-
-      var form = $(".validation-wizard").show();
-
-      $(".validation-wizard").steps({
-        headerTag: "h6",
-        bodyTag: "section",
-        transitionEffect: "fade",
-        titleTemplate: '<span class="step">#index#</span> #title#',
-        labels: {
-          finish: "Submit"
-        },
-        onStepChanging: function (event, currentIndex, newIndex) {
-          return currentIndex > newIndex || !(3 === newIndex && Number($("#age-2").val()) < 18) && (currentIndex < newIndex && (form.find(".body:eq(" + newIndex + ") label.error").remove(), form.find(".body:eq(" + newIndex + ") .error").removeClass("error")), form.validate().settings.ignore = ":disabled,:hidden", form.valid())
-        },
-        onFinishing: function (event, currentIndex) {
-
-          return form.validate().settings.ignore = ":disabled", form.valid()
-        },
-        onFinished: function (event, currentIndex) {
-          $("#events-form").submit();
-        }
-      }), $(".validation-wizard").validate({
-        ignore: "input[type=hidden]",
-        errorClass: "text-danger",
-        successClass: "text-success",
-        highlight: function (element, errorClass) {
-          $(element).removeClass(errorClass)
-        },
-        unhighlight: function (element, errorClass) {
-          $(element).removeClass(errorClass)
-        },
-        errorPlacement: function (error, element) {
-          error.insertAfter(element)
-        },
-        rules: {
-          email: {
-            email: !0
-          }
-        }
-      })
-    </script>
-    <script>
-
-
-      $(function() {
-        $('.summernote').summernote({
-            height: 350, // set editor height
-            minHeight: null, // set minimum height of editor
-            maxHeight: null, // set maximum height of editor
-            focus: false // set focus to editable area after initializing summernote
-          });
-        $('.inline-editor').summernote({
-          airMode: true
-        });
-      });
-      window.edit = function() {
-        $(".click2edit").summernote()
-      }, window.save = function() {
-        $(".click2edit").summernote('destroy');
-      }
-
-      $('#dataTable').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
-      });
-
-      $('#dataTable2').DataTable({
-        dom: 'Bfrtip'
-      });
-      $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary m-r-10');
-
-
-      $('#events-tabs a').click(function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        $(this).tab('show');
-      });
-      $('#profiles-tab a').click(function(e) {
-        $('html,body').stop().animate({
-              scrollTop: $( $(this).attr('href') ).offset().top - $('.x-navbar').height()
-            },700 ,'swing');
-
-        });
-
-
-    // store the currently selected tab in the hash value
-    $("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
-      var id = $(e.target).attr("href").substr(1);
-      window.location.hash = id;
-    });
-
-    // on load of the page: switch to the currently selected tab
-    var hash = window.location.hash;
-    $('#events-tabs a[href="' + hash + '"]').tab('show');
-
-  </script>
-
-  @stack('dataTableScript')
-  @stack('profiles')
-  @stack('contactsJS')
-  @stack('googleCharts')
-
-</body>
-
+    <!--[if IE]><!-->
+    <script src="{{asset('new/node_modules/@coreui/icons/js/svgxuse.min.js')}}"></script>
+    <!--<![endif]-->
+    <!-- Plugins and scripts required by this view-->
+    <script src="{{asset('new/node_modules/@coreui/chartjs/dist/js/coreui-chartjs.bundle.js')}}"></script>
+    <script src="{{asset('new/node_modules/@coreui/utils/dist/coreui-utils.js')}}"></script>
+    <script src="{{asset('assets/js/datatables.js')}}"></script>
+    <script src="{{asset('new/js/main.js')}}"></script>
+    @stack('dataTableScript')
+    @stack('profiles')
+    @stack('contactsJS')
+    @stack('googleCharts')
+  </body>
 </html>

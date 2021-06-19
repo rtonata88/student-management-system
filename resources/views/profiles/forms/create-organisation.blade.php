@@ -7,9 +7,8 @@
             </div>
             {!! Form::open(array('route'=>array('profiles.show', $profile->slug), 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"', 'method'=>'PATCH')) !!}
             <div class="modal-body organisation-modal-body">
-              <div class="table-responsive">
 
-                <table class="table">
+                <table class="table table-responsive-sm table-bordered table-striped table-sm">
                     <tbody>
                       <tr>
                           <td><strong>Organisation</strong></td>
@@ -42,12 +41,11 @@
 
                     </tbody>
                 </table>
-              </div>
             </div>
             {!! Form::close() !!}
             <div class="modal-footer">
               <a  href=""  data-dismiss="modal"><strong>Cancel</strong></a>
-                <button type="button" class="btn btn-info waves-effect save-btn" section="new-organisation" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-success waves-effect save-btn" section="new-organisation" data-dismiss="modal">Save</button>
             </div>
         </div>
         <!-- /.modal-content -->

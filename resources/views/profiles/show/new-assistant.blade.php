@@ -1,4 +1,4 @@
-<div class="table-responsive assistant-{{$assistant->id}}">
+<div class="assistant-{{$assistant->id}}">
   <div class="row">
     <div class="col-md-12">
       <div class="pull-right">
@@ -8,7 +8,7 @@
     </div>
   </div>
   <br>
-  <table class="table" style="background-color: #fcfcfc; border: 1px solid #dbd9d9">
+  <table class="table table-responsive-sm table-bordered table-striped table-sm" style="background-color: #fcfcfc; border: 1px solid #dbd9d9">
       <tbody>
         <tr>
             <td><strong>Name</strong></td>

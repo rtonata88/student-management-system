@@ -1,21 +1,22 @@
 @extends('layouts.hwpl')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Events</li>
+    <li class="breadcrumb-item"><a href="/external-events">External events </a></li>
+    <li class="breadcrumb-item active">Setup</li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row bg-title">
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title">EXTERNAL EVENTS / <small>Edit</small></h4> </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                 <li class="active">Event Setup</li>
-             </ol>
-         </div>
-         <!-- /.col-lg-12 -->
-     </div>
-     <div class="row">
-        <div class="col-md-12 col-lg-12 col-sm-12">
-           <div class="white-box">
-            <div class="card-body">
+
+<div class="card">
+    <div class="card-header">
+        <strong>External events</strong> 
+    </div>
+    <div class="card-body">
                 {!! Form::model($event, array('url' => '/external-events', 'method' => 'post', 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"')) !!}
                 <!-- Step 1 -->
                 <h4 class="page-title"><strong>BASIC INFO</strong></h4>
@@ -214,7 +215,5 @@
         </div>
     </div>
 
-</div>
-</div>
 </div>
 @endsection

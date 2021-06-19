@@ -45,8 +45,7 @@ class ProfilesController extends Controller
 		} else {
 			$profiles = Profile::where('team_id', $user->team_id)->with(['sector', 'language', 'country', 'city', 'organization'])->paginate(50);
 		}
-
-
+		
 		return view('profiles.index', compact('profiles'));
 	}
 	/**
@@ -548,6 +547,20 @@ class ProfilesController extends Controller
 					// code...
 					break;
 			}
+	}
+
+
+	public function ajaxGetProfileInfo(Request $request){
+
+		$results = Profile::select('profiles.id', 'fullname', 'lastname', 'teams.name as team', 'countries.name as country')
+					->join('teams', 'profiles.team_id', '=', 'teams.id')
+					->join('countries', 'profiles.country_id', '=', 'countries.id')
+					->where('fullname', 'like', "%".$request->term."%")
+					->orWhere('lastname', 'like', "%".$request->term."%")
+					->limit(10)
+					->get();
+		
+		return $results;
 	}
 
 }

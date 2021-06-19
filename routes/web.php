@@ -60,6 +60,7 @@ Route::resource('/warp-attendees', 'WarpSummitAttendeesController');
 Route::resource('/campaigns', 'CampaignsController');
 Route::get('/campaign-report/{id}', 'CampaignsController@report_index')->name('campaigns.report');
 Route::post('/campaign-report/{id}', 'CampaignsController@report')->name('campaigns.report.save');
+Route::get('/campaign-report-view/{id}', 'CampaignsController@viewCampaignReport')->name('campaigns.report.view');
 Route::get('/documentation-download/{id}', 'DocumentationsController@download')->name('documentation-download');
 Route::resource('/roles', 'RolesController');
 
@@ -77,6 +78,7 @@ Route::get('/profile/ajax/show/{slug}/{section}', 'ProfilesController@loadShowSe
 Route::get('/profile/ajax/entity/{slug}/{entity}', 'ProfilesController@loadAddNewEntityForm')->name('profiles.ajax.new-entity');
 Route::get('/profile/cancel/{section}/{slug}/', 'ProfilesController@cancelEdit');
 Route::get('/profile/add/{entity}/{slug}/', 'ProfilesController@addNewEntity');
+Route::post('/ajax/get-profile-info', 'ProfilesController@ajaxGetProfileInfo');
 
 //ACTIVITIES
 Route::get('/meetings/create/{profileSlug}', 'ActivitiesController@create');
@@ -95,10 +97,21 @@ Route::post('/media-coverage/create', 'MediaCoverageController@store');
 Route::post('/media-coverage/{id}', 'MediaCoverageController@update')->name('media-coverage.edit');
 
 //EVENTS
-Route::resource('/events', 'EventsController');
+Route::resource('/events', 'EventsController')->except('show');
 Route::get('/events/other-attendees/{slug}/{action}/{participant}', 'EventsController@manage_other_attendees');
 Route::post('/save-invite/{slug}', 'EventsController@saveInviteFromAjaxTable')->name('save-invite');
 Route::post('/update-invite/{slug}', 'EventsController@updateInviteFromAjaxTable')->name('update-invite');
+
+Route::get('/events/{slug}', 'EventsController@show')->name('events.show');
+Route::get('/events/details/{slug}', 'EventsController@show')->name('event-details');
+Route::get('/events/program/{slug}', 'EventsController@show')->name('event-program');
+Route::get('/events/guests/{slug}', 'EventsController@show')->name('event-guests');
+Route::get('/events/staff/{slug}', 'EventsController@show')->name('event-staff');
+Route::get('/events/co-hosts/{slug}', 'EventsController@show')->name('event-co-hosts');
+Route::get('/events/media-coverage/{slug}', 'EventsController@show')->name('event-media-coverage');
+Route::get('/events/documents/{slug}', 'EventsController@show')->name('event-documents');
+Route::get('/events/other-details/{slug}', 'EventsController@show')->name('event-other-details');
+Route::get('/events/gallery/{slug}', 'EventsController@show')->name('event-gallery');
 
 //EVENTS ACTIVITIES REPORT - MAIN ATENDEES
 Route::get('/events/activity-report/{type}/{person}/{event_slug}', 'ActivitiesController@create_activity_report_from_events')->name('main_attendees.activityReport');

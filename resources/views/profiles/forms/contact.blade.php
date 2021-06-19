@@ -1,8 +1,7 @@
 <div class="row white-box edit-contacts-section">
   {!! Form::model($profile, array('route'=>array('profiles.show', $profile->slug), 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"', 'method'=>'PATCH', 'id'=>'profile-edit-form')) !!}
-  <h4 class="page-title"><strong>PERSONAL CONTACT INFORMATION</strong></h4>
-  <div class="table-responsive">
-    <table class="table">
+  <strong>Personal contact information</strong>
+    <table class="table table-responsive-sm table-bordered table-striped table-sm">
         <tbody>
             <tr>
                 <td><strong>Mobile</strong></td>
@@ -24,11 +23,10 @@
         </tbody>
     </table>
     <div class="pull-right">
-      <button type="submit" class="btn btn-default save-btn" section="contact"><span class="fa fa-check-circle"></span> Save </button>
+      <button type="submit" class="btn btn-success save-btn" section="contact"><span class="fa fa-check-circle"></span> Save </button>
        <a  href="" class="cancel-btn" section="contact"><strong>Cancel</strong></a>
     </div>
-</div>
-<h4 class="page-title"><strong>ORGANISATION</strong></h4>
+<strong>Organisation</strong>
 @forelse($organizations as $index=>$profile_organization)
 <div class="table-responsive">
 <h6 class="page-title"><strong>{{$profile_organization->organization->name}}</strong></h6>
@@ -66,7 +64,7 @@
 Not affiliated to any organisation
 @endforelse
 
-<h4 class="page-title"><strong>ASSISTANTS</strong></h4>
+<strong>ASSISTANTS</strong>
 @forelse($assistants as $index=>$assistant)
 <div class="table-responsive">
 <h6 class="page-title"><strong>{{$assistant->assistant_name}}</strong></h6>

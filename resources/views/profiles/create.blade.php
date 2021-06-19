@@ -1,23 +1,28 @@
 @extends('layouts.hwpl')
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+    <li class="breadcrumb-item">Management</li>
+    <li class="breadcrumb-item"><a href="/profiles">Profiles </a></li>
+    <li class="breadcrumb-item active">Add New</li>
+    <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 
 @section('content')
-<div class="container-fluid">
-  <div class="row bg-title">
-    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-      <h4 class="page-title">CONTACT PROFILES</h4> </div>
-      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-        <ol class="breadcrumb">
-          <li><a href="/profiles">Profiles</a></li>
-          <li class="active">Add New</li>
-        </ol>
-      </div>
-      <!-- /.col-lg-12 -->
+<div class="card">
+    <div class="card-header">
+       <h4>Profiles</h4>
+       <p>Please complete all the required fields</p>
+        <a href="/profiles">
+        <svg class="c-icon">
+          <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-circle-left')}}"></use>
+        </svg>
+        Back</a>
     </div>
-    <div class="row">
-      <div class="white-box">
-        <a href="/profiles"> <span class="fa fa-arrow-circle-left"></span> Back</a>
-        <h3 class="box-title">PROFILE [NEW]</h3>
-        <hr>
+    <div class="card-body">
         {!! Form::open(array('url' => '/profiles', 'method' => 'post', 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"')) !!}
        <fieldset>
         <div class="row">
@@ -48,7 +53,7 @@
     <div class="col-md-4">
        <div class="form-group">
         {{Form::label('dob', 'Date of Birth')}}
-        {{Form::text('dob', null, ['class' => 'form-control mydatepicker'])}}
+        {{Form::date('dob', null, ['class' => 'form-control mydatepicker'])}}
       </div>
     </div>
   </div>
@@ -212,7 +217,7 @@
 
 <br>
 <fieldset>
-  <h4 class="box-title m-t-10">BASIC INFORMATION</h4>
+  <h6 class="box-title m-t-10">BASIC INFORMATION</h6>
   <hr>
   <div class="row">
     <div class="col-md-4">
@@ -264,7 +269,7 @@
 </fieldset>
 
 <fieldset>
-  <h4 class="box-title m-t-10">RELATIONSHIP</h4>
+  <h6 class="box-title m-t-10">RELATIONSHIP</h6>
   <hr>
   <div class="row">
     <div class="col-md-4">
@@ -328,7 +333,7 @@
    <div class="col-md-4">
     <div class="form-group">
       {{Form::label('date_networked', 'Date Networked')}}<span class="text-danger">*</span>
-      {{Form::text('date_networked', null, ['class' => 'form-control mydatepicker'])}}
+      {{Form::date('date_networked', null, ['class' => 'form-control mydatepicker'])}}
     </div>
   </div>
 
@@ -349,6 +354,4 @@
 {!! Form::close() !!}
 </div>
 </div>
-</div>
-
 @endsection

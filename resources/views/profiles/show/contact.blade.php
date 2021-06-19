@@ -3,7 +3,7 @@
 
                     <div class="row">
                     <div class="col-md-8">
-                        <h4 class="page-title"><strong>PERSONAL CONTACT INFORMATION</strong></h4>
+                        <strong>PERSONAL CONTACT INFORMATION</strong>
                     </div>
                     <div class="col-md-4">
                       <div class="pull-right">
@@ -29,9 +29,8 @@
                           </tbody>
                       </table>
                   </div>
-                  <h4 class="page-title"><strong>ORGANISATION</strong></h4>
+                  <strong>ORGANISATION</strong>
                   @forelse($organizations as $index=>$profile_organization)
-                  <div class="table-responsive">
                     <div class="row">
                       <div class="col-md-8">
                         <h6 class="page-title"><strong>{{$profile_organization->organization->name}}</strong></h6>
@@ -45,7 +44,7 @@
                       </div>
                     </div>
                     <br>
-                    <table class="table" style="background-color: #fcfcfc; border: 1px solid #dbd9d9">
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm" style="background-color: #fcfcfc; border: 1px solid #dbd9d9">
                         <tbody>
                             <tr>
                                 <td><strong>Position</strong></td>
@@ -73,7 +72,6 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
                 @empty
                   Not affiliated to any organisation
                 @endforelse
@@ -85,9 +83,9 @@
                 </div>
               </h5>
               <hr>
-                <h4 class="page-title"><strong>ASSISTANTS</strong></h4>
+                <strong>ASSISTANTS</strong>
                 @forelse($assistants as $index=>$assistant)
-                <div class="table-responsive assistant-{{$assistant->id}}">
+                <div class="assistant-{{$assistant->id}}">
                   <div class="row">
                     <div class="col-md-12">
                       <div class="pull-right">
@@ -96,7 +94,7 @@
                       </div>
                     </div>
                   </div>
-                  <table class="table" style="background-color: #fcfcfc; border: 1px solid #dbd9d9">
+                  <table class="table table-responsive-sm table-bordered table-striped table-sm" style="background-color: #fcfcfc; border: 1px solid #dbd9d9">
                       <tbody>
                         <tr>
                             <td><strong>Name</strong></td>

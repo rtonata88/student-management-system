@@ -116,4 +116,9 @@ class CampaignsController extends Controller
 
         return redirect('/campaigns');
     }
+
+    public function viewCampaignReport($campaign_id){
+        $campaign_report = CampaignReport::with('reportedBy', 'campaign', 'region')->where('campaign_id', $campaign_id)->get();
+        return view('campaigns.report.show', compact('campaign_report'));
+    }
 }

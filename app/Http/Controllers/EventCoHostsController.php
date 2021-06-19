@@ -64,7 +64,7 @@ class EventCoHostsController extends Controller
 							 	]);
 		}
 
-		return redirect('/events/'.$slug);
+		return redirect('/events/co-hosts/'.$slug);
 	}
 	public function update(Request $requests, $id){
 		$co_host = EventCoHost::find($id);
@@ -74,8 +74,6 @@ class EventCoHostsController extends Controller
 		    $co_host->logo = $logo;
 		}
 
-
-		
 		$co_host->name = $requests->name;
 		$co_host->event_id = $co_host->event->id;
 		$co_host->address_line1 = $requests->address_line1;
@@ -95,6 +93,6 @@ class EventCoHostsController extends Controller
 							 	]);
 		}
 
-		return redirect('/events/'.$co_host->event->slug);
+		return redirect('/events/co-hosts/'.$co_host->event->slug);
 	}
 }

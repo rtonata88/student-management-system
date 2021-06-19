@@ -1,7 +1,8 @@
 $(document).ready(function() {
   var $loading = $('.spinner').hide();
 
-  $('body').on('click', '.edit-btn', function(){
+  $('body').on('click', '.edit-btn', function(e){
+    e.preventDefault();
     $loading.show();
     setTimeout( "jQuery('.spinner').hide();", 800 );
       var section = $(this).attr('section');

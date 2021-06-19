@@ -5,7 +5,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.6.4",
+        "php": ">=5.6.4|^8.0",
         "consoletvs/charts": "6.*",
         "cviebrock/eloquent-sluggable": "^4.2",
         "facade/ignition": "^1.8",

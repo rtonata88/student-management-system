@@ -27,6 +27,7 @@ use EloquentBuilder;
 use App\Exports\PeriodicReportsExport;
 use App\Exports\ProfilesExport;
 use App\Exports\DocumentationsExport;
+use App\Exports\WarpSummitAttendeesExport;
 use Freshbitsweb\Laratables\Laratables;
 use App\WarpSummitAttendee;
 use Session;
@@ -156,6 +157,8 @@ class ReportsController extends Controller {
             $attendees = '';
             Session::flash('message', 'The Date To cannot be earlier than Date From ');
         }
+
+        session()->put('warp_filter', $request->except(['_token']));
         return view('reports.warp.index', compact('attendees'));
     }
 
@@ -219,7 +222,11 @@ class ReportsController extends Controller {
     }
 
     public function exportDocumentationsToExcel(Request $requests){
-        return Excel::download(new DocumentationsExport, 'profiles.xlsx');   
+        return Excel::download(new DocumentationsExport, 'documentation.xlsx');   
+    }
+
+     public function exportWarpSummitAttendees(Request $requests){
+        return Excel::download(new WarpSummitAttendeesExport, 'warp.xlsx');   
     }
 
 

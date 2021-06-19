@@ -1,4 +1,4 @@
-<div class="row white-box relationship-section">
+<div class=" white-box relationship-section">
   <div class="row">
     <div class="col-md-12">
       <div class="pull-right">
@@ -7,8 +7,7 @@
     </div>
   </div>
 
-  <div class="table-responsive">
-    <table class="table">
+    <table class="table table-responsive-sm table-bordered table-striped table-sm">
         <tbody>
             <tr>
                 <td><strong>Sector</strong></td>
@@ -48,5 +47,4 @@
             </tr>
         </tbody>
     </table>
-</div>
 </div>

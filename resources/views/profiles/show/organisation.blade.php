@@ -3,7 +3,7 @@
 
                     <div class="row">
                     <div class="col-md-8">
-                        <h4 class="page-title"><strong>PERSONAL CONTACT INFORMATION</strong></h4>
+                        <strong>PERSONAL CONTACT INFORMATION</strong>
                     </div>
                     <div class="col-md-4">
                       <div class="pull-right">
@@ -13,8 +13,7 @@
                       </div>
                     </div>
                   </div>
-                    <div class="table-responsive">
-                      <table class="table">
+                      <table class="table table-responsive-sm table-bordered table-striped table-sm">
                           <tbody>
                               <tr>
                                   <td><strong>Mobile</strong></td>
@@ -30,8 +29,7 @@
 
                           </tbody>
                       </table>
-                  </div>
-              <h4 class="page-title"><strong>ORGANISATION</strong></h4>
+              <strong>ORGANISATION</strong>
                   @forelse($organizations as $index=>$profile_organization)
                   <div class="table-responsive organisation-{{$profile_organization->id}}">
                     <div class="row">
@@ -87,7 +85,7 @@
                 </div>
               </h5>
               <hr>
-                <h4 class="page-title"><strong>ASSISTANTS</strong></h4>
+                <strong>ASSISTANTS</strong>
                 @forelse($assistants as $index=>$assistant)
                 <div class="table-responsive">
                   <h6 class="page-title"><strong>{{$assistant->assistant_name}}</strong></h6>
