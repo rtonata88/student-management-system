@@ -220,7 +220,7 @@
     @if($team_report->where('Activity', 'Meeting')->count() > 0)
         <div class="card">
             <div class="card-header">
-                <strong>Email Reports</strong> 
+                <strong>Meeting Reports</strong> 
             </div>
             <div class="card-body">
                 @foreach($team_report->where('Activity', 'Meeting') as $activity)
