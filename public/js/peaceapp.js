@@ -10,6 +10,7 @@ $(function() {
 	});
 
 
+
 });
 window.edit = function() {
 $(".click2edit").summernote()
@@ -17,6 +18,22 @@ $(".click2edit").summernote()
 $(".click2edit").summernote('destroy');
 }
 $(document).ready(function($) {
+	$('body').on('DOMNodeInserted', 'select', function () {
+		$(".select2").select2({
+			theme: "bootstrap-5",
+			containerCssClass: "select2--small", // For Select2 v4.0
+			selectionCssClass: "select2--small", // For Select2 v4.1
+			dropdownCssClass: "select2--small",
+		});
+	});
+
+	$(".select2").select2({
+			theme: "bootstrap-5",
+			containerCssClass: "select2--small", // For Select2 v4.0
+			selectionCssClass: "select2--small", // For Select2 v4.1
+			dropdownCssClass: "select2--small",
+		});
+
 	$('.data-table').DataTable();
 
 	//Discussion Points
@@ -186,6 +203,46 @@ $(document).ready(function($) {
 				tr[i].style.display = "none";
 			}
 			}
+		}
+	})
+
+	$('#add-organisation-btn').on('click', function (e){
+		e.preventDefault()
+		$.ajax({
+           type:'GET',
+           url:'/add-profile-organisation',
+           data:{ _token: $("[name=_token]").val()},
+           success:function(response){
+			$('#organisations-section').append(response.html);	
+           }
+        });
+	})
+
+	$('#add-assistant-btn').on('click', function (e){
+		e.preventDefault()
+		$.ajax({
+           type:'GET',
+           url:'/add-profile-assistant',
+           data:{ _token: $("[name=_token]").val()},
+           success:function(response){
+			$('#assistant-section').append(response.html);	
+           }
+        });
+	})
+
+	$('body').on('click', '.remove-organisation-btn', function(e){
+		e.preventDefault();
+		//console.log('here')
+		if(confirm('Are you sure you want to remove this organisation?')){
+			$(this).closest('table').remove();
+		}
+	})
+
+	$('body').on('click', '.remove-assistant-btn', function(e){
+		e.preventDefault();
+		//console.log('here')
+		if(confirm('Are you sure you want to remove this assistant?')){
+			$(this).closest('table').remove();
 		}
 	})
 });

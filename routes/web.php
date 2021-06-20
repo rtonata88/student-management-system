@@ -79,6 +79,8 @@ Route::get('/profile/ajax/entity/{slug}/{entity}', 'ProfilesController@loadAddNe
 Route::get('/profile/cancel/{section}/{slug}/', 'ProfilesController@cancelEdit');
 Route::get('/profile/add/{entity}/{slug}/', 'ProfilesController@addNewEntity');
 Route::post('/ajax/get-profile-info', 'ProfilesController@ajaxGetProfileInfo');
+Route::get('/add-profile-organisation', 'ProfilesController@addOrganisation');
+Route::get('/add-profile-assistant', 'ProfilesController@addAssistant');
 
 //ACTIVITIES
 Route::get('/meetings/create/{profileSlug}', 'ActivitiesController@create');

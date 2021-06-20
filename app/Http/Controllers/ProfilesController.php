@@ -563,4 +563,16 @@ class ProfilesController extends Controller
 		return $results;
 	}
 
+
+	public function addOrganisation(){
+		$organisations = Organization::orderBy('name')->get()->pluck('name', 'id');
+		$html = View::make('profiles.organisation.form', compact('organisations'))->render();
+		return Response::json(['html' => $html]);
+	}
+
+	public function addAssistant(){
+		$html = View::make('profiles.assistant.form')->render();
+		return Response::json(['html' => $html]);
+	}
+
 }

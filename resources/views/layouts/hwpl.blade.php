@@ -28,6 +28,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{asset('new/assets/favicon/favicon-32x32.png')}}">
     <link rel="icon" type="image/png" sizes="96x96" href="{{asset('new/assets/favicon/favicon-96x96.png')}}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('new/assets/favicon/favicon-16x16.png')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.1.1/dist/select2-bootstrap-5-theme.min.css" />
+
     <link rel="manifest" href="{{asset('new/assets/favicon/manifest.json')}}">
     <meta name="msapplication-TileColor" content="#ffffff')}}">
     <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png')}}">
@@ -308,12 +311,14 @@
 
 
  <!-- end - This is for export functionality only -->
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
  <script src="{{asset('js/peaceapp.js')}}"></script>
  <script src="{{asset('js/charts.js')}}"></script>
 
     <!--[if IE]><!-->
     <script src="{{asset('new/node_modules/@coreui/icons/js/svgxuse.min.js')}}"></script>
+    
+
     <!--<![endif]-->
     <!-- Plugins and scripts required by this view-->
     <script src="{{asset('new/node_modules/@coreui/chartjs/dist/js/coreui-chartjs.bundle.js')}}"></script>
