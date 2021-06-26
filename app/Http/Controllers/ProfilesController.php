@@ -64,9 +64,9 @@ class ProfilesController extends Controller
 	{
 		$user = Auth::user();
 		if($user->hasRole('department leader')){
-			$profiles = Profile::with(['sector', 'language', 'country', 'city', 'organization']);
+			$profiles = Profile::with(['sector', 'language', 'country', 'city']);
 		} else {
-			$profiles = Profile::where('team_id', $user->team_id)->with(['sector', 'language', 'country', 'city', 'organization']);
+			$profiles = Profile::where('team_id', $user->team_id)->with(['sector', 'language', 'country', 'city']);
 		}
 
         $profiles = EloquentBuilder::to($profiles, $request->except(['_token']));
