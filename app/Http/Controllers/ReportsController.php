@@ -22,6 +22,7 @@ use App\FruitRole;
 use App\FruitLevel;
 use App\FruitStage;
 use App\DocumentationType;
+use App\TeamReport;
 use Excel;
 use EloquentBuilder;
 use App\Exports\PeriodicReportsExport;
@@ -31,6 +32,7 @@ use App\Exports\WarpSummitAttendeesExport;
 use Freshbitsweb\Laratables\Laratables;
 use App\WarpSummitAttendee;
 use Session;
+use Auth;
 
 class ReportsController extends Controller {
 
@@ -44,82 +46,45 @@ class ReportsController extends Controller {
     }
 
     public function periodic_index() {
-        $activity_report = ActivityReport::all();
-        $media_coverage = MediaCoverageReport::all();
-        $event_reports = EventReport::all();
+        $user = Auth::user();
+        $date_from = date('Y-m-01');
+        $date_to = date('Y-m-d');
 
+		if($user->hasRole('department leader')){
+			$team_report_summary = TeamReport::selectRaw('team_name, activity_type_name, count(activity_type_name) as count')
+                                    ->whereBetween('when', [$date_from, $date_to])
+                                    ->groupBy('team_name', 'activity_type_name')
+                                    ->orderBy('team_name')
+                                    ->get();
 
-        foreach ($media_coverage as $key => $coverage) {
-            $activity_report->push($coverage);
-        }
+            $team_report_detail = TeamReport::whereBetween('when', [$date_from, $date_to])
+                                    ->orderBy('when', 'desc')
+                                    ->orderBy('time', 'asc')
+                                    ->get();
 
-        foreach ($event_reports as $key => $event) {
-            $activity_report->push($event);
-        }
+            
+            $sectors = Sector::pluck('name', 'id');
+            $teams = Team::pluck('name', 'id');
+		} else {
+			$team_report_summary = TeamReport::selectRaw('team_name, activity_type_name, count(activity_type_name) as count')
+                                    ->where('team_id', $user->team_id)
+                                    ->with(['sector', 'team', 'profile'])
+                                    ->whereBetween('when', [$date_from, $date_to])
+                                    ->groupBy('team_name', 'activity_type_name')
+                                    ->orderBy('when', 'desc')
+                                    ->orderBy('time', 'asc')
+                                    ->get();
+            
+            $team_report_detail = TeamReport::where('team_id', $user->team_id)
+                                    ->with(['sector', 'team', 'profile'])
+                                    ->whereBetween('when', [$date_from, $date_to])
+                                    ->orderBy('when')
+                                    ->get();
+            $sectors = Sector::where('id', $user->sector_id)->pluck('name', 'id');
+            $teams = Team::where('id', $user->team_id)->pluck('name', 'id');
+		}
 
-        //Get Unique Activities contained in the report and make them chart legend
-        $legend = array('Activities');
-        $activities = array();
-        $data = array();
-        foreach ($activity_report as $key => $report) {
-            array_push($activities, $report->Activity);
-        }
-
-        $activities = array_values(array_unique($activities));
-
-        $legend = array_merge($legend, $activities);
-
-        array_push($data, $legend);
-
-        $report = array('HWPL');
-        $sector = $activity_report->where('Sector', 'HWPL');
-        foreach ($legend as $key => $value) {
-            if ($key > 0) {
-                $activity = $sector->where('Activity', $value)->first();
-                if (count($activity) == 0) {
-                    array_push($report, 0);
-                } else {
-                    array_push($report, $activity->Occurence);
-                }
-            }
-        }
-
-
-        array_push($data, $report);
-
-        $report = array('IPYG');
-        $sector = $activity_report->where('Sector', 'IPYG');
-        foreach ($legend as $key => $value) {
-            if ($key > 0) {
-                $activity = $sector->where('Activity', $value)->first();
-                if (count($activity) == 0) {
-                    array_push($report, 0);
-                } else {
-                    array_push($report, $activity->Occurence);
-                }
-            }
-        }
-
-        array_push($data, $report);
-
-        $report = array('IWPG');
-        $sector = $activity_report->where('Sector', 'IWPG');
-        foreach ($legend as $key => $value) {
-            if ($key > 0) {
-                $activity = $sector->where('Activity', $value)->first();
-                if (count($activity) == 0) {
-                    array_push($report, 0);
-                } else {
-                    array_push($report, $activity->Occurence);
-                }
-            }
-        }
-        array_push($data, $report);
-        $data1 = collect($data);
-
-        $data = json_encode($data);
-
-        return view('reports.periodic.index', compact('data', 'data1'));
+        return view('reports.periodic.index', compact('team_report_summary', 'team_report_detail', 'sectors', 'teams', 'date_from', 'date_to'));
     }
 
     /**
@@ -242,23 +207,67 @@ class ReportsController extends Controller {
         return view('reports.periodic.sector', compact('sector', 'teams', 'team_report', 'start_date', 'end_date', 'media_coverage_report', 'events'));
     }
 
-    public function report_filter(Request $requests, $sector) {
+    public function periodic_report_filter(Request $requests) {
+        $user = Auth::user();
 
+        $requests->session()->put('periodic_sector_id', $requests->sector);
+        $requests->session()->put('periodic_team_id', $requests->team);
+        $requests->session()->put('periodic_date_from', $requests->date_from);
+        $requests->session()->put('periodic_date_to', $requests->date_to);
 
         $sector = Sector::where('name', $sector)->first();
 
-        $teams = Team::where('sector_id', $sector->id)->pluck('name', 'id');
-        $team_report = ActivityTeamReport::report($sector->id, $requests->team_id, $requests->start_date, $requests->end_date);
-        $media_coverage_report = ActivityTeamReport::media_coverage($sector->id, $requests->team_id, $requests->start_date, $requests->end_date);
-        $events = ActivityTeamReport::events($sector->id, $requests->team_id, $requests->start_date, $requests->end_date);
+		if($user->hasRole('department leader')){
+			$team_report_summary = TeamReport::selectRaw('team_name, activity_type_name, count(activity_type_name) as count');
+            
+            if(isset($requests->date_from)){
+                $team_report_summary->whereBetween('when', [$requests->date_from, $requests->date_to]);
+            }
 
-        
-        $start_date = $requests->start_date;
-        $end_date = $requests->end_date;
+            if(isset($requests->team)){
+                $team_report_summary->where('team_id', $requests->team);
+            }
+            if(isset($requests->sector)){
+                $team_report_summary->where('team_id', $requests->sector);
+            }
+                                    
+            $team_report_summary->groupBy('team_name', 'activity_type_name')
+                                ->orderBy('team_name')
+                                ->get();
 
-        $requests->session()->put('team_id', $requests->team_id);
-        $requests->session()->put('start_date', $requests->start_date);
-        $requests->session()->put('end_date', $requests->end_date);
+
+            $team_report_detail = TeamReport::whereBetween('when', [$date_from, $date_to])
+                                    ->orderBy('when', 'desc')
+                                    ->orderBy('time', 'asc')
+                                    ->get();
+
+            
+                                    
+            $sectors = Sector::pluck('name', 'id');
+            $teams = Team::pluck('name', 'id');
+		} else {
+			$team_report_summary = TeamReport::selectRaw('team_name, activity_type_name, count(activity_type_name) as count')
+                                    ->where('team_id', $user->team_id)
+                                    ->with(['sector', 'team', 'profile'])
+                                    ->whereBetween('when', [$date_from, $date_to])
+                                    ->groupBy('team_name', 'activity_type_name')
+                                    ->orderBy('when', 'desc')
+                                    ->orderBy('time', 'asc')
+                                    ->get();
+            
+            $team_report_detail = TeamReport::where('team_id', $user->team_id)
+                                    ->with(['sector', 'team', 'profile'])
+                                    ->whereBetween('when', [$date_from, $date_to])
+                                    ->orderBy('when')
+                                    ->get();
+
+            
+            $sectors = Sector::where('id', $user->sector_id)->pluck('name', 'id');
+            $teams = Team::where('id', $user->team_id)->pluck('name', 'id');
+		}
+
+        $team_report_summary = EloquentBuilder::to($team_report_summary, $request->except(['_token']))->get();
+        $team_report_detail = EloquentBuilder::to($team_report_detail, $request->except(['_token']))->get();
 
         return view('reports.periodic.sector', compact('sector', 'teams', 'team_report', 'start_date', 'end_date', 'media_coverage_report', 'events'));
     }

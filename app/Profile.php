@@ -55,10 +55,6 @@ class Profile extends Model implements Auditable
     	return $this->belongsTo('App\City');
     }
 
-    public function organization(){
-    	return $this->belongsTo('App\Organization');
-    }
-
     public function gender(){
     	return $this->belongsTo('App\Gender');
     }
@@ -82,6 +78,11 @@ class Profile extends Model implements Auditable
     public function documents(){
         return $this->hasMany('App\ProfileDocument');
     }
+
+    public function media_coverage(){
+        return $this->hasMany('App\MediaCoverage');
+    }
+
 
     public function warp_summit(){
         return $this->hasMany('App\WarpSummitAttendee');
@@ -313,7 +314,7 @@ class Profile extends Model implements Auditable
     }
 
     public function organization_profile(){
-        return $this->hasMany('App\OrganizationProfile', 'profile_id');
+        return $this->hasMany('App\OrganizationProfile');
     }
 
     public function profile_assistant(){

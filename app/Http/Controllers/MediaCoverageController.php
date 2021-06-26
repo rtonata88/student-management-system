@@ -31,25 +31,23 @@ class MediaCoverageController extends Controller
 
 	public function create($profileSlug)
 	{
-		$countries = Country::pluck('name', 'id');
 		$cities = City::pluck('name', 'id');
 		$events = Event::pluck('name', 'id');	
 
 		$profile = Profile::whereSlug($profileSlug)->first();
 
-		return view('media-coverage.create', compact('countries', 'cities', 'events', 'profile'));
+		return view('media-coverage.create', compact('cities', 'events', 'profile'));
 	}
 
 	public function edit($id)
 	{
 		$media_coverage = MediaCoverage::find($id);
-		$countries = Country::pluck('name', 'id');
 		$cities = City::pluck('name', 'id');
 		$events = Event::pluck('name', 'id');	
 
 		$profile = Profile::find($media_coverage->profile_id)->first();
 
-		return view('media-coverage.edit', compact('countries', 'cities', 'events', 'profile', 'media_coverage'));
+		return view('media-coverage.edit', compact('cities', 'events', 'profile', 'media_coverage'));
 	}
 
 	public function store(Request $requests){
@@ -59,12 +57,13 @@ class MediaCoverageController extends Controller
 		$coverage->profile_id = $requests->profile_id;
 		$coverage->when = $requests->when;
 		$coverage->event_id = $requests->event_id;
-		$coverage->country_id = $requests->country_id;
+		$coverage->country_id = City::find($requests->city_id)->country_id;
 		$coverage->city_id = $requests->city_id;
 		$coverage->title = $requests->title;
 		$coverage->platform = $requests->platform;
 		$coverage->short_summary = $requests->short_summary;
 		$coverage->url = $requests->url;
+		$coverage->created_by = Auth::user()->id;
 		$coverage->location = $requests->location;
 		$coverage->save();
 
@@ -88,7 +87,7 @@ class MediaCoverageController extends Controller
 		
 		Session::flash('message', 'Media Coverage successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click <strong><a href="/profiles/'.$profile->slug.'" >go to profile</a></strong>');
 
-		return redirect('/media-coverage/'.$coverage->id.'/edit');
+		return redirect('/profiles/show/'.$profile->slug);
 	}
 
 	public function update(Request $requests, $id){
@@ -98,7 +97,7 @@ class MediaCoverageController extends Controller
 		$coverage->profile_id = $requests->profile_id;
 		$coverage->when = $requests->when;
 		$coverage->event_id = $requests->event_id;
-		$coverage->country_id = $requests->country_id;
+		$coverage->country_id = City::find($requests->city_id)->country_id;
 		$coverage->city_id = $requests->city_id;
 		$coverage->title = $requests->title;
 		$coverage->platform = $requests->platform;
@@ -127,6 +126,11 @@ class MediaCoverageController extends Controller
 		
 		Session::flash('message', 'Media Coverage successfully recorded. If you would like to make changes, please edit and save again. If you are happy, click <strong><a href="/profiles/'.$profile->slug.'" >go to profile</a></strong>');
 
-		return redirect('/media-coverage/'.$coverage->id.'/edit');
+		return redirect('/profiles/show/'.$profile->slug);
+	}
+
+	public function deletePhoto($id){
+		MediaCoveragePhoto::destroy($id);
+		return redirect()->back();
 	}
 }

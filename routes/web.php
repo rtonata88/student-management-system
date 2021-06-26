@@ -69,6 +69,11 @@ Route::get('/users/{id}/disable-or-enable', 'UsersController@disableEnableUser')
 
 //PROFILES
 Route::resource('/profiles', 'ProfilesController');
+//Route::get('/profiles/show/{slug}', 'ProfilesController@show')->name('profiles.show');
+//Route::get('/profiles', 'ProfilesController@index')->name('profiles.index');
+//Route::get('/profiles/{slug}/edit', 'ProfilesController@edit')->name('profiles.edit');
+//Route::post('/profiles/{slug}/edit', 'ProfilesController@update')->name('profiles.update');
+//Route::get('/profiles/create', 'ProfilesController@create')->name('profiles.create');
 Route::get('/tbl-profiles', 'ProfilesController@getSimpleDatatablesData')->name('tbl-profiles');
 Route::post('/profiles/documents', 'ProfilesController@upload_document');
 Route::get('/profile/documents/{id}/download', 'ProfilesController@download_document');
@@ -81,6 +86,10 @@ Route::get('/profile/add/{entity}/{slug}/', 'ProfilesController@addNewEntity');
 Route::post('/ajax/get-profile-info', 'ProfilesController@ajaxGetProfileInfo');
 Route::get('/add-profile-organisation', 'ProfilesController@addOrganisation');
 Route::get('/add-profile-assistant', 'ProfilesController@addAssistant');
+Route::post('/profiles', 'ProfilesController@store')->name('profiles.store');
+Route::post('/profiles/filter', 'ProfilesController@filter')->name('filter-profiles');
+Route::post('/delete-profile-organisation', 'ProfilesController@deleteOrganisation');
+Route::post('/delete-profile-assistant', 'ProfilesController@deleteAssistant');
 
 //ACTIVITIES
 Route::get('/meetings/create/{profileSlug}', 'ActivitiesController@create');
@@ -91,6 +100,7 @@ Route::post('/activities', 'ActivitiesController@store');
 Route::get('/activities/{activity_type}/{id}/{profile_slug}/edit', 'ActivitiesController@edit');
 Route::post('/activities/{activity_id}/{profile_slug}/edit', 'ActivitiesController@update')->name('activities.edit');
 Route::get('/delete/activity/photo/{id}', 'ActivitiesController@deletePhoto')->name('delete.activity.photo');
+Route::get('/delete/media/photo/{id}', 'MediaCoverageController@deletePhoto')->name('delete.media.photo');
 
 //MEDIA COVARAGE
 Route::get('/media-coverage/{profileSlug}', 'MediaCoverageController@index');
@@ -182,7 +192,7 @@ Route::get('reports/periodic', 'ReportsController@periodic_index');
 Route::get('reports/profiles', 'ReportsController@profiles');
 Route::get('reports/documentation', 'ReportsController@documentation');
 Route::get('reports/sector/{sector}', 'ReportsController@sector_report');
-Route::post('/reports/periodic/filters/{sector}', 'ReportsController@report_filter');
+Route::post('/reports/periodic/filters', 'ReportsController@periodic_report_filter')->name('periodic.reports.filter');
 Route::get('/reports/periodic/excel/{sector}', 'ReportsController@export');
 Route::post('/reports/profiles/search', 'ReportsController@searchProfiles')->name('search-profiles');
 Route::post('/reports/documentation/search', 'ReportsController@searchDocumentations')->name('search-documentation');

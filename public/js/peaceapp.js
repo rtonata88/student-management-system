@@ -234,6 +234,14 @@ $(document).ready(function($) {
 		e.preventDefault();
 		//console.log('here')
 		if(confirm('Are you sure you want to remove this organisation?')){
+			let deletedId = $(this).attr('data');
+
+			$.ajax({
+				type:'POST',
+				url:'/delete-profile-organisation',
+				data:{ _token: $("[name=_token]").val(), 'id': deletedId},
+			});
+
 			$(this).closest('table').remove();
 		}
 	})
@@ -242,6 +250,15 @@ $(document).ready(function($) {
 		e.preventDefault();
 		//console.log('here')
 		if(confirm('Are you sure you want to remove this assistant?')){
+			let deletedId = $(this).attr('data');
+
+			$.ajax({
+				type:'POST',
+				url:'/delete-profile-assistant',
+				data:{ _token: $("[name=_token]").val(), 'id': deletedId},
+			});
+
+
 			$(this).closest('table').remove();
 		}
 	})

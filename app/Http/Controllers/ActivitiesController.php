@@ -39,25 +39,25 @@ class ActivitiesController extends Controller
 		if($request->is('meetings/*'))
 		{
 			$activity_type = "Meeting";
-			$activity_title= "POST MEETING REPORT";
+			$activity_title= "Post meeting report";
 		}
 
 		if($request->is('calls/*'))
 		{
 			$activity_type = "Call";
-			$activity_title= "CALL REPORT";
+			$activity_title= "Call report";
 		}
 
 		if($request->is('emails/*'))
 		{
 			$activity_type = "Email";
-			$activity_title= "EMAIL REPORT";
+			$activity_title= "Email report";
 		}
 
 		if($request->is('messages/*'))
 		{
 			$activity_type = "TextMessage";
-			$activity_title= "MESSAGE REPORT";
+			$activity_title= "Message report";
 		}
 
 
@@ -77,25 +77,25 @@ class ActivitiesController extends Controller
 		if($type == 'Meeting')
 		{
 			$activity_type = "Meeting";
-			$activity_title= "POST MEETING REPORT";
+			$activity_title= "Post meeting report";
 		}
 
 		if($type == 'Call')
 		{
 			$activity_type = "Call";
-			$activity_title= "CALL REPORT";
+			$activity_title= "Call report";
 		}
 
 		if($type == 'Email')
 		{
 			$activity_type = "Email";
-			$activity_title= "EMAIL REPORT";
+			$activity_title= "Email report";
 		}
 
 		if($type == 'Text Message (SMS)')
 		{
 			$activity_type = "Text Message (SMS)";
-			$activity_title= "MESSAGE REPORT";
+			$activity_title= "Message report";
 		}
 
 		$sectors = Sector::pluck('name', 'id');
@@ -113,25 +113,25 @@ class ActivitiesController extends Controller
 		if($type == 'Meeting')
 		{
 			$activity_type = "Meeting";
-			$activity_title= "POST MEETING REPORT";
+			$activity_title= "Post meeting report";
 		}
 
 		if($type == 'Call')
 		{
 			$activity_type = "Call";
-			$activity_title= "CALL REPORT";
+			$activity_title= "Call report";
 		}
 
 		if($type == 'Email')
 		{
 			$activity_type = "Email";
-			$activity_title= "EMAIL REPORT";
+			$activity_title= "Email report";
 		}
 
 		if($type == 'Text Message (SMS)')
 		{
 			$activity_type = "Text Message (SMS)";
-			$activity_title= "MESSAGE REPORT";
+			$activity_title= "Message report";
 		}
 
 		$sectors = Sector::pluck('name', 'id');
@@ -155,24 +155,24 @@ class ActivitiesController extends Controller
 
 		if($activity_type == "Meeting")
 		{
-			$activity_title= "POST MEETING REPORT";
+			$activity_title= "Post meeting report";
 		}
 
 		if($activity_type == "Call")
 		{
-			$activity_title= "CALL REPORT";
+			$activity_title= "Call report";
 		}
 
 		if($activity_type == "Email")
 		{
 			$activity_type = "Email";
-			$activity_title= "EMAIL REPORT";
+			$activity_title= "Email report";
 		}
 
 		if($activity_type == "Text Message (SMS)")
 		{
 			$activity_type = "Text Message (SMS)";
-			$activity_title= "MESSAGE REPORT";
+			$activity_title= "Message report";
 		}
 
 
@@ -194,24 +194,24 @@ class ActivitiesController extends Controller
 
 		if($activity_type == "Meeting")
 		{
-			$activity_title= "POST MEETING REPORT";
+			$activity_title= "Post meeting report";
 		}
 
 		if($activity_type == "Call")
 		{
-			$activity_title= "CALL REPORT";
+			$activity_title= "Call report";
 		}
 
 		if($activity_type == "Email")
 		{
 			$activity_type = "Email";
-			$activity_title= "EMAIL REPORT";
+			$activity_title= "Email report";
 		}
 
 		if($activity_type == "TextMessage (SMS)")
 		{
 			$activity_type = "Text Message (SMS)";
-			$activity_title= "MESSAGE REPORT";
+			$activity_title= "Message report";
 		}
 
 
@@ -230,24 +230,24 @@ class ActivitiesController extends Controller
 
 		if($activity_type == "Meeting")
 		{
-			$activity_title= "POST MEETING REPORT";
+			$activity_title= "Post meeting report";
 		}
 
 		if($activity_type == "Call")
 		{
-			$activity_title= "CALL REPORT";
+			$activity_title= "Call report";
 		}
 
 		if($activity_type == "Email")
 		{
 			$activity_type = "Email";
-			$activity_title= "EMAIL REPORT";
+			$activity_title= "Email report";
 		}
 
-		if($activity_type == "Text Message (SMS)")
+		if($activity_type == "TextMessage")
 		{
-			$activity_type = "Text Message (SMS)";
-			$activity_title= "MESSAGE REPORT";
+			$activity_type = "TextMessage";
+			$activity_title= "Message report";
 		}
 
 		$activity = Activity::find($id);
@@ -282,9 +282,10 @@ class ActivitiesController extends Controller
 		if(is_array($requests->profiles))
 		{
 			$profiles = $requests->profiles;
-			if(!array_key_exists($requests->profile_id, $profiles)){
+			if(!in_array($requests->profile_id, $profiles)){
 				array_push($profiles, $requests->profile_id);
 			}
+
 			$fruits = Profile::whereIn('id', $profiles)->get();
 			$activity->profiles()->sync($profiles);
 		} else {
@@ -479,7 +480,7 @@ class ActivitiesController extends Controller
 		{
 
 			$profiles = $requests->profiles;
-			if(!array_key_exists($requests->profile_id, $profiles)){
+			if(!in_array($requests->profile_id, $profiles)){
 				array_push($profiles, $requests->profile_id);
 			}
 			$fruits = Profile::whereIn('id', $profiles)->get();

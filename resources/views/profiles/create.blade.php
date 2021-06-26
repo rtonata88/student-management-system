@@ -12,7 +12,7 @@
 @endsection
 
 @section('content')
- {!! Form::open(array('url' => '/profiles', 'method' => 'post', 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"')) !!}
+ {!! Form::open(array('route' => array('profiles.store'), 'method' => 'post', 'class'=> 'form-vertical form-material', 'enctype="multipart/form-data"')) !!}
 <div class="row">
 <div class="col-md-2 col-xs-12">
        
@@ -30,8 +30,8 @@
                     <td>{{Form::file('photo', null, ['class' => 'form-control'])}}</td>
                   </tr>
                   <tr>
-                    <th style="background-color: rgba(227, 227, 227, 0.5)">Fullname <span class="text-danger">*</span></th>
-                    <td>{{Form::text('fullname',null, ['class' => 'form-control', 'required', 'placeholder' => 'Fullname'])}}</td>
+                    <th style="background-color: rgba(227, 227, 227, 0.5)">Firstname <span class="text-danger">*</span></th>
+                    <td>{{Form::text('fullname',null, ['class' => 'form-control', 'required', 'placeholder' => 'Firstname'])}}</td>
                   </tr>
                   <tr>
                     <th style="background-color: rgba(227, 227, 227, 0.5)">Surname <span class="text-danger">*</span></th>
@@ -93,7 +93,32 @@
 
         <div class="card">
             <div class="card-header">
-                <strong>Organisation and contact information</strong> 
+                <strong>Contact information</strong> 
+            </div>
+            <div class="card-body">
+                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
+                  <tr>
+                    <th style="background-color: rgba(227, 227, 227, 0.5)">Mobile number</th>
+                    <td>
+                      {{Form::text('mobile_no',null, ['class' => 'form-control', 'placeholder'=>'Primary mobile number'])}}
+                      {{Form::text('mobile_no2',null, ['class' => 'form-control', 'placeholder'=>'Secondary mobile number'])}}
+                      {{Form::text('mobile_no_other',null, ['class' => 'form-control', 'placeholder'=>'Other'])}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th style="background-color: rgba(227, 227, 227, 0.5)">Email</th>
+                    <td>
+                      {{Form::email('email',null, ['class' => 'form-control', 'placeholder'=>'Primary Email'])}}
+                      {{Form::email('email2',null, ['class' => 'form-control', 'placeholder'=>'Secondary Email'])}}
+                    </td>
+                  </tr>
+              </table>
+            </div>
+          </div>
+
+        <div class="card">
+            <div class="card-header">
+                <strong>Organisation information</strong> 
             </div>
             <div class="card-body" id="organisations-section"></div>
             <div class="card-footer">

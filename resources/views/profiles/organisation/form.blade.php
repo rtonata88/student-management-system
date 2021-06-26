@@ -5,7 +5,7 @@
     </tr>
     <tr>
     <th style="background-color: rgba(227, 227, 227, 0.5)">Position </th>
-    <td>{{Form::text('position[]',null, ['class' => 'form-control', 'required', 'placeholder' => 'Type here'])}}</td>
+    <td>{{Form::text('position[]',null, ['class' => 'form-control', 'placeholder' => 'Type here'])}}</td>
     </tr>
     <tr>
     <th style="background-color: rgba(227, 227, 227, 0.5)">Department</th>
@@ -14,9 +14,9 @@
     <tr>
     <th style="background-color: rgba(227, 227, 227, 0.5)">Work number</th>
     <td>
-        {{Form::text('work_number[]',null, ['class' => 'form-control', 'required', 'placeholder' => 'Primary number'])}}
-        {{Form::text('work_number2[]',null, ['class' => 'form-control', 'required', 'placeholder' => 'Secondary number'])}}
-        {{Form::text('work_number_other[]',null, ['class' => 'form-control', 'required', 'placeholder' => 'Other'])}}
+        {{Form::text('work_number[]',null, ['class' => 'form-control', 'placeholder' => 'Primary number'])}}
+        {{Form::text('work_number2[]',null, ['class' => 'form-control', 'placeholder' => 'Secondary number'])}}
+        {{Form::text('work_number_other[]',null, ['class' => 'form-control', 'placeholder' => 'Other'])}}
 
     </td>
     </tr>
