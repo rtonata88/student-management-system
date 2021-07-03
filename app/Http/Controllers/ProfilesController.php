@@ -60,12 +60,9 @@ class ProfilesController extends Controller
 	public function filter(Request $request)
 	{
 		$user = Auth::user();
-		if($user->hasRole('department leader')){
-			$profiles = Profile::with(['sector', 'language', 'country', 'city']);
-		} else {
-			$profiles = Profile::where('team_id', $user->team_id)->with(['sector', 'language', 'country', 'city']);
-		}
 
+		$profiles = Profile::whereIn('team_id', $user->team->pluck('id'))->with(['sector', 'language', 'country', 'city']);
+		
         $profiles = EloquentBuilder::to($profiles, $request->except(['_token']));
 		$profiles = $profiles->paginate(1000);
 
