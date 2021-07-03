@@ -256,11 +256,11 @@ class ProfilesController extends Controller
 		$profile->cult_awareness 			= $requests->cult_awareness;
 		$profile->warp_attendee 			= $requests->warp_attendee;
 		$profile->team_id					= $requests->team_id;
-		$profile->mobile_no					= $requests->mobile_no;
-		$profile->mobile_no2				= $requests->mobile_no2;
-		$profile->mobile_no_other			= $requests->mobile_no_other;
-		$profile->email						= $requests->email;
-		$profile->email2					= $requests->email2;
+		$profile->mobile_no					= $requests->personal_mobile_no;
+		$profile->mobile_no2				= $requests->personal_mobile_no2;
+		$profile->mobile_no_other			= $requests->personal_mobile_no_other;
+		$profile->email						= $requests->personal_email;
+		$profile->email2					= $requests->personal_email2;
 
 		$profile->save();
 

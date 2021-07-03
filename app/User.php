@@ -34,7 +34,7 @@ class User extends Authenticatable implements Auditable
 
 
     public function team(){
-        return $this->belongsTo('\App\Team', 'team_id');
+        return $this->belongsToMany('App\Team');
     }
 
     public function country(){
@@ -42,7 +42,7 @@ class User extends Authenticatable implements Auditable
     }
 
     public function sector(){
-        return $this->belongsTo('App\Sector');
+        return $this->belongsToMany('App\Sector');
     }
 
     public function language(){

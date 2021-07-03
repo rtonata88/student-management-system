@@ -100,16 +100,16 @@
                   <tr>
                     <th style="background-color: rgba(227, 227, 227, 0.5)">Mobile number</th>
                     <td>
-                      {{Form::text('mobile_no',null, ['class' => 'form-control', 'placeholder'=>'Primary mobile number'])}}
-                      {{Form::text('mobile_no2',null, ['class' => 'form-control', 'placeholder'=>'Secondary mobile number'])}}
-                      {{Form::text('mobile_no_other',null, ['class' => 'form-control', 'placeholder'=>'Other'])}}
+                      {{Form::text('personal_mobile_no',null, ['class' => 'form-control', 'placeholder'=>'Primary mobile number'])}}
+                      {{Form::text('personal_mobile_no2',null, ['class' => 'form-control', 'placeholder'=>'Secondary mobile number'])}}
+                      {{Form::text('personal_mobile_no_other',null, ['class' => 'form-control', 'placeholder'=>'Other'])}}
                     </td>
                   </tr>
                   <tr>
                     <th style="background-color: rgba(227, 227, 227, 0.5)">Email</th>
                     <td>
-                      {{Form::email('email',null, ['class' => 'form-control', 'placeholder'=>'Primary Email'])}}
-                      {{Form::email('email2',null, ['class' => 'form-control', 'placeholder'=>'Secondary Email'])}}
+                      {{Form::email('personal_email',null, ['class' => 'form-control', 'placeholder'=>'Primary Email'])}}
+                      {{Form::email('personal_email2',null, ['class' => 'form-control', 'placeholder'=>'Secondary Email'])}}
                     </td>
                   </tr>
               </table>

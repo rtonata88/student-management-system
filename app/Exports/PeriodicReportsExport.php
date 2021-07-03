@@ -14,18 +14,12 @@ use App\Exports\ReportSheets;
 
 class PeriodicReportsExport implements WithMultipleSheets, WithHeadings, WithStrictNullComparison
 {
-	protected $sector;
-
-	public function __construct($sector)
-	{
-		$this->sector = $sector;
-	}
 
     public function sheets(): array
     {
     	$sheets = [];
-    	for($i=0; $i<7; $i++){
-    		$sheets[] =  new ReportSheets($this->sector, $i);
+    	for($i=0; $i<5; $i++){
+    		$sheets[] =  new ReportSheets($i);
     	}
 
     	return $sheets;
@@ -34,7 +28,7 @@ class PeriodicReportsExport implements WithMultipleSheets, WithHeadings, WithStr
     public function headings(): array
     {
     	return [
-    		'Sector', 'Team', 'Activity', 'Occurence',
+    		'Team', 'Report type', 'Count',
     	];
     }
 }

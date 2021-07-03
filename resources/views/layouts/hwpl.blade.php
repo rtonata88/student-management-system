@@ -62,6 +62,12 @@
               <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
             </svg> Profiles</a></li>
         @endif
+         @if(Auth::user()->hasRole('Organisations'))
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/organizations">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-building')}}"></use>
+            </svg> Organisations</a></li>
+        @endif
         @if(Auth::user()->hasRole('WARP Office Attendees'))
         <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/warp-attendees">
             <svg class="c-sidebar-nav-icon">
@@ -87,7 +93,8 @@
               <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bullhorn')}}"></use>
             </svg> Campaigns</a></li>
         @endif
-        
+       
+        @if(Auth::user()->hasRole('events'))
         <li class="c-sidebar-nav-title">Events</li>
         @if(Auth::user()->hasRole('External Events'))
         <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/external-events">
@@ -101,37 +108,46 @@
               <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
             </svg> Internal events</a></li>
         @endif
-
+        @endif
         <li class="c-sidebar-nav-title">Reports</li>
          @if(Auth::user()->hasRole('Reports'))
+         @if(Auth::user()->hasRole('profile_report'))
         <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/reports/profiles">
             <svg class="c-sidebar-nav-icon">
               <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart-pie')}}"></use>
             </svg> Profiles</a></li>
-       
+        @endif
+        @if(Auth::user()->hasRole('warp_report'))
         <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/reports/warp-attendees">
             <svg class="c-sidebar-nav-icon">
               <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart-line')}}"></use>
             </svg> WARP attendees</a></li>
+        @endif
 
+        @if(Auth::user()->hasRole('documentation_report'))
         <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/reports/documentation">
             <svg class="c-sidebar-nav-icon">
               <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart-pie')}}"></use>
             </svg> Documentation</a></li>
-
+        @endif
+        @if(Auth::user()->hasRole('periodic_report'))
         <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/reports/periodic">
             <svg class="c-sidebar-nav-icon">
               <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bar-chart')}}"></use>
             </svg> Periodic reports</a></li>
-
+        @endif
+        @if(Auth::user()->hasRole('internal_event_report'))
         <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/report/internal/events">
             <svg class="c-sidebar-nav-icon">
               <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
             </svg> Internal events</a></li>
+        @endif
+        @if(Auth::user()->hasRole('external_event_report'))
         <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/report/external/events">
             <svg class="c-sidebar-nav-icon">
               <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
             </svg> External events</a></li>
+        @endif
         @endif
         @if(Auth::user()->hasRole('Access Management'))
         <li class="c-sidebar-nav-title">Administration</li>
@@ -164,7 +180,6 @@
             <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/industries"><span class="c-sidebar-nav-icon"></span> Industries</a></li>
             <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/languages"><span class="c-sidebar-nav-icon"></span> Languages</a></li>
             <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/meeting-types"><span class="c-sidebar-nav-icon"></span> Meeting types</a></li>
-            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/organizations"><span class="c-sidebar-nav-icon"></span> Organisations</a></li>
             <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/religions"><span class="c-sidebar-nav-icon"></span> Religions</a></li>
             <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/report-types"><span class="c-sidebar-nav-icon"></span> Report types</a></li>
             <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/maintainers"><span class="c-sidebar-nav-icon"></span> Staff</a></li>

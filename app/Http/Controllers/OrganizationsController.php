@@ -18,9 +18,14 @@ class OrganizationsController extends Controller
 		$this->middleware('auth');
 	}
 
-	public function index()
+	public function index(Request $requests)
 	{
-		$organizations = Organization::all();
+		if(isset($requests->name)){
+			$organizations = Organization::where('name', 'like', '%'.$requests->name.'%')->paginate(50);
+		} else {
+			$organizations = Organization::paginate(50);
+		}
+		
 
 		return view('setup.organizations.index', compact('organizations'));
 	}

@@ -39,7 +39,7 @@
                     <div class="form-group">
                         
                             {{Form::label('password', 'Password')}}
-                            {{Form::password('password', ['class' => 'form-control', 'required', 'placeholder'=>'Password here'])}}
+                            {{Form::password('password', ['class' => 'form-control', 'placeholder'=>'Password here'])}}
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <div class="form-group">
                         
                             {{Form::label('password_confirmation', 'Confirm Password')}}
-                            {{Form::password('password_confirmation', ['class' => 'form-control' , 'required', 'placeholder'=>'Password again'])}}
+                            {{Form::password('password_confirmation', ['class' => 'form-control' , 'placeholder'=>'Password again'])}}
                         </div>
                     </div>
                 </div>
@@ -79,21 +79,15 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            {{Form::label('sector_id', 'Sector')}}
-                            {{Form::select('sector_id', $sectors,null, ['class' => 'form-control select'])}}
-                        </div>
-                    </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             {{Form::label('team_id', 'Team')}}
-                            {{Form::select('team_id', $teams,null, ['class' => 'form-control select'])}}
+                            {{Form::select('teams[]', $teams,$user->team, ['class' => 'form-control select2', 'multiple'])}}
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             {{Form::label('department_id', 'Department')}}
                             {{Form::select('department_id', $departments,null, ['class' => 'form-control select'])}}
@@ -102,21 +96,14 @@
                 </div>
 
                  <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            {{Form::label('country_id', 'Counter')}}
-                            {{Form::select('country_id', $countries, null, ['class' => 'form-control select'])}}
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             {{Form::label('city_id', 'City')}}
                             {{Form::select('city_id', $cities,null, ['class' => 'form-control select'])}}
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             {{Form::label('language_id', 'Preferred Language')}}
                             {{Form::select('language_id', $languages,null, ['class' => 'form-control select'])}}

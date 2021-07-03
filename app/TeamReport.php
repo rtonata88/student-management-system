@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class TeamReport extends Model
@@ -15,9 +15,4 @@ class TeamReport extends Model
         return $this->belongsTo('App\Team');
     }
 
-    public function profile(){
-        return $this->belongsTo('App\Profile');
-    }
-
-    
 }

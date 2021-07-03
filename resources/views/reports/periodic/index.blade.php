@@ -28,10 +28,7 @@
                     </div>
 
                     <div class="form-group">
-                        {{Form::select('sector', $sectors, null, ['class' => 'form-control select', 'placeholder'=>'All sectors'])}}
-                    </div>
-                    <div class="form-group">
-                        {{Form::select('team', $teams, null, ['class' => 'form-control select', 'placeholder'=>'All teams'])}}
+                        {{Form::select('team', $teams, $teams, ['class' => 'form-control select', 'placeholder'=>'All teams'])}}
                     </div>
                   
                     <button type="submit" class="btn btn-sm btn-success">
@@ -48,23 +45,28 @@
         <div class="card">
             <div class="card-header">
                 <strong>Report Summary</strong> 
+                <div class="pull-right">
+                     @if(count($summary_report) > 0 || count($media_coverage_report)>0 || count($events) > 0)
+                        <a href="/reports/periodic/excel" class="btn btn-primary btn-sm"> Export to excel</a>
+                    @endif
+                </div>
             </div>
             <div class="card-body">
-                @if(count($team_report_summary) > 0)
+                @if(count($summary_report) > 0)
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <thead>
                         <th>Team</th>
-                        <th>Activity</th>
+                        <th>Report type</th>
                         <th>Count</th>
                     </thead>
                     <tbody>
-                        @if($team_report_summary)
-                            @foreach($team_report_summary as $report)                                
-                                    <tr>
-                                        <td>{{$report->team_name}}</td>
-                                        <td>{{$report->activity_type_name}}</td>
-                                        <td>{{$report->count}}</td> 
-                                    </tr>
+                        @if($summary_report)
+                            @foreach($summary_report as $key=>$report)                                
+                                <tr>
+                                    <td>{{$report['team']}}</td>
+                                    <td>{{$report['report_type']}}</td>
+                                    <td>{{$report['count']}}</td> 
+                                </tr>
                             @endforeach
                         @endif
                     </tbody>
@@ -76,14 +78,27 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <strong>Meeting reports</strong> 
+                <strong>Meeting reports 
+                <span class="badge badge-primary">
+                    {{$summary_report->where('report_type', 'Meeting')->sum('count')}}
+                </span></strong> 
             </div>
             <div class="card-body">
                 @if(count($team_report_detail->where('activity_type_name', 'Meeting')) > 0)
                 @foreach($team_report_detail->where('activity_type_name', 'Meeting') as $report)                                
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                         <tr>
-                            <th style="background-color: rgba(227, 227, 227, 0.5)" colspan="2">{{$report->fullname}} {{$report->lastname}}</th>
+                            <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Who</th>
+                            <td>
+                            
+                                @foreach($profiles->where('activity_id', $report->activity_id) as $profile)
+                                    {{$profile->fullname}} {{$profile->lastname}} <br>
+                                @endforeach
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Team</th>
+                            <td>{{$report->team_name}}</td>
                         </tr>
                         <tr>
                             <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Meeting type</th>
@@ -115,14 +130,28 @@
 
         <div class="card">
             <div class="card-header">
-                <strong>Call reports</strong> 
+                <strong>Call reports
+                <span class="badge badge-primary">
+                    {{$summary_report->where('report_type', 'Call')->sum('count')}}
+                </span>
+                </strong> 
             </div>
             <div class="card-body">
                 @if(count($team_report_detail->where('activity_type_name', 'Call')) > 0)
                 @foreach($team_report_detail->where('activity_type_name', 'Call') as $report)                                
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
+                         <tr>
+                            <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Who</th>
+                            <td>
+                            
+                                @foreach($profiles->where('activity_id', $report->activity_id) as $profile)
+                                    {{$profile->fullname}} {{$profile->lastname}} <br>
+                                @endforeach
+                            </td>
+                        </tr>
                         <tr>
-                            <th style="background-color: rgba(227, 227, 227, 0.5)" colspan="2">{{$report->fullname}} {{$report->lastname}}</th>
+                            <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Team</th>
+                            <td>{{$report->team_name}}</td>
                         </tr>
                         <tr>
                             <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Direction</th>
@@ -150,14 +179,28 @@
 
         <div class="card">
             <div class="card-header">
-                <strong>Email reports</strong> 
+                <strong>Email reports
+                    <span class="badge badge-primary">
+                    {{$summary_report->where('report_type', 'Email')->sum('count')}}
+                </span>
+                </strong> 
             </div>
             <div class="card-body">
                 @if(count($team_report_detail->where('activity_type_name', 'Email')) > 0)
                 @foreach($team_report_detail->where('activity_type_name', 'Email') as $report)                                
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                         <tr>
-                            <th style="background-color: rgba(227, 227, 227, 0.5)" colspan="2">{{$report->fullname}} {{$report->lastname}}</th>
+                            <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Who</th>
+                            <td>
+                            
+                                @foreach($profiles->where('activity_id', $report->activity_id) as $profile)
+                                    {{$profile->fullname}} {{$profile->lastname}} <br>
+                                @endforeach
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Team</th>
+                            <td>{{$report->team_name}}</td>
                         </tr>
                         <tr>
                             <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Direction</th>
@@ -184,14 +227,28 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <strong>Text message reports</strong> 
+                <strong>Text message reports
+                <span class="badge badge-primary">
+                    {{$summary_report->where('report_type', 'TextMessage')->sum('count')}}
+                </span>
+                </strong> 
             </div>
             <div class="card-body">
                  @if(count($team_report_detail->where('activity_type_name', 'TextMessage')) > 0)
                 @foreach($team_report_detail->where('activity_type_name', 'TextMessage') as $report)                                
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
+                         <tr>
+                            <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Who</th>
+                            <td>
+                            
+                                @foreach($profiles->where('activity_id', $report->activity_id) as $profile)
+                                    {{$profile->fullname}} {{$profile->lastname}} <br>
+                                @endforeach
+                            </td>
+                        </tr>
                         <tr>
-                            <th style="background-color: rgba(227, 227, 227, 0.5)" colspan="2">{{$report->fullname}} {{$report->lastname}}</th>
+                            <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Team</th>
+                            <td>{{$report->team_name}}</td>
                         </tr>
                         <tr>
                             <th style="background-color: rgba(227, 227, 227, 0.5)" width="150px">Direction</th>

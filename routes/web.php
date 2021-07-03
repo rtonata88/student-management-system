@@ -193,7 +193,7 @@ Route::get('reports/profiles', 'ReportsController@profiles');
 Route::get('reports/documentation', 'ReportsController@documentation');
 Route::get('reports/sector/{sector}', 'ReportsController@sector_report');
 Route::post('/reports/periodic/filters', 'ReportsController@periodic_report_filter')->name('periodic.reports.filter');
-Route::get('/reports/periodic/excel/{sector}', 'ReportsController@export');
+Route::get('/reports/periodic/excel', 'ReportsController@export');
 Route::post('/reports/profiles/search', 'ReportsController@searchProfiles')->name('search-profiles');
 Route::post('/reports/documentation/search', 'ReportsController@searchDocumentations')->name('search-documentation');
 Route::get('/reports/profiles/excel', 'ReportsController@exportProfilesToExcel')->name('export-profiles');

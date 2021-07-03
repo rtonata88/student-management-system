@@ -44,8 +44,16 @@
                                 <td>{{$user->username}}</td>
                                 <td>{{$user->gender}}</td>
                                 <td>{{$user->email}}</td>
-                                <td>{{$user->sector->name}}</td>
-                                <td>{{$user->team->name}}</td>
+                                <td>
+                                    @foreach($user->sector as $sector)
+                                        {{$sector->name}}. 
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach($user->team as $team)
+                                        {{$team->name}}. 
+                                    @endforeach
+                                </td>
                                 <td>{{$user->country->name}}</td>
                                 <td>
                                     @if($user->approved == 1)
