@@ -41,12 +41,9 @@ class ProfilesController extends Controller
 	public function index()
 	{
 		$user = Auth::user();
-		if($user->hasRole('department leader')){
-			$profiles = Profile::with(['sector', 'language', 'country', 'city'])->paginate(50);
-		} else {
-			$profiles = Profile::where('team_id', $user->team_id)->with(['sector', 'language', 'country', 'city'])->paginate(50);
-		}
 
+		$profiles = Profile::whereIn('team_id', $user->team->pluck('id'))->with(['sector', 'language', 'country', 'city'])->paginate(50);
+	
 		$sectors = Sector::pluck('name', 'id');
         $countries = Country::pluck('name', 'id');
         $organisations = Organization::pluck('name', 'id');
