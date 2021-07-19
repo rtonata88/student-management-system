@@ -13,6 +13,7 @@ use App\Language;
 use App\Department;
 
 use Session;
+use Hash;
 
 
 class UsersController extends Controller
