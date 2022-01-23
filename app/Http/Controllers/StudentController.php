@@ -15,10 +15,8 @@ class StudentController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
-
         $students = Student::paginate(50);
-        $centers = Center::pluck('name', 'id');
+        $centers = Center::pluck('center_name', 'id');
         
         return view('Management.Students.Index', compact('students', 'centers'));
     }
