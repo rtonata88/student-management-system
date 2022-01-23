@@ -44,7 +44,7 @@
 <body class="c-app">
   <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
     <div class="c-sidebar-brand d-lg-down-none">
-      <span class="text-uppercase font-weight-bold">Lotus Mental Health</span>
+      <span class="text-uppercase font-weight-bold">STUDENT MANAGEMENT SYSTEM</span>
     </div>
     <ul class="c-sidebar-nav">
       <li class="c-sidebar-nav-item">
@@ -58,11 +58,37 @@
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/therapists">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
-          </svg> Therapists</a></li>
+          </svg> Students</a>
+      </li>
+
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
-          </svg> Appointments</a></li>
+          </svg> Enrollment</a>
+      </li>
+      <li class="c-sidebar-nav-title">FINANCE</li>
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/therapists">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
+          </svg> Invoices</a>
+      </li>
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+          </svg> Payments</a>
+      </li>
+
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+          </svg> Student Statements</a>
+      </li>
+
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+          </svg> Enrollment</a>
+      </li>
 
       @if(Auth::user()->hasRole('Access Management'))
       <li class="c-sidebar-nav-title">Administration</li>
@@ -83,11 +109,9 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-cog')}}"></use>
           </svg> Setups</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('registration-boards.index')}}"><span class="c-sidebar-nav-icon"></span> Boards</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('countries.index')}}"><span class="c-sidebar-nav-icon"></span> Countries</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('license-types.index')}}"><span class="c-sidebar-nav-icon"></span> Licence Types</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('specialties.index')}}"><span class="c-sidebar-nav-icon"></span> Specialties</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('languages.index')}}"><span class="c-sidebar-nav-icon"></span> Languages</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('registration-boards.index')}}"><span class="c-sidebar-nav-icon"></span> Subjects</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('countries.index')}}"><span class="c-sidebar-nav-icon"></span> Other fees</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('license-types.index')}}"><span class="c-sidebar-nav-icon"></span> Centers</a></li>
         </ul>
       </li>
       @endif
@@ -142,7 +166,7 @@
         </div>
       </main>
       <footer class="c-footer">
-        <div class="text-uppercase"> &copy; {{date('Y')}} Lotus Mental Health Counseling Services.
+        <div class="text-uppercase"> &copy; {{date('Y')}} STUDENT MANAGEMENT SYSTEM.
         </div>
       </footer>
     </div>
