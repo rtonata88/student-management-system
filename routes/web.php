@@ -51,7 +51,7 @@ Route::get('/invoice/reports', 'InvoiceReportController@index');
 Route::get('/payment/reports', 'PaymentReportController@index');
 
 //LMS setups
-Route::resource('/subjects', 'SubjectController');
+Route::resource('/subjects', 'ModuleController');
 Route::resource('/fees', 'FeesController');
 Route::resource('/centers', 'CenterController');
 

@@ -21,8 +21,10 @@ class CreateStudentsTable extends Migration
             $table->string('initials');
             $table->string('gender');
             $table->string('contact_number');
-            $table->integer('center_id');
-            $table->string('email_address')->nullable();
+            $table->string('contact_email')->nullable();
+            $table->date('date_of_birth');
+            $table->string('birth_certificate');
+            $table->bigInteger('id_number');
             $table->timestamps();
         });
     }

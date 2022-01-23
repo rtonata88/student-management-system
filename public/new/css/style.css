@@ -70,6 +70,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.input-no-border {
+  border: 0 !important;
+}
+
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important;
 }
@@ -18840,4 +18844,5 @@ a.text-dark:hover, a.text-dark:focus {
     color: inherit;
   }
 }
+
 /*# sourceMappingURL=style.css.map */

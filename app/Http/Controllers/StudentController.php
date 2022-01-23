@@ -15,15 +15,30 @@ class StudentController extends Controller
 
     public function index()
     {
-        $students = Student::paginate(50);
-        $centers = Center::pluck('center_name', 'id');
+        $students = Student::all();
         
-        return view('Management.Students.Index', compact('students', 'centers'));
+        return view('Management.Students.Index', compact('students'));
+    }
+
+    public function filter(Request $request)
+    {
+        $students = Student::all();
+
+        if(isset($request->student_number))
+        {
+            $students = $students->where('student_number', $request->student_number);
+        }
+
+        if (isset($request->surname)) {
+            $students = $students->where('surname', $request->surname);
+        }
+
+        return view('Management.Students.Index', compact('students'));
     }
 
     public function create()
     {
-        $centers = Center::pluck('name', 'id');
+        $centers = Center::pluck('center_name', 'id');
 
         return view('Management.Students.Create', compact('centers'));
     }
@@ -31,9 +46,8 @@ class StudentController extends Controller
     public function edit($id)
     {
         $student = Student::find($id);
-        $centers = Center::pluck('name', 'id');
 
-        return view('Management.Students.Edit', compact('centers', 'student'));
+        return view('Management.Students.Edit', compact('student'));
     }
 
     public function show($id)
@@ -65,15 +79,26 @@ class StudentController extends Controller
 
     private function createStudentGuardian($student, $request)
     {
-        for ($i = 0; $i < count($request->qualification_name); $i++) {
             StudentGuardian::create([
                 'student_id' => $student->id,
-                'guardian_names' => $request->guardian_names[$i],
-                'surname' => $request->surname[$i],
-                'relationship' => $request->relationship[$i],
-                'contact_number' => $request->contact_number[$i],
-                'contact_email' => $request->contact_email[$i]
+                'guardian_names' => $request->guardian_names,
+                'surname' => $request->guardian_surname,
+                'relationship' => $request->relationship,
+                'contact_number' => $request->guardian_contact_number,
+                'contact_email' => $request->guardian_contact_email
             ]);
+        
+    }
+
+    private function generateStudentNumber()
+    {
+        $student_number = rand(10000, 99999);
+
+        $student = Student::where('student_number', $student_number)->first();
+        if(count($student) > 0){
+            $this->generateStudentNumber();
         }
+
+        return $student_number;
     }
 }

@@ -22,18 +22,12 @@
                     {{Form::number('student_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student number'])}}
                 </div>
                 <div class="form-group">
-                    {{Form::text('student_names', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Name'])}}
-                </div>
-                <div class="form-group">
                     {{Form::text('surname', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Surname'])}}
-                </div>
-                <div class="form-group">
-                    {{Form::select('center', $centers, null, ['class' => 'form-control select2 form-control-sm','placeholder'=>'All'])}}
                 </div>
                 <button type="submit" class="btn btn-sm btn-success">
                     Search
                 </button>
-                <a href="/profiles" class="btn btn-sm">
+                <a href="/students" class="btn btn-sm">
                     Clear
                 </a>
                 {!! Form::close() !!}
@@ -54,9 +48,8 @@
                             <th>Student number</th>
                             <th>Student names</th>
                             <th>Surname</th>
-                            <th>Gender</th>
+                            <th>DOB</th>
                             <th>Contact Number</th>
-                            <th>Center</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -64,11 +57,10 @@
                         @foreach($students as $student)
                         <tr>
                             <td>{{$student->student_number}}</td>
-                            <td>{{$student->stduent_names}}</td>
+                            <td>{{$student->student_names}}</td>
                             <td>{{$student->surname}}</td>
-                            <td>{{$student->gender}}</td>
+                            <td>{{$student->date_of_birth}}</td>
                             <td>{{$student->contact_number}}</td>
-                            <td>{{$student->center->center_name}}</td>
                             <td>
                                 <a href="{{route('students.show', $student->id)}}">
                                     <svg class="c-icon mr-2">
@@ -84,9 +76,7 @@
                         </tr>
                         @endforeach
                     </tbody>
-
                 </table>
-                {{ $students->links() }}
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
         <li class="breadcrumb-item">Setup</li>
-        <li class="breadcrumb-item active">License Types </li>
+        <li class="breadcrumb-item active">Subjects </li>
         <!-- Breadcrumb Menu-->
     </ol>
 </div>
@@ -14,7 +14,7 @@
     <div class="col-md-12 col-xs-12">
         <div class="card">
             <div class="card-header">
-                <a href="/license-types/create" class="btn btn-primary">
+                <a href="/subjects/create" class="btn btn-primary">
                     Add New
                 </a>
             </div>
@@ -25,22 +25,28 @@
                     {{ Session::get('message') }}
                 </div>
                 @endif
+
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                     <thead>
                         <tr>
-                            <th>License type</th>
+                            <th>Subject name</th>
+                            <th>Code</th>
+                            <th>Subject Fee</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($license_types as $license_type)
+                        @foreach($subjects as $index=>$subject)
                         <tr>
-                            <td>{{$license_type->type}}</td>
+                            <td>{{$subject->subject_name}}</td>
+                            <td>{{$subject->subject_code}}</td>
+                            <td>{{$subject->subject_fees}}</td>
                             <td>
-                                <a href="{{route('license-types.edit', $license_type->id)}}"> <span class="fa fa-pencil"></span> Edit</a>
+                                <a href="{{route('subjects.edit', $subject->id)}}"> <span class="fa fa-pencil"></span> Edit</a>
                             </td>
                         </tr>
                         @endforeach
+                    </tbody>
                     </tbody>
                 </table>
             </div>
