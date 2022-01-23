@@ -90,6 +90,25 @@
           </svg> Enrollment</a>
       </li>
 
+      <li class="c-sidebar-nav-title">REPORTS</li>
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/therapists">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
+          </svg> Students</a>
+      </li>
+
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+          </svg> Invoices</a>
+      </li>
+
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+          </svg> Payments</a>
+      </li>
+
       @if(Auth::user()->hasRole('Access Management'))
       <li class="c-sidebar-nav-title">Administration</li>
       <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
