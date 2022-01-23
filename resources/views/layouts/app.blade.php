@@ -83,13 +83,6 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
           </svg> Student Statements</a>
       </li>
-
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
-          <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
-          </svg> Enrollment</a>
-      </li>
-
       <li class="c-sidebar-nav-title">REPORTS</li>
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/therapists">
           <svg class="c-sidebar-nav-icon">
@@ -109,7 +102,7 @@
           </svg> Payments</a>
       </li>
 
-      @if(Auth::user()->hasRole('Access Management'))
+      
       <li class="c-sidebar-nav-title">Administration</li>
       <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
           <svg class="c-sidebar-nav-icon">
@@ -121,8 +114,7 @@
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/roles"><span class="c-sidebar-nav-icon"></span> Roles</a></li>
         </ul>
       </li>
-      @endif
-      @if(Auth::user()->hasRole('Setup'))
+
       <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-cog')}}"></use>
@@ -133,7 +125,6 @@
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('license-types.index')}}"><span class="c-sidebar-nav-icon"></span> Centers</a></li>
         </ul>
       </li>
-      @endif
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
   </div>

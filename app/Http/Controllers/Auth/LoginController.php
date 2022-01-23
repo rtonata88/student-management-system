@@ -53,7 +53,7 @@ class LoginController extends Controller
      */
     public function login(Request $request) {
         $this->validateLogin($request);
-
+        
     // If the class is using the ThrottlesLogins trait, we can automatically throttle
     // the login attempts for this application. We'll key this by the username and
     // the IP address of the client making these requests into this application.
@@ -61,11 +61,12 @@ class LoginController extends Controller
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
         }
-
+        
     // This section is the only change
         if ($this->guard()->validate($this->credentials($request))) {
+            
             $user = $this->guard()->getLastAttempted();
-
+            
         // Make sure the user is active
             if ($this->attemptLogin($request)) {
             // Send the normal successful login response
@@ -99,6 +100,7 @@ class LoginController extends Controller
     protected function credentials(Request $request)
     {
         $credentials = $request->only($this->username(), 'password');
+        
         // Customization: validate if user status is active (1)
         return $credentials;
     }

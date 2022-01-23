@@ -4,16 +4,10 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laratrust\Traits\LaratrustUserTrait;
 
-use OwenIt\Auditing\Contracts\Auditable;
-
-class User extends Authenticatable implements Auditable
+class User extends Authenticatable
 {
-    use LaratrustUserTrait;
     use Notifiable;
-    use \OwenIt\Auditing\Auditable;
-
     /**
      * The attributes that are mass assignable.
      *

@@ -14,7 +14,7 @@
     <div class="col-sm-12">
         <div class="row">
             <div class="col-3">
-                <div class="c-callout c-callout-info"><small class="text-muted">Therapists</small>
+                <div class="c-callout c-callout-info"><small class="text-muted">Payments</small>
                     <div class="text-value-lg">
                    0         
                     </div>
@@ -22,14 +22,14 @@
             </div>
             <!-- /.col-->
             <div class="col-3">
-                <div class="c-callout c-callout-primary"><small class="text-muted">Patients</small>
+                <div class="c-callout c-callout-primary"><small class="text-muted">Students</small>
                     <div class="text-value-lg">
                         0
                     </div>
                 </div>
             </div>
             <div class="col-3">
-                <div class="c-callout c-callout-warning"><small class="text-muted">Sessions</small>
+                <div class="c-callout c-callout-warning"><small class="text-muted">Total Invoice</small>
                     <div class="text-value-lg">
                         0
                     </div>
