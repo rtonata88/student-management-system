@@ -55,61 +55,60 @@
         </a>
       </li>
       <li class="c-sidebar-nav-title">MANAGEMENT</li>
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/therapists">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
           </svg> Students</a>
       </li>
 
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
           </svg> Enrollment</a>
       </li>
       <li class="c-sidebar-nav-title">FINANCE</li>
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/therapists">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoices">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
           </svg> Invoices</a>
       </li>
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payments">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
           </svg> Payments</a>
       </li>
 
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/statements">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
           </svg> Student Statements</a>
       </li>
       <li class="c-sidebar-nav-title">REPORTS</li>
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/therapists">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students/report">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
           </svg> Students</a>
       </li>
 
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoice/reports">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
           </svg> Invoices</a>
       </li>
 
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/appointments">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payment/reports">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
           </svg> Payments</a>
       </li>
 
-      
+
       <li class="c-sidebar-nav-title">Administration</li>
       <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-lock-locked')}}"></use>
           </svg> Access management</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/admin-clerks"><span class="c-sidebar-nav-icon"></span> Admin Clerks</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/users"><span class="c-sidebar-nav-icon"></span> Users</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/roles"><span class="c-sidebar-nav-icon"></span> Roles</a></li>
         </ul>
@@ -120,9 +119,9 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-cog')}}"></use>
           </svg> Setups</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('registration-boards.index')}}"><span class="c-sidebar-nav-icon"></span> Subjects</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('countries.index')}}"><span class="c-sidebar-nav-icon"></span> Other fees</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('license-types.index')}}"><span class="c-sidebar-nav-icon"></span> Centers</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('subjects.index')}}"><span class="c-sidebar-nav-icon"></span> Subjects</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('fees.index')}}"><span class="c-sidebar-nav-icon"></span> Fees</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('centers.index')}}"><span class="c-sidebar-nav-icon"></span> Centers</a></li>
         </ul>
       </li>
     </ul>

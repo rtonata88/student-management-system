@@ -47,8 +47,8 @@ Route::post('/statements/filter', 'StatementController@filter')->name('statement
 
 //Reports
 Route::get('/student/reports', 'StudentReportController@index');
-Route::get('/invoices/reports', 'InvoiceReportController@index');
-Route::get('/payments/reports', 'PaymentReportController@index');
+Route::get('/invoice/reports', 'InvoiceReportController@index');
+Route::get('/payment/reports', 'PaymentReportController@index');
 
 //LMS setups
 Route::resource('/subjects', 'SubjectController');
