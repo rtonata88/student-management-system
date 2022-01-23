@@ -19,12 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->tinyInteger('approved')->default(0);
             $table->string('password');
-            $table->integer('gender_id');
-            $table->integer('sector_id');
-            $table->integer('team_id');
-            $table->integer('department_id');
-            $table->integer('country_id');
-            $table->integer('city_id');
             $table->rememberToken();
             $table->timestamps();
         });
