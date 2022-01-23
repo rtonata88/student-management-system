@@ -15,14 +15,26 @@
   <div class="col-md-8 col-sm-12">
     <div class="card">
       <div class="card-header">
-        <strong>Specialties</strong> | <a href="/specialties"> Back</a>
+        <strong>Fees</strong> | <a href="/fees"> Back</a>
       </div>
-      {!! Form::open(array('url' => '/specialties', 'method' => 'post', 'class'=> 'form-horizontal')) !!}
+      {!! Form::open(array('url' => '/fees', 'method' => 'post', 'class'=> 'form-horizontal')) !!}
       <div class="card-body">
         <div class="col-md-12">
           <div class="form-group">
-            {{Form::label('specialty', 'Specialty')}}
-            {{Form::text('specialty', null, ['class' => 'form-control'])}}
+            {{Form::label('fee_description', 'Fee description')}}
+            {{Form::text('fee_description', null, ['class' => 'form-control'])}}
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            {{Form::label('amount', 'Amount')}}
+            {{Form::text('amount', null, ['class' => 'form-control'])}}
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            {{Form::label('automatic_charge', 'Automatic charge at registration')}}
+            {{Form::select('automatic_charge', ['Yes' => 'Yes', 'No' => 'No'],null, ['class' => 'form-control'])}}
           </div>
         </div>
         <hr>

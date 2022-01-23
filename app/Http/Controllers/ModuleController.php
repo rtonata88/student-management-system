@@ -33,4 +33,11 @@ class ModuleController extends Controller
 
         return redirect()->route('subjects.index');
     }
+
+    public function update(Request $request, $id){
+        $subject = Module::find($id);
+        $subject->update($request->all());
+
+        return redirect()->route('subjects.index');
+    }
 }

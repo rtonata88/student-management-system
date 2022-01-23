@@ -11,8 +11,8 @@
 </div>
 @endsection
 @section('content')
-<div class="row">
-    <div class="col-md-12 col-xs-12">
+<div class="offset-3 row">
+    <div class="col-md-8 col-xs-12">
         <div class="card-header">
             <strong>Subjects</strong> | <a href="/subjects"> Back</a>
         </div>

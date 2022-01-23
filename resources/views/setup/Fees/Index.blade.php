@@ -4,7 +4,7 @@
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
         <li class="breadcrumb-item">Setup</li>
-        <li class="breadcrumb-item active">Specialties </li>
+        <li class="breadcrumb-item active">Fees </li>
         <!-- Breadcrumb Menu-->
     </ol>
 </div>
@@ -14,7 +14,7 @@
     <div class="col-md-12 col-xs-12">
         <div class="card">
             <div class="card-header">
-                <a href="/specialties/create" class="btn btn-primary">
+                <a href="/fees/create" class="btn btn-primary">
                     Add New
                 </a>
             </div>
@@ -29,16 +29,20 @@
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Specialty</th>
+                            <th>Fee description</th>
+                            <th>Amount</th>
+                            <th>Automatic Charge</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($specialties as $specialty)
+                        @foreach($fees as $fee)
                         <tr>
-                            <td>{{$specialty->specialty}}</td>                    
+                            <td>{{$fee->fee_description}}</td>
+                            <td>{{$fee->amount}}</td>
+                            <td>{{$fee->automatic_charge}}</td>
                             <td>
-                                <a href="/specialties/{{$specialty->id}}/edit"> <span class="fa fa-pencil"></span> Edit</a>
+                                <a href="/fees/{{$fee->id}}/edit"> <span class="fa fa-pencil"></span> Edit</a>
                             </td>
                         </tr>
                         @endforeach
