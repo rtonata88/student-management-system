@@ -32,24 +32,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $sectors = ActivityTeamReport::sectorsDashboardAnalysis($user);
-        $data = $this->sectorByTeamGraph($user);
-
-        $profiles = Profile::where('team_id', $user->team_id)->get();
-
-        $profiles_by_country = $this->getProfilesByCountry($user);
-        $profiles_by_status = $this->getProfilesByStatus($user);
-        $profiles_by_role = $this->getProfilesByRole($user);
-        $profiles_by_stage = $this->getProfilesByStage($user);
-        $email_activities = $this->getEmailActivitiesByTeam($user, date('Y-m-01'), date('Y-m-d'));
-        $meeting_activities = $this->getMeetingActivitiesByTeam($user, date('Y-m-01'), date('Y-m-d'));
-        $call_activities = $this->getCallActivitiesByTeam($user, date('Y-m-01'), date('Y-m-d'));
-        $message_activities = $this->getMessageActivitiesByTeam($user, date('Y-m-01'), date('Y-m-d'));
-        $internal_events_by_team = $this->getInternalEventReportsByTeam($user, date('Y-m-01'), date('Y-m-d'));
-        $external_events_by_team = $this->getExternalEventReportsByTeam($user, date('Y-m-01'), date('Y-m-d'));
-
-        return view('home', compact('sectors', 'data', 'profiles', 'profiles_by_country', 'profiles_by_status', 'profiles_by_role', 'profiles_by_stage', 'email_activities', 'message_activities', 'call_activities', 'meeting_activities', 'internal_events_by_team', 'external_events_by_team'));
+        return view('home');
     }
 
 

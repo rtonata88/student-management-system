@@ -1,4 +1,4 @@
-@extends('layouts.hwpl')
+@extends('layouts.app')
 @section('breadcrumb')
 <div class="c-subheader px-3">
     <!-- Breadcrumb-->

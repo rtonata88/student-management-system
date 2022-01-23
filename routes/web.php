@@ -30,38 +30,53 @@ Route::get('/success', function () {
 })->name('auth.success');
 
 
-// SETUP RESOUCES
-Route::resource('/departments', 'DepartmentsController');
-Route::resource('/countries', 'CountriesController');
-Route::resource('/cities', 'CitiesController');
+//Lotus
+Route::resource('/therapists', 'TherapistController');
+Route::post('/therapists/filter', 'TherapistController@filter')->name('filter-therapists');
+Route::resource('appointments', 'AppointmentController');
+
+Route::post('/admin-clerks/filter', 'AdminClerksController@filter')->name('filter-admin-clerks');
+Route::resource('/admin-clerks', 'AdminClerksController');
+
+//Lotus setups
+Route::resource('/registration-boards', 'RegistrationBoardController');
+Route::resource('/specialties', 'SpecialtyController');
+Route::resource('/license-types', 'LicenceTypeController');
 Route::resource('/languages', 'LanguagesController');
-Route::resource('/duties', 'DutiesController');
-Route::resource('/event-types', 'EventTypesController');
-Route::resource('/fruit-levels', 'FruitLevelsController');
-Route::resource('/industries', 'IndustriesController');
-Route::resource('/organizations', 'OrganizationsController');
-Route::resource('/report-types', 'ReportTypesController');
-Route::resource('/fruit-roles', 'FruitRolesController');
-Route::resource('/fruit-stages', 'FruitStagesController');
-Route::resource('/maintainers', 'MaintainersController');
-Route::resource('/maintainer-assignment', 'MaintainerAssignmentController');
-Route::resource('/meeting-types', 'MeetingTypesController');
-Route::resource('/sector-relationships', 'SectorRelationshipsController');
-Route::resource('/sectors', 'SectorsController');
-Route::resource('/teams', 'TeamsController');
-Route::resource('/activity-types', 'ActivityTypeController');
-Route::resource('/titles', 'TitlesController');
-Route::resource('/religions', 'ReligionsController');
-Route::resource('/users', 'UsersController');
-Route::resource('/documentation', 'DocumentationsController');
-Route::resource('/document-types', 'DocumentTypesController');
-Route::get('/warp-attendees/delete/{id}', 'WarpSummitAttendeesController@destroy')->name('warp-attendees.delete');
-Route::resource('/warp-attendees', 'WarpSummitAttendeesController');
-Route::resource('/campaigns', 'CampaignsController');
-Route::get('/campaign-report/{id}', 'CampaignsController@report_index')->name('campaigns.report');
-Route::post('/campaign-report/{id}', 'CampaignsController@report')->name('campaigns.report.save');
-Route::get('/campaign-report-view/{id}', 'CampaignsController@viewCampaignReport')->name('campaigns.report.view');
-Route::get('/documentation-download/{id}', 'DocumentationsController@download')->name('documentation-download');
+Route::resource('/countries', 'CountriesController');
+
+// // SETUP RESOUCES
+// Route::resource('/departments', 'DepartmentsController');
+
+// Route::resource('/cities', 'CitiesController');
+
+// Route::resource('/duties', 'DutiesController');
+// Route::resource('/event-types', 'EventTypesController');
+// Route::resource('/fruit-levels', 'FruitLevelsController');
+// Route::resource('/industries', 'IndustriesController');
+// Route::resource('/organizations', 'OrganizationsController');
+// Route::resource('/report-types', 'ReportTypesController');
+// Route::resource('/fruit-roles', 'FruitRolesController');
+// Route::resource('/fruit-stages', 'FruitStagesController');
+// Route::resource('/maintainers', 'MaintainersController');
+// Route::resource('/maintainer-assignment', 'MaintainerAssignmentController');
+// Route::resource('/meeting-types', 'MeetingTypesController');
+// Route::resource('/sector-relationships', 'SectorRelationshipsController');
+// Route::resource('/sectors', 'SectorsController');
+// Route::resource('/teams', 'TeamsController');
+// Route::resource('/activity-types', 'ActivityTypeController');
+// Route::resource('/titles', 'TitlesController');
+// Route::resource('/religions', 'ReligionsController');
+// Route::resource('/users', 'UsersController');
+// Route::resource('/documentation', 'DocumentationsController');
+// Route::resource('/document-types', 'DocumentTypesController');
+// Route::get('/warp-attendees/delete/{id}', 'WarpSummitAttendeesController@destroy')->name('warp-attendees.delete');
+// Route::resource('/warp-attendees', 'WarpSummitAttendeesController');
+// Route::resource('/campaigns', 'CampaignsController');
+// Route::get('/campaign-report/{id}', 'CampaignsController@report_index')->name('campaigns.report');
+// Route::post('/campaign-report/{id}', 'CampaignsController@report')->name('campaigns.report.save');
+// Route::get('/campaign-report-view/{id}', 'CampaignsController@viewCampaignReport')->name('campaigns.report.view');
+// Route::get('/documentation-download/{id}', 'DocumentationsController@download')->name('documentation-download');
 Route::resource('/roles', 'RolesController');
 
 //USERS

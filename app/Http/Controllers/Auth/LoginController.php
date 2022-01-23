@@ -67,7 +67,7 @@ class LoginController extends Controller
             $user = $this->guard()->getLastAttempted();
 
         // Make sure the user is active
-            if ($user->approved && $this->attemptLogin($request)) {
+            if ($this->attemptLogin($request)) {
             // Send the normal successful login response
                 return $this->sendLoginResponse($request);
             } else {
@@ -100,7 +100,6 @@ class LoginController extends Controller
     {
         $credentials = $request->only($this->username(), 'password');
         // Customization: validate if user status is active (1)
-        $credentials['approved'] = 1;
         return $credentials;
     }
     /**

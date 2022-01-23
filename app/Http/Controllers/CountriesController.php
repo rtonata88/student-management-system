@@ -24,14 +24,12 @@ class CountriesController extends Controller
 
 	public function show($id){
 		$country = Country::whereSlug($id)->first();
-		$languages = Language::pluck('name', 'id');
-		return view('setup.countries.edit', compact('country', 'languages'));
+		return view('setup.countries.edit', compact('country'));
 	}
 
 	public function create()
 	{
-		$languages = Language::pluck('name', 'id');
-		return view('setup.countries.create', compact('languages'));
+		return view('setup.countries.create');
 	}
 
 	public function edit($id)
@@ -48,8 +46,6 @@ class CountriesController extends Controller
         ]);
 
 		$country = new Country;
-
-		$country->language_id	= $requests->language_id;
 		$country->slug			= str_slug($requests->name);
 		$country->name 			= $requests->name;
 		$country->save();
@@ -61,8 +57,6 @@ class CountriesController extends Controller
 	public function update(Request $requests, $id)
 	{
 		$country =  Country::find($id);
-
-		$country->language_id	= $requests->language_id;
 		$country->name 			= $requests->name;
 		$country->save();
 

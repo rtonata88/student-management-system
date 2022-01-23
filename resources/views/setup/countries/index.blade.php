@@ -1,4 +1,4 @@
-@extends('layouts.hwpl')
+@extends('layouts.app')
 @section('breadcrumb')
 <div class="c-subheader px-3">
     <!-- Breadcrumb-->
@@ -30,7 +30,6 @@
                     <thead>
                         <tr>
                             <th>Country name</th>
-                            <th>Language</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -38,8 +37,6 @@
                         @foreach($countries as $index=>$country)
                             <tr>
                                 <td>{{$country->name}}</td>
-                                <td>{{$country->language->name}}</td>
-                                
                                 <td>
                                     <a href="/countries/{{$country->slug}}"> <span class="fa fa-pencil"></span> Edit</a>
                                 </td>
