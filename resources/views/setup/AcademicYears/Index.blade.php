@@ -38,9 +38,15 @@
                         @foreach($academic_years as $academic_year)
                         <tr>
                             <td>{{$academic_year->academic_year}}</td>
-                            <td>{{$academic_year->status}}</td>
                             <td>
-                                <a href="{{route('academic_year.edit', $academic_year->id)}}"> <span class="fa fa-pencil"></span> Edit</a>
+                                @if($academic_year->status)
+                                <span class="badge bg-success">Active</span>
+                                @else
+                                <span class="badge bg-light text-dark">Not active</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{route('academic-year.status', $academic_year->id)}}"> <span class="fa fa-pencil"></span> Update status</a>
                             </td>
                         </tr>
                         @endforeach
