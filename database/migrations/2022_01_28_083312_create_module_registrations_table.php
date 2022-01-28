@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRegistrationsTable extends Migration
+class CreateModuleRegistrationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateRegistrationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('registrations', function (Blueprint $table) {
+        Schema::create('module_registrations', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('student_id');
             $table->integer('academic_year');
             $table->date('registration_date');
             $table->string('registration_status');
+            $table->integer('module_id');
+            $table->decimal('amount', 15, 2);
             $table->string('cancellation_reason')->nullable();
             $table->date('cancellation_date')->nullable();
             $table->timestamps();
@@ -32,6 +34,6 @@ class CreateRegistrationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('registrations');
+        Schema::dropIfExists('module_registrations');
     }
 }

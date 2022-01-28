@@ -32,7 +32,6 @@
         </div>
     </div>
     @if($student)
-    {!! Form::open(array('route' => array('enrolment.store'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
     <div class="col-md-9">
         <div class="card">
             <div class="card-header">
@@ -59,10 +58,13 @@
                         </tr>
                     </tbody>
                 </table>
-                <input type="hidden" name="student_id" value="{{$student->id}}">
             </div>
         </div>
     </div>
+</div>
+{!! Form::open(array('route' => array('enrolment.store'), 'method' => 'post')) !!}
+<input type="hidden" name="student_id" value="{{$student->id}}">
+<div class="row">
     <div class="offset-3 col-md-9">
         <div class="card">
             <div class="card-header">
@@ -136,7 +138,8 @@
             </div>
         </div>
     </div>
-    {!! Form::close() !!}
-    @endif
+</div>
+{!! Form::close() !!}
+@endif
 </div>
 @endsection

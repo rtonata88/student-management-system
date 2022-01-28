@@ -43,26 +43,35 @@
                     <tr>
                         <th>Date</th>
                         <th>Description</th>
+                        <th>Quantity</th>
                         <th>Amount</th>
+                        <th>Total</th>
                     </tr>
                     @foreach($enrolment as $enrolment)
                     <tr>
                         <td>{{$enrolment->registration_date}}</td>
                         <td>{{$enrolment->subject->subject_name}}</td>
+                        <td>9</td>
                         <td>{{$enrolment->subject->subject_fees}}</td>
+                        <td>{{$enrolment->subject->subject_fees * 9}}</td>
                     </tr>
                     @endforeach
                     @foreach($extra_fees as $extra_fee)
                     <tr>
                         <td>{{$extra_fee->transaction_date}}</td>
                         <td>{{$extra_fee->fee_description}}</td>
+                        <td>9</td>
                         <td>{{$extra_fee->amount}}</td>
+                        <td>{{$extra_fee->amount * 9}}</td>
                     </tr>
                     @endforeach
                     <tr>
-                        <th colspan="2">TOTAL</th>
+                        <th colspan="3">TOTAL</th>
                         <th>
                             {{$total }}
+                        </th>
+                        <th>
+                            {{$total * 9}}
                         </th>
                     </tr>
                 </table>

@@ -54,4 +54,5 @@ Route::get('/payment/reports', 'PaymentReportController@index');
 Route::resource('/subjects', 'ModuleController');
 Route::resource('/fees', 'FeesController');
 Route::resource('/centers', 'CenterController');
+Route::resource('/academic-year', 'AcademicYearController');
 
