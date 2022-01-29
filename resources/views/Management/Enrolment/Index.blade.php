@@ -114,6 +114,8 @@
                                 <td>{{$subject->subject_fees}}</td>
                                 <td class="text-center">
                                     <input type="checkbox" value="{{$subject->id}}" name="subject[]">
+                                    <input type="checkbox" value="{{$subject->subject_fees}}" name="subject_fee[]">
+                                    <input type="checkbox" value="{{$subject->subject_name}}" name="subject_name[]">
                                 </td>
                             </tr>
                             @endforeach
@@ -134,7 +136,8 @@
                     <thead>
                         <tr>
                             <th>Fee desscription</th>
-                            <th>Charge Automatically?</th>
+                            <th>Mandatory fee</th>
+                            <th>Charge type</th>
                             <th>Amount</th>
                             <th class="text-center">Tick to Charge</th>
                         </tr>
@@ -144,6 +147,7 @@
                         <tr>
                             <td>{{$fee->fee_description}}</td>
                             <td>{{$fee->automatic_charge}}</td>
+                            <td>{{$fee->charge_type}}</td>
                             <td>{{$fee->amount}}</td>
                             <td class="text-center">
                                 @if($fee->automatic_charge == 'Yes')
@@ -152,7 +156,8 @@
                                 <input type="checkbox" value="{{$fee->id}}" name="other_fees[]">
                                 @endif
                                 <input type="hidden" name="fee_description[]" value="{{$fee->fee_description}}">
-
+                                <input type="hidden" name="charge_type[]" value="{{$fee->charge_type}}">
+                                <input type="hidden" name="fee_amount[]" value="{{$fee->amount}}">
                             </td>
                         </tr>
                         @endforeach

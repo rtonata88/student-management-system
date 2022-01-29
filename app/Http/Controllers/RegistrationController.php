@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\AcademicYear;
 use App\Center;
 use App\Fees;
+use App\Invoice;
 use App\Module;
+use App\ModuleRegistration;
 use App\Registration;
 use App\StudentExtraCharge;
 use Illuminate\Http\Request;
@@ -41,8 +43,7 @@ class RegistrationController extends Controller
 
     public function show($student_id){
         $student = Student::find($student_id);
-        $enrolment = Registration::where('student_id', $student_id)->where('registration_status', 'Registered')->get();
-        $extra_fees = StudentExtraCharge::where('student_id', $student_id)->where('status', 'Active')->get();
+        $invoice = Invoice::where('student_id', $student_id)->where('academic_year', 'Registered')->get();
 
         $total = $this->calculateTotal($enrolment, $extra_fees);
 
@@ -64,47 +65,138 @@ class RegistrationController extends Controller
             'academic_year' => 'required',
         ]);
         $this->enrol($request);
-        $this->chargeExtraSelectedFees($request);
-        $this->chargeExtraMandatoryFees($request);
+        $this->registerModules($request);
+        $this->createInvoice($request);
         
-        return redirect()->route('enrolment.show', $request->student_id);
+        return redirect()->route('invoice.show', $request->student_id);
     }
 
     private function enrol($request){
-        for ($i = 0; $i < count($request->subject); $i++) {
+        $enrolment = Registration::where('academic_year',$request->academic_year)
+                                ->where('student_id', $request->student_id)
+                                ->first();
+
+        if(!$enrolment){
             $enrolment = new Registration;
             $enrolment->student_id = $request->student_id;
-            $enrolment->registration_date = date('Y-m-d H:i:s');
+            $enrolment->academic_year = $request->academic_year;
+            $enrolment->registration_date = date('Y-m-d');
             $enrolment->registration_status = 'Registered';
-            $enrolment->module_id = $request->subject[$i];
             $enrolment->save();
         }
     }
 
-    private function chargeExtraSelectedFees($request) {
-        for ($i = 0; count($request->other_fees); $i++) {
-            $other_charges = new StudentExtraCharge;
-            $other_charges->transaction_date = date('Y-m-d');
-            $other_charges->student_id = $request->student_id;
-            $other_charges->fee_id = $request->other_fees[$i];
-            $other_charges->fee_description = $request->fee_description[$i];
-            $other_charges->status = 'Active';
-            $other_charges->save();
+    private function registerModules($request){
+        for ($i = 0; $i < count($request->subject); $i++) {
+            $enrolment = new ModuleRegistration;
+            $enrolment->student_id = $request->student_id;
+            $enrolment->module_id = $request->subject[$i];
+            $enrolment->amount = $request->subject_fee[$i];
+            $enrolment->academic_year = $request->academic_year;
+            $enrolment->registration_date = date('Y-m-d H:i:s');
+            $enrolment->registration_status = 'Registered';
+            $enrolment->save();
         }
     }
 
-    private function chargeExtraMandatoryFees($request){
+    private function createInvoice($request){
+        $academic_year = AcademicYear::where('academic_year', $request->academic_year)->first();
+        $reference_number = $this->generateInvoiceReferenceNumber();
+
+        for ($i = 0; $i < count($request->subject); $i++) {
+            Invoice::create([
+                'student_id' => $request->student_id,
+                'reference_number' => $reference_number,
+                'model' => "Module",
+                'model_id' => $request->subject[$i],
+                'financial_year' => $request->academic_year,
+                'transaction_date' => date('Y-m-d'),
+                'line_description' => $request->subject_name[$i],
+                'debit_amount' => $this->calculateAmount($academic_year, $request->subject_fee[$i]),
+                'credit_amount' => 0
+            ]);
+        }
+    
+        $this->chargeExtraSelectedFees($academic_year, $reference_number, $request);
+        $this->chargeExtraMandatoryFees($academic_year, $reference_number, $request);
+    }
+
+    private function chargeExtraSelectedFees($academic_year, $reference_number, $request)
+    {
+        for ($i = 0; count($request->other_fees); $i++) {
+            Invoice::create([
+                'student_id' => $request->student_id,
+                'reference_number' => $reference_number,
+                'model' => "Fees",
+                'model_id' => $request->other_fees[$i],
+                'financial_year' => $request->academic_year,
+                'transaction_date' => date('Y-m-d'),
+                'line_description' => $request->fee_description[$i],
+                'debit_amount' => $this->calculateExtraFeeAmount($academic_year, $request->fee_amount[$i], $request->charge_type[$i]),
+                'credit_amount' => 0
+            ]);
+        }
+    }
+
+    private function calculateAmount($year, $subject_fee){
+        
+        $number_of_months = $this->calculateNumberOfMonths(date('Y-m-d'), $year->end_date);
+
+        $amount = $number_of_months * $subject_fee;
+
+        return $amount;
+    }
+
+    private function calculateExtraFeeAmount($academic_year, $amount, $charge_type){
+        
+        if($charge_type === 'Once-off'){
+            return $amount;
+        } else {
+            $number_of_months = $this->calculateNumberOfMonths(date('Y-m-d'), $academic_year->end_date);
+
+            return $number_of_months * $amount;
+        }
+    }
+
+    private function calculateNumberOfMonths($start_date, $end_date){
+        $ts1 = strtotime($start_date);
+        $ts2 = strtotime($end_date);
+
+        $year1 = date('Y', $ts1);
+        $year2 = date('Y', $ts2);
+
+        $month1 = date('m', $ts1);
+        $month2 = date('m', $ts2);
+
+        return (($year2 - $year1) * 12) + ($month2 - $month1);
+    }
+
+    private function generateInvoiceReferenceNumber(){
+        $reference_number = rand(100000, 999999);
+
+        $invoice = Invoice::where('reference_number', $reference_number)->first();
+        if (count($invoice) > 0) {
+            $this->generateInvoiceReferenceNumber();
+        }
+
+        return $reference_number;
+    }
+
+    private function chargeExtraMandatoryFees($academic_year, $reference_number, $request){
         $fees = Fees::where('automatic_charge', 'Yes')->get();
 
         foreach ($fees as $fee) {
-            $other_charges = new StudentExtraCharge;
-            $other_charges->transaction_date = date('Y-m-d');
-            $other_charges->student_id = $request->student_id;
-            $other_charges->fee_id = $fee->id;
-            $other_charges->fee_description = $fee->fee_description;
-            $other_charges->amount = $fee->amount;
-            $other_charges->status = 'Active';
-            $other_charges->save();
+            Invoice::create([
+                'student_id' => $request->student_id,
+                'reference_number' => $reference_number,
+                'model' => "Fees",
+                'model_id' => $fee->id,
+                'financial_year' => $request->academic_year,
+                'transaction_date' => date('Y-m-d'),
+                'line_description' => $fee->fee_description,
+                'debit_amount' => $this->calculateExtraFeeAmount($academic_year, $fee->amount, $fee->charge_type),
+                'credit_amount' => 0
+            ]);
         }
     }
 }

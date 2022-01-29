@@ -3,8 +3,8 @@
 <div class="c-subheader px-3">
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
-        <li class="breadcrumb-item">Management</li>
-        <li class="breadcrumb-item"><a href="/students">Enrolment Confirmation</a></li>
+        <li class="breadcrumb-item">Finance</li>
+        <li class="breadcrumb-item"><a href="/invoices">Invoices</a></li>
         <li class="breadcrumb-item active">{{$student->student_names}} {{$student->surname}}</li>
         <!-- Breadcrumb Menu-->
     </ol>
@@ -16,7 +16,7 @@
     <div class="col-md-9 col-xs-12">
         <div class="card">
             <div class="card-header">
-                <strong>Enrolment confirmation</strong> | <a href="{{route('enrolment.index', $student->id)}}">Back</a> | <a href="{{route('enrolment.index', $student->id)}}">Print</a>
+                <strong>Invoice</strong> | <a href="{{route('invoice.index')}}">Back</a> | <a href="/">Print</a>
             </div>
             <div class="card-body">
                 <table class="table-sm" style="width:100%">
@@ -43,36 +43,22 @@
                     <tr>
                         <th>Date</th>
                         <th>Description</th>
-                        <th>Amount</th>
-                        <th>Total</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Balance</th>
                     </tr>
-                    @foreach($enrolment as $enrolment)
+                    @foreach($invoices as $invoice)
+                    <?php
+                    $balance = ($invoice->debit > 0) ? $balance += $invoice->debit : $balance -= $invoice->credit
+                    ?>
                     <tr>
-                        <td>{{$enrolment->registration_date}}</td>
-                        <td>{{$enrolment->subject->subject_name}}</td>
-                        <td>9</td>
-                        <td>{{$enrolment->subject->subject_fees}}</td>
-                        <td>{{$enrolment->subject->subject_fees * 9}}</td>
+                        <td>{{$invoice->transaction_date}}</td>
+                        <td>{{$invoice->line_description}}</td>
+                        <td>{{$invoice->debit}}</td>
+                        <td>{{$invoice->credit}}</td>
+                        <td>{{$balance}}</td>
                     </tr>
                     @endforeach
-                    @foreach($extra_fees as $extra_fee)
-                    <tr>
-                        <td>{{$extra_fee->transaction_date}}</td>
-                        <td>{{$extra_fee->fee_description}}</td>
-                        <td>9</td>
-                        <td>{{$extra_fee->amount}}</td>
-                        <td>{{$extra_fee->amount * 9}}</td>
-                    </tr>
-                    @endforeach
-                    <tr>
-                        <th colspan="3">TOTAL</th>
-                        <th>
-                            {{$total }}
-                        </th>
-                        <th>
-                            {{$total * 9}}
-                        </th>
-                    </tr>
                 </table>
             </div>
         </div>
