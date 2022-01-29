@@ -36,6 +36,32 @@
                     {{Form::number('subject_fees', null, ['class' => 'form-control'])}}
                 </div>
             </div>
+
+            <div class="col-md-12 mt-2">
+                <div class="form-group">
+                    {{Form::label('subject_fees', 'Subject extra fees')}}
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Fee desscription</th>
+                                <th>Amount</th>
+                                <th class="text-center">Tick to Add</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($fees as $fee)
+                            <tr>
+                                <td>{{$fee->fee_description}}</td>
+                                <td>{{$fee->amount}}</td>
+                                <td class="text-center">
+                                    <input type="checkbox" value="{{$fee->id}}" @if(in_array($fee->id, $module_extra_fees)) checked @endif name="fee_id[]">
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
                 <button type="reset" class="btn"><span class="fa fa-ban"></span> Reset</button>

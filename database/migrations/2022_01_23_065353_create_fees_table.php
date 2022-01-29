@@ -17,6 +17,7 @@ class CreateFeesTable extends Migration
             $table->increments('id');
             $table->string('fee_description');
             $table->string('automatic_charge');
+            $table->string('charge_type');
             $table->decimal('amount', 15, 2);
             $table->timestamps();
         });

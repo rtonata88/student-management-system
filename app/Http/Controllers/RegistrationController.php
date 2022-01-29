@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\AcademicYear;
+use App\Center;
 use App\Fees;
 use App\Module;
 use App\Registration;
@@ -26,8 +28,12 @@ class RegistrationController extends Controller
         if($student){   
             $subjects = Module::all();
             $fees = Fees::all();
-
-            return view('Management.Enrolment.Index', compact('student', 'subjects', 'fees'));
+            $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+            $centers = Center::pluck('center_name', 'id');
+            $registration = $student->registration->where('academic_year', $academic_year)->first();
+            $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
+            
+            return view('Management.Enrolment.Index', compact('student', 'subjects', 'fees', 'academic_year', 'centers', 'registration_status'));
         }
         
         return view('Management.Enrolment.Index', compact('student'));
@@ -54,6 +60,9 @@ class RegistrationController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'academic_year' => 'required',
+        ]);
         $this->enrol($request);
         $this->chargeExtraSelectedFees($request);
         $this->chargeExtraMandatoryFees($request);

@@ -11,4 +11,8 @@ class Student extends Model
     public function guardian(){
         return $this->hasOne(StudentGuardian::class);
     }
+
+    public function registration(){
+        return $this->hasMany(Registration::class);
+    }
 }

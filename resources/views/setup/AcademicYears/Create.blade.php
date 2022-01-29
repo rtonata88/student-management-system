@@ -28,6 +28,18 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
+                            {{Form::label('start_date', 'Start Date')}}
+                            {{Form::date('start_date', null, ['class' => 'form-control', 'required'])}}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {{Form::label('end_date', 'End Date')}}
+                            {{Form::date('end_date', null, ['class' => 'form-control', 'required'])}}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
                             {{Form::label('status', 'Status')}}
                             {{Form::text('status', 0, ['class' => 'form-control', 'readonly'])}}
                         </div>

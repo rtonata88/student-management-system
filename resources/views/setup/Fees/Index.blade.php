@@ -31,7 +31,8 @@
                         <tr>
                             <th>Fee description</th>
                             <th>Amount</th>
-                            <th>Automatic Charge</th>
+                            <th>Mandatory fee</th>
+                            <th>Charge type</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -41,6 +42,7 @@
                             <td>{{$fee->fee_description}}</td>
                             <td>{{$fee->amount}}</td>
                             <td>{{$fee->automatic_charge}}</td>
+                            <td>{{$fee->charge_type}}</td>
                             <td>
                                 <a href="/fees/{{$fee->id}}/edit"> <span class="fa fa-pencil"></span> Edit</a>
                             </td>

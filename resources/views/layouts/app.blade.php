@@ -61,10 +61,22 @@
           </svg> Students</a>
       </li>
 
+      <li class="c-sidebar-nav-title">REGISTRATION MANAGEMENT</li>
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
+          </svg> Students</a>
+      </li>
+
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
           </svg> Enrolment</a>
+      </li>
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+          </svg> Cancel Enrolment</a>
       </li>
       <li class="c-sidebar-nav-title">FINANCE</li>
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoices">

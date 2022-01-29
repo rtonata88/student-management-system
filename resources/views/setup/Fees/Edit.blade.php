@@ -33,8 +33,14 @@
         </div>
         <div class="col-md-12">
           <div class="form-group">
-            {{Form::label('automatic_charge', 'Automatic charge at registration')}}
+            {{Form::label('automatic_charge', 'Mandatory fee')}}
             {{Form::select('automatic_charge', ['Yes' => 'Yes', 'No' => 'No'],null, ['class' => 'form-control'])}}
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            {{Form::label('charge_type', 'How should this fee be charged?')}}
+            {{Form::select('charge_type', ['Once-off' => 'Once off', 'Recurring' => 'Recurring'],null, ['class' => 'form-control'])}}
           </div>
         </div>
         <hr>

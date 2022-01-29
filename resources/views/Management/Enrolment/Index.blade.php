@@ -41,20 +41,36 @@
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                     <thead>
                         <tr>
+                            <th>Academic year</th>
                             <th>Student number</th>
                             <th>Student names</th>
                             <th>Surname</th>
                             <th>DOB</th>
-                            <th>Contact Number</th>
+                            <th>Registration status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td>{{$academic_year}}</td>
                             <td>{{$student->student_number}}</td>
                             <td>{{$student->student_names}}</td>
                             <td>{{$student->surname}}</td>
                             <td>{{$student->date_of_birth}}</td>
-                            <td>{{$student->contact_number}}</td>
+                            <td>
+                                @if($registration_status == 'Registered')
+                                <span class="badge badge-success">
+                                    {{$registration_status}}
+                                </span>
+                                @elseif($registration_status == 'Canceled')
+                                <span class="badge badge-danger">
+                                    {{$registration_status}}
+                                </span>
+                                @else
+                                <span class="badge badge-warning text-white">
+                                    Not registered
+                                </span>
+                                @endif
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -68,31 +84,42 @@
     <div class="offset-3 col-md-9">
         <div class="card">
             <div class="card-header">
-                <strong> Subjects </strong>
+                <strong> Academic and Module registrations </strong>
             </div>
             <div class="card-body">
-                <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Subject code</th>
-                            <th>Amount</th>
-                            <th class="text-center">Tick to Enrol</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($subjects as $subject)
-                        <tr>
-                            <td>{{$subject->subject_name}}</td>
-                            <td>{{$subject->subject_code}}</td>
-                            <td>{{$subject->subject_fees}}</td>
-                            <td class="text-center">
-                                <input type="checkbox" value="{{$subject->id}}" name="subject[]">
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="form-group">
+                    {{Form::label('academic_year', 'Academic Year')}}
+                    {{Form::text('academic_year', $academic_year, ['class' => 'form-control', 'readonly', 'required'])}}
+                </div>
+                <div class="form-group">
+                    {{Form::label('center_id', 'Center')}}
+                    {{Form::select('center_id', $centers,null, ['class' => 'form-control'])}}
+                </div>
+                <div class="form-group">
+                    <strong><label>Select subjects below: </label></strong>
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Subject code</th>
+                                <th>Amount</th>
+                                <th class="text-center">Tick to Enrol</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($subjects as $subject)
+                            <tr>
+                                <td>{{$subject->subject_name}}</td>
+                                <td>{{$subject->subject_code}}</td>
+                                <td>{{$subject->subject_fees}}</td>
+                                <td class="text-center">
+                                    <input type="checkbox" value="{{$subject->id}}" name="subject[]">
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

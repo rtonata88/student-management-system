@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAcademicYearsTable extends Migration
+class CreateModuleExtraFeesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateAcademicYearsTable extends Migration
      */
     public function up()
     {
-        Schema::create('academic_years', function (Blueprint $table) {
+        Schema::create('module_extra_fees', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('academic_year');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->tinyInteger('status');
+            $table->integer('module_id');
+            $table->integer('fee_id');
+            $table->decimal('amount', 15, 2);
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateAcademicYearsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('academic_years');
+        Schema::dropIfExists('module_extra_fees');
     }
 }

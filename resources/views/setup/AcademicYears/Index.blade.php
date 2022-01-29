@@ -30,6 +30,8 @@
                     <thead>
                         <tr>
                             <th>Academic Year</th>
+                            <th>Start</th>
+                            <th>End</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -38,6 +40,8 @@
                         @foreach($academic_years as $academic_year)
                         <tr>
                             <td>{{$academic_year->academic_year}}</td>
+                            <td>{{$academic_year->start_date}}</td>
+                            <td>{{$academic_year->end_date}}</td>
                             <td>
                                 @if($academic_year->status)
                                 <span class="badge bg-success">Active</span>
