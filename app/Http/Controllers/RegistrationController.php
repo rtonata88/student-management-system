@@ -9,7 +9,6 @@ use App\Invoice;
 use App\Module;
 use App\ModuleRegistration;
 use App\Registration;
-use App\StudentExtraCharge;
 use Illuminate\Http\Request;
 use App\Student;
 

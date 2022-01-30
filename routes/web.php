@@ -37,6 +37,9 @@ Route::post('/students/filter', 'StudentController@filter')->name('students.filt
 Route::resource('/enrolment', 'RegistrationController');
 Route::post('/enrolment/filter', 'RegistrationController@filter')->name('enrolment.filter');
 
+Route::resource('/cancel-registration', 'CancelRegistrationController');
+Route::post('/cancel-registration/filter', 'CancelRegistrationController@filter')->name('cancel-registration.filter');
+
 //Finance
 Route::resource('/invoices', 'InvoiceController');
 Route::post('/invoices/filter', 'InvoiceController@filter')->name('invoices.filter');

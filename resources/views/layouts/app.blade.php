@@ -77,7 +77,7 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check')}}"></use>
           </svg> Enrolment</a>
       </li>
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/cancel-registration">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-ban')}}"></use>
           </svg> Cancel Enrolment</a>
