@@ -15,9 +15,7 @@
 <div class="row">
     <div class="col-md-12 col-xs-12">
         <div class="card">
-            <div class="card-header">
-                <strong>Invoice</strong> | <a href="{{route('invoices.index')}}">Back</a> | <a href="/">Print</a>
-            </div>
+           
             <div class="card-body">
                 <table class="table-sm" style="width:100%">
                     <tr>

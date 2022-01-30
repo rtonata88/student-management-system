@@ -16,7 +16,7 @@
     <div class="col-md-12 col-xs-12">
         <div class="card">
             <div class="card-header">
-                <strong>Invoice</strong> | <a href="{{route('invoices.index')}}">Back</a> | <a href="/">Print</a>
+                <strong>Invoice</strong> | <a href="{{route('invoices.index')}}">Back</a> | <a href="{{route('invoices.print', $student->id)}}" target="_blank">Print</a>
             </div>
             <div class="card-body">
                 <table class="table-sm" style="width:100%">

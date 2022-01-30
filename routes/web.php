@@ -43,7 +43,7 @@ Route::post('/cancel-registration/filter', 'CancelRegistrationController@filter'
 //Finance
 Route::resource('/invoices', 'InvoiceController');
 Route::post('/invoices/filter', 'InvoiceController@filter')->name('invoices.filter');
-Route::post('/invoices/print/{student_id}', 'InvoiceController@print')->name('invoices.print');
+Route::get('/invoices/print/{student_id}', 'InvoiceController@print')->name('invoices.print');
 
 Route::resource('/payments', 'PaymentController');
 Route::post('/payments/filter', 'PaymentController@filter')->name('payments.filter');
