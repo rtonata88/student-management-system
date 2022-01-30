@@ -38,6 +38,8 @@
                 <strong> Student information </strong>
             </div>
             <div class="card-body">
+                {!! Form::open(array('route' => array('cancel-registration.store'), 'method' => 'post')) !!}
+                <input type="hidden" name="student_id" value="{{$student->id}}">
                 <table class="table-sm" style="width:100%">
                     <tr>
                         <th style="width: 150px">Student number </th>
@@ -91,17 +93,22 @@
                     {{Form::textarea('cancelation_reason', null, ['class' => 'form-control', 'required', 'placeholder' => 'Please type a cancelation reason here'])}}
                 </div>
             </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-sm btn-success">Confirm cancellation</button>
+                <a href="/cancel-registration">Cancel</a>
+            </div>
+            {!! Form::close() !!}
         </div>
     </div>
 </div>
-{!! Form::open(array('route' => array('cancel-registration.store'), 'method' => 'post')) !!}
+
 <input type="hidden" name="student_id" value="{{$student->id}}">
 <div class="row">
     <div class="offset-3 col-md-9">
 
     </div>
 
-    <div class="offset-3 col-md-9">
+    <!-- <div class="offset-3 col-md-9">
         <div class="card">
             <div class="card-header">
                 <strong>Other charges</strong>
@@ -133,9 +140,9 @@
                 <a href="/cancel-registration">Cancel</a>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
-{!! Form::close() !!}
+
 @endif
 </div>
 @endsection

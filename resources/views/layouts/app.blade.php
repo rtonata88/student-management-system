@@ -93,12 +93,7 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bank')}}"></use>
           </svg> Payments</a>
       </li>
-
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/statements">
-          <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-money')}}"></use>
-          </svg> Student Statements</a>
-      </li>
+      
       <li class="c-sidebar-nav-title">REPORTS</li>
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students/report">
           <svg class="c-sidebar-nav-icon">
