@@ -11,6 +11,7 @@ use App\ModuleRegistration;
 use App\Registration;
 use Illuminate\Http\Request;
 use App\Student;
+use App\StudentExtraCharge;
 
 class RegistrationController extends Controller
 {
@@ -152,7 +153,9 @@ class RegistrationController extends Controller
                 );
         }
 
-        Invoice::insert($invoices);
+        if (count($invoices) > 0) {
+            Invoice::insert($invoices);
+        }
 
         $fees = Fees::all();
         $this->chargeModuleAttachedFees($subjects, $fees, $academic_year, $reference_number, $request);
@@ -190,21 +193,30 @@ class RegistrationController extends Controller
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
         }
+        if(count($invoices) > 0){
+            Invoice::insert($invoices);
+        }
         
-        Invoice::insert($invoices);
     }
 
     private function chargeExtraSelectedFees($fees, $academic_year, $reference_number, $request)
     {
         $newInvoices = [];
+        $new_student_extra_charges = [];
         $invoices = Invoice::select('model_id')
                             ->where('reference_number', $reference_number)
                             ->where('model', 'Fees')
                             ->pluck('model_id')
                             ->toArray();
 
+        $student_extra_charges = StudentExtraCharge::whereYear('transaction_date', $academic_year)
+                                                    ->where('student_id', $request->student_id)
+                                                    ->whereIn('fee_id', $request->other_fees)
+                                                    ->pluck('fee_id')
+                                                    ->toArray();
         
         for ($i = 0; $i < count($request->other_fees); $i++) {
+            
             if(!in_array($request->other_fees[$i], $invoices)){
                 array_push(
                     $newInvoices, 
@@ -225,9 +237,30 @@ class RegistrationController extends Controller
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]);
             }
+            
+            if(!in_array($request->other_fees[$i], $student_extra_charges)){
+                array_push($new_student_extra_charges, [
+                    'transaction_date' => date('Y-m-d'),
+                    'student_id' => $request->student_id,
+                    'fee_id' => $request->other_fees[$i],
+                    'fee_description' => $fees->where('id', $request->other_fees[$i])->first()->fee_description,
+                    'amount' => $fees->where('id', $request->other_fees[$i])->first()->amount,
+                    'status' => 'Active',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+            }
+
+        }
+
+        if($newInvoices){
+            Invoice::insert($newInvoices);
+        }
+
+        if(count($new_student_extra_charges) > 0){
+            StudentExtraCharge::insert($new_student_extra_charges);
         }
         
-        Invoice::insert($newInvoices);
     }
 
     private function calculateAmount($year, $subject_fee){
@@ -277,6 +310,13 @@ class RegistrationController extends Controller
     private function chargeExtraMandatoryFees($fees, $academic_year, $reference_number, $request){
         $fees = $fees->where('automatic_charge', 'Yes');
 
+        $student_extra_charges = StudentExtraCharge::whereYear('transaction_date', $academic_year)
+            ->where('student_id', $request->student_id)
+            ->whereIn('fee_id', $request->other_fees)
+            ->pluck('fee_id')
+            ->toArray();
+
+        $new_student_extra_charges = [];
         foreach ($fees as $fee) {
             Invoice::create([
                 'student_id' => $request->student_id,
@@ -289,6 +329,24 @@ class RegistrationController extends Controller
                 'debit_amount' => $this->calculateExtraFeeAmount($academic_year, $fee->amount, $fee->charge_type),
                 'credit_amount' => 0
             ]);
+
+            if (!in_array($fee->id, $student_extra_charges)) {
+                array_push($new_student_extra_charges, [
+                    'transaction_date' => date('Y-m-d'),
+                    'student_id' => $request->student_id,
+                    'fee_id' => $fee->id,
+                    'fee_description' => $fee->fee_description,
+                    'amount' => $fee->amount,
+                    'status' => 'Active',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+            }
+        }
+
+        if(count($new_student_extra_charges) > 0)
+        {
+            StudentExtraCharge::insert($new_student_extra_charges);
         }
     }
 }
