@@ -10,6 +10,7 @@ use App\Fees;
 use App\Invoice;
 use App\Module;
 use App\ModuleRegistration;
+use App\Registration;
 use App\StudentExtraCharge;
 
 class CancelRegistrationController extends Controller
@@ -54,18 +55,41 @@ class CancelRegistrationController extends Controller
                             ->update([
                                 'cancellation_date' => date('Y-m-d'),
                                 'cancellation_reason' => $request->cancelation_reason,
+                                'registration_status' => 'Canceled'
                             ]);
+
+        $this->cancelStudentEnrolment($academic_year, $request);
 
         $reference_number = $this->generateInvoiceReferenceNumber();
         $this->creditModuleFees($academic_year, $reference_number, $request);
-        $this->creditExtraChargedFees($academic_year, $reference_number, $request);
+
+        /**
+         * TODO: Given to find out if extra fees charged can be canceled.
+         **/
+        //$this->creditExtraChargedFees($academic_year, $reference_number, $request);
+    }
+
+    private function cancelStudentEnrolment($academic_year, $request){
+        $registered_modules = ModuleRegistration::where('student_id', $request->student_id)
+                                                ->where('academic_year', $academic_year)
+                                                ->whereNotNull('cancellation_date')
+                                                ->get();
+        
+        if(count($registered_modules) == 0){
+            Registration::where('student_id', $request->student_id)
+                        ->where('academic_year', $academic_year)
+                        ->update([
+                            'cancellation_date' => date('Y-m-d'),
+                            'cancellation_reason' => $request->cancelation_reason,
+                            'registration_status' => 'Canceled']);
+        }
+
     }
 
     private function creditModuleFees($academic_year, $reference_number, $request)
     {
         $invoices = [];
         
-
         $subjects = Module::whereIn('id', $request->subject)->get();
 
         for ($i = 0; $i < count($request->subject); $i++) {
