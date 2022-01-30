@@ -16,6 +16,7 @@ class CreateRegistrationsTable extends Migration
         Schema::create('registrations', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('student_id');
+            $table->integer('center_id');
             $table->integer('academic_year');
             $table->date('registration_date');
             $table->string('registration_status');

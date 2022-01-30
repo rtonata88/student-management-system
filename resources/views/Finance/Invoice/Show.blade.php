@@ -13,10 +13,10 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-9 col-xs-12">
+    <div class="col-md-12 col-xs-12">
         <div class="card">
             <div class="card-header">
-                <strong>Invoice</strong> | <a href="{{route('invoice.index')}}">Back</a> | <a href="/">Print</a>
+                <strong>Invoice</strong> | <a href="{{route('invoices.index')}}">Back</a> | <a href="/">Print</a>
             </div>
             <div class="card-body">
                 <table class="table-sm" style="width:100%">
@@ -49,14 +49,14 @@
                     </tr>
                     @foreach($invoices as $invoice)
                     <?php
-                    $balance = ($invoice->debit > 0) ? $balance += $invoice->debit : $balance -= $invoice->credit
+                    $balance = ($invoice->debit_amount > 0) ? $balance += $invoice->debit_amount : $balance -= $invoice->credit_amount
                     ?>
                     <tr>
                         <td>{{$invoice->transaction_date}}</td>
                         <td>{{$invoice->line_description}}</td>
-                        <td>{{$invoice->debit}}</td>
-                        <td>{{$invoice->credit}}</td>
-                        <td>{{$balance}}</td>
+                        <td>{{number_format($invoice->debit_amount, 2, '.',',')}}</td>
+                        <td>{{number_format($invoice->credit_amount, 2, '.',',')}}</td>
+                        <td>{{number_format($balance, 2, '.',',')}}</td>
                     </tr>
                     @endforeach
                 </table>

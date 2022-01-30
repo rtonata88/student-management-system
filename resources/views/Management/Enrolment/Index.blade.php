@@ -114,8 +114,8 @@
                                 <td>{{$subject->subject_fees}}</td>
                                 <td class="text-center">
                                     <input type="checkbox" value="{{$subject->id}}" name="subject[]">
-                                    <input type="checkbox" value="{{$subject->subject_fees}}" name="subject_fee[]">
-                                    <input type="checkbox" value="{{$subject->subject_name}}" name="subject_name[]">
+                                    <input type="hidden" value="{{$subject->subject_fees}}" name="subject_fee[]">
+                                    <input type="hidden" value="{{$subject->subject_name}}" name="subject_name[]">
                                 </td>
                             </tr>
                             @endforeach

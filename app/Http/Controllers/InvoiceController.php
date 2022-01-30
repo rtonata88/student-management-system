@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\Invoice;
+use App\Student;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -15,12 +16,14 @@ class InvoiceController extends Controller
 
     public function show($id)
     {
+        $student = Student::find($id);
+        
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
         
         $invoices = Invoice::where('student_id', $id)
-                            ->where('academic_year', $academic_year)
+                            ->where('financial_year', $academic_year)
                             ->get();
         
-        return view('Finance.Invoice.Show', compact('invoices'));
+        return view('Finance.Invoice.Show', compact('invoices', 'student'));
     }
 }
