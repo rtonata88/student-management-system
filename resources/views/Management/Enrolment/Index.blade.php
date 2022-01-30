@@ -113,7 +113,11 @@
                                 <td>{{$subject->subject_code}}</td>
                                 <td>{{$subject->subject_fees}}</td>
                                 <td class="text-center">
+                                    @if(in_array($subject->id, $registered_modules))
+                                    <input type="checkbox" value="{{$subject->id}}" name="subject[]" checked="checked" disabled>
+                                    @else
                                     <input type="checkbox" value="{{$subject->id}}" name="subject[]">
+                                    @endif
                                     <input type="hidden" value="{{$subject->subject_fees}}" name="subject_fee[]">
                                     <input type="hidden" value="{{$subject->subject_name}}" name="subject_name[]">
                                 </td>
@@ -150,9 +154,10 @@
                             <td>{{$fee->charge_type}}</td>
                             <td>{{$fee->amount}}</td>
                             <td class="text-center">
-                                @if($fee->automatic_charge == 'Yes')
+                                @if(($fee->automatic_charge == 'Yes') || (in_array($fee->id, $charged_fees)))
                                 <input type="checkbox" value="{{$fee->id}}" checked="checked" name="other_fees[]" disabled>
                                 @else
+
                                 <input type="checkbox" value="{{$fee->id}}" name="other_fees[]">
                                 @endif
                                 <input type="hidden" name="fee_description[]" value="{{$fee->fee_description}}">

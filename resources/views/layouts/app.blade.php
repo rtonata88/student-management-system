@@ -60,57 +60,61 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
           </svg> Students</a>
       </li>
-
-      <li class="c-sidebar-nav-title">REGISTRATION MANAGEMENT</li>
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fees">
           <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
-          </svg> Students</a>
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-money')}}"></use>
+          </svg> Fees</a>
+      </li>
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/subjects">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-book')}}"></use>
+          </svg> Subjects</a>
       </li>
 
+      <li class="c-sidebar-nav-title">REGISTRATION MANAGEMENT</li>
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment">
           <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check')}}"></use>
           </svg> Enrolment</a>
       </li>
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment">
           <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-ban')}}"></use>
           </svg> Cancel Enrolment</a>
       </li>
       <li class="c-sidebar-nav-title">FINANCE</li>
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoices">
           <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-wallet')}}"></use>
           </svg> Invoices</a>
       </li>
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payments">
           <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bank')}}"></use>
           </svg> Payments</a>
       </li>
 
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/statements">
           <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-money')}}"></use>
           </svg> Student Statements</a>
       </li>
       <li class="c-sidebar-nav-title">REPORTS</li>
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students/report">
           <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
           </svg> Students</a>
       </li>
 
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoice/reports">
           <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
           </svg> Invoices</a>
       </li>
 
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payment/reports">
           <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
           </svg> Payments</a>
       </li>
 

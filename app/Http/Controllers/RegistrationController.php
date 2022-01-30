@@ -36,7 +36,7 @@ class RegistrationController extends Controller
             $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
             $registered_modules = ModuleRegistration::where('student_id', $student->id)
-                                                    ->where('academoc_year', $academic_year)
+                                                    ->where('academic_year', $academic_year)
                                                     ->where('registration_status', 'Registered')
                                                     ->pluck('module_id')
                                                     ->toArray();
@@ -44,7 +44,7 @@ class RegistrationController extends Controller
             $charged_fees = Invoice::where('model', 'Fees')
                                     ->where('student_id', $student->id)
                                     ->where('financial_year', $academic_year)
-                                    ->pluck('module_id')
+                                    ->pluck('model_id')
                                     ->toArray();
 
             return view('Management.Enrolment.Index', compact('student', 'subjects', 'fees', 'academic_year', 'centers', 'registration_status', 'registered_modules', 'charged_fees'));
