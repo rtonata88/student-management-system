@@ -15,7 +15,7 @@
 <div class="row">
     <div class="col-md-12 col-xs-12">
         <div class="card">
-           
+
             <div class="card-body">
                 <table class="table-sm" style="width:100%">
                     <tr>
@@ -57,6 +57,14 @@
                         <td>{{number_format($balance, 2, '.',',')}}</td>
                     </tr>
                     @endforeach
+                    <tr>
+                        <th colspan="4" class="text-right">
+                            You are owing
+                        </th>
+                        <th>
+                            {{number_format($balance, 2, '.',',')}}
+                        </th>
+                    </tr>
                 </table>
             </div>
         </div>

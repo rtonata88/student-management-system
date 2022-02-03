@@ -57,6 +57,7 @@ Route::get('/payment/reports', 'PaymentReportController@index');
 
 //LMS setups
 Route::resource('/subjects', 'ModuleController');
+Route::resource('/company', 'CompanySetupController');
 Route::resource('/fees', 'FeesController');
 Route::resource('/centers', 'CenterController');
 Route::resource('/academic-year', 'AcademicYearController');

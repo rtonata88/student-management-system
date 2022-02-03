@@ -42,9 +42,9 @@
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
                         <th>Payment Date</th>
-                        <th>Amount</th>
                         <th>Method</th>
                         <th>Received by</th>
+                        <th>Amount</th>
                     </tr>
                     @foreach($payments as $payment)
                     <tr>

@@ -93,7 +93,7 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bank')}}"></use>
           </svg> Payments</a>
       </li>
-      
+
       <li class="c-sidebar-nav-title">REPORTS</li>
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students/report">
           <svg class="c-sidebar-nav-icon">
@@ -130,10 +130,9 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-cog')}}"></use>
           </svg> Setups</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('subjects.index')}}"><span class="c-sidebar-nav-icon"></span> Subjects</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('fees.index')}}"><span class="c-sidebar-nav-icon"></span> Fees</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('academic-year.index')}}"><span class="c-sidebar-nav-icon"></span> Academic Years</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('centers.index')}}"><span class="c-sidebar-nav-icon"></span> Centers</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('subjects.index')}}"><span class="c-sidebar-nav-icon"></span> Company</a></li>
         </ul>
       </li>
     </ul>
@@ -244,19 +243,6 @@
   <!--  Data Tables -->
   <script src="{{asset('bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.js')}}"></script>
-
-  <!-- start - This is for export functionality only -->
-  <!-- <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
- <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
- <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
- <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
- <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
- <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script> -->
-
-
-
 
   <!-- end - This is for export functionality only -->
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
