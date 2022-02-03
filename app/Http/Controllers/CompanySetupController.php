@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CompanySetup;
 use Illuminate\Http\Request;
 
 class CompanySetupController extends Controller
@@ -11,9 +12,16 @@ class CompanySetupController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function show($id)
     {
-        return view('Setup.Company.Index');
+        $company = CompanySetup::find($id);
+        return view('Setup.Company.Show', compact('company'));
+    }
+
+    public function edit($id){
+        $company = CompanySetup::find($id);
+
+        return view('Setup.Company.Edit', compact('company'));
     }
 
 }

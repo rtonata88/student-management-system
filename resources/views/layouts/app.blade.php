@@ -132,7 +132,7 @@
         <ul class="c-sidebar-nav-dropdown-items">
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('academic-year.index')}}"><span class="c-sidebar-nav-icon"></span> Academic Years</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('centers.index')}}"><span class="c-sidebar-nav-icon"></span> Centers</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('subjects.index')}}"><span class="c-sidebar-nav-icon"></span> Company</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('company.show', 1)}}"><span class="c-sidebar-nav-icon"></span> Company</a></li>
         </ul>
       </li>
     </ul>
