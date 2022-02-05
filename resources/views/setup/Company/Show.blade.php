@@ -47,7 +47,11 @@
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Logo </th>
-                        <td></td>
+                        <td>
+                            <div class="col-md-4">
+                                <img src="{{asset('storage/'.$company->logo)}}" class="img-fluid" />
+                            </div>
+                        </td>
                     </tr>
                 </table>
             </div>

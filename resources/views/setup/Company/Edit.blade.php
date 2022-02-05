@@ -18,7 +18,8 @@
             <div class="card-header">
                 <strong>Company information</strong> | <a href="{{route('company.show', 1)}}">Back</a>
             </div>
-            {!! Form::model($company, array('route'=>array('company.update', $company->id), 'class'=>'form-horizontal', 'method'=>'PATCH', 'enctype="multipart/form-data"')) !!}
+            {!! Form::model($company, array('route' => array('company.update', 1), 'method' => 'post', 'enctype="multipart/form-data"')) !!}
+            <input type="hidden" name="_method" value="patch">
             <div class="card-body">
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
@@ -40,7 +41,7 @@
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Fax </th>
-                        <td>{{Form::text('fax', null, ['class' => 'form-control input-no-border', 'placeholder' => 'Fax number'])}}</td>
+                        <td>{{Form::text('fax_number', null, ['class' => 'form-control input-no-border', 'placeholder' => 'Fax number'])}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Email </th>
