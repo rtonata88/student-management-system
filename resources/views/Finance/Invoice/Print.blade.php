@@ -15,7 +15,33 @@
 <div class="row">
     <div class="col-md-12 col-xs-12">
         <div class="card">
-
+            <div class="card-header">
+                <div class="row">
+                    <table style="width: 100%;" width="100%">
+                        <tr>
+                            <td style="width: 70%;">
+                                <div class="col-md-6">
+                                    <h3>{{$company->company_name}}</h3><br>
+                                    {{$company->address1}} <br>
+                                    {{$company->address2}} <br>
+                                    {{$company->address3}} <br>
+                                    {{$company->address4}} <br>
+                                    <strong>C: </strong> {{$company->contact_number}} <br>
+                                    <strong>F: </strong>{{$company->fax}} <br>
+                                    <strong>E: </strong>{{$company->email}} <br>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <img src="{{asset('storage/'.$company->logo)}}" class="img-fluid" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
             <div class="card-body">
                 <table class="table-sm" style="width:100%">
                     <tr>
@@ -36,7 +62,7 @@
                     </tr>
 
                 </table>
-
+                <hr>
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
                         <th>Date</th>
@@ -59,7 +85,11 @@
                     @endforeach
                     <tr>
                         <th colspan="4" class="text-right">
+                            @if($balance >= 0)
                             You are owing
+                            @else
+                            We owe you
+                            @endif
                         </th>
                         <th>
                             {{number_format($balance, 2, '.',',')}}

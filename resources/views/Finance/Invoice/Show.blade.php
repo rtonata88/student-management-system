@@ -59,6 +59,18 @@
                         <td>{{number_format($balance, 2, '.',',')}}</td>
                     </tr>
                     @endforeach
+                    <tr>
+                        <th colspan="4" class="text-right">
+                            @if($balance >= 0)
+                            You are owing
+                            @else
+                            We owe you
+                            @endif
+                        </th>
+                        <th>
+                            {{number_format($balance, 2, '.',',')}}
+                        </th>
+                    </tr>
                 </table>
             </div>
         </div>

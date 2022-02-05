@@ -28,15 +28,32 @@ class PaymentController extends Controller
         if ($student) {
             $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
+            $balance = $this->calculateBalance($academic_year, $student->id);
+
             $registration = $student->registration->where('academic_year', $academic_year)->first();
             $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
-            return view('Finance.Payments.Index', compact('student', 'academic_year', 'registration_status'));
+            return view('Finance.Payments.Index', compact('student', 'academic_year', 'registration_status', 'balance'));
         }
 
         Session::flash('message', 'Student information not found, please make sure you have entered a correct student number.');
 
         return redirect()->back();
+    }
+
+    private function calculateBalance($academic_year, $id)
+    {
+        $invoices = Invoice::where('student_id', $id)
+            ->where('financial_year', $academic_year)
+            ->get();
+
+        $balance = 0;
+
+        foreach ($invoices as $invoice){
+            $balance = ($invoice->debit_amount > 0) ? $balance += $invoice->debit_amount : $balance -= $invoice->credit_amount;
+        }
+
+        return  $balance;
     }
 
     public function show($id)

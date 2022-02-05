@@ -53,6 +53,7 @@
                             <th>Student names</th>
                             <th>Surname</th>
                             <th>DOB</th>
+                            <th>Balance</th>
                             <th>Registration status</th>
                         </tr>
                     </thead>
@@ -63,6 +64,7 @@
                             <td>{{$student->student_names}}</td>
                             <td>{{$student->surname}}</td>
                             <td>{{$student->date_of_birth}}</td>
+                            <td>{{number_format($balance, 2, '.',',')}}</td>
                             <td>
                                 @if($registration_status == 'Registered')
                                 <span class="badge badge-success">

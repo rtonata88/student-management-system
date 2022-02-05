@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AcademicYear;
+use App\CompanySetup;
 use App\Invoice;
 use App\Student;
 use Session;
@@ -46,6 +47,7 @@ class InvoiceController extends Controller
 
     public function print($student_id){
         $student = Student::find($student_id);
+        $company = CompanySetup::find(1);
 
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
@@ -53,6 +55,6 @@ class InvoiceController extends Controller
             ->where('financial_year', $academic_year)
             ->get();
 
-        return view('Finance.Invoice.Print', compact('invoices', 'student'));
+        return view('Finance.Invoice.Print', compact('invoices', 'student', 'company'));
     }
 }
