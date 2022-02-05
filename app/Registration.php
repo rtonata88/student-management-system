@@ -9,4 +9,8 @@ class Registration extends Model
     public function subject(){
         return $this->belongsTo(Module::class, 'module_id');
     }
+
+    public function center(){
+        return $this->belongsTo(Center::class, 'center_id');
+    }
 }

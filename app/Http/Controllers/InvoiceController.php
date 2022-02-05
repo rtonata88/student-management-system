@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\CompanySetup;
+use App\Registration;
 use App\Invoice;
 use App\Student;
 use Session;
@@ -42,7 +43,17 @@ class InvoiceController extends Controller
                             ->where('financial_year', $academic_year)
                             ->get();
         
-        return view('Finance.Invoice.Show', compact('invoices', 'student'));
+        $student_center = $this->getStudentCenter($academic_year, $student->id);
+        return view('Finance.Invoice.Show', compact('invoices', 'student', 'student_center'));
+    }
+
+    private function getStudentCenter($academic_year, $student_id){
+
+        $enrolment = Registration::where('academic_year',$academic_year)
+                                ->where('student_id', $student_id)
+                                ->first();
+        
+        return $enrolment->center;
     }
 
     public function print($student_id){
@@ -55,6 +66,8 @@ class InvoiceController extends Controller
             ->where('financial_year', $academic_year)
             ->get();
 
-        return view('Finance.Invoice.Print', compact('invoices', 'student', 'company'));
+            $student_center = $this->getStudentCenter($academic_year, $student->id);
+
+        return view('Finance.Invoice.Print', compact('invoices', 'student', 'company', 'student_center'));
     }
 }

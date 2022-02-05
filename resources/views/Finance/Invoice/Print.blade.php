@@ -17,26 +17,20 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <table style="width: 100%;" width="100%">
+                    <table style="width: 100%;">
                         <tr>
-                            <td style="width: 70%;">
-                                <div class="col-md-6">
-                                    <h3>{{$company->company_name}}</h3><br>
-                                    {{$company->address1}} <br>
-                                    {{$company->address2}} <br>
-                                    {{$company->address3}} <br>
-                                    {{$company->address4}} <br>
-                                    <strong>C: </strong> {{$company->contact_number}} <br>
-                                    <strong>F: </strong>{{$company->fax}} <br>
-                                    <strong>E: </strong>{{$company->email}} <br>
-                                </div>
-                            </td>
                             <td>
-                                <div class="col-md-6">
-                                    <div class="col-md-4">
-                                        <img src="{{asset('storage/'.$company->logo)}}" class="img-fluid" />
-                                    </div>
-                                </div>
+                                <h3>{{$company->company_name}}</h3><br>
+                                {{$company->address1}} <br>
+                                {{$company->address2}} <br>
+                                {{$company->address3}} <br>
+                                {{$company->address4}} <br>
+                                <strong>C: </strong> {{$company->contact_number}} <br>
+                                <strong>F: </strong>{{$company->fax}} <br>
+                                <strong>E: </strong>{{$company->email}} <br>
+                            </td>
+                            <td width="200px; margin-right:20px;">
+                                <img src="{{asset('storage/'.$company->logo)}}" class="img-fluid" />
                             </td>
                         </tr>
                     </table>
@@ -59,6 +53,10 @@
                     <tr>
                         <th style="width: 100px">Date of Birth</th>
                         <td>{{$student->date_of_birth}}</td>
+                    </tr>
+                    <tr>
+                        <th style="width: 100px">Center</th>
+                        <td>{{$student_center->center_name}}</td>
                     </tr>
 
                 </table>

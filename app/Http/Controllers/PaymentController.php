@@ -83,17 +83,23 @@ class PaymentController extends Controller
     }
 
     public function store(Request $request){
-
+        $request->validate([
+            'payment_amount' => 'min:1',
+        ]);
+        
         $payment_data = $request->all();
         $payment_data['payment_date'] = date('Y-m-d');
         $payment_data['received_by'] = Auth::user()->id;
 
-        $payment = Payment::create($payment_data);
+        if($request->payment_amount > 0){
 
-        $this->creditStudentAccount($request, $payment);
-
-        Session::flash('message', 'Payment successfully recorded.');
-        
+            $payment = Payment::create($payment_data);
+            
+            $this->creditStudentAccount($request, $payment);
+            
+            Session::flash('message', 'Payment successfully recorded.');
+            
+        }
         return redirect()->route('payments.show', $request->student_id);
     }
 
