@@ -19,7 +19,7 @@
             <div class="card-body">
                 {!! Form::open(array('route' => array('students.filter'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
                 <div class="form-group">
-                    {{Form::number('student_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student number'])}}
+                    {{Form::text('student_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student number'])}}
                 </div>
                 <div class="form-group">
                     {{Form::text('surname', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Surname'])}}

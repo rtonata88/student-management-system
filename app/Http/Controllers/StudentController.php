@@ -15,22 +15,29 @@ class StudentController extends Controller
 
     public function index()
     {
-        $students = Student::all();
+        $students = Student::paginate(100);
         
         return view('Management.Students.Index', compact('students'));
     }
 
     public function filter(Request $request)
     {
-        $students = Student::all();
+        $students = Student::paginate(100);
 
-        if(isset($request->student_number))
-        {
-            $students = $students->where('student_number', $request->student_number);
+        if (isset($request->student_number)) {
+            $students = Student::where('student_number2', $request->student_number)->get();
+
+            if ($students) {
+                return view('Management.Students.Index', compact('students'));
+            }
         }
 
         if (isset($request->surname)) {
-            $students = $students->where('surname', $request->surname);
+            $students = Student::where('surname', 'like', '%' . $request->surname . '%')->get();
+
+            if (count($students)) {
+                return view('Management.Students.Index', compact('students'));
+            }
         }
 
         return view('Management.Students.Index', compact('students'));
