@@ -36,6 +36,10 @@
                         <th style="width: 100px">Date of Birth</th>
                         <td>{{$student->date_of_birth}}</td>
                     </tr>
+                    <tr>
+                        <th style="width: 100px">Center</th>
+                        <td>{{$student_center->center_name}}</td>
+                    </tr>
 
                 </table>
 
