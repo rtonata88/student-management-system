@@ -91,7 +91,12 @@
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payments">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bank')}}"></use>
-          </svg> Payments</a>
+          </svg> Payments & Credit Memos</a>
+      </li>
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/debit-memos">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bank')}}"></use>
+          </svg> Debit Memos</a>
       </li>
 
       <li class="c-sidebar-nav-title">REPORTS</li>

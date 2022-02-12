@@ -40,7 +40,7 @@
                 <table class="table-sm" style="width:100%">
                     <tr>
                         <th style="width: 150px">Student number </th>
-                        <td>{{$student->student_number}}</td>
+                        <td>{{$student->student_number2}}</td>
                     </tr>
                     <tr>
                         <th style="width: 150px">Student names </th>

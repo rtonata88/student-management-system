@@ -4,7 +4,7 @@
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
         <li class="breadcrumb-item">Finance</li>
-        <li class="breadcrumb-item"><a href="/invoices">Payments</a></li>
+        <li class="breadcrumb-item"><a href="/payments">Payments</a></li>
         <li class="breadcrumb-item active">{{$student->student_names}} {{$student->surname}}</li>
         <!-- Breadcrumb Menu-->
     </ol>
@@ -22,7 +22,7 @@
                 <table class="table-sm" style="width:100%">
                     <tr>
                         <th style="width: 150px">Student number </th>
-                        <td>{{$student->student_number}}</td>
+                        <td>{{$student->student_number2}}</td>
                     </tr>
                     <tr>
                         <th style="width: 150px">Student names </th>

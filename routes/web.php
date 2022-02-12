@@ -54,6 +54,9 @@ Route::post('/payments/filter', 'PaymentController@filter')->name('payments.filt
 Route::resource('/statements', 'StatementController');
 Route::post('/statements/filter', 'StatementController@filter')->name('statements.filter');
 
+Route::resource('/debit-memos', 'DebitMemoController');
+Route::post('/debit-memos/filter', 'DebitMemoController@filter')->name('debit-memos.filter');
+
 //Reports
 Route::get('/student/reports', 'StudentReportController@index');
 Route::get('/invoice/reports', 'InvoiceReportController@index');

@@ -27,7 +27,7 @@
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5);width:250px;">Reference Number </th>
-                        <td>{{$student->student_number}}</td>
+                        <td>{{$student->student_number2}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Student names </th>

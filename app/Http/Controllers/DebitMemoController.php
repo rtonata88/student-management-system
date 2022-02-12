@@ -3,22 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\AcademicYear;
+use App\DebitMemo;
 use App\Invoice;
-use App\Payment;
 use App\Student;
-use Session;
-use Auth;
 use Illuminate\Http\Request;
 
-class PaymentController extends Controller
+use Auth;
+use Session;
+
+class DebitMemoController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    public function index(){
-        return view('Finance.Payments.Search');
+    public function index()
+    {
+        return view('Finance.DebitMemo.Search');
     }
 
     public function filter(Request $request)
@@ -26,7 +28,7 @@ class PaymentController extends Controller
         if (isset($request->student_number)) {
             $student = Student::where('student_number2', $request->student_number)->first();
             if ($student) {
-                return redirect()->route('payments.edit', $student->id);
+                return redirect()->route('debit-memos.edit', $student->id);
             }
         }
 
@@ -36,9 +38,9 @@ class PaymentController extends Controller
             if (count($students)) {
 
                 if (count($students) === 1) {
-                    return redirect()->route('payments.edit', $students->first()->id);
+                    return redirect()->route('debit-memos.edit', $students->first()->id);
                 } else {
-                    return view('Finance.Payments.Search', compact('students'));
+                    return view('Finance.DebitMemo.Search', compact('students'));
                 }
             }
         }
@@ -48,7 +50,8 @@ class PaymentController extends Controller
         return redirect()->back();
     }
 
-    public function edit($student_id){
+    public function edit($student_id)
+    {
         $student = Student::find($student_id);
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
@@ -57,7 +60,7 @@ class PaymentController extends Controller
         $registration = $student->registration->where('academic_year', $academic_year)->first();
         $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
-        return view('Finance.Payments.Create', compact('student', 'academic_year', 'registration_status', 'balance'));
+        return view('Finance.DebitMemo.Create', compact('student', 'academic_year', 'registration_status', 'balance'));
     }
 
     private function calculateBalance($academic_year, $id)
@@ -68,7 +71,7 @@ class PaymentController extends Controller
 
         $balance = 0;
 
-        foreach ($invoices as $invoice){
+        foreach ($invoices as $invoice) {
             $balance = ($invoice->debit_amount > 0) ? $balance += $invoice->debit_amount : $balance -= $invoice->credit_amount;
         }
 
@@ -81,11 +84,11 @@ class PaymentController extends Controller
 
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
-        $payments = Payment::where('student_id', $id)
-            ->whereYear('payment_date', $academic_year)
+        $debit_memos = DebitMemo::where('student_id', $id)
+            ->whereYear('transaction_date', $academic_year)
             ->get();
 
-        return view('Finance.Payments.Show', compact('payments', 'student'));
+        return view('Finance.DebitMemo.Show', compact('debit_memos', 'student'));
     }
 
     public function print($student_id)
@@ -94,54 +97,47 @@ class PaymentController extends Controller
 
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
-        $payments = Payment::where('student_id', $student_id)
-            ->whereYear('payment_date', $academic_year)
+        $debit_memos = DebitMemo::where('student_id', $student_id)
+            ->whereYear('transacion_date', $academic_year)
             ->get();
 
-        return view('Finance.Payments.Print', compact('payments', 'student'));
+        return view('Finance.DebitMemo.Print', compact('debit_memos', 'student'));
     }
 
-    public function store(Request $request){
-        
+    public function store(Request $request)
+    {
+
         $request->validate([
-            'payment_amount' => 'required|numeric|min:1',
+            'amount' => 'required|numeric|min:1',
         ]);
+
+        $data = $request->all();
+        $data['transaction_date'] = date('Y-m-d');
+        $data['captured_by'] = Auth::user()->id;
+
+        $debit_memo = DebitMemo::create($data);
+
+        $this->debitStudentAccount($request, $debit_memo);
+
+        Session::flash('message', 'Debit Memo successfully recorded.');
         
-        $payment_data = $request->all();
-        $payment_data['payment_date'] = date('Y-m-d');
-        $payment_data['received_by'] = Auth::user()->id;
-
-        if($request->payment_amount > 0){
-
-            $payment = Payment::create($payment_data);
-            
-            $this->creditStudentAccount($request, $payment);
-            
-            Session::flash('message', 'Payment successfully recorded.');
-            
-        }
-        return redirect()->route('payments.show', $request->student_id);
+        return redirect()->route('debit-memos.show', $request->student_id);
     }
 
-    public function creditStudentAccount($request, $payment){
+    public function debitStudentAccount($request, $debit_memo)
+    {
         $reference_number  = $this->generateInvoiceReferenceNumber();
-
-        if($request->document_type === 'Payment'){
-            $line_description = 'Payment - Thank you';
-        } else {
-            $line_description = 'Credit Memo';
-        }
 
         Invoice::create([
             'student_id' => $request->student_id,
             'reference_number' => $reference_number,
-            'model' => "Payment",
-            'model_id' => $payment->id,
+            'model' => "DebitMemo",
+            'model_id' => $debit_memo->id,
             'financial_year' => $request->academic_year,
             'transaction_date' => date('Y-m-d'),
-            'line_description' => $line_description,
-            'debit_amount' => 0,
-            'credit_amount' =>  $payment->payment_amount
+            'line_description' => 'Debit Memo',
+            'debit_amount' => $debit_memo->amount,
+            'credit_amount' =>  0
         ]);
     }
 
