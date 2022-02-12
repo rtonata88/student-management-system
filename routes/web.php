@@ -58,7 +58,10 @@ Route::resource('/debit-memos', 'DebitMemoController');
 Route::post('/debit-memos/filter', 'DebitMemoController@filter')->name('debit-memos.filter');
 
 //Reports
-Route::get('/student/reports', 'StudentReportController@index');
+Route::get('/student/reports', 'StudentReportController@index')->name('reports.students.index');
+Route::post('/student/reports/search','StudentReportController@search')->name('reports.students.search');
+Route::get('/student/reports/export', 'StudentReportController@export')->name('reports.students.export');
+
 Route::get('/invoice/reports', 'InvoiceReportController@index');
 Route::get('/payment/reports', 'PaymentReportController@index');
 
