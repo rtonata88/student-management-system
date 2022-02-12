@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Student;
 use App\Center;
 use App\StudentGuardian;
+use Illuminate\Validation\Rule;
 class StudentController extends Controller
 {
     public function __construct()
@@ -81,9 +82,19 @@ class StudentController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $student = Student::find($id);
+
+        $request->validate([
+            'student_number2' => ['required',
+                Rule::unique('students')->ignore($student->id)]
+        ]);
+
+        
         $student->update($request->all());
+
+        $student->guardian()->delete();
+
+        $this->createStudentGuardian($student, $request);
 
         return redirect()->route('students.show', $id);
     }

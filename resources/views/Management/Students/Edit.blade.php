@@ -32,8 +32,8 @@
                 @endif
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
-                        <th style="background-color: rgba(227, 227, 227, 0.5)">Student number</th>
-                        <td>{{$student->student_number}}</td>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Student number <span class="text-danger">*</span></th>
+                        <td>{{Form::text('student_number2',null, ['class' => 'form-control input-no-border', 'required', 'placeholder' => 'Student number'])}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Student names <span class="text-danger">*</span></th>
@@ -48,8 +48,8 @@
                         <td>{{Form::text('initials',null, ['class' => 'form-control input-no-border', 'required', 'placeholder' => 'Inititals'])}}</td>
                     </tr>
                     <tr>
-                        <th style="background-color: rgba(227, 227, 227, 0.5)">Email <span class="text-danger">*</span></th>
-                        <td>{{Form::email('contact_email',null, ['class' => 'form-control input-no-border', 'required', 'placeholder' => 'Email'])}}</td>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Email </th>
+                        <td>{{Form::email('contact_email',null, ['class' => 'form-control input-no-border', 'placeholder' => 'Email'])}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Contact number <span class="text-danger">*</span></th>
@@ -86,34 +86,69 @@
                 <strong>Guardian information</strong>
             </div>
             <div class="card-body qualifications-table">
+                @foreach($student->guardian as $guardian)
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Name <span class="text-danger">*</span></th>
                         <td>
-                            {{Form::text('guardian_names', $student->guardian->guardian_names, ['class' => 'form-control input-no-border', 'placeholder'=>'Guardian name', 'required'])}}
+                            {{Form::text('guardian_names[]', $guardian->guardian_names, ['class' => 'form-control input-no-border', 'placeholder'=>'Guardian name', 'required'])}}
                         </td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Surname <span class="text-danger">*</span></th>
                         <td>
-                            {{Form::text('guardian_surname', $student->guardian->surname, ['class' => 'form-control input-no-border', 'placeholder'=>'Surname', 'required'])}}
+                            {{Form::text('guardian_surname[]', $guardian->surname, ['class' => 'form-control input-no-border', 'placeholder'=>'Surname', 'required'])}}
                         </td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Relationship <span class="text-danger">*</span></th>
-                        <td>{{Form::select('relationship', ['Father' => 'Father', 'Mother' => 'Mother', 'Cousin' => 'Cousin', 'Aunt' => 'Aunt', 'Uncle' => 'Uncle', 'Sister' => 'Sister', 'Brother' => 'Brother'], $student->guardian->relationship, ['class' => 'form-control select input-no-border', 'required'])}}</td>
+                        <td>{{Form::select('relationship[]', ['Father' => 'Father', 'Mother' => 'Mother', 'Cousin' => 'Cousin', 'Aunt' => 'Aunt', 'Uncle' => 'Uncle', 'Sister' => 'Sister', 'Brother' => 'Brother'], $guardian->relationship, ['class' => 'form-control select input-no-border', 'required'])}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Contact number <span class="text-danger">*</span></th>
                         <td>
-                            {{Form::text('guardian_contact_number',$student->guardian->contact_number, ['class' => 'form-control input-no-border', 'placeholder'=>'Contact number', 'required'])}}
+                            {{Form::text('guardian_contact_number[]',$guardian->contact_number, ['class' => 'form-control input-no-border', 'placeholder'=>'Contact number', 'required'])}}
                         </td>
 
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Contact email </th>
                         <td>
-                            {{Form::text('guardian_contact_email',$student->guardian->contact_email, ['class' => 'form-control input-no-border', 'placeholder'=>'Contact email'])}}
+                            {{Form::text('guardian_contact_email[]',$guardian->contact_email, ['class' => 'form-control input-no-border', 'placeholder'=>'Contact email'])}}
+                        </td>
+                    </tr>
+                </table>
+                @endforeach
+                <br>
+                <p class="text-info">Use the section below to add more guardians</p>
+                <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
+                    <tr>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Name <span class="text-danger">*</span></th>
+                        <td>
+                            {{Form::text('guardian_names[]',null, ['class' => 'form-control input-no-border', 'placeholder'=>'Guardian name'])}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Surname <span class="text-danger">*</span></th>
+                        <td>
+                            {{Form::text('guardian_surname[]',null, ['class' => 'form-control input-no-border', 'placeholder'=>'Surname'])}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Relationship <span class="text-danger">*</span></th>
+                        <td>{{Form::select('relationship[]', ['Father' => 'Father', 'Mother' => 'Mother', 'Cousin' => 'Cousin', 'Aunt' => 'Aunt', 'Uncle' => 'Uncle', 'Sister' => 'Sister', 'Brother' => 'Brother'], null, ['class' => 'form-control select input-no-border'])}}</td>
+                    </tr>
+                    <tr>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Contact number <span class="text-danger">*</span></th>
+                        <td>
+                            {{Form::text('guardian_contact_number[]',null, ['class' => 'form-control input-no-border', 'placeholder'=>'Contact number'])}}
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Contact email </th>
+                        <td>
+                            {{Form::text('guardian_contact_email[]',null, ['class' => 'form-control input-no-border', 'placeholder'=>'Contact email'])}}
                         </td>
                     </tr>
                 </table>
