@@ -16,6 +16,10 @@ class Student extends Model
         return $this->hasMany(Registration::class);
     }
 
+    public function currentRegistration(){
+        return $this->hasOne(Registration::class)->where('academic_year', date('Y'));
+    }
+
     public function registered_modules(){
         return $this->hasMany(ModuleRegistration::class);
     }

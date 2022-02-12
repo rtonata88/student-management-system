@@ -4,7 +4,7 @@
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
         <li class="breadcrumb-item">Management</li>
-        <li class="breadcrumb-item active"><a href="/enrolment">Enrolment </a></li>
+        <li class="breadcrumb-item active"><a href="/enrolment">Cancel Enrolment </a></li>
         <!-- Breadcrumb Menu-->
     </ol>
 </div>
@@ -17,12 +17,12 @@
                 <strong>Search</strong>
             </div>
             <div class="card-body">
-                {!! Form::open(array('route' => array('enrolment.filter'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
+                {!! Form::open(array('route' => array('cancel-registration.filter'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
                 <div class="form-group">
                     {{Form::text('student_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student number'])}}
                 </div>
                 <div class="form-group">
-                    {{Form::text('surname', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student surname'])}}
+                    {{Form::text('surname', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Surname'])}}
                 </div>
                 <button type="submit" class="btn btn-sm btn-success">
                     Search
@@ -43,7 +43,7 @@
         @if($students)
         <div class="card">
             <div class="card-header">
-                <strong>Select student</strong>
+                <strong> Select student </strong>
             </div>
             <div class="card-body">
                 <table class="table table-responsive-sm table-bordered table-striped table-hover table-sm" style="width:100%">
@@ -58,7 +58,7 @@
                     </thead>
                     <tbody>
                         @foreach($students as $student)
-                        <tr style="cursor: pointer" onclick="window.location='{{route('enrolment.showEnrollmentScreen', $student->id)}}'">
+                        <tr style="cursor: pointer" onclick="window.location='{{route('cancellation.showCancellationScreen', $student->id)}}'">
                             <td>{{$student->student_number2}}</td>
                             <td>{{$student->student_names}}</td>
                             <td>{{$student->surname}}</td>
@@ -83,9 +83,8 @@
                     </tbody>
                 </table>
             </div>
+            @endif
         </div>
-        @endif
     </div>
-</div>
 </div>
 @endsection

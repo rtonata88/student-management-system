@@ -11,6 +11,7 @@
 |
 */
 
+
 if(version_compare(PHP_VERSION, '7.2.0', '>=')) {
     error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 }
@@ -40,6 +41,8 @@ Route::get('enrolment/show-form/{student_id}', 'RegistrationController@showEnrol
 
 Route::resource('/cancel-registration', 'CancelRegistrationController');
 Route::post('/cancel-registration/filter', 'CancelRegistrationController@filter')->name('cancel-registration.filter');
+Route::get('cancel/show-form/{student_id}', 'CancelRegistrationController@showCancellationScreen')->name('cancellation.showCancellationScreen');
+Route::get('cancel/remove/{student_id}/{module_id}', 'CancelRegistrationController@removeCancellation')->name('cancellation.remove');
 
 //Finance
 Route::resource('/invoices', 'InvoiceController');
