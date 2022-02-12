@@ -59,13 +59,17 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'student_number2' => 'required|unique:students',
+        ]);
+
         $data = $request->all();
         $data['student_number'] = $this->generateStudentNumber();
         $student = Student::create($data);
 
         $this->createStudentGuardian($student, $request);
 
-        return redirect()->route('students.show', $student->id);
+        return redirect()->route('enrolment.showEnrollmentScreen', $student->id);
     }
 
     public function update(Request $request, $id)
@@ -79,15 +83,18 @@ class StudentController extends Controller
 
     private function createStudentGuardian($student, $request)
     {
-            StudentGuardian::create([
-                'student_id' => $student->id,
-                'guardian_names' => $request->guardian_names,
-                'surname' => $request->guardian_surname,
-                'relationship' => $request->relationship,
-                'contact_number' => $request->guardian_contact_number,
-                'contact_email' => $request->guardian_contact_email
-            ]);
-        
+        for($i=0; $i<count($request->guardian_names); $i++){
+            if(isset($request->guardian_names[$i])){
+                StudentGuardian::create([
+                    'student_id' => $student->id,
+                    'guardian_names' => $request->guardian_names[$i],
+                    'surname' => $request->guardian_surname[$i],
+                    'relationship' => $request->relationship[$i],
+                    'contact_number' => $request->guardian_contact_number[$i],
+                    'contact_email' => $request->guardian_contact_email[$i]
+                ]);
+            }
+        }
     }
 
     private function generateStudentNumber()

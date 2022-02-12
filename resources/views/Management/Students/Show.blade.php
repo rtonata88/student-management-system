@@ -22,7 +22,11 @@
             <div class="card-body">
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
-                        <th style="background-color: rgba(227, 227, 227, 0.5)">Student number </th>
+                        <th style="background-color: rgba(227, 227, 227, 0.5);width:250px;">Student Number </th>
+                        <td>{{$student->student_number2}}</td>
+                    </tr>
+                    <tr>
+                        <th style="background-color: rgba(227, 227, 227, 0.5);width:250px;">Reference Number </th>
                         <td>{{$student->student_number}}</td>
                     </tr>
                     <tr>
@@ -70,28 +74,30 @@
                 <strong>Guardian information</strong>
             </div>
             <div class="card-body qualifications-table">
+                @foreach($student->guardian as $guardian)
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
-                        <th style="background-color: rgba(227, 227, 227, 0.5)">Name </th>
-                        <td>{{$student->guardian->guardian_names}}</td>
+                        <th style="background-color: rgba(227, 227, 227, 0.5); width:250px;">Name </th>
+                        <td>{{$guardian->guardian_names}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Surname </th>
-                        <td>{{$student->guardian->surname}}</td>
+                        <td>{{$guardian->surname}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Relationship </th>
-                        <td>{{$student->guardian->relationship}}</td>
+                        <td>{{$guardian->relationship}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Contact number </th>
-                        <td>{{$student->guardian->contact_number}}</td>
+                        <td>{{$guardian->contact_number}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Contact email </th>
-                        <td>{{$student->guardian->contact_email}}</td>
+                        <td>{{$guardian->contact_email}}</td>
                     </tr>
                 </table>
+                @endforeach
             </div>
             <!--
                 UNCOMMENT this line if you wish to add more than one guardian 

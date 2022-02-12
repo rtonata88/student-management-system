@@ -4,7 +4,7 @@
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
         <li class="breadcrumb-item">Management</li>
-        <li class="breadcrumb-item active"><a href="/students">Students </a></li>
+        <li class="breadcrumb-item active"><a href="/enrolment">Enrolment </a></li>
         <!-- Breadcrumb Menu-->
     </ol>
 </div>
@@ -14,15 +14,15 @@
     <div class="col-md-3 col-xs-12">
         <div class="card">
             <div class="card-header">
-                <strong>Filter</strong>
+                <strong>Search</strong>
             </div>
             <div class="card-body">
-                {!! Form::open(array('route' => array('students.filter'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
+                {!! Form::open(array('route' => array('enrolment.filter'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
                 <div class="form-group">
-                    {{Form::number('student_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student number'])}}
+                    {{Form::text('student_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student number'])}}
                 </div>
                 <div class="form-group">
-                    {{Form::text('surname', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Surname'])}}
+                    {{Form::text('surname', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student surname'])}}
                 </div>
                 <button type="submit" class="btn btn-sm btn-success">
                     Search
@@ -35,43 +35,48 @@
         </div>
     </div>
     <div class="col-md-9">
+        @if (Session::has('not_found'))
+        <div class="alert alert-danger">
+            {{Session::get('not_found')}}
+        </div>
+        @endif
+        @if($students)
         <div class="card">
             <div class="card-header">
-                <div class="float-left">
-                    <a href="{{route('students.create')}}" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD STUDENT</a>
-                </div>
+                <strong>Select student</strong>
             </div>
             <div class="card-body">
-                <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                <table class="table table-responsive-sm table-bordered table-striped table-hover table-sm" style="width:100%">
                     <thead>
                         <tr>
                             <th>Student number</th>
                             <th>Student names</th>
                             <th>Surname</th>
                             <th>DOB</th>
-                            <th>Contact Number</th>
-                            <th>Action</th>
+                            <th>Registration status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($students as $student)
-                        <tr>
+                        <tr style="cursor: pointer" onclick="window.location='{{route('enrolment.showEnrollmentScreen', $student->id)}}'">
                             <td>{{$student->student_number2}}</td>
                             <td>{{$student->student_names}}</td>
                             <td>{{$student->surname}}</td>
                             <td>{{$student->date_of_birth}}</td>
-                            <td>{{$student->contact_number}}</td>
                             <td>
-                                <a href="{{route('students.show', $student->id)}}">
-                                    <svg class="c-icon mr-2">
-                                        <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-search')}}"></use>
-                                    </svg>
-                                </a>
-                                <a href="{{route('students.edit', $student->id)}}">
-                                    <svg class="c-icon mr-2">
-                                        <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
-                                    </svg>
-                                </a>
+                                @if($registration_status == 'Registered')
+                                <span class="badge badge-success">
+                                    {{$registration_status}}
+                                </span>
+                                @elseif($registration_status == 'Canceled')
+                                <span class="badge badge-danger">
+                                    {{$registration_status}}
+                                </span>
+                                @else
+                                <span class="badge badge-warning text-white">
+                                    Not registered
+                                </span>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -79,6 +84,8 @@
                 </table>
             </div>
         </div>
+        @endif
     </div>
+</div>
 </div>
 @endsection

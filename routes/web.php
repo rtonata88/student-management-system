@@ -36,6 +36,7 @@ Route::post('/students/filter', 'StudentController@filter')->name('students.filt
 
 Route::resource('/enrolment', 'RegistrationController');
 Route::post('/enrolment/filter', 'RegistrationController@filter')->name('enrolment.filter');
+Route::get('enrolment/show-form/{student_id}', 'RegistrationController@showEnrollmentScreen')->name('enrolment.showEnrollmentScreen');
 
 Route::resource('/cancel-registration', 'CancelRegistrationController');
 Route::post('/cancel-registration/filter', 'CancelRegistrationController@filter')->name('cancel-registration.filter');

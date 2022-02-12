@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Student;
 use App\StudentExtraCharge;
 
+use Session;
+
 class RegistrationController extends Controller
 {
     public function __construct()
@@ -21,36 +23,58 @@ class RegistrationController extends Controller
     }
 
     public function index(){
-        return view('Management.Enrolment.Index');
+        return view('Management.Enrolment.Search');
     }
 
     public function filter(Request $request){
-        $student = Student::where('student_number', $request->student_number)->first();
-        
-        if($student){   
-            $subjects = Module::all();
-            $fees = Fees::all();
-            $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
-            $centers = Center::pluck('center_name', 'id');
-            $registration = $student->registration->where('academic_year', $academic_year)->first();
-            $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
-            $registered_modules = ModuleRegistration::where('student_id', $student->id)
-                                                    ->where('academic_year', $academic_year)
-                                                    ->where('registration_status', 'Registered')
-                                                    ->pluck('module_id')
-                                                    ->toArray();
+        if(isset($request->student_number)){
+            $student = Student::where('student_number2', $request->student_number)->first();
+            if ($student) {
+                return redirect()->route('enrolment.showEnrollmentScreen', $student->id);
+            }
+        }
+
+        if (isset($request->surname)) {
+            $students = Student::where('surname', 'like' ,'%'.$request->surname.'%')->get();
             
-            $charged_fees = Invoice::where('model', 'Fees')
-                                    ->where('student_id', $student->id)
-                                    ->where('financial_year', $academic_year)
-                                    ->pluck('model_id')
-                                    ->toArray();
-
-            return view('Management.Enrolment.Index', compact('student', 'subjects', 'fees', 'academic_year', 'centers', 'registration_status', 'registered_modules', 'charged_fees'));
+            if (count($students)) {
+                if (count($students) === 1) {
+                    return redirect()->route('enrolment.showEnrollmentScreen', $students->first()->id);
+                } else {
+                    return view('Management.Enrolment.Search', compact('students'));
+                }
+            }
         }
         
-        return view('Management.Enrolment.Index', compact('student'));
+        Session::flash('not_found','The entered student number does not match any record. Please make sure you have entered a correct student number');
+        
+        return view('Management.Enrolment.Search', compact('students'));
+    }
+
+    public function showEnrollmentScreen($student_id){
+        $student = Student::find($student_id);
+
+        $subjects = Module::all();
+        $fees = Fees::all();
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+        $centers = Center::pluck('center_name', 'id');
+        $registration = $student->registration->where('academic_year', $academic_year)->first();
+        $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
+
+        $registered_modules = ModuleRegistration::where('student_id', $student->id)
+            ->where('academic_year', $academic_year)
+            ->where('registration_status', 'Registered')
+            ->pluck('module_id')
+            ->toArray();
+
+        $charged_fees = Invoice::where('model', 'Fees')
+            ->where('student_id', $student->id)
+            ->where('financial_year', $academic_year)
+            ->pluck('model_id')
+            ->toArray();
+
+        return view('Management.Enrolment.Index', compact('student', 'subjects', 'fees', 'academic_year', 'centers', 'registration_status', 'registered_modules', 'charged_fees'));
     }
 
     public function show($student_id){

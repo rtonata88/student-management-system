@@ -11,28 +11,8 @@
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-3 col-xs-12">
-        <div class="card">
-            <div class="card-header">
-                <strong>Search</strong>
-            </div>
-            <div class="card-body">
-                {!! Form::open(array('route' => array('enrolment.filter'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
-                <div class="form-group">
-                    {{Form::number('student_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student number'])}}
-                </div>
-                <button type="submit" class="btn btn-sm btn-success">
-                    Search
-                </button>
-                <a href="/students" class="btn btn-sm">
-                    Clear
-                </a>
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
     @if($student)
-    <div class="col-md-9">
+    <div class="offset-2 col-md-9">
         <div class="card">
             <div class="card-header">
                 <strong>Student information</strong>
@@ -52,7 +32,7 @@
                     <tbody>
                         <tr>
                             <td>{{$academic_year}}</td>
-                            <td>{{$student->student_number}}</td>
+                            <td>{{$student->student_number2}}</td>
                             <td>{{$student->student_names}}</td>
                             <td>{{$student->surname}}</td>
                             <td>{{$student->date_of_birth}}</td>
@@ -81,7 +61,7 @@
 {!! Form::open(array('route' => array('enrolment.store'), 'method' => 'post')) !!}
 <input type="hidden" name="student_id" value="{{$student->id}}">
 <div class="row">
-    <div class="offset-3 col-md-9">
+    <div class="offset-2 col-md-9">
         <div class="card">
             <div class="card-header">
                 <strong> Academic and Module registrations </strong>
@@ -130,7 +110,7 @@
         </div>
     </div>
 
-    <div class="offset-3 col-md-9">
+    <div class="offset-2 col-md-9">
         <div class="card">
             <div class="card-header">
                 <strong>Other charges</strong>

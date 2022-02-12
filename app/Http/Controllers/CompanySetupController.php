@@ -29,7 +29,7 @@ class CompanySetupController extends Controller
 
         $logo = "";
         if ($request->hasFile('logo')) {
-            $logo = $request->file('logo')->storePublicly('company', 'local');
+            $logo = $request->file('logo')->store('company', 'local');
         }
         $data = $request->all();
         $data['logo'] = $logo;
