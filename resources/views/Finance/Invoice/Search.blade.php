@@ -42,6 +42,35 @@
             {{ Session::get('message') }}
         </div>
         @endif
+        @if($students)
+        <div class="card">
+            <div class="card-header">
+                <strong> Select student </strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive-sm table-bordered table-striped table-hover table-sm" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Student number</th>
+                            <th>Student names</th>
+                            <th>Surname</th>
+                            <th>DOB</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($students as $student)
+                        <tr style="cursor: pointer" onclick="window.location='{{route('invoices.show', $student->id)}}'">
+                            <td>{{$student->student_number2}}</td>
+                            <td>{{$student->student_names}}</td>
+                            <td>{{$student->surname}}</td>
+                            <td>{{$student->date_of_birth}}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 @endsection

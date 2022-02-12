@@ -18,14 +18,32 @@ class InvoiceController extends Controller
     }
 
     public function index() {
-        return view('Finance.Invoice.Index');
+        return view('Finance.Invoice.Search');
     }
 
     public function filter(Request $request){
         $student = Student::where('student_number', $request->student_number)->first();
 
-        if($student) {
-            return redirect()->route('invoices.show', $student->id);
+        if (isset($request->student_number)) {
+            $student = Student::where('student_number2', $request->student_number)->first();
+            if ($student) {
+                return redirect()->route('invoices.show', $student->id);
+            }
+        }
+
+        if (isset($request->surname)) {
+            $students = Student::where('surname', 'like', '%' . $request->surname . '%')->get();
+            
+            if (count($students)) {
+                
+                if (count($students) === 1) {
+                    
+                    return redirect()->route('invoices.show', $students->first()->id);
+                } else {
+                    
+                    return view('Finance.Invoice.Search', compact('students'));
+                }
+            }
         }
 
         Session::flash('message', 'Student information not found, please make sure you have entered a correct student number.');
