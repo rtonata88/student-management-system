@@ -103,13 +103,13 @@
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.students.index')}}">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
-          </svg> Students</a>
+          </svg> Student Registration</a>
       </li>
 
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoice/reports">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.finance.index')}}">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
-          </svg> Invoices</a>
+          </svg> Accounting</a>
       </li>
 
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payment/reports">

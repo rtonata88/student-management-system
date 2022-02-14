@@ -24,4 +24,5 @@ class ModuleRegistration extends Model
         }
         
     }
+
 }

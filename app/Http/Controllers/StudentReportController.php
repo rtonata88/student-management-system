@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\Center;
-use App\Exports\SubjectRegistration;
+use App\Exports\Students;
 use App\Module;
 use App\ModuleRegistration;
 use App\Student;
@@ -19,14 +19,11 @@ class StudentReportController extends Controller
     }
 
     public function index(){
-        $students = Student::all();
-        $academic_years = AcademicYear::pluck('academic_year', 'academic_year');    
-        $subjects = Module::pluck('subject_name', 'id');
-        $subject_registration = ModuleRegistration::with(['student', 'subject', 'registration'])->where('academic_year', date('Y'))->paginate(50);
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+
+        $subject_registration = ModuleRegistration::with(['student', 'subject', 'registration'])->where('academic_year', $academic_year)->paginate(50);
         
         session()->put('subject_registration', $subject_registration);
-
-        //$registration = $subject_registration->registration
 
         return view('Reports.Students.Index', compact('subject_registration', 'academic_years', 'subjects'));
     }

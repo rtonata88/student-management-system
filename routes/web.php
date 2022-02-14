@@ -62,8 +62,7 @@ Route::get('/student/reports', 'StudentReportController@index')->name('reports.s
 Route::post('/student/reports/search','StudentReportController@search')->name('reports.students.search');
 Route::get('/student/reports/export', 'StudentReportController@export')->name('reports.students.export');
 
-Route::get('/invoice/reports', 'InvoiceReportController@index');
-Route::get('/payment/reports', 'PaymentReportController@index');
+Route::get('/accounting/reports', 'InvoiceReportController@index')->name('reports.finance.index');
 
 //LMS setups
 Route::resource('/subjects', 'ModuleController');
