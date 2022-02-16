@@ -39,6 +39,8 @@
   <!-- summernotes CSS -->
   <link href="{{asset('bower_components/summernote/summernote.css')}}" rel="stylesheet" />
 
+  @stack('highcharts-css')
+
 </head>
 
 <body class="c-app">
@@ -268,6 +270,7 @@
   @stack('profiles')
   @stack('contactsJS')
   @stack('googleCharts')
+  @stack('highcharts')
 </body>
 
 </html>

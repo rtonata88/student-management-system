@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AcademicYear;
 use Illuminate\Http\Request;
 
 use App\ActivityTeamReport;
@@ -10,7 +11,9 @@ use App\MediaCoverageReport;
 use App\EventReport;
 use App\Profile;
 use App\ActivityType;
-
+use App\Invoice;
+use App\ModuleRegistration;
+use App\Registration;
 use Auth;
 
 class HomeController extends Controller
@@ -32,220 +35,66 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+
+        $registered_students = Registration::where('academic_year', $academic_year)
+                                ->where('registration_status', 'Registered')
+                                ->pluck('student_id');
+
+        $registered_learners = count($registered_students);
+        $total_invoices = $this->totalInvoices($academic_year, $registered_students);
+        $total_payments = $this->totalPayments($academic_year, $registered_students);
+        $learners_per_subject = $this->learnersPerSubject($academic_year);
+
+        return view('home', compact('registered_learners', 'total_invoices', 'total_payments', 'learners_per_subject'));
     }
 
-
-    private function sectorByTeamGraph($user){
-        $activity_report = ActivityReport::all();
-        $media_coverage = MediaCoverageReport::all();
-        $event_reports = EventReport::all();
-
-
-        foreach ($media_coverage as $key => $coverage) {
-           $activity_report->push($coverage);
-        }
-
-         foreach ($event_reports as $key => $event) {
-           $activity_report->push($event);
-        }
-
-        //Get Unique Activities contained in the report and make them chart legend
-        $legend = array('Activities');
-        $activities = array();
-        $data = array();
-        foreach ($activity_report as $key => $report) {
-            array_push($activities, $report->Activity);
-        }
-
-
-
-        $activities = array_values(array_unique($activities));
-
-
-        $legend = array_merge($legend, $activities);
-
-        array_push($data, $legend);
-
-        $report = array('HWPL');
-        $sector = $activity_report->where('Sector', 'HWPL');
-        foreach ($legend as $key => $value) {
-            if($key > 0){
-                $activity = $sector->where('Activity', $value)->first();
-                if(count($activity) == 0){
-                    array_push($report, 0);
-                } else {
-                    array_push($report, $activity->Occurence);
-                }
-            }
-        }
-
-
-        array_push($data, $report);
-
-        $report = array('IPYG');
-        $sector = $activity_report->where('Sector', 'IPYG');
-        foreach ($legend as $key => $value) {
-            if($key > 0){
-                $activity = $sector->where('Activity', $value)->first();
-                if(count($activity) == 0){
-                    array_push($report, 0);
-                } else {
-                    array_push($report, $activity->Occurence);
-                }
-            }
-        }
-
-        array_push($data, $report);
-
-        $report = array('IWPG');
-        $sector = $activity_report->where('Sector', 'IWPG');
-        foreach ($legend as $key => $value) {
-            if($key > 0){
-                $activity = $sector->where('Activity', $value)->first();
-                if(count($activity) == 0){
-                    array_push($report, 0);
-                } else {
-                    array_push($report, $activity->Occurence);
-                }
-            }
-        }
-        array_push($data, $report);
-        $data1 = collect($data);
-
-        return json_encode($data);
+    private function totalLearners($academic_year){
+        return  Registration::where('academic_year', $academic_year)
+                                ->where('registration_status', 'Registered')
+                                ->count();
     }
 
-    private function getProfilesByCountry($user){
-        $profiles_by_country = Profile::getProfilesByCountry($user);
-
-        $data = array();
-        array_push($data, array('Countries', 'Profiles'));
-
-        foreach($profiles_by_country as $profiles){
-            array_push($data, array($profiles->country, $profiles->number_of_profiles));
-        }
-
-        return json_encode($data);
+    private function totalInvoices($academic_year, $registered_students)
+    {
+        $invoices = Invoice::select('debit_amount')->whereIn('student_id', $registered_students)      
+                            ->where('financial_year', $academic_year) 
+                            ->sum('debit_amount');
+        
+        return $invoices;
     }
 
-    private function getProfilesByStatus($user){
-        $profiles_by_status = Profile::getProfilesByStatus($user);
+    private function totalPayments($academic_year, $registered_students)
+    {
+        $payments = Invoice::select('credit_amount')->whereIn('student_id', $registered_students)
+            ->where('financial_year', $academic_year)
+            ->sum('credit_amount');
 
-        $data = array();
-        array_push($data, array('Status', 'Profiles'));
-
-        foreach($profiles_by_status as $profiles){
-            array_push($data, array($profiles->status, $profiles->number_of_profiles));
-        }
-
-        return json_encode($data);
+        return $payments;
     }
 
-    private function getProfilesByRole($user){
-        $profiles_by_role = Profile::getProfilesByRole($user);
-
-        $data = array();
-        array_push($data, array('Appointed Role', 'Profiles'));
-
-        foreach($profiles_by_role as $profiles){
-            array_push($data, array($profiles->role, $profiles->number_of_profiles));
-        }
-
-        return json_encode($data);
+    private function learnersPerSubject($academic_year){
+        return ModuleRegistration::selectRaw('count(module_registrations.module_id) as count, modules.subject_name')
+            ->join('modules', 'modules.id', '=', 'module_registrations.module_id')
+            ->where('academic_year', $academic_year)
+            ->where('registration_status', 'Registered')
+            ->groupBy('module_registrations.module_id')
+            ->get();
     }
 
-    private function getProfilesByStage($user){
-        $profiles_by_stage = Profile::getProfilesByStage($user);
+    public function fetchSubjects(){
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
-        $data = array();
-        array_push($data, array('Stage', 'Profiles'));
-
-        foreach($profiles_by_stage as $profiles){
-            array_push($data, array($profiles->stage, $profiles->number_of_profiles));
-        }
-
-        return json_encode($data);
-    }
-
-    private function getEmailActivitiesByTeam($user, $start_date, $end_date){
-        $activity_type_id = $this->getActivityId('Email');
-        $report_by_activity = ActivityTeamReport::getReportByTeam($activity_type_id, $start_date, $end_date);
-
-        $data = array();
-        array_push($data, array('Team', 'Emails'));
-
-        foreach($report_by_activity as $activity){
-            array_push($data, array($activity->Team, $activity->Occurence));
-        }
-        return json_encode($data);
-    }
-
-    private function getMeetingActivitiesByTeam($user, $start_date, $end_date){
-        $activity_type_id = $this->getActivityId('Meeting');
-        $report_by_activity = ActivityTeamReport::getReportByTeam($activity_type_id, $start_date, $end_date);
-
-        $data = array();
-        array_push($data, array('Team', 'Meetings'));
-
-        foreach($report_by_activity as $activity){
-            array_push($data, array($activity->Team, $activity->Occurence));
-        }
-        return json_encode($data);
-    }
-
-    private function getCallActivitiesByTeam($user, $start_date, $end_date){
-        $activity_type_id = $this->getActivityId('Call');
-        $report_by_activity = ActivityTeamReport::getReportByTeam($activity_type_id, $start_date, $end_date);
-
-        $data = array();
-        array_push($data, array('Team', 'Calls'));
-
-        foreach($report_by_activity as $activity){
-            array_push($data, array($activity->Team, $activity->Occurence));
-        }
-        return json_encode($data);
-    }
-
-    private function getMessageActivitiesByTeam($user, $start_date, $end_date){
-        $activity_type_id = $this->getActivityId('Text Message (SMS)');
-        $report_by_activity = ActivityTeamReport::getReportByTeam($activity_type_id, $start_date, $end_date);
-
-        $data = array();
-        array_push($data, array('Team', 'Messages'));
-
-        foreach($report_by_activity as $activity){
-            array_push($data, array($activity->Team, $activity->Occurence));
-        }
-        return json_encode($data);
-    }
+        $subjects = ModuleRegistration::selectRaw('count(module_registrations.module_id) as y, modules.subject_name as name')
+                                    ->join('modules', 'modules.id', '=', 'module_registrations.module_id')
+                                    ->where('academic_year', $academic_year)
+                                    ->where('registration_status', 'Registered')
+                                    ->groupBy('module_registrations.module_id')
+                                    ->get();
 
 
-    private function getInternalEventReportsByTeam($user, $start_date, $end_date){
-        $report_by_activity = ActivityTeamReport::getEventReportsByTeam('internal', $start_date, $end_date);
-
-        $data = array();
-        array_push($data, array('Team', 'Events'));
-
-        foreach($report_by_activity as $activity){
-            array_push($data, array($activity->Team, $activity->Occurence));
-        }
-        return json_encode($data);
-    }
-
-    private function getExternalEventReportsByTeam($user, $start_date, $end_date){
-        $report_by_activity = ActivityTeamReport::getEventReportsByTeam('external', $start_date, $end_date);
-
-        $data = array();
-        array_push($data, array('Team', 'Events'));
-
-        foreach($report_by_activity as $activity){
-            array_push($data, array($activity->Team, $activity->Occurence));
-        }
-        return json_encode($data);
-    }
-
-    private function getActivityId($activity_name){
-        return ActivityType::where('name', '=', $activity_name)->first()->id;
+        return response()->json(
+            $subjects
+        );
     }
 }

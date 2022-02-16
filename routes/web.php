@@ -64,6 +64,9 @@ Route::get('/student/reports/export', 'StudentReportController@export')->name('r
 
 Route::get('/accounting/reports', 'InvoiceReportController@index')->name('reports.finance.index');
 
+//Ajax URLs
+Route::get('get-subjects', 'HomeController@fetchSubjects');
+
 //LMS setups
 Route::resource('/subjects', 'ModuleController');
 Route::resource('/company', 'CompanySetupController');
