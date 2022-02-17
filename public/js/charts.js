@@ -33,7 +33,7 @@ async function main() {
       type: 'pie',
     },
     title: {
-      text: 'Number of registrations per subject',
+      text: 'Registrations per subject',
     },
     tooltip: {
       pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',

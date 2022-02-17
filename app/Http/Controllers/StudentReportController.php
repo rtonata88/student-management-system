@@ -21,6 +21,10 @@ class StudentReportController extends Controller
     public function index(){
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
+        $academic_years = AcademicYear::pluck('academic_year', 'academic_year');
+
+        $subjects = Module::pluck('subject_name', 'id');
+
         $subject_registration = ModuleRegistration::with(['student', 'subject', 'registration'])->where('academic_year', $academic_year)->paginate(50);
         
         session()->put('subject_registration', $subject_registration);

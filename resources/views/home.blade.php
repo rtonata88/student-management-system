@@ -110,7 +110,7 @@
                     @foreach($learners_per_subject as $learner)
                     <tr>
                         <td>{{$learner->subject_name}}</td>
-                        <td class="text-center">{{$learner->count}}</td>
+                        <td class="text-center">{{$learner->count}} ({{number_format(($learner->count / $learners_per_subject->sum('count') * 100),2,'.',',')}}%)</td>
                     </tr>
                     @endforeach
                 </table>
