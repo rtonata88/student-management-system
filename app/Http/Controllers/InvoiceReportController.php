@@ -38,6 +38,7 @@ class InvoiceReportController extends Controller
 
     public function search(Request $request)
     {
+        
         $academic_years = AcademicYear::pluck('academic_year', 'academic_year');
         $subjects = Module::pluck('subject_name', 'id');
 
@@ -55,13 +56,14 @@ class InvoiceReportController extends Controller
                 $invoices = $invoices->where('model', 'Module');
             }
 
-            if ($request->fee_type === 'Other fees') {
+            if ($request->fee_type === 'Other') {
                 $invoices = $invoices->where('model', 'Fees');
+                
             }
         }
 
         if (isset($request->subject_id)) {
-            $invoices = $invoices->where('module_id', $request->subject_id)
+            $invoices = $invoices->where('model_id', $request->subject_id)
                                 ->where('model', 'Module');
         }
 

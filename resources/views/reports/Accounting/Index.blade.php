@@ -36,7 +36,7 @@
                 <hr>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-success btn-sm">Search</button>
-                    <a href="{{route('reports.students.index')}}" class="btn btn-sm">Clear</a>
+                    <a href="{{route('reports.finance.index')}}" class="btn btn-sm">Clear</a>
                 </div>
                 {!! Form::close() !!}
             </div>

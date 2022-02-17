@@ -9,7 +9,7 @@ class InvoiceReport implements FromView
 {
     public function view(): View
     {
-        return view('Reports.Account.Export', [
+        return view('Reports.Accounting.Export', [
             'invoices' => session()->get('invoices')
         ]);
     }
