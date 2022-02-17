@@ -63,6 +63,8 @@ Route::post('/student/reports/search','StudentReportController@search')->name('r
 Route::get('/student/reports/export', 'StudentReportController@export')->name('reports.students.export');
 
 Route::get('/accounting/reports', 'InvoiceReportController@index')->name('reports.finance.index');
+Route::post('/accounting/reports/search', 'InvoiceReportController@search')->name('reports.finance.search');
+Route::get('/accounting/reports/export', 'InvoiceReportController@export')->name('reports.finance.export');
 
 //Ajax URLs
 Route::get('get-subjects', 'HomeController@fetchSubjects');
