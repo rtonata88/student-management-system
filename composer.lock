@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "163be223454d1a2a762617eee16341e7",
+    "content-hash": "e8e60136fa07a2e1f2c5af8cdbbde53e",
     "packages": [
         {
             "name": "balping/json-raw-encoder",
@@ -3256,29 +3256,27 @@
         },
         {
             "name": "santigarcor/laratrust",
-            "version": "4.0.5",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/santigarcor/laratrust.git",
-                "reference": "b7ad126757c4e0542174c42b39094b4212a65d94"
+                "reference": "0b0d188d6721a415a5d1efc3f9de12345b96bdd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/b7ad126757c4e0542174c42b39094b4212a65d94",
-                "reference": "b7ad126757c4e0542174c42b39094b4212a65d94",
+                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/0b0d188d6721a415a5d1efc3f9de12345b96bdd5",
+                "reference": "0b0d188d6721a415a5d1efc3f9de12345b96bdd5",
                 "shasum": ""
             },
             "require": {
-                "illuminate/cache": "~5.1",
-                "illuminate/console": "~5.1",
-                "illuminate/database": "~5.1",
-                "illuminate/support": "^5.1.40",
                 "kkszymanowski/traitor": "^0.2.0",
-                "php": ">=5.5.9"
+                "laravel/framework": "~5.2.32|~5.3.0|~5.4.0|~5.5.0|~5.6.0|~5.7.0",
+                "php": ">=5.6.0"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9.2",
-                "phpunit/phpunit": "~4.1"
+                "mockery/mockery": ">=0.9.9",
+                "orchestra/testbench": "~3.2.0|~3.3.0|~3.4.6|~3.5.0|~3.6.0|~3.7.0",
+                "phpunit/phpunit": ">=4.1"
             },
             "type": "library",
             "extra": {
@@ -3292,11 +3290,8 @@
                 }
             },
             "autoload": {
-                "classmap": [
-                    "src/commands"
-                ],
                 "psr-4": {
-                    "Laratrust\\": "src/Laratrust/"
+                    "Laratrust\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3311,10 +3306,12 @@
             ],
             "description": "This package provides a flexible way to add Role-based Permissions to Laravel",
             "keywords": [
+                "Teams",
                 "acl",
                 "authorization",
                 "laratrust",
                 "laravel",
+                "multiusers",
                 "permissions",
                 "php",
                 "rbac",
@@ -3322,9 +3319,15 @@
             ],
             "support": {
                 "issues": "https://github.com/santigarcor/laratrust/issues",
-                "source": "https://github.com/santigarcor/laratrust/tree/4.0"
+                "source": "https://github.com/santigarcor/laratrust/tree/5.1.0"
             },
-            "time": "2017-09-29T19:54:05+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/santigarcor",
+                    "type": "github"
+                }
+            ],
+            "time": "2019-01-26T03:21:30+00:00"
         },
         {
             "name": "scrivo/highlight.php",

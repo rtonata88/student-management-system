@@ -114,13 +114,6 @@
           </svg> Accounting</a>
       </li>
 
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payment/reports">
-          <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
-          </svg> Payments</a>
-      </li>
-
-
       <li class="c-sidebar-nav-title">Administration</li>
       <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
           <svg class="c-sidebar-nav-icon">
