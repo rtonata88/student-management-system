@@ -39,7 +39,7 @@
             {{ Session::get('message') }}
         </div>
         @endif
-        
+
         @if($student)
         <div class="card">
             <div class="card-header">
@@ -93,12 +93,12 @@
             </div>
             {!! Form::open(array('route' => array('payments.store'), 'method' => 'post')) !!}
             <div class="card-body">
-            @if(Session::has('error_message'))
-            <div class="alert alert-danger alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                {{ Session::get('error_message') }}
-            </div>
-            @endif
+                @if(Session::has('error_message'))
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    {{ Session::get('error_message') }}
+                </div>
+                @endif
                 <div class="form-group">
                     {{Form::label('payment_amount', 'Amount')}}
                     {{Form::number('payment_amount',null, ['class' => 'form-control'])}}
@@ -112,7 +112,9 @@
                 </div>
             </div>
             <div class="card-footer">
+                @permission('add-payment')
                 <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                @endpermission
                 <a href="/payments">Cancel</a>
             </div>
             {!! Form::close() !!}

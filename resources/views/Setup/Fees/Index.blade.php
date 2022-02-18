@@ -14,9 +14,11 @@
     <div class="col-md-12 col-xs-12">
         <div class="card">
             <div class="card-header">
+                @permission('add-fees')
                 <a href="/fees/create" class="btn btn-primary">
                     Add New
                 </a>
+                @endpermission
             </div>
             <div class="card-body">
                 @if(Session::has('message'))
@@ -44,7 +46,9 @@
                             <td>{{$fee->automatic_charge}}</td>
                             <td>{{$fee->charge_type}}</td>
                             <td>
+                                @permission('edit-fees')
                                 <a href="/fees/{{$fee->id}}/edit"> <span class="fa fa-pencil"></span> Edit</a>
+                                @endpermission
                             </td>
                         </tr>
                         @endforeach

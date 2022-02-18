@@ -24,7 +24,7 @@
                 @endforeach
                 @endif
 
-                {!! Form::model($user, array('route'=>array('users.update', $user->id), 'class'=>'form-vertical form-material', 'method'=>'PATCH')) !!}
+                {!! Form::model($user, array('route'=>array('users.update', $user->id), 'autocomplete'=>"none", 'class'=>'form-vertical form-material', 'method'=>'PATCH')) !!}
 
                 <div class="row">
                     <div class="col-md-6">
@@ -45,7 +45,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             {{Form::label('password', 'Password')}}
-                            {{Form::password('password', ['class' => 'form-control'])}}
+                            {{Form::password('password', ['class' => 'form-control', 'autocomplete'=>"none"])}}
                             <span class="text-help text-info">
                                 The password field can be left blank. Only fill it in if you wish to change/update the user's password.
                             </span>

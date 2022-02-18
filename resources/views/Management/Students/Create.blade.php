@@ -158,7 +158,9 @@
                 <button typ="button" class="btn btn-sm btn-primary" id="add-qualification-btn">Add qualification</button>
             </div>-->
             <div class="card-footer">
+                @permission('add-student')
                 <button type="submit" class="btn btn-sm btn-success">Save</button>
+                @endpermission
                 <a href="/students">Cancel</a>
             </div>
         </div>

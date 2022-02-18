@@ -37,9 +37,11 @@
     <div class="col-md-9">
         <div class="card">
             <div class="card-header">
+                @permission('add-student')
                 <div class="float-left">
                     <a href="{{route('students.create')}}" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD STUDENT</a>
                 </div>
+                @endpermission
             </div>
             <div class="card-body">
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
@@ -62,16 +64,20 @@
                             <td>{{$student->date_of_birth}}</td>
                             <td>{{$student->contact_number}}</td>
                             <td>
+                                @permission('show-student')
                                 <a href="{{route('students.show', $student->id)}}">
                                     <svg class="c-icon mr-2">
                                         <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-search')}}"></use>
                                     </svg>
                                 </a>
+                                @endpermission
+                                @permission('edit-student')
                                 <a href="{{route('students.edit', $student->id)}}">
                                     <svg class="c-icon mr-2">
                                         <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
                                     </svg>
                                 </a>
+                                @endpermission
                             </td>
                         </tr>
                         @endforeach

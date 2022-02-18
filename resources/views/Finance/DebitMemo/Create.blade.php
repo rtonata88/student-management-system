@@ -102,7 +102,9 @@
                 </div>
             </div>
             <div class="card-footer">
+                @permission('add-debit-order')
                 <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                @endpermission
                 <a href="/debit-memos">Cancel</a>
             </div>
             {!! Form::close() !!}
