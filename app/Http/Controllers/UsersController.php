@@ -34,16 +34,20 @@ class UsersController extends Controller
     	return view('Users.Create', compact('permissions'));
     }
 
-    public function edit($id){
-    	$user = User::find($id);
+    public function edit($username){
+    	$user = User::where('username', $username)->first();
+
 		$permissions = Permission::all();
 
-    	return view('users.edit', compact('user', 'permissions'));
+		$assigned_permissions = $user->permissions->pluck('id')->toArray();
+
+    	return view('Users.Edit', compact('user', 'permissions', 'assigned_permissions'));
     }
 
-    public function show($id){
-    	$user = User::find($id);
-    	return view('users.show', compact('user'));
+    public function show($username){
+		$user = User::where('username', $username)->first();
+
+    	return view('Users.Show', compact('user', 'assigned_permissions'));
     }
 
     public function store(Request $requests)
@@ -81,15 +85,10 @@ class UsersController extends Controller
                 'password' => ['required', 'string', 'min:6', 'confirmed'],
             ]);
             
-            $user->update(['password' => Hash::make($request->password)]);
+            $user->update(['password' => Hash::make($requests->password)]);
         }
 
-    	$user->update($request->all());
-
-        foreach ($requests->roles as $key) {
-            $role = Role::find($key);
-            $user->syncRoles([$role->id]);
-        }
+    	$user->update($requests->all());
 		
 		$user->syncPermissions($requests->permissions);
 

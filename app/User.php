@@ -28,33 +28,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-
-    public function team(){
-        return $this->belongsToMany('App\Team');
-    }
-
-    public function country(){
-        return $this->belongsTo('App\Country');
-    }
-
-    public function sector(){
-        return $this->belongsToMany('App\Sector');
-    }
-
-    public function language(){
-        return $this->belongsTo('App\Language', 'prefered_language', 'id');
-    }
-
-    public function city(){
-        return $this->belongsTo('App\City');
-    }
-
-     public function department(){
-        return $this->belongsTo('App\Department');
-    }
-
-    public function roles(){
-        return $this->belongsToMany('App\Role');
+    public function permissions(){
+        return $this->belongsToMany('App\Permission');
     }
 
 

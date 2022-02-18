@@ -39,12 +39,12 @@
                             <td>{{$user->username}}</td>
                             <td>{{$user->email}}</td>
                             <td class="text-center">
-                                <a href="{{route('users.show', $user->id)}}">
+                                <a href="{{route('users.show', $user->username)}}">
                                     <svg class="c-icon mr-2">
                                         <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-search')}}"></use>
                                     </svg>
                                 </a>
-                                <a href="{{route('users.edit', $user->id)}}">
+                                <a href="{{route('users.edit', $user->username)}}">
                                     <svg class="c-icon mr-2">
                                         <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
                                     </svg>

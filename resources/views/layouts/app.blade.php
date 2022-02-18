@@ -121,7 +121,6 @@
           </svg> Access management</a>
         <ul class="c-sidebar-nav-dropdown-items">
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/users"><span class="c-sidebar-nav-icon"></span> Users</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/roles"><span class="c-sidebar-nav-icon"></span> Roles</a></li>
         </ul>
       </li>
 
