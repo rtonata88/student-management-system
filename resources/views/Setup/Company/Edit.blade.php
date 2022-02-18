@@ -56,7 +56,9 @@
                 </table>
             </div>
             <div class="card-footer">
+                @permission('edit-company')
                 <button type="submit" class="btn btn-sm btn-success">Save</button>
+                @endpermission
                 <a href="{{route('company.show', 1)}}">Cancel</a>
             </div>
             {!! Form::close() !!}

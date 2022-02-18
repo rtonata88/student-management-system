@@ -33,7 +33,9 @@
             </div>
           </div>
           <hr>
+          @permission('edit-centers')
           <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
+          @endpermission
           <a href="/centers" class="btn"><span class="fa fa-ban"></span> Cancel</a>
         </div>
       </div>

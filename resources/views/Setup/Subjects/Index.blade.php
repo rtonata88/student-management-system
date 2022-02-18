@@ -14,9 +14,11 @@
     <div class="col-md-12 col-xs-12">
         <div class="card">
             <div class="card-header">
+                @permission('add-subjects')
                 <a href="/subjects/create" class="btn btn-primary">
                     Add New
                 </a>
+                @endpermission
             </div>
             <div class="card-body">
                 @if(Session::has('message'))
@@ -42,7 +44,9 @@
                             <td>{{$subject->subject_code}}</td>
                             <td>{{$subject->subject_fees}}</td>
                             <td>
+                                @permission('edit-subjects')
                                 <a href="{{route('subjects.edit', $subject->id)}}"> <span class="fa fa-pencil"></span> Edit</a>
+                                @endpermission
                             </td>
                         </tr>
                         @endforeach

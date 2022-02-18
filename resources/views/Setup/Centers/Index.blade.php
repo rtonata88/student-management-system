@@ -14,9 +14,11 @@
     <div class="col-md-12 col-xs-12">
         <div class="card">
             <div class="card-header">
+                @permission('add-centers')
                 <a href="{{route('centers.create')}}" class="btn btn-primary">
                     Add New
                 </a>
+                @endpermission
             </div>
             <div class="card-body">
                 @if(Session::has('message'))
@@ -40,7 +42,9 @@
                             <td>{{$center->center_name}}</td>
                             <td>{{$center->location}}</td>
                             <td>
+                                @permission('edit-centers')
                                 <a href="{{route('centers.edit', $center->id)}}"> <span class="fa fa-pencil"></span> Edit</a>
+                                @endpermission
                             </td>
                         </tr>
                         @endforeach

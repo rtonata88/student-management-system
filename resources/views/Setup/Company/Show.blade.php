@@ -16,7 +16,7 @@
     <div class="col-md-8 col-xs-12">
         <div class="card">
             <div class="card-header">
-                <strong>Company information</strong> | <a href="{{route('company.edit', 1)}}">Edit company information</a>
+                <strong>Company information</strong> @permission('edit-company')| <a href="{{route('company.edit', 1)}}">Edit company information</a>@endpermission
             </div>
             <div class="card-body">
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">

@@ -63,7 +63,9 @@
                 </div>
             </div>
             <div class="card-footer">
+                @permission('edit-subjects')
                 <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
+                @endpermission
                 <button type="reset" class="btn"><span class="fa fa-ban"></span> Reset</button>
             </div>
             {!! Form::close() !!}

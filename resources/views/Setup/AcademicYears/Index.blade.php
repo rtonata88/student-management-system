@@ -14,9 +14,11 @@
     <div class="col-md-12 col-xs-12">
         <div class="card">
             <div class="card-header">
+                @permission('add-academic-years')
                 <a href="{{route('academic-year.create')}}" class="btn btn-primary">
                     Add New
                 </a>
+                @endpermission
             </div>
             <div class="card-body">
                 @if(Session::has('message'))
@@ -43,14 +45,18 @@
                             <td>{{$academic_year->start_date}}</td>
                             <td>{{$academic_year->end_date}}</td>
                             <td>
+                                @permission('edit-academic-years')
                                 @if($academic_year->status)
                                 <span class="badge bg-success">Active</span>
                                 @else
                                 <span class="badge bg-light text-dark">Not active</span>
                                 @endif
+                                @endpermission
                             </td>
                             <td>
+                                @permission('edit-academic-years')
                                 <a href="{{route('academic-year.status', $academic_year->id)}}"> <span class="fa fa-pencil"></span> Update status</a>
+                                @endpermission
                             </td>
                         </tr>
                         @endforeach

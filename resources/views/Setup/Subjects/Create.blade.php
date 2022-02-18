@@ -39,9 +39,9 @@
             <div class="col-md-12 mt-2">
                 <div class="form-group">
                     {{Form::label('Subject extra fees')}}
-                   <div class="alert alert-info">
-                    <strong>Please note: </strong> These extra fees are ONLY for compulsory fees which must be attached to the module.
-                   </div>
+                    <div class="alert alert-info">
+                        <strong>Please note: </strong> These extra fees are ONLY for compulsory fees which must be attached to the module.
+                    </div>
                     <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                         <thead>
                             <tr>
@@ -65,7 +65,9 @@
                 </div>
             </div>
             <div class="card-footer">
+                @permission('add-subjects')
                 <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
+                @endpermission
                 <button type="reset" class="btn"><span class="fa fa-ban"></span> Reset</button>
             </div>
             {!! Form::close() !!}
