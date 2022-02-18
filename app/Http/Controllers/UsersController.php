@@ -4,13 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-use App\Team;
-use App\City;
-use App\Role;
-use App\Sector;
-use App\Country;
-use App\Language;
-use App\Department;
+use App\Permission;
 
 use Session;
 use Hash;
@@ -28,31 +22,23 @@ class UsersController extends Controller
     }
 
     public function index(){
-    	$users = User::with('country')->get();
-    	return view('users.index', compact('users'));
+    	$users = User::select('name', 'username', 'email')->get();
+
+    	return view('Users.Index', compact('users'));
     }
 
     public function create(){
-    	$teams = Team::pluck('name', 'id');
-    	$cities = City::pluck('name', 'id');
-    	$languages = Language::pluck('name', 'id');
-        $roles = Role::pluck('display_name', 'id');
-    	$departments = Department::pluck('name', 'id');
+    
+        $permissions = Permission::all();
 
-    	return view('users.create', compact('teams', 'sectors', 'countries', 'departments', 'cities', 'languages', 'roles'));
+    	return view('Users.Create', compact('permissions'));
     }
 
     public function edit($id){
     	$user = User::find($id);
-    	$teams = Team::pluck('name', 'id');
-    	$cities = City::pluck('name', 'id');
-    	$sectors = Sector::pluck('name', 'id');
-    	$countries = Country::pluck('name', 'id');
-    	$languages = Language::pluck('name', 'id');
-        $roles = Role::pluck('display_name', 'id');
-    	$departments = Department::pluck('name', 'id');
+		$permissions = Permission::all();
 
-    	return view('users.edit', compact('user', 'teams', 'sectors', 'countries', 'departments', 'cities', 'languages', 'roles'));
+    	return view('users.edit', compact('user', 'permissions'));
     }
 
     public function show($id){
@@ -63,38 +49,20 @@ class UsersController extends Controller
     public function store(Request $requests)
     {
     	$validated = $this->validate($requests, [
-    		'username' => 'required|string|max:255|unique:users',
             'email' => 'required|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
-
         ]);
 
+		$data = $requests->all();
 
-    	$user = new User;
+		$data['username'] = str_slug($requests->name, '.');
 
-    	$user->name = $requests->name;
-    	$user->email = $requests->email;
-    	$user->username = $requests->username;
-    	$user->approved = 1;
-    	$user->password = bcrypt($requests->password);
-    	$user->gender = $requests->gender;
-    	$user->department_id = $requests->department_id;
-    	$user->country_id = City::find($requests->city_id)->country_id;
-    	$user->city_id = $requests->city_id;
-    	$user->prefered_language = $requests->language_id;
-    	$user->save();
+    	$user = User::create($data);
 
-        foreach ($requests->roles as $key) {
-            $role = Role::find($key);
-            $user->attachRole($role);
-        }
+        $user->syncPermissions($requests->permissions);
 
-        $user->syncRoles($requests->roles);
+    	Session::flash('message', 'User created successfully!!');
 
-		$user->team()->sync($requests->teams);
-		$user->sector()->sync(Team::whereIn('id', $requests->teams)->pluck('sector_id'));
-
-    	Session::flash('message', 'Saved successfully, please confirm that the changes have taken effect in the table below.');
     	return redirect('/users');
     }
 
@@ -116,27 +84,16 @@ class UsersController extends Controller
             $user->update(['password' => Hash::make($request->password)]);
         }
 
-    	$user->name = $requests->name;
-    	$user->email = $requests->email;
-    	$user->gender = $requests->gender;
-    	$user->sector_id = $requests->sector_id;
-    	$user->team_id = $requests->team_id;
-    	$user->department_id = $requests->department_id;
-    	$user->country_id = City::find($requests->city_id)->country_id;
-    	$user->city_id = $requests->city_id;
-    	$user->prefered_language = $requests->prefered_language;
-    	$user->save();
+    	$user->update($request->all());
 
         foreach ($requests->roles as $key) {
             $role = Role::find($key);
             $user->syncRoles([$role->id]);
         }
-        $user->syncRoles($requests->roles);
+		
+		$user->syncPermissions($requests->permissions);
 
-		$user->team()->sync($requests->teams);
-		$user->sector()->sync(Team::whereIn('id', $requests->teams)->pluck('sector_id'));
-
-    	Session::flash('message', 'The record has been updated, please confirm that the changes have taken effect in the table below.');
+		Session::flash('message', 'User record updated successfully!!!');
     	return redirect('/users');
     }
 
@@ -150,12 +107,7 @@ class UsersController extends Controller
     	}
     	$user->save();
 
-    	return redirect('/users');
-    }
-
-    public function destroy($id){
-    	$user = User::destroy($id);
-    	Session::flash('message', 'Deleted Successfully');
+		Session::flash('message', 'User record updated successfully!!!');
     	return redirect('/users');
     }
 }

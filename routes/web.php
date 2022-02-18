@@ -77,3 +77,5 @@ Route::resource('/centers', 'CenterController');
 Route::resource('/academic-year', 'AcademicYearController');
 Route::get('/academic-year/status/{id}', 'AcademicYearController@updateStatus')->name('academic-year.status');
 
+//Access Management
+Route::resource('/users','UsersController');

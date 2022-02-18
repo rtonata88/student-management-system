@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('approved')->default(0);
             $table->string('password');
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamps();s
         });
     }
 

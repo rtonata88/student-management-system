@@ -3,56 +3,28 @@
 <div class="c-subheader px-3">
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
-    <li class="breadcrumb-item">Access Management</li>
-    <li class="breadcrumb-item"><a href="{{route('users.index')}}">Users</a> </li>
-    <li class="breadcrumb-item active">Create </li>
-    <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-item">Access Management</li>
+        <li class="breadcrumb-item"><a href="{{route('users.index')}}">Users</a> </li>
+        <li class="breadcrumb-item active">Create </li>
+        <!-- Breadcrumb Menu-->
     </ol>
 </div>
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12 col-xs-12">
+    <div class="offset-3 col-sm-12 col-md-6">
         <div class="card">
             <div class="card-header">
-                <strong>Users</strong> 
+                <strong>Users</strong>
             </div>
             <div class="card-body">
                 @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                        <p class="text-danger">{{ $error }}</p>
-                    @endforeach
+                @foreach ($errors->all() as $error)
+                <p class="text-danger">{{ $error }}</p>
+                @endforeach
                 @endif
 
-                 {!! Form::open(array('route'=>array('users.store'), 'class'=>'form-vertical form-material', 'method'=>'post')) !!}
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        
-                            {{Form::label('username', 'Username')}}
-                            {{Form::text('username', null, ['class' => 'form-control', 'required', 'placeholder'=>'Type here', 'autocomplete'=>'off'])}}
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        
-                            {{Form::label('password', 'Password')}}
-                            {{Form::password('password', ['class' => 'form-control', 'required', 'placeholder'=>'Password here'])}}
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        
-                            {{Form::label('password_confirmation', 'Confirm Password')}}
-                            {{Form::password('password_confirmation', ['class' => 'form-control' , 'required', 'placeholder'=>'Password again'])}}
-                        </div>
-                    </div>
-                </div>
-                <hr>
+                {!! Form::open(array('route'=>array('users.store'), 'class'=>'form-vertical form-material', 'method'=>'post')) !!}
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -60,69 +32,59 @@
                             {{Form::text('name', null, ['class' => 'form-control', 'required'])}}
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-md-6">
-                       <div class="form-group">
+                        <div class="form-group">
                             {{Form::label('email', 'Email')}}
                             {{Form::text('email', null, ['class' => 'form-control', 'required'])}}
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            {{Form::label('gender', 'Gender')}}
-                            {{Form::select('gender', ['Male'=>'Male', 'Female'=>'Female'],null, ['class' => 'form-control select'])}}
+                            {{Form::label('password', 'Password')}}
+                            {{Form::password('password', ['class' => 'form-control', 'required', 'placeholder'=>'Password here'])}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{Form::label('password_confirmation', 'Confirm Password')}}
+                            {{Form::password('password_confirmation', ['class' => 'form-control' , 'required', 'placeholder'=>'Password again'])}}
                         </div>
                     </div>
                 </div>
-
+                <hr>
                 <div class="row">
-
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
-                            {{Form::label('team_id', 'Team')}}
-                            {{Form::select('teams[]', $teams,null, ['class' => 'form-control select2', 'multiple'])}}
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {{Form::label('department_id', 'Department')}}
-                            {{Form::select('department_id', $departments,null, ['class' => 'form-control select'])}}
+                            {{Form::label('roles', 'Access Levels', array('class' => 'control-label'))}}
+                            <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th class="text-center">Tick to Assign</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($permissions as $permission)
+                                    <tr>
+                                        <td>{{$permission->display_name}}</td>
+                                        <td>{{$permission->description}}</td>
+                                        <td class="text-center">
+                                            <input type="checkbox" value="{{$permission->id}}" name="permissions[]">
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-
-                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {{Form::label('city_id', 'City')}}
-                            {{Form::select('city_id', $cities,null, ['class' => 'form-control select2'])}}
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {{Form::label('language_id', 'Preferred Language')}}
-                            {{Form::select('language_id', $languages,null, ['class' => 'form-control select'])}}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                         
-                            <div class="col-md-12">
-                                <div class="form-group">
-                              {{Form::label('roles', 'Access', array('class' => 'control-label'))}}
-                              {{Form::select('roles[]', $roles,null ,array('class' => 'form-control select2', 'multiple', 'required'))}}
-                              <div class="help-block text-info">Ctrl + Click on the role - to assign  a permission to multiple roles</div>
-                              </div>
-                          </div>
-                </div>  
-                <button type="reset" class="btn"> Reset</button>
                 <button type="submit" class="btn btn-success"> Save</button>
+                <a href="/users" class="btn"> Cancel</a>
+
                 {!! Form::close() !!}
             </div>
         </div>
