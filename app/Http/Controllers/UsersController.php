@@ -84,11 +84,11 @@ class UsersController extends Controller
             $requests->validate([
                 'password' => ['required', 'string', 'min:6', 'confirmed'],
             ]);
-            
+
             $user->update(['password' => Hash::make($requests->password)]);
         }
 
-    	$user->update($requests->all());
+    	$user->update($requests->except('password'));
 		
 		$user->syncPermissions($requests->permissions);
 
