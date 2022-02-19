@@ -77,6 +77,21 @@
                     </tr>
                 </table>
             </div>
+            <div class="card-footer">
+                <p><strong>Aging Report</strong></p>
+                <table class="table table-responsive-sm table-bordered table-sm" style="width:50%">
+                    <tr class="text-center">
+                        <th>90+</th>
+                        <th>60 Days</th>
+                        <th>30 Days</th>
+                    </tr>
+                    <tr class="text-center">
+                        <td>{{number_format($aging_report["90"], 2, '.',',')}}</td>
+                        <td>{{number_format($aging_report["60"], 2, '.',',')}}</td>
+                        <td>{{number_format($aging_report["30"], 2, '.',',')}}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
