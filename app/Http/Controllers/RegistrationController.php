@@ -228,17 +228,17 @@ class RegistrationController extends Controller
         $newInvoices = [];
         $new_student_extra_charges = [];
         $invoices = Invoice::select('model_id')
-                            ->where('reference_number', $reference_number)
                             ->where('model', 'Fees')
                             ->pluck('model_id')
                             ->toArray();
 
-        $student_extra_charges = StudentExtraCharge::whereYear('transaction_date', $academic_year)
+        $student_extra_charges = StudentExtraCharge::whereYear('transaction_date', $academic_year->academic_year)
                                                     ->where('student_id', $request->student_id)
                                                     ->whereIn('fee_id', $request->other_fees)
                                                     ->pluck('fee_id')
                                                     ->toArray();
         
+       // dd($student_extra_charges);
         for ($i = 0; $i < count($request->other_fees); $i++) {
             
             if(!in_array($request->other_fees[$i], $invoices)){
@@ -333,28 +333,30 @@ class RegistrationController extends Controller
 
     private function chargeExtraMandatoryFees($fees, $academic_year, $reference_number, $request){
         $fees = $fees->where('automatic_charge', 'Yes');
-
-        $student_extra_charges = StudentExtraCharge::whereYear('transaction_date', $academic_year)
+        
+        $student_extra_charges = StudentExtraCharge::whereYear('transaction_date', $academic_year->academic_year)
             ->where('student_id', $request->student_id)
-            ->whereIn('fee_id', $request->other_fees)
+            ->whereIn('fee_id', $fees->pluck('id'))
             ->pluck('fee_id')
             ->toArray();
 
+           
         $new_student_extra_charges = [];
         foreach ($fees as $fee) {
-            Invoice::create([
-                'student_id' => $request->student_id,
-                'reference_number' => $reference_number,
-                'model' => "Fees",
-                'model_id' => $fee->id,
-                'financial_year' => $request->academic_year,
-                'transaction_date' => date('Y-m-d'),
-                'line_description' => $fee->fee_description,
-                'debit_amount' => $this->calculateExtraFeeAmount($academic_year, $fee->amount, $fee->charge_type),
-                'credit_amount' => 0
-            ]);
-
             if (!in_array($fee->id, $student_extra_charges)) {
+                
+                Invoice::create([
+                    'student_id' => $request->student_id,
+                    'reference_number' => $reference_number,
+                    'model' => "Fees",
+                    'model_id' => $fee->id,
+                    'financial_year' => $request->academic_year,
+                    'transaction_date' => date('Y-m-d'),
+                    'line_description' => $fee->fee_description,
+                    'debit_amount' => $this->calculateExtraFeeAmount($academic_year, $fee->amount, $fee->charge_type),
+                    'credit_amount' => 0
+                ]);
+
                 array_push($new_student_extra_charges, [
                     'transaction_date' => date('Y-m-d'),
                     'student_id' => $request->student_id,

@@ -66,6 +66,9 @@ Route::get('/accounting/reports', 'InvoiceReportController@index')->name('report
 Route::post('/accounting/reports/search', 'InvoiceReportController@search')->name('reports.finance.search');
 Route::get('/accounting/reports/export', 'InvoiceReportController@export')->name('reports.finance.export');
 
+Route::get('/aging/reports', 'InvoiceReportController@agingReport')->name('reports.finance.aging');
+Route::get('/aging/reports/export', 'InvoiceReportController@export')->name('reports.aging.export');
+
 //Ajax URLs
 Route::get('get-subjects', 'HomeController@fetchSubjects');
 

@@ -15,4 +15,8 @@ class Registration extends Model
     public function center(){
         return $this->belongsTo(Center::class, 'center_id');
     }
+
+    public function student(){
+        return $this->belongsTo(Student::class, 'student_id');
+    }
 }

@@ -126,7 +126,6 @@ class CancelRegistrationController extends Controller
         
         $subjects = Module::whereIn('id', $request->subject)->get();
         
-
         for ($i = 0; $i < count($request->subject); $i++) {
             array_push(
                 $invoices,
@@ -219,7 +218,7 @@ class CancelRegistrationController extends Controller
 
         $number_of_months = $this->calculateNumberOfMonths(date('Y-m-d'), $year->end_date);
 
-        $amount = ($number_of_months + 1) * $subject_fee;
+        $amount = $number_of_months * $subject_fee;
         
         return $amount;
     }

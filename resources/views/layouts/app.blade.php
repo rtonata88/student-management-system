@@ -136,6 +136,11 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
           </svg> Finance</a>
       </li>
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.finance.aging')}}">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
+          </svg> Aging Report</a>
+      </li>
       @endpermission
       @endpermission
       @permission('ADMINISTRATION')
@@ -222,7 +227,7 @@
         </div>
       </main>
       <footer class="c-footer">
-        <div class="text-uppercase"> &copy; {{date('Y')}} STUDENT MANAGEMENT SYSTEM.
+        <div class="text-uppercase"> &copy; {{date('Y')}} OSKOLA STUDENT MANAGEMENT SYSTEM.
         </div>
       </footer>
     </div>

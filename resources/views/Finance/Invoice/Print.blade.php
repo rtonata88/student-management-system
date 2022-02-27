@@ -30,7 +30,7 @@
                                 <strong>E: </strong>{{$company->email}} <br>
                             </td>
                             <td width="200px; margin-right:20px;">
-                                <img src="{{asset('storage/'.$company->logo)}}" class="img-fluid" />
+                                <img src="{{asset('assets/Logo.png')}}" class="img-fluid" />
                             </td>
                         </tr>
                     </table>

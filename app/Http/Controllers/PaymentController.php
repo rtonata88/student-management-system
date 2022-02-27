@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\Invoice;
+use App\ModuleRegistration;
 use App\Payment;
 use App\Student;
 use Session;
@@ -52,27 +53,21 @@ class PaymentController extends Controller
         $student = Student::find($student_id);
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
-        $balance = $this->calculateBalance($academic_year, $student->id);
+        $payable_amount = $this->calculatePayableAmount($academic_year, $student->id);
 
         $registration = $student->registration->where('academic_year', $academic_year)->first();
+
         $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
-        return view('Finance.Payments.Create', compact('student', 'academic_year', 'registration_status', 'balance'));
+        return view('Finance.Payments.Create', compact('student', 'academic_year', 'registration_status', 'payable_amount'));
     }
 
-    private function calculateBalance($academic_year, $id)
+    private function calculatePayableAmount($academic_year, $id)
     {
-        $invoices = Invoice::where('student_id', $id)
-            ->where('financial_year', $academic_year)
-            ->get();
-
-        $balance = 0;
-
-        foreach ($invoices as $invoice){
-            $balance = ($invoice->debit_amount > 0) ? $balance += $invoice->debit_amount : $balance -= $invoice->credit_amount;
-        }
-
-        return  $balance;
+        return ModuleRegistration::where('student_id', $id)
+            ->where('academic_year', $academic_year)
+            ->where('registration_status', 'Registered')
+            ->sum('amount');
     }
 
     public function show($id)
