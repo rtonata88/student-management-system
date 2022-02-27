@@ -64,7 +64,6 @@ class RegistrationController extends Controller
 
         $registered_modules = ModuleRegistration::where('student_id', $student->id)
             ->where('academic_year', $academic_year)
-            ->where('registration_status', 'Registered')
             ->pluck('module_id')
             ->toArray();
 

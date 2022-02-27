@@ -20,7 +20,7 @@
             ?>
           <tr>
               <td>{{$registered_student->student->student_number2}}</td>
-              <td>{{$registered_student->student->student_names}} {{$invoice->surname}}</td>
+              <td>{{$registered_student->student->student_names}} {{$registered_student->student->surname}}</td>
               <td>{{$registered_student->student->contact_number}}</td>
               <td style="width:400px">
                   @foreach($registered_student->student->guardian as $index => $guardian)
