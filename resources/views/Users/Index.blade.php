@@ -26,7 +26,7 @@
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Full Names</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Action</th>

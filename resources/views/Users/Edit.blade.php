@@ -29,7 +29,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            {{Form::label('name', 'Fullname')}}
+                            {{Form::label('name', 'Full Names')}}
                             {{Form::text('name', $user->name, ['class' => 'form-control', 'required'])}}
                         </div>
                     </div>
