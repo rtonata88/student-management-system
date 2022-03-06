@@ -66,7 +66,7 @@
 
                         <tr>
                             <td>{{$registration->student->student_number2}}</td>
-                            <td>{{$registration->student->student_names}} {{$student->surname}}</td>
+                            <td>{{$registration->student->student_names}} {{$registration->student->surname}}</td>
                             <td>
                                 {{$registration->registration
                                                 ->where('student_id', $registration->student_id)

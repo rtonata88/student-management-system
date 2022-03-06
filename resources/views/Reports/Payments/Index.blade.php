@@ -17,26 +17,30 @@
                 <strong>Report filter</strong>
             </div>
             <div class="card-body">
-                {!! Form::open(array('route' => array('reports.students.search'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
+                {!! Form::open(array('route' => array('reports.payments.search'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
                 <div class="form-group">
-                    <label class="text-right control-label col-form-label">Academic year</label>
-                    {{Form::select('academic_year', $academic_years, date('Y'), ['class' => 'form-control form-control-sm select', 'placeholder'=>"All years"])}}
+                    <label class="text-right control-label col-form-label">From date</label>
+                    {{Form::date('date_from', date('Y-m-d'), ['class' => 'form-control form-control-sm', 'required'])}}
                 </div>
 
                 <div class="form-group">
-                    <label class="text-right control-label col-form-label">Registration status</label>
-                    {{Form::select('registration_status', ['Registered' => 'Registered', 'Canceled' => 'Cancelled'], null, ['class' => 'form-control form-control-sm select','placeholder'=>"Doesn't matter"])}}
+                    <label class="text-right control-label col-form-label">To date</label>
+                    {{Form::date('date_to', date('Y-m-d'), ['class' => 'form-control form-control-sm', 'required'])}}
                 </div>
 
                 <div class="form-group">
-                    <label class="text-right control-label col-form-label">Registered Subjects</label>
-                    {{Form::select('subject_id', $subjects, null, ['class' => 'form-control form-control-sm select','placeholder'=>"All subjects"])}}
+                    <label class="text-right control-label col-form-label">Receipt number</label>
+                    {{Form::text('receipt_number', null, ['class' => 'form-control form-control-sm','placeholder'=>"Enter receipt number"])}}
                 </div>
 
+                <div class="form-group">
+                    <label class="text-right control-label col-form-label">Student number</label>
+                    {{Form::text('student_id', null, ['class' => 'form-control form-control-sm','placeholder'=>"Enter student number"])}}
+                </div>
                 <hr>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-success btn-sm">Search</button>
-                    <a href="{{route('reports.students.index')}}" class="btn btn-sm">Clear</a>
+                    <a href="{{route('reports.payments.index')}}" class="btn btn-sm">Clear</a>
                 </div>
                 {!! Form::close() !!}
             </div>
@@ -48,40 +52,32 @@
                 <strong>Report results</strong>
             </div>
             <div class="card-body">
-                @if($subject_registration)
-                <strong>{{$subject_registration->total()}} Results Found</strong>, <a href="{{route('reports.students.export')}}">Export to excel</a>
+                @if($payments)
+                <a href="{{route('reports.payments.export')}}">Export to excel</a>
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                     <thead>
                         <tr>
+                            <th>Receipt number</th>
                             <th>Student number</th>
-                            <th>Names</th>
-                            <th>Center</th>
-                            <th>Subject</th>
-                            <th>Registration Date</th>
-                            <th>Status</th>
+                            <th>Student name</th>
+                            <th>Transaction date</th>
+                            <th>Amount</th>
+                            <th>Received by</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($subject_registration as $registration)
-
+                        @foreach($payments as $payment)
                         <tr>
-                            <td>{{$registration->student->student_number2}}</td>
-                            <td>{{$registration->student->student_names}} {{$student->surname}}</td>
-                            <td>
-                                {{$registration->registration
-                                                ->where('student_id', $registration->student_id)
-                                                ->first()
-                                                ->center
-                                                ->center_name}}
-                            </td>
-                            <td>{{$registration->subject->subject_name}}</td>
-                            <td>{{$registration->registration_date}}</td>
-                            <td>{{$registration->registration_status}}</td>
+                            <td>{{$payment->receipt_number}}</td>
+                            <td>{{$payment->student->student_number2}}</td>
+                            <td>{{$payment->student->student_names}} {{$payment->student->surname}}</td>
+                            <td>{{$payment->payment_date}}</td>
+                            <td>{{$payment->payment_amount}}</td>
+                            <td>{{$payment->user->name}}</td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
-
                 @endif
             </div>
         </div>

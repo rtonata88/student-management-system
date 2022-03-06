@@ -65,6 +65,10 @@ Route::get('/student/reports', 'StudentReportController@index')->name('reports.s
 Route::post('/student/reports/search','StudentReportController@search')->name('reports.students.search');
 Route::get('/student/reports/export', 'StudentReportController@export')->name('reports.students.export');
 
+Route::get('/payment/reports', 'PaymentReportController@index')->name('reports.payments.index');
+Route::post('/payment/reports/search', 'PaymentReportController@search')->name('reports.payments.search');
+Route::get('/payment/reports/export', 'PaymentReportController@export')->name('reports.payments.export');
+
 Route::get('/accounting/reports', 'InvoiceReportController@index')->name('reports.finance.index');
 Route::post('/accounting/reports/search', 'InvoiceReportController@search')->name('reports.finance.search');
 Route::get('/accounting/reports/export', 'InvoiceReportController@export')->name('reports.finance.export');

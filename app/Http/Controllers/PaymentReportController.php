@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\Center;
+use App\Exports\PaymentsReport;
 use App\Payment;
+use App\Student;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaymentReportController extends Controller
 {
@@ -20,9 +23,11 @@ class PaymentReportController extends Controller
 
         $academic_years = AcademicYear::pluck('academic_year', 'academic_year');
 
-        $payments = Payment::with('student')->where('transaction_date', date('Y-m-d'))->get();
+        $payments = Payment::with('student')->where('payment_date', date('Y-m-d'))->get();
 
         session()->put('payments_report', $payments);
+
+        
 
         return view('Reports.Payments.Index', compact('payments'));
     }
@@ -35,17 +40,18 @@ class PaymentReportController extends Controller
         $date_from = $request->date_from;
         $date_to = $request->date_to;
 
-        $payments = Payment::with('student')->whereBetween('transaction_date', $date_from, $date_to);
+        $payments = Payment::with('student')->whereBetween('payment_date', [$date_from, $date_to]);
 
         if (isset($request->receipt_number)) {
             $payments = $payments->where('receipt_number', $request->receipt_number);
         }
 
         if (isset($request->student_id)) {
-            $payments = $payments->where('student_id', $request->student_id);
+            $student = Student::where('student_number2', 'OMA121')->first();
+            $payments = $payments->where('student_id', $student->id);
         }
 
-        $payments = $payments->paginate(100);
+        $payments = $payments->get();
 
         session()->put('payments_report', $payments);
 
@@ -54,6 +60,6 @@ class PaymentReportController extends Controller
 
     public function export()
     {
-        return Excel::download(new SubjectRegistration, 'student_report_' . date('Y-m-d') . '.xlsx');
+        return Excel::download(new PaymentsReport, 'payments_report_' . date('Y-m-d') . '.xlsx');
     }
 }
