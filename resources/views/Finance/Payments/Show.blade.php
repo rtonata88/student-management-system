@@ -74,10 +74,12 @@
                         <td>{{$payment->payment_amount}}</td>
                     </tr>
                     @endforeach
+                    @if(count($payments) > 0)
                     <tr>
                         <th colspan="4" class="text-right">Total</th>
-                        <th>{{number_format($payment->sum('payment_amount') ?? 0, 2, '.',',')}}</th>
+                        <th>{{number_format($payment->sum('payment_amount'), 2, '.',',')}}</th>
                     </tr>
+                    @endif
                 </table>
             </div>
         </div>
