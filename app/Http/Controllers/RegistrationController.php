@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\Center;
+use App\EducationSystem;
 use App\Fees;
 use App\Invoice;
 use App\Module;
@@ -63,9 +64,11 @@ class RegistrationController extends Controller
         $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
         $registered_modules = ModuleRegistration::where('student_id', $student->id)
-            ->where('academic_year', $academic_year)
-            ->pluck('module_id')
-            ->toArray();
+            ->where('academic_year', $academic_year);
+        
+        $symbols = $registered_modules->get();
+
+        $registered_modules = $registered_modules->pluck('module_id')->toArray();
 
         $charged_fees = Invoice::where('model', 'Fees')
             ->where('student_id', $student->id)
@@ -73,7 +76,10 @@ class RegistrationController extends Controller
             ->pluck('model_id')
             ->toArray();
 
-        return view('Management.Enrolment.Index', compact('student', 'subjects', 'fees', 'academic_year', 'centers', 'registration_status', 'registered_modules', 'charged_fees'));
+        
+        $education_system = EducationSystem::all();
+
+        return view('Management.Enrolment.Index', compact('education_system','student', 'subjects', 'fees', 'academic_year', 'centers', 'registration_status', 'registered_modules', 'charged_fees', 'symbols'));
     }
 
     public function show($student_id){
@@ -137,6 +143,8 @@ class RegistrationController extends Controller
                             'academic_year' => $request->academic_year,
                             'registration_date' => date('Y-m-d'),
                             'registration_status' => 'Registered',
+                            'subject_symbol' => $request->subject_symbol[$request->subject[$i]],
+                            'system' => $request->system[$request->subject[$i]],
                             'created_at' => date('Y-m-d H:i:s'),
                             'updated_at' => date('Y-m-d H:i:s'),
                             ]

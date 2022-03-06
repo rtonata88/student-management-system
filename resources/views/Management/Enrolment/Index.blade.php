@@ -83,6 +83,8 @@
                                 <th>Subject</th>
                                 <th>Subject code</th>
                                 <th>Amount</th>
+                                <th>Symbol</th>
+                                <th>System</th>
                                 <th class="text-center">Tick to Enrol</th>
                             </tr>
                         </thead>
@@ -92,7 +94,17 @@
                                 <td>{{$subject->subject_name}}</td>
                                 <td>{{$subject->subject_code}}</td>
                                 <td>{{$subject->subject_fees}}</td>
-                                <td class="text-center">
+                                <td><input type="text" name="subject_symbol[{{$subject->id}}]" class="form-control form-control-sm input-no-border" value="{{$symbols->where('module_id', $subject->id)->first()->subject_symbol ?? ''}}" placeholder="Subject symbol" /></td>
+                                <td>
+                                    <select class="form-control select form-control-sm input-no-border" name="system[{{$subject->id}}]">
+                                        <option>Select</option>
+                                        @foreach($education_system as $system)
+                                        <option value="{{$system->value}}" @if($symbols->where('module_id', $subject->id)->first()->system == $system->value) {{'selected'}} @endif>{{$system->label}} {{$symbols->where('module_id', $subject->id)->first()->system}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td class=" text-center">
+
                                     @if(in_array($subject->id, $registered_modules))
                                     <input type="checkbox" value="{{$subject->id}}" name="subject[]" checked="checked" disabled>
                                     @else
