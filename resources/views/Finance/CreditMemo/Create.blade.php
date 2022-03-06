@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                @permission('add-credit-order')
+                @permission('add-credit-memos')
                 <button type="submit" class="btn btn-sm btn-success">Submit</button>
                 @endpermission
                 <a href="/credit-memos">Cancel</a>
