@@ -120,23 +120,23 @@
 
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
-                        <th style="background-color: rgba(227, 227, 227, 0.5)">Name <span class="text-danger">*</span></th>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Name</th>
                         <td>
                             {{Form::text('guardian_names[]',null, ['class' => 'form-control input-no-border', 'placeholder'=>'Guardian name'])}}
                         </td>
                     </tr>
                     <tr>
-                        <th style="background-color: rgba(227, 227, 227, 0.5)">Surname <span class="text-danger">*</span></th>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Surname</th>
                         <td>
                             {{Form::text('guardian_surname[]',null, ['class' => 'form-control input-no-border', 'placeholder'=>'Surname'])}}
                         </td>
                     </tr>
                     <tr>
-                        <th style="background-color: rgba(227, 227, 227, 0.5)">Relationship <span class="text-danger">*</span></th>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Relationship</th>
                         <td>{{Form::select('relationship[]', ['Father' => 'Father', 'Mother' => 'Mother', 'Cousin' => 'Cousin', 'Aunt' => 'Aunt', 'Uncle' => 'Uncle', 'Sister' => 'Sister', 'Brother' => 'Brother'], null, ['class' => 'form-control select input-no-border'])}}</td>
                     </tr>
                     <tr>
-                        <th style="background-color: rgba(227, 227, 227, 0.5)">Contact number <span class="text-danger">*</span></th>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Contact number</th>
                         <td>
                             {{Form::text('guardian_contact_number[]',null, ['class' => 'form-control input-no-border', 'placeholder'=>'Contact number'])}}
                         </td>

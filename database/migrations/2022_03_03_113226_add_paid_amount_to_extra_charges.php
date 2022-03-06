@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDocumentTypeToPayments extends Migration
+class AddPaidAmountToExtraCharges extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddDocumentTypeToPayments extends Migration
      */
     public function up()
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->string('document_type', 20)->after('payment_method');
+        Schema::table('student_extra_charges', function (Blueprint $table) {
+            $table->decimal('amount_paid', 15, 2)->after('amount')->default(0.00);
         });
     }
 
@@ -25,8 +25,8 @@ class AddDocumentTypeToPayments extends Migration
      */
     public function down()
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->dropColumn('document_type');
+        Schema::table('student_extra_charges', function (Blueprint $table) {
+            $table->dropColumn('amount_paid');
         });
     }
 }

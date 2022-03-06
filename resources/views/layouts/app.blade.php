@@ -110,7 +110,14 @@
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payments">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bank')}}"></use>
-          </svg> Payments & Credit Memos</a>
+          </svg> Payments</a>
+      </li>
+      @endpermission
+      @permission('credit-memos')
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/credit-memos">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bank')}}"></use>
+          </svg> Credit Memos</a>
       </li>
       @endpermission
       @permission('debit-memos')
@@ -305,6 +312,7 @@
   @stack('contactsJS')
   @stack('googleCharts')
   @stack('highcharts')
+  @stack('payments')
 </body>
 
 </html>

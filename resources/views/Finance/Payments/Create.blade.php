@@ -41,12 +41,18 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{$academic_year}}</td>
+                            <td>{{$academic_year->academic_year}}</td>
                             <td>{{$student->student_number2}}</td>
                             <td>{{$student->student_names}}</td>
                             <td>{{$student->surname}}</td>
                             <td>{{$student->date_of_birth}}</td>
-                            <td>{{number_format($payable_amount, 2, '.',',')}}</td>
+                            <td>
+                                @if($payable_amount > 0)
+                                    {{number_format($payable_amount, 2, '.',',')}}
+                                @else
+                                    0
+                                @endif
+                            </td>
                             <td>
                                 @if($registration_status == 'Registered')
                                 <span class="badge badge-success">
@@ -90,27 +96,85 @@
                 </div>
                 @endif
                 <div class="form-group">
-                    {{Form::label('payment_amount', 'Amount')}}
-                    {{Form::text('payment_amount',null, ['class' => 'form-control', 'required'])}}
+                    <strong>{{Form::label('receipt_number', 'Receipt number')}} </strong>
+                    {{Form::text('receipt_number',null, ['class' => 'form-control', 'required'])}}
+                </div>
+                <div class="form-group">
+                    <strong>{{Form::label('receipt_amount', 'Receipt amount (N$)')}} </strong>
+                    {{Form::number('receipt_amount',null, ['class' => 'form-control', 'required'])}}
                     {{Form::hidden('academic_year',$academic_year, ['class' => 'form-control'])}}
                     {{Form::hidden('student_id',$student->id, ['class' => 'form-control'])}}
+                    <div class="help-text text-danger d-none" id="error-message"><strong>The receipt amount does not add up to the individual item amounts below.</strong></div>
+                </div>
+
+                <div class="form-group">
+                    <p><strong>Receipt Breakdown</strong></p>
+                    <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Payment Description</th>
+                                <th>Amount due (N$)</th>
+                                <th>Status</th>
+                                <th>Amount paid (N$)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tuition fees</td>
+                                <td>{{number_format($payable_amount, 2, '.',',')}}</td>
+                                <td></td>
+                                <td> {{Form::number('tuition_fees',0, ['class' => 'form-control fees', 'required'])}}</td>
+                            </tr>
+                            @foreach($extra_fees as $fee)
+                            <tr>
+                                <td>{{$fee->fee_description}}</td>
+                                <td>{{$fee->amount}}</td>
+                                <td class="text-center">
+                                    @if($fee->amount_paid == 0)
+                                    <span class="badge badge-danger">
+                                        Not paid
+                                    </span>
+                                    @elseif($fee->amount_paid >= $fee->amount)
+                                    <span class="badge badge-success">
+                                        Paid
+                                    </span>
+                                    @else
+                                    <span class="badge badge-warning">
+                                        Partially paid
+                                    </span>
+                                    @endif
+
+                                </td>
+                                <td>
+                                    @if($fee->amount_paid == 0)
+                                    <input type="number" name="other_fee[{{$fee->id}}]" class="form-control input-no-border fees" value="{{$fee->amount}}">
+                                    @elseif($fee->amount_paid >= $fee->amount)
+                                    {{$fee->amount}}
+                                    @else
+                                    <input type="number" name="other_fee[{$fee->id}}]" class="form-control input-no-border fees" value="{{$fee->amount - $fee->amount_paid}}">
+                                    @endif
+                                    <input type="hidden" name="fee_id[]" class="form-control input-no-border" value="{{$fee->id}}">
+                                    <input type="hidden" name="fee_description[{{$fee->id}}]" value="{{$fee->fee_description}}">
+                                </td>
+                            </tr>
+                            @endforeach
+                            <tr>
+                                <th colspan="3" class="text-right">TOTAL RECEIPT AMOUNT (N$)</th>
+                                <th>
+                                    <input type="text" class="form-control input-no-border" id="displayTotalReceiptAmount" value="0" readonly="readonly">
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <div class="form-group">
                     {{Form::label('payment_method', 'Payment method')}}
                     {{Form::select('payment_method', ['Cash' => 'Cash', 'Bank Deposit' => 'Bank Deposit', 'EFT' => 'EFT'], null, ['class' => 'form-control', 'required'])}}
                 </div>
-
-                <div class="form-group">
-                    {{Form::label('document_type', 'Document Type')}}
-                    {{Form::select('document_type', ['Payment' => 'Payment', 'Credit Memo' => 'Credit Memo'], null, ['class' => 'form-control', 'required'])}}
-                    <span class="help text-info">
-                        Please select Credit Memo if you are recording an amount that must be credited onto the student's account which is not a payment.
-                    </span>
-                </div>
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                <button type="submit" class="btn btn-sm btn-success" id="submit-btn">Submit</button>
                 <a href="/payments">Cancel</a>
             </div>
             {!! Form::close() !!}
@@ -118,4 +182,7 @@
         @endif
     </div>
 </div>
+@push('payments')
+<script src="{{asset('js/payments.js')}}"></script>
+@endpush
 @endsection

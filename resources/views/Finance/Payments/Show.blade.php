@@ -13,10 +13,28 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-12 col-xs-12">
+    <div class="col-md-3 col-xs-12">
         <div class="card">
             <div class="card-header">
-                <strong>Payments</strong> | <a href="{{route('payments.index')}}">Back</a> | <a href="{{route('invoices.print', $student->id)}}" target="_blank">Print Invoice</a>
+                <strong>Quick actions</strong>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li><a href="{{route('invoices.print', $student->id)}}" target="_blank">Print Invoice</a></li>
+                    <li><a href="{{route('payments.index')}}">Search another student</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                @permission('add-payment')
+                <div class="float-left">
+                    <a href="{{route('payments.edit', $student->id)}}" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD PAYMENT</a>
+                </div>
+                @endpermission
             </div>
             <div class="card-body">
                 <table class="table-sm" style="width:100%">
@@ -41,6 +59,7 @@
 
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
+                        <th>Receipt Number</th>
                         <th>Payment Date</th>
                         <th>Method</th>
                         <th>Received by</th>
@@ -48,6 +67,7 @@
                     </tr>
                     @foreach($payments as $payment)
                     <tr>
+                        <td>{{$payment->receipt_number}}</td>
                         <td>{{$payment->payment_date}}</td>
                         <td>{{$payment->payment_method}}</td>
                         <td>{{$payment->user->name}}</td>
@@ -55,7 +75,7 @@
                     </tr>
                     @endforeach
                     <tr>
-                        <th colspan="3" class="text-right">Total</th>
+                        <th colspan="4" class="text-right">Total</th>
                         <th>{{number_format($payment->sum('payment_amount'), 2, '.',',')}}</th>
                     </tr>
                 </table>

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\AcademicYear;
+use App\CreditMemo;
 use App\Invoice;
 use App\ModuleRegistration;
 use App\Payment;
 use App\Student;
+use App\StudentExtraCharge;
 use Session;
 use Auth;
 use Illuminate\Http\Request;
@@ -27,7 +29,7 @@ class PaymentController extends Controller
         if (isset($request->student_number)) {
             $student = Student::where('student_number2', $request->student_number)->first();
             if ($student) {
-                return redirect()->route('payments.edit', $student->id);
+                return redirect()->route('payments.show', $student->id);
             }
         }
 
@@ -37,7 +39,7 @@ class PaymentController extends Controller
             if (count($students)) {
 
                 if (count($students) === 1) {
-                    return redirect()->route('payments.edit', $students->first()->id);
+                    return redirect()->route('payments.show', $students->first()->id);
                 } else {
                     return view('Finance.Payments.Search', compact('students'));
                 }
@@ -51,23 +53,89 @@ class PaymentController extends Controller
 
     public function edit($student_id){
         $student = Student::find($student_id);
-        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+        $academic_year = AcademicYear::where('status', 1)->first();
 
-        $payable_amount = $this->calculatePayableAmount($academic_year, $student->id);
+        $fees = $this->calculatePayableAmount($academic_year, $student->id);
 
-        $registration = $student->registration->where('academic_year', $academic_year)->first();
+        $payable_amount = $fees['payable_fees'];
+        
+        $monthly_amount = $fees['monthly_amount'];
 
+        $registration = $student->registration->where('academic_year', $academic_year->academic_year)->first();
+        
         $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
-        return view('Finance.Payments.Create', compact('student', 'academic_year', 'registration_status', 'payable_amount'));
+        $extra_fees = $this->getChargedExtraFees($student->id, $academic_year);
+        return view('Finance.Payments.Create', compact('student', 'academic_year', 'registration_status', 'payable_amount', 'extra_fees', 'monthly_amount'));
+    }
+
+    private function getChargedExtraFees($student_id, $academic_year){
+        return StudentExtraCharge::whereYear('transaction_date', $academic_year)
+                                ->where('student_id', $student_id)
+                                ->get();
     }
 
     private function calculatePayableAmount($academic_year, $id)
     {
-        return ModuleRegistration::where('student_id', $id)
-            ->where('academic_year', $academic_year)
-            ->where('registration_status', 'Registered')
-            ->sum('amount');
+        $registered_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'cancellation_date')->where('student_id', $id)
+                        ->where('academic_year', $academic_year->academic_year)
+                        ->get();
+
+        
+        $monthly_amount = $registered_subjects->where('registration_status', 'Registered')->sum('amount');
+        
+        $canceled_subjects = $registered_subjects->where('registration_status', 'Canceled');
+        
+        $cancellation_credits = 0;
+        foreach($canceled_subjects as $canceled_subject){
+            $number_of_months = $this->calculateNumberOfMonths($canceled_subject->cancellation_date, $academic_year->end_date) - 1;
+            $cancellation_credits += $number_of_months * $canceled_subject->amount;
+        }
+        
+        $number_of_months = $this->calculateNumberOfMonths($academic_year->start_date, $academic_year->end_date);
+
+        $payable_fees = $registered_subjects->sum('amount') * $number_of_months;
+        
+        $number_of_months = $this->calculateNumberOfMonths(date('Y-m-d'), $academic_year->end_date);
+        
+        $payments = $this->calculatePaymentsToDate($id);
+        
+        $credit_memos = $this->calculateCreditMemos($academic_year, $id);
+        
+        $payable_fees = ($payable_fees - $cancellation_credits - $payments - $credit_memos) /  $number_of_months;
+
+        $amounts['payable_fees'] = $payable_fees;
+        $amounts['monthly_amount'] = $monthly_amount;
+
+        return $amounts;
+    }
+
+    private function calculatePaymentsToDate($student_id){
+        return Invoice::select('credit_amount')
+                        ->where('model', 'Payment')
+                        ->where('student_id', $student_id)
+                        ->whereBetween('transaction_date', [date('Y-01-01'), date('Y-m-d')])
+                        ->sum('credit_amount');
+    }
+
+    private function calculateCreditMemos($academic_year, $student_id){
+        return CreditMemo::where('student_id', $student_id)
+                            ->whereYear('transaction_date', $academic_year->academic_year)
+                            ->sum('amount');
+    }
+
+    private function calculateNumberOfMonths($start_date, $end_date)
+    {
+        $ts1 = strtotime($start_date);
+        $ts2 = strtotime($end_date);
+
+        $year1 = date('Y', $ts1);
+        $year2 = date('Y', $ts2);
+
+        $month1 = date('m', $ts1);
+        $month2 = date('m', $ts2);
+
+        return (($year2 - $year1) * 12) + ($month2 - $month1) + 1;
     }
 
     public function show($id)
@@ -99,30 +167,96 @@ class PaymentController extends Controller
     public function store(Request $request){
         
         $request->validate([
-            'payment_amount' => 'required|numeric|min:1',
+            'receipt_amount' => 'required|numeric',
+            'receipt_number' => 'required|unique:payments'
         ]);
-        
+
         $payment_data = $request->all();
         $payment_data['payment_date'] = date('Y-m-d');
         $payment_data['received_by'] = Auth::user()->id;
+        $payment_data['payment_amount'] = $request->receipt_amount;
 
-        if($request->payment_amount > 0){
+        $payment = Payment::create($payment_data);
 
-            $payment = Payment::create($payment_data);
-            
-            $this->creditStudentAccount($request, $payment);
-            
-            Session::flash('message', 'Payment successfully recorded.');
-            
-        }
+        $this->creditStudentInvoice($request, $payment);
+
+        $this->updateExtraChargePayment($request);
+
         return redirect()->route('payments.show', $request->student_id);
+    }
+
+    public function creditStudentInvoice($request, $payment){
+        $invoice_items = [];
+
+        if($request->tuition_fees > 0){ 
+            array_push(
+                $invoice_items,
+                [
+                    'student_id' => $request->student_id,
+                    'reference_number' => $request->receipt_number,
+                    'model' => "Payment",
+                    'model_id' => $payment->id,
+                    'financial_year' => $request->academic_year,
+                    'transaction_date' => date('Y-m-d'),
+                    'line_description' => "Tuition Fees - Payment",
+                    'debit_amount' => 0,
+                    'credit_amount' => $request->tuition_fees,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]
+            );
+        }
+
+        for ($i = 0; $i < count($request->fee_id); $i++) {
+            $extra_charge_id = $request->fee_id[$i];
+
+            if ($request->other_fee[$extra_charge_id] > 0) {
+                array_push(
+                    $invoice_items,
+                    [
+                        'student_id' => $request->student_id,
+                        'reference_number' => $request->receipt_number,
+                        'model' => "StudentExtraCharge",
+                        'model_id' => $extra_charge_id,
+                        'financial_year' => $request->academic_year,
+                        'transaction_date' => date('Y-m-d'),
+                        'line_description' => $request->fee_description[$extra_charge_id]." - Payment",
+                        'debit_amount' => 0,
+                        'credit_amount' => $request->other_fee[$extra_charge_id],
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ]
+                );
+            }
+        }
+
+        if (count($invoice_items) > 0) {
+            Invoice::insert($invoice_items);
+        }
+    }
+
+    public function updateExtraChargePayment($request){
+        
+        $extra_charges = StudentExtraCharge::whereIn('id', $request->fee_id)->get();
+        
+        for($i=0; $i<count($request->fee_id); $i++){
+            $extra_charge_id = $request->fee_id[$i];
+
+            if ($request->other_fee[$extra_charge_id] > 0) {
+                $current_amount = $extra_charges->where('id', $extra_charge_id)->first()->amount_paid;
+                StudentExtraCharge::where('id',$extra_charge_id)
+                    ->update([
+                        'amount_paid' => $current_amount + $request->other_fee[$extra_charge_id],
+                    ]);
+            }
+        }
     }
 
     public function creditStudentAccount($request, $payment){
         $reference_number  = $this->generateInvoiceReferenceNumber();
 
         if($request->document_type === 'Payment'){
-            $line_description = 'Payment - Thank you';
+            $line_description = 'Tuition fees payment - Receipt number '.$request->receipt_number;
         } else {
             $line_description = 'Credit Memo';
         }
