@@ -70,7 +70,7 @@ class PaymentController extends Controller
     }
 
     private function getChargedExtraFees($student_id, $academic_year){
-        return StudentExtraCharge::whereYear('transaction_date', $academic_year)
+        return StudentExtraCharge::whereYear('transaction_date', $academic_year->academic_year)
                                 ->where('student_id', $student_id)
                                 ->get();
     }
