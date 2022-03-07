@@ -135,7 +135,7 @@ class CreditMemoController extends Controller
             'model_id' => $credit_memo->id,
             'financial_year' => $request->academic_year,
             'transaction_date' => date('Y-m-d'),
-            'line_description' => 'Credit Memo',
+            'line_description' => 'Credit Memo - '.$request->reason,
             'debit_amount' =>  0,
             'credit_amount' => $credit_memo->amount,
         ]);

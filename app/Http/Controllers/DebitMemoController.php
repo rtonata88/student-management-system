@@ -135,7 +135,7 @@ class DebitMemoController extends Controller
             'model_id' => $debit_memo->id,
             'financial_year' => $request->academic_year,
             'transaction_date' => date('Y-m-d'),
-            'line_description' => 'Debit Memo',
+            'line_description' => 'Debit Memo - '.$request->reason,
             'debit_amount' => $debit_memo->amount,
             'credit_amount' =>  0
         ]);

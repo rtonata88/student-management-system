@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Student;
 use App\Center;
+use App\Http\Requests\NewStudent;
 use App\StudentGuardian;
 use Illuminate\Validation\Rule;
 class StudentController extends Controller
@@ -65,12 +66,8 @@ class StudentController extends Controller
         return view('Management.Students.Show', compact('student'));
     }
 
-    public function store(Request $request)
+    public function store(NewStudent $request)
     {
-        $request->validate([
-            'student_number2' => 'required|unique:students',
-        ]);
-
         $data = $request->all();
         $data['student_number'] = $this->generateStudentNumber();
         $student = Student::create($data);
