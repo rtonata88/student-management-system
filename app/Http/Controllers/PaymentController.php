@@ -213,7 +213,6 @@ class PaymentController extends Controller
 
     public function creditStudentInvoice($request, $payment){
         $invoice_items = [];
-
         if($request->tuition_fees > 0){ 
             array_push(
                 $invoice_items,

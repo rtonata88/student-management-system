@@ -94,7 +94,7 @@
                 <div class="form-group">
                     <strong>{{Form::label('receipt_amount', 'Receipt amount (N$)')}} </strong>
                     {{Form::number('receipt_amount',null, ['class' => 'form-control', 'required'])}}
-                    {{Form::hidden('academic_year',$academic_year, ['class' => 'form-control'])}}
+                    {{Form::hidden('academic_year',$academic_year->academic_year, ['class' => 'form-control'])}}
                     {{Form::hidden('student_id',$student->id, ['class' => 'form-control'])}}
                     <div class="help-text text-danger d-none" id="error-message"><strong>The receipt amount does not add up to the individual item amounts below.</strong></div>
                 </div>
