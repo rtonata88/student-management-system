@@ -28,6 +28,81 @@
     </div>
 
     <div class="col-md-9 col-xs-12">
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Student information</strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <th>Student number</th>
+                                    <td>{{$student->student_number2}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Academic year</th>
+                                    <td>{{$academic_year->academic_year}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Student names</th>
+                                    <td>{{$student->student_names}} {{$student->surname}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Registration status</th>
+                                    <td>
+                                        @if($registration_status == 'Registered')
+                                        <span class="badge badge-success">
+                                            {{$registration_status}}
+                                        </span>
+                                        @elseif($registration_status == 'Canceled')
+                                        <span class="badge badge-danger">
+                                            {{$registration_status}}
+                                        </span>
+                                        @else
+                                        <span class="badge badge-warning text-white">
+                                            Not registered
+                                        </span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Account summary information</strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <th>Total Payable</th>
+                                    <td>N${{number_format($payable_amount,2, '.',',')}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tuition Fees</th>
+                                    <td>N${{number_format($tuition_fees,2, '.',',')}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Other Fees</th>
+                                    <td>N${{number_format($other_fees,2, '.',',')}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Balance</th>
+                                    <td>N${{number_format($balance,2, '.',',')}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-header">
                 @permission('add-payment')
@@ -37,6 +112,7 @@
                 @endpermission
             </div>
             <div class="card-body">
+
                 <table class="table-sm" style="width:100%">
                     <tr>
                         <th style="width: 150px">Student number </th>
@@ -65,7 +141,7 @@
                         <th>Received by</th>
                         <th>Amount</th>
                     </tr>
-                    @foreach($payments as $payment)
+                    @forelse($payments as $payment)
                     <tr>
                         <td>{{$payment->receipt_number}}</td>
                         <td>{{$payment->payment_date}}</td>
@@ -73,7 +149,9 @@
                         <td>{{$payment->user->name}}</td>
                         <td>{{$payment->payment_amount}}</td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <p class="text-info"><strong>No payment information found for this student.</strong></p>
+                    @endforelse
                     @if(count($payments) > 0)
                     <tr>
                         <th colspan="4" class="text-right">Total</th>

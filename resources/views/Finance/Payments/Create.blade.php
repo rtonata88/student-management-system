@@ -35,7 +35,6 @@
                             <th>Student names</th>
                             <th>Surname</th>
                             <th>DOB</th>
-                            <th>Amount Due (N$)</th>
                             <th>Registration status</th>
                         </tr>
                     </thead>
@@ -46,13 +45,6 @@
                             <td>{{$student->student_names}}</td>
                             <td>{{$student->surname}}</td>
                             <td>{{$student->date_of_birth}}</td>
-                            <td>
-                                @if($payable_amount > 0)
-                                    {{number_format($payable_amount, 2, '.',',')}}
-                                @else
-                                    0
-                                @endif
-                            </td>
                             <td>
                                 @if($registration_status == 'Registered')
                                 <span class="badge badge-success">
@@ -121,9 +113,19 @@
                         <tbody>
                             <tr>
                                 <td>Tuition fees</td>
-                                <td>{{number_format($payable_amount, 2, '.',',')}}</td>
-                                <td></td>
-                                <td> {{Form::number('tuition_fees',0, ['class' => 'form-control fees', 'required'])}}</td>
+                                <td>{{number_format($tuition_fees, 2, '.',',')}}</td>
+                                <td class="text-center">
+                                    @if($tuition_fees > 0)
+                                    <span class="badge badge-warning">
+                                        Outstanding
+                                    </span>
+                                    @else
+                                    <span class="badge badge-success">
+                                        Paid
+                                    </span>
+                                    @endif
+                                </td>
+                                <td> {{Form::number('tuition_fees',$tuition_fees, ['class' => 'form-control fees', 'required'])}}</td>
                             </tr>
                             @foreach($extra_fees as $fee)
                             <tr>

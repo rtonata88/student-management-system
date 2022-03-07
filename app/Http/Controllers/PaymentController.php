@@ -55,18 +55,16 @@ class PaymentController extends Controller
         $student = Student::find($student_id);
         $academic_year = AcademicYear::where('status', 1)->first();
 
-        $fees = $this->calculatePayableAmount($academic_year, $student->id);
-
-        $payable_amount = $fees['payable_fees'];
-        
-        $monthly_amount = $fees['monthly_amount'];
+        $tuition_fees = $this->calculatePayableAmount($academic_year, $student->id);
 
         $registration = $student->registration->where('academic_year', $academic_year->academic_year)->first();
         
         $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
         $extra_fees = $this->getChargedExtraFees($student->id, $academic_year);
-        return view('Finance.Payments.Create', compact('student', 'academic_year', 'registration_status', 'payable_amount', 'extra_fees', 'monthly_amount'));
+
+        
+        return view('Finance.Payments.Create', compact('student', 'academic_year', 'registration_status', 'tuition_fees', 'extra_fees'));
     }
 
     private function getChargedExtraFees($student_id, $academic_year){
@@ -75,39 +73,48 @@ class PaymentController extends Controller
                                 ->get();
     }
 
+    private function calculateBalance($financial_year, $student_id){
+        $invoice = Invoice::select('debit_amount', 'credit_amount')
+                            ->where('financial_year', $financial_year)
+                            ->where('student_id', $student_id)
+                            ->get();
+        $balance = $invoice->sum('debit_amount') - $invoice->sum('credit_amount');
+
+        return $balance;
+    }
+
     private function calculatePayableAmount($academic_year, $id)
     {
-        $registered_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'cancellation_date')->where('student_id', $id)
-                        ->where('academic_year', $academic_year->academic_year)
-                        ->get();
+        $registered_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'cancellation_date')
+                                                    ->where('student_id', $id)
+                                                    ->where('academic_year', $academic_year->academic_year)
+                                                    ->where('registration_status', 'Registered')
+                                                    ->get();
 
-        
-        $monthly_amount = $registered_subjects->where('registration_status', 'Registered')->sum('amount');
-        
-        $canceled_subjects = $registered_subjects->where('registration_status', 'Canceled');
-        
-        $cancellation_credits = 0;
-        foreach($canceled_subjects as $canceled_subject){
-            $number_of_months = $this->calculateNumberOfMonths($canceled_subject->cancellation_date, $academic_year->end_date) - 1;
-            $cancellation_credits += $number_of_months * $canceled_subject->amount;
+        $cancelled_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'cancellation_date')
+                                                ->where('student_id', $id)
+                                                ->where('academic_year', $academic_year->academic_year)
+                                                ->whereMonth('cancellation_date', date('m'))
+                                                ->get();
+
+
+        $total_payable = 0;
+
+        if($registered_subjects){
+            $total_payable =  $registered_subjects->sum('amount');
         }
-        
-        $number_of_months = $this->calculateNumberOfMonths($academic_year->start_date, $academic_year->end_date);
 
-        $payable_fees = $registered_subjects->sum('amount') * $number_of_months;
-        
-        $number_of_months = $this->calculateNumberOfMonths(date('Y-m-d'), $academic_year->end_date);
-        
+        if ($cancelled_subjects) {
+            $total_payable =  $total_payable + $cancelled_subjects->sum('amount');
+        }
+                        
         $payments = $this->calculatePaymentsToDate($id);
         
         $credit_memos = $this->calculateCreditMemos($academic_year, $id);
-        
-        $payable_fees = ($payable_fees - $cancellation_credits - $payments - $credit_memos) /  $number_of_months;
 
-        $amounts['payable_fees'] = $payable_fees;
-        $amounts['monthly_amount'] = $monthly_amount;
+        $total_payable = ($total_payable - $payments - $credit_memos);
 
-        return $amounts;
+        return $total_payable;
     }
 
     private function calculatePaymentsToDate($student_id){
@@ -142,13 +149,32 @@ class PaymentController extends Controller
     {
         $student = Student::find($id);
 
-        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+        $academic_year = AcademicYear::where('status', 1)->first();
+
+        $tuition_fees = $this->calculatePayableAmount($academic_year, $student->id);
+
+        $other_fees = $this->calculatePayableOtherFees($academic_year, $student->id);
+
+        $payable_amount = $tuition_fees +  $other_fees;
+
+        $balance = $this->calculateBalance($academic_year->academic_year, $student->id);
+
+        $registration = $student->registration->where('academic_year', $academic_year->academic_year)->first();
+
+        $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
         $payments = Payment::where('student_id', $id)
-            ->whereYear('payment_date', $academic_year)
+            ->whereYear('payment_date', $academic_year->academic_year)
             ->get();
 
-        return view('Finance.Payments.Show', compact('payments', 'student'));
+        return view('Finance.Payments.Show', compact('payments','student', 'academic_year','balance' ,'registration_status', 'payable_amount', 'other_fees', 'tuition_fees', 'extra_fees', 'monthly_amount'));
+    }
+
+    private function calculatePayableOtherFees($academic_year, $student_id){
+        $extra_fees = $this->getChargedExtraFees($student_id, $academic_year);
+        $charged = $extra_fees->sum('amount');
+        $paid = $extra_fees->sum('amount_paid');
+        return ($charged - $paid);
     }
 
     public function print($student_id)
