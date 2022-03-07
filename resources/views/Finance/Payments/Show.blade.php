@@ -93,7 +93,7 @@
                                     <td>N${{number_format($other_fees,2, '.',',')}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Balance</th>
+                                    <th>Course Balance</th>
                                     <td>N${{number_format($balance,2, '.',',')}}</td>
                                 </tr>
                             </tbody>
