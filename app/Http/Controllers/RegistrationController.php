@@ -207,8 +207,15 @@ class RegistrationController extends Controller
 
         $fees = $fees->where('automatic_charge', '<>','Yes')
                     ->whereIn('id', $extra_fee_ids);
+
+        $student_extra_charges = StudentExtraCharge::whereYear('transaction_date', $academic_year->academic_year)
+            ->where('student_id', $request->student_id)
+            ->whereIn('fee_id', $extra_fee_ids)
+            ->pluck('fee_id')
+            ->toArray();
         
         $invoices = [];
+        $new_student_extra_charges = [];
         foreach ($fees as $fee) {
             array_push($invoices, [
                 'student_id' => $request->student_id,
@@ -223,9 +230,27 @@ class RegistrationController extends Controller
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
+
+
+        if(!in_array($fee->id, $student_extra_charges)) {
+                array_push($new_student_extra_charges, [
+                    'transaction_date' => date('Y-m-d'),
+                    'student_id' => $request->student_id,
+                    'fee_id' => $fee->id,
+                    'fee_description' => $fee->fee_description,
+                    'amount' => $fee->amount,
+                    'status' => 'Active',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+            }
         }
         if(count($invoices) > 0){
             Invoice::insert($invoices);
+        }
+
+        if (count($new_student_extra_charges) > 0) {
+            StudentExtraCharge::insert($new_student_extra_charges);
         }
         
     }
@@ -281,7 +306,6 @@ class RegistrationController extends Controller
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]);
             }
-
         }
 
         if($newInvoices){
