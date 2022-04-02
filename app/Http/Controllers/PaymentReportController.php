@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AcademicYear;
 use App\Center;
 use App\Exports\PaymentsReport;
+use App\Fees;
 use App\Payment;
 use App\Student;
 use Illuminate\Http\Request;
@@ -19,15 +20,9 @@ class PaymentReportController extends Controller
 
     public function index()
     {
-        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
-
-        $academic_years = AcademicYear::pluck('academic_year', 'academic_year');
-
         $payments = Payment::with('student')->where('payment_date', date('Y-m-d'))->get();
 
         session()->put('payments_report', $payments);
-
-        
 
         return view('Reports.Payments.Index', compact('payments'));
     }
@@ -35,6 +30,17 @@ class PaymentReportController extends Controller
     public function search(Request $request)
     {
         $centers = Center::pluck('center_name', 'id');
+
+        $payment_types = [
+            'T' => 'Tuition fees'
+        ];
+
+        $payment_types = Fees::pluck('fee_description', 'id')->toArray();
+        $payment_types['T'] = 'Tuition fees';
+        //$fees = asort($fees);
+
+       // dd($fees);
+
         $academic_years = AcademicYear::pluck('academic_year', 'academic_year');
 
         $date_from = $request->date_from;
@@ -55,7 +61,7 @@ class PaymentReportController extends Controller
 
         session()->put('payments_report', $payments);
 
-        return view('Reports.Payments.Index', compact('payments'));
+        return view('Reports.Payments.Index', compact('payments', 'payment_types'));
     }
 
     public function export()

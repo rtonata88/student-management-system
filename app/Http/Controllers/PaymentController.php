@@ -85,28 +85,11 @@ class PaymentController extends Controller
 
     private function calculatePayableAmount($academic_year, $id)
     {
-        $registered_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'cancellation_date')
-                                                    ->where('student_id', $id)
-                                                    ->where('academic_year', $academic_year->academic_year)
-                                                    ->where('registration_status', 'Registered')
-                                                    ->get();
+        $registered_subjects_payable = $this->payableAmountForRegisteredSubjects($academic_year, $id);
 
-        $cancelled_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'cancellation_date')
-                                                ->where('student_id', $id)
-                                                ->where('academic_year', $academic_year->academic_year)
-                                                ->whereMonth('cancellation_date', date('m'))
-                                                ->get();
+        $canceled_subjects_payable = $this->payableAmountForCanceledSubjects($academic_year, $id);
 
-
-        $total_payable = 0;
-
-        if($registered_subjects){
-            $total_payable =  $registered_subjects->sum('amount');
-        }
-
-        if ($cancelled_subjects) {
-            $total_payable =  $total_payable + $cancelled_subjects->sum('amount');
-        }
+        $total_payable = $registered_subjects_payable + $canceled_subjects_payable;
                         
         $payments = $this->calculatePaymentsToDate($id);
         
@@ -115,6 +98,46 @@ class PaymentController extends Controller
         $total_payable = ($total_payable - $payments - $credit_memos);
 
         return $total_payable;
+    }
+
+    private function payableAmountForRegisteredSubjects($academic_year, $id){
+
+        $registered_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'registration_date', 'cancellation_date')
+                                ->where('student_id', $id)
+                                ->where('academic_year', $academic_year->academic_year)
+                                ->where('registration_status', 'Registered')
+                                ->get();
+
+        $payable = 0;
+
+        if ($registered_subjects) {
+            foreach ($registered_subjects as $registered_subject) {
+                $number_of_months_date = $this->calculateNumberOfMonths($registered_subject->registration_date, date('Y-m-d'));
+                $payable += $registered_subject->amount * $number_of_months_date;
+            }
+        }
+
+        return $payable;
+    }
+
+    private function payableAmountForCanceledSubjects($academic_year, $id){
+
+        $cancelled_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'registration_date', 'cancellation_date')
+            ->where('student_id', $id)
+            ->where('academic_year', $academic_year->academic_year)
+            ->where('registration_status', 'Canceled')
+            ->get();
+        
+        $payable = 0;
+
+        if ($cancelled_subjects) {
+            foreach ($cancelled_subjects as $cancelled_subject) {
+                $number_of_months_date = $this->calculateNumberOfMonths($cancelled_subject->registration_date, $cancelled_subject->cancellation_date);
+                $payable += $cancelled_subject->amount * $number_of_months_date;
+            }
+        }
+
+        return $payable;
     }
 
     private function calculatePaymentsToDate($student_id){
