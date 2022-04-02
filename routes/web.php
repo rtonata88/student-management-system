@@ -73,6 +73,10 @@ Route::get('/accounting/reports', 'InvoiceReportController@index')->name('report
 Route::post('/accounting/reports/search', 'InvoiceReportController@search')->name('reports.finance.search');
 Route::get('/accounting/reports/export', 'InvoiceReportController@export')->name('reports.finance.export');
 
+Route::get('/account-summary/reports', 'AccountSummaryController@index')->name('reports.account-summary.index');
+Route::post('/account-summary/reports/search', 'AccountSummaryController@search')->name('reports.account-summary.search');
+Route::get('/account-summary/reports/export', 'AccountSummaryController@export')->name('reports.account-summary.export');
+
 Route::get('/aging/reports', 'InvoiceReportController@agingReport')->name('reports.finance.aging');
 Route::get('/aging/reports/export', 'InvoiceReportController@export')->name('reports.aging.export');
 

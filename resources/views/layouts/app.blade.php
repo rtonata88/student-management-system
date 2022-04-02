@@ -143,6 +143,11 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
           </svg> Finance</a>
       </li>
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.account-summary.index')}}">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
+          </svg> Account Summary</a>
+      </li>
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.finance.aging')}}">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
