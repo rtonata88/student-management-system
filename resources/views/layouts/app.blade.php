@@ -103,7 +103,7 @@
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoices">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-wallet')}}"></use>
-          </svg> Invoices</a>
+          </svg> Student Statement</a>
       </li>
       @endpermission
       @permission('payments')
