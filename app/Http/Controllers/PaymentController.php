@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\CreditMemo;
+use App\DebitMemo;
 use App\Invoice;
 use App\ModuleRegistration;
 use App\Payment;
@@ -89,7 +90,9 @@ class PaymentController extends Controller
 
         $canceled_subjects_payable = $this->payableAmountForCanceledSubjects($academic_year, $id);
 
-        $total_payable = $registered_subjects_payable + $canceled_subjects_payable;
+        $debit_memos = $this->calculateDebitMemos($academic_year, $id);
+
+        $total_payable = $registered_subjects_payable + $canceled_subjects_payable + $debit_memos;
                         
         $payments = $this->calculatePaymentsToDate($id);
         
@@ -152,6 +155,13 @@ class PaymentController extends Controller
         return CreditMemo::where('student_id', $student_id)
                             ->whereYear('transaction_date', $academic_year->academic_year)
                             ->sum('amount');
+    }
+
+    private function calculateDebitMemos($academic_year, $student_id)
+    {
+        return DebitMemo::where('student_id', $student_id)
+            ->whereYear('transaction_date', $academic_year->academic_year)
+            ->sum('amount');
     }
 
     private function calculateNumberOfMonths($start_date, $end_date)
