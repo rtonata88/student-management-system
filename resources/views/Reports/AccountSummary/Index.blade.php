@@ -20,7 +20,7 @@
                 {!! Form::open(array('route' => array('reports.account-summary.search'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
                 <div class="form-group">
                     <label class="text-right control-label col-form-label">Financial year</label>
-                    {{Form::select('financial_year', $financial_year, date('Y'), ['class' => 'form-control form-control-sm select', 'placeholder'=>"All years"])}}
+                    {{Form::select('financial_year', $financial_years, date('Y'), ['class' => 'form-control form-control-sm select', 'placeholder'=>"All years"])}}
                 </div>
 
                 <div class="form-group">
@@ -92,7 +92,6 @@
                         </tr>
                     </tbody>
                 </table>
-
                 @endif
             </div>
         </div>

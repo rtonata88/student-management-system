@@ -11,52 +11,31 @@
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-4 col-xs-12">
+    <div class="col-md-3 col-xs-12">
         <div class="card">
             <div class="card-header">
                 <strong>Report filter</strong>
             </div>
             <div class="card-body">
                 {!! Form::open(array('route' => array('reports.payments.search'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="text-right control-label col-form-label"><strong>From date</strong></label>
-                            {{Form::date('date_from', date('Y-m-d'), ['class' => 'form-control form-control-sm', 'required'])}}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="text-right control-label col-form-label"><strong>To date</strong></label>
-                            {{Form::date('date_to', date('Y-m-d'), ['class' => 'form-control form-control-sm', 'required'])}}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="text-right control-label col-form-label"><strong>Receipt number: </strong></label>
-                            {{Form::text('receipt_number', null, ['class' => 'form-control form-control-sm','placeholder'=>"Enter receipt number"])}}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="text-right control-label col-form-label"><strong>Student number: </strong></label>
-                            {{Form::text('student_id', null, ['class' => 'form-control form-control-sm','placeholder'=>"Enter student number"])}}
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label class="text-right control-label col-form-label">From date</label>
+                    {{Form::date('date_from', date('Y-m-d'), ['class' => 'form-control form-control-sm', 'required'])}}
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="text-right control-label col-form-label"><strong>Payment type:</strong></label>
-                            {{Form::select('payment_type', $payment_types, null, ['class' => 'form-control form-control-sm select','placeholder'=>"All payments"])}}
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="text-right control-label col-form-label"><strong>Group per payment type: </strong></label>
-                            {{Form::select('grouping', ['Y' => 'Yes'], null, ['class' => 'form-control form-control-sm select','placeholder'=>"No"])}}
-                        </div>
-                    </div>
+
+                <div class="form-group">
+                    <label class="text-right control-label col-form-label">To date</label>
+                    {{Form::date('date_to', date('Y-m-d'), ['class' => 'form-control form-control-sm', 'required'])}}
+                </div>
+
+                <div class="form-group">
+                    <label class="text-right control-label col-form-label">Receipt number</label>
+                    {{Form::text('receipt_number', null, ['class' => 'form-control form-control-sm','placeholder'=>"Enter receipt number"])}}
+                </div>
+
+                <div class="form-group">
+                    <label class="text-right control-label col-form-label">Student number</label>
+                    {{Form::text('student_number', null, ['class' => 'form-control form-control-sm','placeholder'=>"Enter student number"])}}
                 </div>
                 <hr>
                 <div class="form-actions">
@@ -67,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8 col-xs-12">
+    <div class="col-md-9 col-xs-12">
         <div class="card">
             <div class="card-header">
                 <strong>Report results</strong>
@@ -81,20 +60,30 @@
                             <th>Receipt number</th>
                             <th>Student number</th>
                             <th>Student name</th>
-                            <th>Payment type</th>
+                            <th>Transaction date</th>
+                            <th>Received by</th>
                             <th>Amount</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($payments as $payment)
+                        <tr>
+                            <th colspan="5">TOTAL</th>
+                            <th>{{number_format($payments->sum('payment_amount'), 2, '.',',')}}</th>
+                        </tr>
+                        @foreach($payments->take(10) as $payment)
                         <tr>
                             <td>{{$payment->receipt_number}}</td>
                             <td>{{$payment->student->student_number2}}</td>
                             <td>{{$payment->student->student_names}} {{$payment->student->surname}}</td>
                             <td>{{$payment->payment_date}}</td>
-                            <td>{{$payment->payment_amount}}</td>
+                            <td>{{$payment->user->name}}</td>
+                            <td>{{number_format($payment->payment_amount, 2, '.',',')}}</td>
                         </tr>
                         @endforeach
+                        <tr>
+                            <th colspan="5">TOTAL</th>
+                            <th>{{number_format($payments->sum('payment_amount'), 2, '.',',')}}</th>
+                        </tr>
                     </tbody>
                 </table>
                 @endif

@@ -38,6 +38,37 @@ class AccountSummaryController extends Controller
         return view('Reports.AccountSummary.Index', compact('financial_years', 'centers', 'registrations'));
     }
 
+    public function search(Request $request)
+    {
+        $financial_years = AcademicYear::pluck('academic_year', 'academic_year');
+
+        $centers = Center::pluck('center_name', 'id');
+
+        $financial_year = AcademicYear::where('status', 1)->first()->academic_year;
+
+        $registrations = Registration::with('student', 'center');
+        
+        if(isset($request->financial_year)){
+             $registrations =  $registrations->where('academic_year', $request->financial_year);
+        }
+
+        if (isset($request->center_id)) {
+            $registrations =  $registrations->where('center_id', $request->center_id);
+        }
+
+        if (isset($request->registration_status)) {
+            $registrations =  $registrations->where('registration_status', $request->registration_status);
+        }
+
+        $registrations = $registrations->get();
+
+        $registrations = $this->getAccountSummary($registrations, $financial_year);
+
+        session()->put('account_summary', $registrations);
+
+        return view('Reports.AccountSummary.Index', compact('financial_years', 'centers', 'registrations'));
+    }
+
     private function getSubjectRegistration($academic_year){
 
         return ModuleRegistration::select('student_id','module_id', 'amount', 'registration_status', 'registration_date', 'cancellation_date')
