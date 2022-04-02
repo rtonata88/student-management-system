@@ -6,11 +6,13 @@ use App\AcademicYear;
 use App\Center;
 use App\CreditMemo;
 use App\DebitMemo;
+use App\Exports\AccountSummaryReport;
 use App\Invoice;
 use App\ModuleRegistration;
 use App\Registration;
 use App\StudentExtraCharge;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AccountSummaryController extends Controller
 {
@@ -70,7 +72,7 @@ class AccountSummaryController extends Controller
     }
 
     private function getInvoices($academic_year){
-        return Invoice::select('debit_amount', 'credit_amount')
+        return Invoice::select('student_id','debit_amount', 'credit_amount')
                         ->where('financial_year', $academic_year)
                         ->get();
     }
@@ -112,7 +114,7 @@ class AccountSummaryController extends Controller
                 $other_fees = $this->calculatePayableOtherFees($extra_fees, $registration->student_id);
 
                 $payable_amount = $tuition_fees_payable +  $other_fees;
-
+            
                 $balance = $this->calculateBalance($invoices, $registration->student_id);
 
                 $registrations[$key]->tuition_fees = $tuition_fees_payable;
@@ -126,8 +128,11 @@ class AccountSummaryController extends Controller
 
     private function calculateBalance($invoices, $student_id)
     {
-        $balance = $invoices->where('student_id', $student_id)->sum('debit_amount') - $invoices->where('student_id', $student_id)->sum('credit_amount');
-        return $balance;
+        $debits = $invoices->where('student_id', $student_id)->sum('debit_amount');
+
+        $credits = $invoices->where('student_id', $student_id)->sum('credit_amount');
+        
+        return ($debits - $credits);
     }
 
     private function calculatePayableOtherFees($extra_fees, $student_id)
@@ -143,8 +148,7 @@ class AccountSummaryController extends Controller
 
     private function getChargedExtraFees($academic_year)
     {
-        return StudentExtraCharge::whereYear('transaction_date', $academic_year)
-            ->get();
+        return StudentExtraCharge::whereYear('transaction_date', $academic_year)->get();
     }
 
     private function calculateTuitionFeesPayable($academic_year, $registered_subjects, $canceled_subjects)
@@ -215,6 +219,11 @@ class AccountSummaryController extends Controller
         $month2 = date('m', $ts2);
 
         return (($year2 - $year1) * 12) + ($month2 - $month1) + 1;
+    }
+
+    public function export()
+    {
+        return Excel::download(new AccountSummaryReport, 'Account_Summary_' . date('M') . '.xlsx');
     }
 
 }

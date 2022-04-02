@@ -64,19 +64,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($registrations as $registration)
-
+                        <tr>
+                            <th colspan="4">TOTAL</th>
+                            <th>{{number_format($registrations->sum('tuition_fees'), 2, '.',',')}}</th>
+                            <th>{{number_format($registrations->sum('other_fees'), 2, '.',',')}}</th>
+                            <th>{{number_format($registrations->sum('payable_amount'), 2, '.',',')}}</th>
+                            <th>{{number_format($registrations->sum('course_balance'), 2, '.',',')}}</th>
+                        </tr>
+                        @foreach($registrations->take(10) as $registration)
                         <tr>
                             <td>{{$registration->student->student_number2}}</td>
                             <td>{{$registration->student->student_names}} {{$registration->student->surname}}</td>
                             <td>{{$registration->center->center_name}}</td>
                             <td>{{$registration->registration_status}}</td>
-                            <td>{{$registration->tuition_fees}}</td>
-                            <td>{{$registration->other_fees}}</td>
-                            <td>{{$registration->payable_amount}}</td>
-                            <td>{{$registration->course_balance}}</td>
+                            <td>{{number_format($registration->tuition_fees, 2, '.',',')}}</td>
+                            <td>{{number_format($registration->other_fees, 2, '.',',')}}</td>
+                            <td>{{number_format($registration->payable_amount, 2, '.',',')}}</td>
+                            <td>{{number_format($registration->course_balance, 2, '.',',')}}</td>
                         </tr>
                         @endforeach
+                        <tr>
+                            <th colspan="4">TOTAL</th>
+                            <th>{{number_format($registrations->sum('tuition_fees'), 2, '.',',')}}</th>
+                            <th>{{number_format($registrations->sum('other_fees'), 2, '.',',')}}</th>
+                            <th>{{number_format($registrations->sum('payable_amount'), 2, '.',',')}}</th>
+                            <th>{{number_format($registrations->sum('course_balance'), 2, '.',',')}}</th>
+                        </tr>
                     </tbody>
                 </table>
 
