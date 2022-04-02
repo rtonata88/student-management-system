@@ -77,7 +77,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="card-footer">
+            <!-- <div class="card-footer">
                 <p><strong>Aging Report</strong></p>
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:50%">
                     <tr class="text-center">
@@ -91,7 +91,7 @@
                         <td>{{number_format($aging_report["90"], 2, '.',',')}}</td>
                     </tr>
                 </table>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
