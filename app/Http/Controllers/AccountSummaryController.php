@@ -8,6 +8,7 @@ use App\CreditMemo;
 use App\DebitMemo;
 use App\Exports\AccountSummaryReport;
 use App\Invoice;
+use App\Module;
 use App\ModuleRegistration;
 use App\Registration;
 use App\StudentExtraCharge;
@@ -31,9 +32,13 @@ class AccountSummaryController extends Controller
         
         $registrations = Registration::with('student', 'center')->where('academic_year', $financial_year)->get();
 
-        $registrations = $this->getAccountSummary($registrations, $financial_year);        
+        $registrations = $this->getAccountSummary($registrations, $financial_year);
+
+        $modules = Module::select('id', 'subject_name')->get();
 
         session()->put('account_summary', $registrations);
+
+        session()->put('modules', $modules);
 
         return view('Reports.AccountSummary.Index', compact('financial_years', 'centers', 'registrations'));
     }
@@ -64,7 +69,11 @@ class AccountSummaryController extends Controller
 
         $registrations = $this->getAccountSummary($registrations, $financial_year);
 
+        $modules = Module::select('id','subject_name')->get();
+
         session()->put('account_summary', $registrations);
+
+        session()->put('modules', $modules);
 
         return view('Reports.AccountSummary.Index', compact('financial_years', 'centers', 'registrations'));
     }

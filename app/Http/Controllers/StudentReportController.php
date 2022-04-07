@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AcademicYear;
 use App\Center;
 use App\Exports\Students;
+use App\Exports\SubjectRegistration;
 use App\Module;
 use App\ModuleRegistration;
 use App\Student;

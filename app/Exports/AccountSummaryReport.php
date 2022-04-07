@@ -11,6 +11,7 @@ class AccountSummaryReport implements FromView
     {
         return view('Reports.AccountSummary.Export', [
             'registrations' => session()->get('account_summary'),
+            'modules'   => session()->get('modules')
         ]);
     }
 }

@@ -6,7 +6,9 @@
              <th style="width:100px;">Center</th>
              <th style="width:50px;">Student Contact</th>
              <th style="width:250px;">Guardian Information</th>
-             <th style="width:50px;">Registration Status</th>
+             @foreach($modules as $subject)
+             <th style="width:100px;"><strong>{{$subject->subject_name}}</strong></th>
+             @endforeach
              <th style="width:100px;">Tuition Fees (N$)</th>
              <th style="width:100px;">Other fees (N$)</th>
              <th style="width:100px;">Total Payable (N$)</th>
@@ -21,28 +23,25 @@
              <td>{{$registration->center->center_name}}</td>
              <td>{{$registration->student->contact_number}}</td>
              <td>
-                 @foreach($registration->student->guardian as $guardian)
-                 {{$guardian->guardian_names}} {{$guardian->surname}} ({{$guardian->relationship}}) - {{$guardian->contact_number}} <br>
-                 @endforeach
+                 @foreach($registration->student->guardian as $index => $guardian)
+                 {{$guardian->guardian_names}} {{$guardian->surname}} ({{$guardian->relationship}}) - {{$guardian->contact_number}}
+                 @if($index < (count($registration->student->guardian) - 1))
+                     <br>
+                     @endif
+                     @endforeach
              </td>
-             <td>{{$registration->registration_status}}</td>
+             @foreach($modules as $subject)
+             <td>
+                 @if(in_array($subject->id, $registration->student->registered_modules->pluck("module_id")->toArray()))
+                 Enrolled
+                 @endif
+             </td>
+             @endforeach
              <td>{{$registration->tuition_fees}}</td>
              <td>{{$registration->other_fees}}</td>
              <td>{{$registration->payable_amount}}</td>
              <td>{{$registration->course_balance}}</td>
          </tr>
          @endforeach
-         <tr>
-             <th></th>
-             <th></th>
-             <th></th>
-             <th></th>
-             <th></th>
-             <th></th>
-             <th>{{$registrations->sum('tuition_fees')}}</th>
-             <th>{{$registrations->sum('other_fees')}}</th>
-             <th>{{$registrations->sum('payable_amount')}}</th>
-             <th>{{$registrations->sum('course_balance')}}</th>
-         </tr>
      </tbody>
  </table>
