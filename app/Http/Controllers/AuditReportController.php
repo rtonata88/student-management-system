@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Audit;
+use App\User;
 use Illuminate\Http\Request;
 
 class AuditReportController extends Controller
@@ -17,7 +18,38 @@ class AuditReportController extends Controller
 
         $audit_logs = Audit::with('user')->whereDate('created_at', date('Y-m-d'))->get();
 
-        return view('Reports.Audit.Index', compact('audit_models', 'audit_logs'));
+        $users = User::pluck('name', 'id');
+
+        return view('Reports.Audit.Index', compact('audit_models', 'audit_logs', 'users'));
+    }
+
+    public function search(Request $request){
+        
+        $audit_models = $this->getModels();
+        
+        $users = User::pluck('name', 'id');
+
+        $date_from = $request->date_from;
+
+        $date_to = $request->date_to;
+        
+        $audit_logs = Audit::with('user')->whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d') BETWEEN '$date_from' AND '$date_to' ");
+
+        if(isset($request->event)){
+            $audit_logs = $audit_logs->where('event', $request->event);
+        }
+
+        if(isset($request->model)){
+            $audit_logs = $audit_logs->where('auditable_type', $request->model);
+        }
+
+        if (isset($request->user_id)) {
+            $audit_logs = $audit_logs->where('user_id', $request->user_id);
+        }
+
+        $audit_logs = $audit_logs->get();
+
+        return view('Reports.Audit.Index', compact('audit_models', 'audit_logs', 'users'));
     }
 
     public function show($id){

@@ -19,8 +19,8 @@
             <div class="card-body">
                 {!! Form::open(array('route' => array('reports.audit.search'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
                 <div class="form-group">
-                    <label class="text-right control-label col-form-label">Event</label>
-                    {{Form::select('event', ['created' => "New record", 'updated' => "Update record"], null, ['class' => 'form-control form-control-sm', 'placeholder' => 'All events'])}}
+                    <label class="text-right control-label col-form-label">Event action</label>
+                    {{Form::select('event', ['created' => "New record event", 'updated' => "Update record event"], null, ['class' => 'form-control form-control-sm', 'placeholder' => 'All events'])}}
                 </div>
 
                 <div class="form-group">
@@ -36,6 +36,11 @@
                 <div class="form-group">
                     <label class="text-right control-label col-form-label">Module</label>
                     {{Form::select('model', $audit_models, null, ['class' => 'form-control form-control-sm select'])}}
+                </div>
+
+                <div class="form-group">
+                    <label class="text-right control-label col-form-label">User</label>
+                    {{Form::select('user_id', $users, null, ['class' => 'form-control form-control-sm select'])}}
                 </div>
 
                 <hr>
@@ -65,7 +70,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($audit_logs as $log)
+                        @forelse($audit_logs->take(100) as $log)
                         <tr>
                             <td>{{$log->auditable_type}}</td>
                             <td>{{$log->event}}</td>
@@ -79,7 +84,14 @@
                                 </a>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="5">
+                                Nothing to show here
+                            </td>
+                        </tr>
+
+                        @endforelse
                     </tbody>
                 </table>
 
