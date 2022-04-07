@@ -103,7 +103,7 @@
                     ?>
                     <tr>
                         <td>{{$invoice->transaction_date}}</td>
-                        <td>{{$invoice->line_description}}</td>
+                        <td>{{$invoice->line_description}} - Ref: {{$invoice->reference_number}}</td>
                         <td>{{number_format($invoice->debit_amount, 2, '.',',')}}</td>
                         <td>{{number_format($invoice->credit_amount, 2, '.',',')}}</td>
                         <td>{{number_format($balance, 2, '.',',')}}</td>
