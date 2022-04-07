@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class DebitMemo extends Model
+class DebitMemo extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+    
     protected $fillable = ['student_id', 'transaction_date','amount','reason','captured_by'];
 
     public function user()

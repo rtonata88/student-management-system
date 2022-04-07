@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Student extends Model
+class Student extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+
     protected $fillable = ['student_number2','student_number', 'surname', 'student_names', 'initials', 'gender', 'contact_number', 'contact_email', 'date_of_birth', 'id_number', 'birth_certificate'];
 
     public function guardian(){

@@ -27,7 +27,7 @@ class StudentController extends Controller
         $students = Student::paginate(100);
 
         if (isset($request->student_number)) {
-            $students = Student::where('student_number2', $request->student_number)->get();
+            $students = Student::where('student_number2', $request->student_number)->paginate(1);
 
             if ($students) {
                 return view('Management.Students.Index', compact('students'));
@@ -35,7 +35,7 @@ class StudentController extends Controller
         }
 
         if (isset($request->surname)) {
-            $students = Student::where('surname', 'like', '%' . $request->surname . '%')->get();
+            $students = Student::where('surname', 'like', '%' . $request->surname . '%')->paginate(100);
 
             if (count($students)) {
                 return view('Management.Students.Index', compact('students'));
