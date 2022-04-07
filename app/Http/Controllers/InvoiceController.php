@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\CompanySetup;
+use App\CreditMemo;
+use App\DebitMemo;
 use App\Registration;
 use App\Invoice;
 use App\ModuleRegistration;
@@ -54,8 +56,6 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $student = Student::find($id);
-
-        $aging_report = $this->agingReport($id);
         
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
         
@@ -65,158 +65,104 @@ class InvoiceController extends Controller
         
         $student_center = $this->getStudentCenter($academic_year, $student->id);
 
-        return view('Finance.Invoice.Show', compact('invoices', 'student', 'student_center', 'aging_report'));
-    }
-
-    private function getStudentCenter($academic_year, $student_id){
-
-        $enrolment = Registration::where('academic_year',$academic_year)
-                                ->where('student_id', $student_id)
-                                ->first();
+        $tuition_fees = $this->calculatePayableAmount($academic_year, $student->id);
         
-        return $enrolment->center;
+        $other_fees = $this->calculatePayableOtherFees($academic_year, $student->id);
+        
+        $payable_amount = $tuition_fees +  $other_fees;
+
+        $course_balance = $this->calculateBalance($academic_year, $student->id);
+
+        return view('Finance.Invoice.Show', compact('invoices', 'student', 'student_center', 'tuition_fees', 'other_fees', 'course_balance', 'payable_amount'));
+    }
+    private function getChargedExtraFees($student_id, $academic_year)
+    {
+        return StudentExtraCharge::whereYear('transaction_date', $academic_year)
+            ->where('student_id', $student_id)
+            ->get();
     }
 
-    public function print($student_id){
-        $student = Student::find($student_id);
+    private function calculatePayableAmount($academic_year, $id)
+    {
+        $registered_subjects_payable = $this->payableAmountForRegisteredSubjects($academic_year, $id);
+        
+        $canceled_subjects_payable = $this->payableAmountForCanceledSubjects($academic_year, $id);
 
-        $aging_report = $this->agingReport($student_id);
+        $debit_memos = $this->calculateDebitMemos($academic_year, $id);
 
-        $company = CompanySetup::find(1);
+        $total_payable = $registered_subjects_payable + $canceled_subjects_payable + $debit_memos;
 
-        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+        $payments = $this->calculatePaymentsToDate($id);
 
-        $invoices = Invoice::where('student_id', $student_id)
-            ->where('financial_year', $academic_year)
+        $credit_memos = $this->calculateCreditMemos($academic_year, $id);
+
+        $total_payable = ($total_payable - $payments - $credit_memos);
+
+        return $total_payable;
+    }
+
+    private function calculatePayableOtherFees($academic_year, $student_id)
+    {
+        $extra_fees = $this->getChargedExtraFees($student_id, $academic_year);
+        $charged = $extra_fees->sum('amount');
+        $paid = $extra_fees->sum('amount_paid');
+        return ($charged - $paid);
+    }
+
+    private function calculateBalance($financial_year, $student_id)
+    {
+        
+        $invoice = Invoice::select('debit_amount', 'credit_amount')
+        ->where('financial_year', $financial_year)
+            ->where('student_id', $student_id)
             ->get();
 
-            $student_center = $this->getStudentCenter($academic_year, $student->id);
+        $balance = $invoice->sum('debit_amount') - $invoice->sum('credit_amount');
 
-        return view('Finance.Invoice.Print', compact('invoices', 'student', 'company', 'student_center', 'aging_report'));
+        return $balance;
     }
 
-    public function agingReport($student_id)
+
+    private function payableAmountForRegisteredSubjects($academic_year, $id)
     {
-        $academic_year = AcademicYear::where('status', 1)->first();
 
-        $number_of_months = $this->calculateNumberOfMonths($academic_year->start_date, $academic_year->end_date);
-
-        $subject_fees = $this->getChargedSubjectFees($student_id, $academic_year->academic_year);
-
-        $extra_charges = $this->getChargedExtraFees($student_id, $academic_year->academic_year);
-
-        $credits = $this->getCreditsPerMonth($student_id, $academic_year->academic_year);
-
-        $aging_busket = $this->constuctAgingBusket($number_of_months, $subject_fees, $extra_charges, $credits);
-
-        $aging_report = $this->constructAgingReport($aging_busket, $academic_year);
+        $registered_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'registration_date', 'cancellation_date')
+        ->where('student_id', $id)
+            ->where('academic_year', $academic_year)
+            ->where('registration_status', 'Registered')
+            ->get();
         
-        return $aging_report;
-    }
+        $payable = 0;
 
-    private function constructAgingReport($aging_busket, $academic_year){
-        $aging_report = [
-            "30" => 0,
-            "60" => 0,
-            "90" => 0,
-        ];
-
-        if(date('m') == 1){
-            return  $aging_report;
-        } else {
-            $month = date('m');
-
-            //30 Days
-            $_30_days = ($aging_busket[$month - 1]["balance"] > 0) ? $aging_busket[$month - 1]["balance"] : 0;
-
-            //60 Days
-            $_60_days = 0;
-            if(($month - 2) > 0){
-                $balance = $aging_busket[$month]["balance"] + $aging_busket[$month - 2]["balance"];
-                $_60_days = ($balance > 0) ? $balance : 0;
+        if ($registered_subjects) {
+            foreach ($registered_subjects as $registered_subject) {
+                $number_of_months_date = $this->calculateNumberOfMonths($registered_subject->registration_date, date('Y-m-d'));
+                $payable += $registered_subject->amount * $number_of_months_date;
             }
-            
-            //90 Days
-            $_90_days = 0;
-            if (($month - 3) > 0) {
-                for ($i = intval($month); $i > 0; $i--) {
-                    $_90_days += $aging_busket[$i]["balance"];
-                }
+        }
+
+        return $payable;
+    }
+
+    private function payableAmountForCanceledSubjects($academic_year, $id)
+    {
+
+        $cancelled_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'registration_date', 'cancellation_date')
+        ->where('student_id', $id)
+            ->where('academic_year', $academic_year)
+            ->where('registration_status', 'Canceled')
+            ->get();
+
+        $payable = 0;
+
+        if ($cancelled_subjects) {
+            foreach ($cancelled_subjects as $cancelled_subject) {
+                $number_of_months_date = $this->calculateNumberOfMonths($cancelled_subject->registration_date, $cancelled_subject->cancellation_date);
+                $payable += $cancelled_subject->amount * $number_of_months_date;
             }
-           
-            $aging_report = [
-                "30" => $_30_days,
-                "60" => $_60_days,
-                "90" => $_90_days,
-            ];
-        }
-        
-        return $aging_report;
-    }
-
-    private function getCreditsPerMonth($student_id, $financial_year){
-
-        return Invoice::selectRaw('month(transaction_date) month, sum(credit_amount) amount')
-                                ->where('student_id', $student_id)
-                                ->where('model', '<>','Module')
-                                ->where('financial_year', $financial_year)
-                                ->groupBy('month')
-                                ->get();
-    }
-
-    private function constuctAgingBusket($number_of_months, $subject_fees, $extra_charges, $credits){
-        $aging_busket = [];
-        $debit_amount = 0;
-        $credit_amount = 0;
-
-        for ($i = 1; $i <= $number_of_months; $i++) {
-            
-            $subject_fee = $subject_fees->where('month', $i)->first();
-            if($subject_fee){
-                $debit_amount += $subject_fee->amount;
-            }
-
-            $credit_amount = ($credits->where('month', $i)->first()) ? $credits->where('month', $i)->first()->amount : 0;
-
-            $aging_busket[$i] = [
-                "debit" => $debit_amount,
-                "credit" => $credit_amount,
-            ];
         }
 
-        $debit_amount = 0;
-        foreach ($subject_fees as $subject_fee) {
-            $debit_amount += $subject_fee->amount;
-            $aging_busket[$subject_fee->month]["debit"] = $debit_amount;
-        }
-
-        foreach ($extra_charges as $extra_charge) {
-            $aging_busket[$extra_charge->month]["debit"] += $extra_charge->amount;
-        }
-
-        for ($i = 1; $i <= $number_of_months; $i++) {
-            $aging_busket[$i]["balance"] = $aging_busket[$i]["debit"] - $aging_busket[$i]["credit"];
-        }
-
-        return $aging_busket;
-    }
-
-    private function getChargedSubjectFees($student_id, $academic_year){
-
-        return ModuleRegistration::selectRaw('month(registration_date) month, sum(amount) amount')
-                                ->where('student_id', $student_id)
-                                ->where('academic_year', $academic_year)
-                                ->groupBy('month')
-                                ->get();
-    }
-
-    private function getChargedExtraFees($student_id, $academic_year){
-        
-        return StudentExtraCharge::selectRaw('month(transaction_date) month, sum(amount) amount')
-                                    ->where('student_id', $student_id)
-                                    ->whereYear('transaction_date', $academic_year)
-                                    ->groupBy('month')
-                                    ->get();
+        return $payable;
     }
 
     private function calculateNumberOfMonths($start_date, $end_date)
@@ -232,4 +178,61 @@ class InvoiceController extends Controller
 
         return (($year2 - $year1) * 12) + ($month2 - $month1) + 1;
     }
+
+    private function calculatePaymentsToDate($student_id)
+    {
+        return Invoice::select('credit_amount')
+        ->where('model', 'Payment')
+        ->where('student_id', $student_id)
+            ->whereBetween('transaction_date', [date('Y-01-01'), date('Y-m-d')])
+            ->sum('credit_amount');
+    }
+
+    private function calculateCreditMemos($academic_year, $student_id)
+    {
+        return CreditMemo::where('student_id', $student_id)
+            ->whereYear('transaction_date', $academic_year->academic_year)
+            ->sum('amount');
+    }
+
+    private function calculateDebitMemos($academic_year, $student_id)
+    {
+        return DebitMemo::where('student_id', $student_id)
+            ->whereYear('transaction_date', $academic_year->academic_year)
+            ->sum('amount');
+    }
+
+    private function getStudentCenter($academic_year, $student_id){
+
+        $enrolment = Registration::where('academic_year',$academic_year)
+                                ->where('student_id', $student_id)
+                                ->first();
+        
+        return $enrolment->center;
+    }
+
+    public function print($student_id){
+        $student = Student::find($student_id);
+
+        $company = CompanySetup::find(1);
+
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+
+        $invoices = Invoice::where('student_id', $student_id)
+            ->where('financial_year', $academic_year)
+            ->get();
+
+        $student_center = $this->getStudentCenter($academic_year, $student->id);
+
+        $tuition_fees = $this->calculatePayableAmount($academic_year, $student->id);
+
+        $other_fees = $this->calculatePayableOtherFees($academic_year, $student->id);
+
+        $payable_amount = $tuition_fees +  $other_fees;
+
+        $course_balance = $this->calculateBalance($academic_year, $student->id);
+
+        return view('Finance.Invoice.Print', compact('invoices', 'student', 'company', 'student_center', 'tuition_fees', 'other_fees', 'payable_amount', 'course_balance'));
+    }
+
 }

@@ -56,7 +56,7 @@
                     @endforeach
                     <tr>
                         <th colspan="3" class="text-right">Total</th>
-                        <th>{{number_format($credit_memo->sum('amount'), 2, '.',',')}}</th>
+                        <th>{{number_format($credit_memos->sum('amount'), 2, '.',',')}}</th>
                     </tr>
                 </table>
             </div>

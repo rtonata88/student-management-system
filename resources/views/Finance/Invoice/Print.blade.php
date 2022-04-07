@@ -37,29 +37,57 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table-sm" style="width:100%">
-                    <tr>
-                        <th style="width: 150px">Student number </th>
-                        <td>{{$student->student_number2}}</td>
-                    </tr>
-                    <tr>
-                        <th style="width: 150px">Student names </th>
-                        <td>{{$student->student_names}}</td>
-                    </tr>
-                    <tr>
-                        <th style="width: 150px">Surname </th>
-                        <td>{{$student->surname}}</td>
-                    </tr>
-                    <tr>
-                        <th style="width: 100px">Date of Birth</th>
-                        <td>{{$student->date_of_birth}}</td>
-                    </tr>
-                    <tr>
-                        <th style="width: 100px">Center</th>
-                        <td>{{$student_center->center_name}}</td>
-                    </tr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table-sm" style="width:100%">
+                            <tr>
+                                <th style="width: 150px">Student number </th>
+                                <td>{{$student->student_number2}}</td>
+                            </tr>
+                            <tr>
+                                <th style="width: 150px">Student names </th>
+                                <td>{{$student->student_names}}</td>
+                            </tr>
+                            <tr>
+                                <th style="width: 150px">Surname </th>
+                                <td>{{$student->surname}}</td>
+                            </tr>
+                            <tr>
+                                <th style="width: 100px">Date of Birth</th>
+                                <td>{{$student->date_of_birth}}</td>
+                            </tr>
+                            <tr>
+                                <th style="width: 100px">Center</th>
+                                <td>{{$student_center->center_name}}</td>
+                            </tr>
 
-                </table>
+                        </table>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Account Summary: </strong>
+                        <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <th>Total Payable</th>
+                                    <td>N${{number_format($payable_amount,2, '.',',')}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tuition Fees</th>
+                                    <td>N${{number_format($tuition_fees,2, '.',',')}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Other Fees</th>
+                                    <td>N${{number_format($other_fees,2, '.',',')}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Course Balance</th>
+                                    <td>N${{number_format($course_balance,2, '.',',')}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <hr>
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
@@ -95,21 +123,6 @@
                     </tr>
                 </table>
             </div>
-            <!-- <div class="card-footer">
-                <p><strong>Aging Report</strong></p>
-                <table class="table table-responsive-sm table-bordered table-sm" style="width:50%;">
-                    <tr class="text-center">
-                        <th>90+</th>
-                        <th>60 Days</th>
-                        <th>30 Days</th>
-                    </tr>
-                    <tr class="text-center" style="border:solid #000 !important; border-width:0 1px 1px 0 !important;">
-                        <td style="border:solid #000 !important; border-width:0 1px 1px 0 !important;">{{number_format($aging_report["90"], 2, '.',',')}}</td>
-                        <td style="border:solid #000 !important; border-width:0 1px 1px 0 !important;">{{number_format($aging_report["60"], 2, '.',',')}}</td>
-                        <td style="border:solid #000 !important; border-width:0 1px 1px 0 !important;">{{number_format($aging_report["30"], 2, '.',',')}}</td>
-                    </tr>
-                </table>
-            </div> -->
         </div>
     </div>
 </div>

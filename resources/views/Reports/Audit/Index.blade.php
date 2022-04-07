@@ -40,7 +40,7 @@
 
                 <div class="form-group">
                     <label class="text-right control-label col-form-label">User</label>
-                    {{Form::select('user_id', $users, null, ['class' => 'form-control form-control-sm select'])}}
+                    {{Form::select('user_id', $users, null, ['class' => 'form-control form-control-sm select', 'placeholder' =>'Select all'])}}
                 </div>
 
                 <hr>

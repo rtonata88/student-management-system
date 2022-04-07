@@ -79,6 +79,7 @@ class PaymentController extends Controller
                             ->where('financial_year', $financial_year)
                             ->where('student_id', $student_id)
                             ->get();
+                            
         $balance = $invoice->sum('debit_amount') - $invoice->sum('credit_amount');
 
         return $balance;
