@@ -36,8 +36,10 @@ class RegistrationController extends Controller
             }
         }
 
-        if (isset($request->surname)) {
-            $students = Student::where('surname', 'like' ,'%'.$request->surname.'%')->get();
+        if (isset($request->names)) {
+            $students = Student::where('surname', 'like' ,'%'.$request->names.'%')
+                ->orwhere('student_names', 'like', '%' . $request->names . '%')
+                ->get();
             
             if (count($students)) {
                 if (count($students) === 1) {

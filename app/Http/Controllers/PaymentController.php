@@ -34,8 +34,10 @@ class PaymentController extends Controller
             }
         }
 
-        if (isset($request->surname)) {
-            $students = Student::where('surname', 'like', '%' . $request->surname . '%')->get();
+        if (isset($request->names)) {
+            $students = Student::where('surname', 'like', '%' . $request->names . '%')
+                                ->orwhere('student_names', 'like', '%' . $request->names . '%')
+                                ->get();
 
             if (count($students)) {
 
@@ -79,7 +81,7 @@ class PaymentController extends Controller
                             ->where('financial_year', $financial_year)
                             ->where('student_id', $student_id)
                             ->get();
-                            
+
         $balance = $invoice->sum('debit_amount') - $invoice->sum('credit_amount');
 
         return $balance;

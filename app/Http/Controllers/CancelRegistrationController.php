@@ -33,8 +33,10 @@ class CancelRegistrationController extends Controller
             }
         }
 
-        if (isset($request->surname)) {
-            $students = Student::with('currentRegistration')->where('surname', 'like', '%' . $request->surname . '%')->get();
+        if (isset($request->names)) {
+            $students = Student::with('currentRegistration')->where('surname', 'like', '%' . $request->names . '%')
+                                        ->orwhere('student_names', 'like', '%' . $request->names . '%')
+                                        ->get();
 
             if (count($students)) {
                 if (count($students) === 1) {

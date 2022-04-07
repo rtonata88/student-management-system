@@ -34,8 +34,10 @@ class StudentController extends Controller
             }
         }
 
-        if (isset($request->surname)) {
-            $students = Student::where('surname', 'like', '%' . $request->surname . '%')->paginate(100);
+        if (isset($request->names)) {
+            $students = Student::where('surname', 'like', '%' . $request->names . '%')
+                                ->orwhere('student_names', 'like', '%' . $request->names. '%')
+                                ->paginate(100);
 
             if (count($students)) {
                 return view('Management.Students.Index', compact('students'));

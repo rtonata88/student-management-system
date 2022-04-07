@@ -22,7 +22,7 @@
                     {{Form::text('student_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student number'])}}
                 </div>
                 <div class="form-group">
-                    {{Form::text('surname', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Surname'])}}
+                    {{Form::text('names', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student names'])}}
                 </div>
                 <button type="submit" class="btn btn-sm btn-success">
                     Search
