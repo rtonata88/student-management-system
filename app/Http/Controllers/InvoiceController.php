@@ -69,6 +69,7 @@ class InvoiceController extends Controller
 
         $tuition_fees = $this->calculatePayableAmount($academic_year, $student->id);
         
+        
         $other_fees = $this->calculatePayableOtherFees($academic_year, $student->id);
         
         $payable_amount = $tuition_fees +  $other_fees;
@@ -89,13 +90,13 @@ class InvoiceController extends Controller
         $registered_subjects_payable = $this->payableAmountForRegisteredSubjects($academic_year, $id);
         
         $canceled_subjects_payable = $this->payableAmountForCanceledSubjects($academic_year, $id);
-
+        
         $debit_memos = $this->calculateDebitMemos($academic_year, $id);
-
+        
         $total_payable = $registered_subjects_payable + $canceled_subjects_payable + $debit_memos;
-
+        
         $payments = $this->calculatePaymentsToDate($id);
-
+        
         $credit_memos = $this->calculateCreditMemos($academic_year, $id);
 
         $total_payable = ($total_payable - $payments - $credit_memos);
@@ -193,14 +194,14 @@ class InvoiceController extends Controller
     private function calculateCreditMemos($academic_year, $student_id)
     {
         return CreditMemo::where('student_id', $student_id)
-            ->whereYear('transaction_date', $academic_year->academic_year)
+            ->whereYear('transaction_date', $academic_year)
             ->sum('amount');
     }
 
     private function calculateDebitMemos($academic_year, $student_id)
     {
         return DebitMemo::where('student_id', $student_id)
-            ->whereYear('transaction_date', $academic_year->academic_year)
+            ->whereYear('transaction_date', $academic_year)
             ->sum('amount');
     }
 
