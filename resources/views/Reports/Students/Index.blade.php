@@ -49,7 +49,7 @@
             </div>
             <div class="card-body">
                 @if($subject_registration)
-                <strong>{{$subject_registration->total()}} Results Found</strong>, <a href="{{route('reports.students.export')}}">Export to excel</a>
+                <strong>{{$subject_registration->count()}} Results Found</strong>, <a href="{{route('reports.students.export')}}">Export to excel</a>
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                     <thead>
                         <tr>
@@ -62,7 +62,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($subject_registration as $registration)
+                        @foreach($subject_registration->take(25) as $registration)
 
                         <tr>
                             <td>{{$registration->student->student_number2}}</td>

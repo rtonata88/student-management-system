@@ -26,7 +26,7 @@ class StudentReportController extends Controller
 
         $subjects = Module::pluck('subject_name', 'id');
 
-        $subject_registration = ModuleRegistration::with(['student', 'subject', 'registration'])->where('academic_year', $academic_year)->paginate(50);
+        $subject_registration = ModuleRegistration::with(['student', 'subject', 'registration'])->where('academic_year', $academic_year)->get();
         
         session()->put('subject_registration', $subject_registration);
 
