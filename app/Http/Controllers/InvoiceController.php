@@ -69,7 +69,6 @@ class InvoiceController extends Controller
 
         $tuition_fees = $this->calculatePayableAmount($academic_year, $student->id);
         
-        
         $other_fees = $this->calculatePayableOtherFees($academic_year, $student->id);
         
         $payable_amount = $tuition_fees +  $other_fees;
