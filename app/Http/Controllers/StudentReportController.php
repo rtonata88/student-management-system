@@ -54,7 +54,7 @@ class StudentReportController extends Controller
             $subject_registration = $subject_registration->where('module_id', $request->subject_id);
         }
 
-        $subject_registration = $subject_registration->paginate(50);
+        $subject_registration = $subject_registration->get();
 
         session()->put('subject_registration', $subject_registration);
 

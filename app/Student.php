@@ -26,4 +26,8 @@ class Student extends Model implements Auditable
     public function registered_modules(){
         return $this->hasMany(ModuleRegistration::class);
     }
+
+    public function extra_charges(){
+        return $this->hasMany(StudentExtraCharge::class);
+    }
 }

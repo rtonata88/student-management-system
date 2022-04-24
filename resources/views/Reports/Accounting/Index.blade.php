@@ -49,7 +49,7 @@
             </div>
             <div class="card-body">
                 @if($invoices)
-                <strong>{{$invoices->total()}} Results Found</strong>, <a href="{{route('reports.finance.export')}}">Export to excel</a>
+                <strong>{{$invoices->count()}} Results Found</strong>, <a href="{{route('reports.finance.export')}}">Export to excel</a>
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                     <thead>
                         <tr>
@@ -62,7 +62,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($invoices as $invoice)
+                        @foreach($invoices->take(25) as $invoice)
 
                         <tr>
                             <td>{{$invoice->student_number2}}</td>

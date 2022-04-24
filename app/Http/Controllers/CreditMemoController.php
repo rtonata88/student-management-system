@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\CreditMemo;
+use App\Fees;
 use App\Invoice;
+use App\Module;
 use App\Student;
 use Illuminate\Http\Request;
 
@@ -36,7 +38,7 @@ class CreditMemoController extends Controller
             $students = Student::where('surname', 'like', '%' . $request->names . '%')
                                 ->orwhere('student_names', 'like', '%' . $request->names . '%')
                                 ->get();
-            //dd($students);
+            
             if (count($students)) {
 
                 if (count($students) === 1) {
@@ -62,7 +64,16 @@ class CreditMemoController extends Controller
         $registration = $student->registration->where('academic_year', $academic_year)->first();
         $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
-        return view('Finance.CreditMemo.Create', compact('student', 'academic_year', 'registration_status', 'balance'));
+        $student_registered_subjects = $student->registered_modules
+                                                ->where('registration_status', 'Registered')
+                                                ->pluck('module_id');
+
+        $student_extra_charges = $student->extra_charges
+            ->pluck('fee_description', 'fee_id');
+
+        $subjects = Module::whereIn('id',$student_registered_subjects)->pluck('subject_name', 'id');
+
+        return view('Finance.CreditMemo.Create', compact('student', 'academic_year', 'registration_status', 'balance', 'subjects', 'student_extra_charges'));
     }
 
     private function calculateBalance($academic_year, $id)
@@ -90,7 +101,10 @@ class CreditMemoController extends Controller
             ->whereYear('transaction_date', $academic_year)
             ->get();
 
-        return view('Finance.CreditMemo.Show', compact('credit_memos', 'student'));
+        $subjects = Module::select('id', 'subject_name')->get();
+        $other_fees = Fees::select('id', 'fee_description')->get();
+
+        return view('Finance.CreditMemo.Show', compact('credit_memos', 'student', 'subjects', 'other_fees'));
     }
 
     public function print($student_id)
@@ -108,14 +122,23 @@ class CreditMemoController extends Controller
 
     public function store(Request $request)
     {
-
+        
         $request->validate([
             'amount' => 'required|numeric|min:1',
+            'reason' => 'required',
         ]);
 
         $data = $request->all();
         $data['transaction_date'] = date('Y-m-d');
         $data['captured_by'] = Auth::user()->id;
+
+        if($request->credit_type == 'tuition'){
+            $data['model'] = "Subject";
+            $data['model_id'] = $request->subject_id;
+        } else {
+            $data['model'] = "StudentExtraCharge";
+            $data['model_id'] = $request->fee_id;
+        }
 
         $credit_memo = CreditMemo::create($data);
 

@@ -32,9 +32,9 @@ class InvoiceReportController extends Controller
             ->join('students', 'students.id', '=', 'invoices.student_id')
             ->selectRaw('student_number2, surname, student_names, contact_number, sum(debit_amount) as debit_amount, sum(credit_amount) as credit_amount, sum(debit_amount - credit_amount) as balance')
             ->groupBy('student_id')
-            ->paginate(100);
+            ->get();
 
-
+        
         session()->put('invoices', $invoices);
 
         return view('Reports.Accounting.Index', compact('invoices', 'academic_years', 'subjects'));
@@ -70,7 +70,7 @@ class InvoiceReportController extends Controller
                 ->where('model', 'Module');
         }
 
-        $invoices = $invoices->paginate(100);
+        $invoices = $invoices->get();
 
         session()->put('invoices', $invoices);
 
@@ -238,6 +238,6 @@ class InvoiceReportController extends Controller
 
     public function export()
     {
-        return Excel::download(new AgingReport, 'Aging_report_' . date('Y-m-d') . '.xlsx');
+        return Excel::download(new InvoiceReport, 'InvoiceSummaryReport_' . date('Y-m-d') . '.xlsx');
     }
 }
