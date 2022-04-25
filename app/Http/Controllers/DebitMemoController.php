@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AcademicYear;
 use App\DebitMemo;
 use App\Invoice;
+use App\Module;
 use App\Student;
 use Illuminate\Http\Request;
 
@@ -62,7 +63,16 @@ class DebitMemoController extends Controller
         $registration = $student->registration->where('academic_year', $academic_year)->first();
         $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
-        return view('Finance.DebitMemo.Create', compact('student', 'academic_year', 'registration_status', 'balance'));
+        $student_registered_subjects = $student->registered_modules
+            ->where('registration_status', 'Registered')
+            ->pluck('module_id');
+
+        $student_extra_charges = $student->extra_charges
+            ->pluck('fee_description', 'fee_id');
+
+        $subjects = Module::whereIn('id', $student_registered_subjects)->pluck('subject_name', 'id');
+        
+        return view('Finance.DebitMemo.Create', compact('student', 'academic_year', 'registration_status', 'balance', 'subjects', 'student_extra_charges'));
     }
 
     private function calculateBalance($academic_year, $id)
@@ -111,11 +121,20 @@ class DebitMemoController extends Controller
 
         $request->validate([
             'amount' => 'required|numeric|min:1',
+            'reason' => 'required',
         ]);
 
         $data = $request->all();
         $data['transaction_date'] = date('Y-m-d');
         $data['captured_by'] = Auth::user()->id;
+
+        if ($request->debit_type == 'tuition') {
+            $data['model'] = "Subject";
+            $data['model_id'] = $request->subject_id;
+        } else {
+            $data['model'] = "StudentExtraCharge";
+            $data['model_id'] = $request->fee_id;
+        }
 
         $debit_memo = DebitMemo::create($data);
 

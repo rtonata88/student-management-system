@@ -34,9 +34,8 @@
                             <th>Student number</th>
                             <th>Student names</th>
                             <th>Surname</th>
-                            <th>DOB</th>
-                            <th>Balance</th>
                             <th>Registration status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,8 +44,6 @@
                             <td>{{$student->student_number2}}</td>
                             <td>{{$student->student_names}}</td>
                             <td>{{$student->surname}}</td>
-                            <td>{{$student->date_of_birth}}</td>
-                            <td>{{number_format($balance, 2, '.',',')}}</td>
                             <td>
                                 @if($registration_status == 'Registered')
                                 <span class="badge badge-success">
@@ -61,6 +58,9 @@
                                     Not registered
                                 </span>
                                 @endif
+                            </td>
+                            <td>
+                                <a href="{{route('debit-memos.show', $student->id)}}"> Debit memos </a>
                             </td>
                         </tr>
                     </tbody>
@@ -90,6 +90,26 @@
                 </div>
                 @endif
                 <div class="form-group">
+                    {{Form::label('debit_type', 'Credit Type')}}<span class="text-danger">*</span>
+                    {{Form::select('debit_type', ['tuition' => 'Tuition', 'other_fees' => 'Other charges'], null, ['class' => 'form-control', 'id' => "debit_type", 'required'])}}
+                </div>
+
+                <div class="form-group d-none" id="subjects">
+                    {{Form::label('subject_id', 'Subject:')}}<span class="text-danger">*</span>
+                    {{Form::select('subject_id', $subjects, null, ['class' => 'form-control'])}}
+                    <div class="help text-info">
+                        Please select the <strong>Subject</strong> you would like to credit this student on.
+                    </div>
+                </div>
+
+                <div class="form-group d-none" id="other-fees">
+                    {{Form::label('fee_id', 'Select Charge')}}<span class="text-danger">*</span>
+                    {{Form::select('fee_id', $student_extra_charges, null, ['class' => 'form-control'])}}
+                    <div class="help text-info">
+                        Please select the <strong>Extra charge</strong> you would like to credit this student on.
+                    </div>
+                </div>
+                <div class="form-group">
                     {{Form::label('amount', 'Amount')}}<span class="text-danger">*</span>
                     {{Form::text('amount',null, ['class' => 'form-control', 'required'])}}
                     {{Form::hidden('academic_year',$academic_year, ['class' => 'form-control'])}}
@@ -111,5 +131,29 @@
         </div>
         @endif
     </div>
+
+    <script type="text/javascript">
+        let subjectsContainer = document.getElementById('subjects');
+        let otherFeesContainer = document.getElementById('other-fees');
+        let credit_type = document.getElementById('debit_type');
+
+        debit_type.addEventListener('change', function(e) {
+            if (debit_type.value == 'tuition') {
+                subjectsContainer.classList.remove("d-none");
+                otherFeesContainer.classList.add("d-none");
+            } else {
+                subjectsContainer.classList.add("d-none");
+                otherFeesContainer.classList.remove("d-none");
+            }
+        })
+
+        if (debit_type.value == 'tuition') {
+            subjectsContainer.classList.remove("d-none");
+            otherFeesContainer.classList.add("d-none");
+        } else {
+            subjectsContainer.classList.add("d-none");
+            otherFeesContainer.classList.remove("d-none");
+        }
+    </script>
 </div>
 @endsection

@@ -16,7 +16,7 @@
     <div class="col-md-12 col-xs-12">
         <div class="card">
             <div class="card-header">
-                <strong>Debit Memo</strong> | <a href="{{route('debit-memos.index')}}">Back</a> | <a href="{{route('invoices.print', $student->id)}}" target="_blank">Print Invoice</a>
+                <strong>Debit Memo</strong> | <a href="{{route('debit-memos.index')}}">Search another student</a> | <a href="{{route('debit-memos.show', $student->id)}}"> Debit memos </a> | <a href="{{route('invoices.print', $student->id)}}" target="_blank">Print Invoice</a>
             </div>
             <div class="card-body">
                 <table class="table-sm" style="width:100%">

@@ -9,7 +9,7 @@ class DebitMemo extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     
-    protected $fillable = ['student_id', 'transaction_date','amount','reason','captured_by'];
+    protected $fillable = ['student_id', 'transaction_date','amount','reason','captured_by', 'debit_type', 'model', 'model_id'];
 
     public function user()
     {
