@@ -48,15 +48,15 @@
                 <strong>Report results</strong>
             </div>
             <div class="card-body">
-                @if($registrations)
-                <strong>{{$registrations->count()}} Results Found</strong>, <a href="{{route('reports.account-summary.export')}}">Export to excel</a>
+
+                @if($account_summary)
+                <strong>{{$account_summary->count()}} Results Found</strong>, <a href="{{route('reports.account-summary.export')}}">Export to excel</a>
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%; font-size:12px">
                     <thead>
                         <tr>
                             <th>Student number</th>
                             <th>Names</th>
                             <th>Center</th>
-                            <th>Registration Status</th>
                             <th>Tuition Fees (N$)</th>
                             <th>Other fees (N$)</th>
                             <th>Total Payable (N$)</th>
@@ -65,30 +65,38 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th colspan="4">TOTAL</th>
-                            <th>{{number_format($registrations->sum('tuition_fees'), 2, '.',',')}}</th>
-                            <th>{{number_format($registrations->sum('other_fees'), 2, '.',',')}}</th>
-                            <th>{{number_format($registrations->sum('payable_amount'), 2, '.',',')}}</th>
-                            <th>{{number_format($registrations->sum('course_balance'), 2, '.',',')}}</th>
+                            <th colspan="3">TOTAL</th>
+                            <th>{{number_format($totals['tuition_fees'], 2, '.',',')}}</th>
+                            <th>{{number_format($totals['other_fees'], 2, '.',',')}}</th>
+                            <th>{{number_format($totals['payable_amount'], 2, '.',',')}}</th>
+                            <th>{{number_format($totals['course_balance'], 2, '.',',')}}</th>
                         </tr>
-                        @foreach($registrations->take(10) as $registration)
+
+                        @foreach($account_summary->take(10) as $summary)
+                        <?php
+                        $payment = $payments->where('student_id', $summary->student_id)->first()->payments ?? 0;
+                        $other_fees = $extra_charges->where('student_id', $summary->student_id)->first()->outstanding ?? 0;
+                        $payable_amount = ($other_fees + $summary->tuition_fees_payable) - $payment;
+                        $debit = $invoices->where('student_id', $summary->student_id)->first()->debit ?? 0;
+                        $credit = $invoices->where('student_id', $summary->student_id)->first()->credit ?? 0;
+                        $course_balance = $debit - $credit;
+                        ?>
                         <tr>
-                            <td>{{$registration->student->student_number2}}</td>
-                            <td>{{$registration->student->student_names}} {{$registration->student->surname}}</td>
-                            <td>{{$registration->center->center_name}}</td>
-                            <td>{{$registration->registration_status}}</td>
-                            <td>{{number_format($registration->tuition_fees, 2, '.',',')}}</td>
-                            <td>{{number_format($registration->other_fees, 2, '.',',')}}</td>
-                            <td>{{number_format($registration->payable_amount, 2, '.',',')}}</td>
-                            <td>{{number_format($registration->course_balance, 2, '.',',')}}</td>
+                            <td>{{$summary->student_number2}}</td>
+                            <td>{{$summary->student_names}} {{$summary->surname}}</td>
+                            <td>{{$centers[$summary->center_id]}}</td>
+                            <td>{{number_format($summary->tuition_fees_payable - $payment, 2, '.',',')}}</td>
+                            <td>{{number_format($other_fees, 2, '.',',')}}</td>
+                            <td>{{number_format($payable_amount, 2, '.',',')}}</td>
+                            <td>{{number_format($course_balance, 2, '.',',')}}</td>
                         </tr>
                         @endforeach
                         <tr>
-                            <th colspan="4">TOTAL</th>
-                            <th>{{number_format($registrations->sum('tuition_fees'), 2, '.',',')}}</th>
-                            <th>{{number_format($registrations->sum('other_fees'), 2, '.',',')}}</th>
-                            <th>{{number_format($registrations->sum('payable_amount'), 2, '.',',')}}</th>
-                            <th>{{number_format($registrations->sum('course_balance'), 2, '.',',')}}</th>
+                            <th colspan="3">TOTAL</th>
+                            <th>{{number_format($totals['tuition_fees'], 2, '.',',')}}</th>
+                            <th>{{number_format($totals['other_fees'], 2, '.',',')}}</th>
+                            <th>{{number_format($totals['payable_amount'], 2, '.',',')}}</th>
+                            <th>{{number_format($totals['course_balance'], 2, '.',',')}}</th>
                         </tr>
                     </tbody>
                 </table>
