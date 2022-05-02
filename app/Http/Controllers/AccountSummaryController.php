@@ -14,6 +14,7 @@ use App\Module;
 use App\ModuleRegistration;
 use App\Registration;
 use App\StudentExtraCharge;
+use App\StudentGuardian;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -44,6 +45,13 @@ class AccountSummaryController extends Controller
         
         $modules = Module::select('id', 'subject_name')->get();
         
+        $module_registrations = ModuleRegistration::select('student_id','module_id', 'subject_name')
+                                ->join('modules', 'modules.id', '=','module_registrations.module_id')
+                                ->where('academic_year', $financial_year)
+                                ->get();
+        
+        $guardians = StudentGuardian::whereIn('student_id', $account_summary->pluck('student_id'))->get();
+        
         session()->put('account_summary', $account_summary);
 
         session()->put('extra_charges', $extra_charges);
@@ -51,6 +59,14 @@ class AccountSummaryController extends Controller
         session()->put('payments', $payments);
         
         session()->put('modules', $modules);
+
+        session()->put('module_registrations', $module_registrations);
+
+        session()->put('centers', $centers);
+
+        session()->put('guardians', $guardians);
+
+        session()->put('invoices', $invoices);
         
         return view('Reports.AccountSummary.Index', compact('financial_years', 'centers', 'account_summary', 'extra_charges', 'payments', 'totals', 'invoices'));
     }
@@ -60,9 +76,9 @@ class AccountSummaryController extends Controller
         $course_balance = $invoices->sum('debit') - $invoices->sum('credit');
 
         return [
-            'tuition_fees' => ($account_summary->sum('tuition_fees_payable') + $extra_charges->sum('outstanding')) - $payments->sum('payments'),
+            'tuition_fees' => $account_summary->sum('tuition_fees_payable') - $payments->sum('payments'), 
             'other_fees' => $extra_charges->sum('outstanding'),
-            'payable_amount' => $account_summary->sum('tuition_fees_payable'),
+            'payable_amount' => (($account_summary->sum('tuition_fees_payable') -$payments->sum('payments')) + $extra_charges->sum('outstanding')),
             'course_balance' => $course_balance
         ];
     }
@@ -117,7 +133,7 @@ class AccountSummaryController extends Controller
     }
 
     private function accountSummary($academic_year){
-        return AccountSummary::selectRaw('student_id, center_id, student_number2, student_names, surname, sum((payable_to_date + debit_memos) - credit_memos) tuition_fees_payable')
+        return AccountSummary::selectRaw('student_id, center_id, student_number2, student_names, contact_number, surname, sum((payable_to_date + debit_memos) - credit_memos) tuition_fees_payable')
                             ->where('academic_year', $academic_year)
                                 ->groupBy('student_id', 'center_id', 'student_number2', 'student_names', 'surname')
                                 ->get();

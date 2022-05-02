@@ -16,31 +16,36 @@
          </tr>
      </thead>
      <tbody>
-         @foreach($registrations as $registration)
+         @foreach($account_summary as $summary)
+         <?php
+            $payment = $payments->where('student_id', $summary->student_id)->first()->payments ?? 0;
+            $other_fees = $extra_charges->where('student_id', $summary->student_id)->first()->outstanding ?? 0;
+            $payable_amount = ($other_fees + $summary->tuition_fees_payable) - $payment;
+            $debit = $invoices->where('student_id', $summary->student_id)->first()->debit ?? 0;
+            $credit = $invoices->where('student_id', $summary->student_id)->first()->credit ?? 0;
+            $course_balance = $debit - $credit;
+            ?>
          <tr>
-             <td>{{$registration->student->student_number2}}</td>
-             <td>{{$registration->student->student_names}} {{$registration->student->surname}}</td>
-             <td>{{$registration->center->center_name}}</td>
-             <td>{{$registration->student->contact_number}}</td>
+             <td>{{$summary->student_number2}}</td>
+             <td>{{$summary->student_names}} {{$summary->surname}}</td>
+             <td>{{$centers[$summary->center_id]}}</td>
+             <td></td>
              <td>
-                 @foreach($registration->student->guardian as $index => $guardian)
-                 {{$guardian->guardian_names}} {{$guardian->surname}} ({{$guardian->relationship}}) - {{$guardian->contact_number}}
-                 @if($index < (count($registration->student->guardian) - 1))
-                     <br>
-                     @endif
-                     @endforeach
+                 @foreach($guardians->where('student_id', $summary->student_id) as $index => $guardian)
+                 <p>{{$guardian->guardian_names}} {{$guardian->surname}} ({{$guardian->relationship}}) - {{$guardian->contact_number}}</p>
+                 @endforeach
              </td>
              @foreach($modules as $subject)
              <td>
-                 @if(in_array($subject->id, $registration->student->registered_modules->pluck("module_id")->toArray()))
+                 @if($module_registrations->where('module_id', $subject->id)->where('student_id', $summary->student_id)->first())
                  Enrolled
                  @endif
              </td>
              @endforeach
-             <td>{{$registration->tuition_fees}}</td>
-             <td>{{$registration->other_fees}}</td>
-             <td>{{$registration->payable_amount}}</td>
-             <td>{{$registration->course_balance}}</td>
+             <td>{{$summary->tuition_fees_payable - $payment}}</td>
+             <td>{{$other_fees}}</td>
+             <td>{{$payable_amount}}</td>
+             <td>{{$course_balance}}</td>
          </tr>
          @endforeach
      </tbody>
