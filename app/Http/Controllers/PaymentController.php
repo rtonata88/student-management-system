@@ -235,7 +235,6 @@ class PaymentController extends Controller
             ]);
 
         $payment_data = $request->all();
-        $payment_data['payment_date'] = date('Y-m-d');
         $payment_data['received_by'] = Auth::user()->id;
         $payment_data['payment_amount'] = $request->receipt_amount;
 
@@ -259,7 +258,7 @@ class PaymentController extends Controller
                     'model' => "Payment",
                     'model_id' => $payment->id,
                     'financial_year' => $request->academic_year,
-                    'transaction_date' => date('Y-m-d'),
+                    'transaction_date' => $request->payment_date,
                     'line_description' => "Tuition Fees - Payment",
                     'debit_amount' => 0,
                     'credit_amount' => $request->tuition_fees,
@@ -281,7 +280,7 @@ class PaymentController extends Controller
                         'model' => "StudentExtraCharge",
                         'model_id' => $extra_charge_id,
                         'financial_year' => $request->academic_year,
-                        'transaction_date' => date('Y-m-d'),
+                        'transaction_date' => $request->payment_date,
                         'line_description' => $request->fee_description[$extra_charge_id]." - Payment",
                         'debit_amount' => 0,
                         'credit_amount' => $request->other_fee[$extra_charge_id],
@@ -329,7 +328,7 @@ class PaymentController extends Controller
             'model' => "Payment",
             'model_id' => $payment->id,
             'financial_year' => $request->academic_year,
-            'transaction_date' => date('Y-m-d'),
+            'transaction_date' => $request->payment_date,
             'line_description' => $line_description,
             'debit_amount' => 0,
             'credit_amount' =>  $payment->payment_amount

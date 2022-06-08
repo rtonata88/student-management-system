@@ -33,7 +33,15 @@ class PaymentReportController extends Controller
 
         session()->put('payments_report', $payments);
 
-        return view('Reports.Payments.Index', compact('payments'));
+        $users = User::select('id', 'name')->get();
+
+        session()->put('users', $users);
+
+        $guardians = StudentGuardian::whereIn('student_id', $payments->pluck('student_id'))->get();
+        
+        session()->put('guardians', $guardians);
+
+        return view('Reports.Payments.Index', compact('payments', 'users'));
     }
 
     public function search(Request $request)

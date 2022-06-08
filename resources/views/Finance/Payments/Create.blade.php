@@ -88,11 +88,17 @@
                 </div>
                 @endif
                 <div class="form-group">
-                    <strong>{{Form::label('receipt_number', 'Receipt number')}} </strong>
+                    <strong>{{Form::label('receipt_number', 'Receipt number')}} <span class="text-danger">*</span></strong>
                     {{Form::text('receipt_number',null, ['class' => 'form-control', 'required'])}}
                 </div>
+
                 <div class="form-group">
-                    <strong>{{Form::label('receipt_amount', 'Receipt amount (N$)')}} </strong>
+                    <strong>{{Form::label('payment_date', 'Payment Date')}} <span class="text-danger">*</span></strong>
+                    {{Form::date('payment_date',null, ['class' => 'form-control', 'required'])}}
+                </div>
+
+                <div class="form-group">
+                    <strong>{{Form::label('receipt_amount', 'Receipt amount (N$)')}} <span class="text-danger">*</span></strong>
                     {{Form::number('receipt_amount',null, ['class' => 'form-control', 'required'])}}
                     {{Form::hidden('academic_year',$academic_year->academic_year, ['class' => 'form-control'])}}
                     {{Form::hidden('student_id',$student->id, ['class' => 'form-control'])}}
