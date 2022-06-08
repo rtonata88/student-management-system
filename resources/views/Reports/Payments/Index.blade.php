@@ -54,35 +54,37 @@
             <div class="card-body">
                 @if($payments)
                 <a href="{{route('reports.payments.export')}}">Export to excel</a>
-                <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%; font-size: 12px">
                     <thead>
                         <tr>
                             <th>Receipt number</th>
                             <th>Student number</th>
                             <th>Student name</th>
                             <th>Transaction date</th>
-                            <th>Received by</th>
+                            <th>Description</th>
+                            <th>Captured By</th>
                             <th>Amount</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th colspan="5">TOTAL</th>
-                            <th>{{number_format($payments->sum('payment_amount'), 2, '.',',')}}</th>
+                            <th colspan="6">TOTAL</th>
+                            <th>{{number_format($payments->sum('credit_amount'), 2, '.',',')}}</th>
                         </tr>
                         @foreach($payments->take(10) as $payment)
                         <tr>
-                            <td>{{$payment->receipt_number}}</td>
+                            <td>{{$payment->reference_number}}</td>
                             <td>{{$payment->student->student_number2}}</td>
                             <td>{{$payment->student->student_names}} {{$payment->student->surname}}</td>
-                            <td>{{$payment->payment_date}}</td>
-                            <td>{{$payment->user->name}}</td>
-                            <td>{{number_format($payment->payment_amount, 2, '.',',')}}</td>
+                            <td>{{$payment->transaction_date}}</td>
+                            <td>{{$payment->line_description}}</td>
+                            <td>{{$users->where('id', $payment->capturedBy->received_by)->first()->name}}</td>
+                            <td>{{number_format($payment->credit_amount, 2, '.',',')}}</td>
                         </tr>
                         @endforeach
                         <tr>
-                            <th colspan="5">TOTAL</th>
-                            <th>{{number_format($payments->sum('payment_amount'), 2, '.',',')}}</th>
+                            <th colspan="6">TOTAL</th>
+                            <th>{{number_format($payments->sum('credit_amount'), 2, '.',',')}}</th>
                         </tr>
                     </tbody>
                 </table>

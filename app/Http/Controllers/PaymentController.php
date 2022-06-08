@@ -228,10 +228,11 @@ class PaymentController extends Controller
 
     public function store(Request $request){
         
-        $request->validate([
-            'receipt_amount' => 'required|numeric',
-            'receipt_number' => 'required|unique:payments'
-        ]);
+            $request->validate([
+                'receipt_amount' => 'required|numeric',
+                'payment_date' => 'required|date',
+                'receipt_number' => 'required|unique:payments'
+            ]);
 
         $payment_data = $request->all();
         $payment_data['payment_date'] = date('Y-m-d');

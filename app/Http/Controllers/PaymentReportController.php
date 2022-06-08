@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\AcademicYear;
 use App\Center;
 use App\Exports\PaymentsReport;
+use App\Invoice;
 use App\Payment;
 use App\Student;
+use App\StudentGuardian;
+use App\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -23,7 +26,10 @@ class PaymentReportController extends Controller
 
         $academic_years = AcademicYear::pluck('academic_year', 'academic_year');
 
-        $payments = Payment::with('student')->where('payment_date', date('Y-m-d'))->get();
+        $payments = Invoice::with('student', 'capturedBy')
+                            ->where('transaction_date', date('Y-m-d'))
+                            ->whereIn('model', ['StudentExtraCharge', 'Payment'])
+                            ->get();
 
         session()->put('payments_report', $payments);
 
@@ -38,10 +44,11 @@ class PaymentReportController extends Controller
         $date_from = $request->date_from;
         $date_to = $request->date_to;
 
-        $payments = Payment::with('student')->whereBetween('payment_date', [$date_from, $date_to]);
+        $payments = Invoice::with('capturedBy', 'student')->whereIn('model', ['StudentExtraCharge', 'Payment'])
+                            ->whereBetween('transaction_date', [$date_from, $date_to]);
 
         if (isset($request->receipt_number)) {
-            $payments = $payments->where('receipt_number', $request->receipt_number);
+            $payments = $payments->where('reference_number', $request->receipt_number);
         }
 
         if (isset($request->student_number)) {
@@ -51,9 +58,17 @@ class PaymentReportController extends Controller
 
         $payments = $payments->get();
 
+        $guardians = StudentGuardian::whereIn('student_id', $payments->pluck('student_id'))->get();
+        
+        $users = User::select('id','name')->get();
+
         session()->put('payments_report', $payments);
 
-        return view('Reports.Payments.Index', compact('payments'));
+        session()->put('guardians', $guardians);
+
+        session()->put('users', $users);
+
+        return view('Reports.Payments.Index', compact('payments', 'users'));
     }
 
     public function export()
