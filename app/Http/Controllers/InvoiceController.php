@@ -9,6 +9,7 @@ use App\DebitMemo;
 use App\Registration;
 use App\Invoice;
 use App\ModuleRegistration;
+use App\Services\StudentPayableAmount;
 use App\Student;
 use App\StudentExtraCharge;
 use Session;
@@ -55,7 +56,7 @@ class InvoiceController extends Controller
         return redirect()->back();
     }
 
-    public function show($id)
+    public function show($id, StudentPayableAmount $payableAmount)
     {
         $student = Student::find($id);
         
@@ -67,7 +68,7 @@ class InvoiceController extends Controller
         
         $student_center = $this->getStudentCenter($academic_year, $student->id);
 
-        $tuition_fees = $this->calculatePayableAmount($academic_year, $student->id);
+        $tuition_fees = $payableAmount->calculatePayableAmount($academic_year, $student->id);
         
         $other_fees = $this->calculatePayableOtherFees($academic_year, $student->id);
         

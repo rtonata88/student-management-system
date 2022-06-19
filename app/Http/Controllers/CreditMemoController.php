@@ -171,7 +171,7 @@ class CreditMemoController extends Controller
         $reference_number = rand(10000, 999999);
 
         $invoice = Invoice::where('reference_number', $reference_number)->first();
-        if (count($invoice) > 0) {
+        if ($invoice) {
             $this->generateInvoiceReferenceNumber();
         }
 
