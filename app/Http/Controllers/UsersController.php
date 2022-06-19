@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\User;
 use App\Permission;
 
@@ -59,7 +60,7 @@ class UsersController extends Controller
 
 		$data = $requests->all();
 
-		$data['username'] = str_slug($requests->name, '.');
+		$data['username'] = Str::slug($requests->name, '.');
 
     	$user = User::create($data);
 
