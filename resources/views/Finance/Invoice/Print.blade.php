@@ -97,6 +97,7 @@
                         <th>Credit</th>
                         <th>Balance</th>
                     </tr>
+                    @php $balance = 0; @endphp
                     @foreach($invoices as $invoice)
                     <?php
                     $balance = ($invoice->debit_amount > 0) ? $balance += $invoice->debit_amount : $balance -= $invoice->credit_amount
