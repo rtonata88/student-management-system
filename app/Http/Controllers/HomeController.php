@@ -83,6 +83,7 @@ class HomeController extends Controller
     }
 
     public function fetchSubjects(){
+        
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
         $subjects = ModuleRegistration::selectRaw('count(module_registrations.module_id) as y, modules.subject_name as name')

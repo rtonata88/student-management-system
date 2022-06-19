@@ -92,25 +92,6 @@ class PaymentController extends Controller
                                 ->get();
     }
 
-    private function payableAmountForRegisteredSubjects($academic_year, $id){
-
-        $registered_subjects = ModuleRegistration::select('module_id', 'amount', 'registration_status', 'registration_date', 'cancellation_date')
-                                ->where('student_id', $id)
-                                ->where('academic_year', $academic_year->academic_year)
-                                ->where('registration_status', 'Registered')
-                                ->get();
-
-        $payable = 0;
-
-        if ($registered_subjects) {
-            foreach ($registered_subjects as $registered_subject) {
-                $number_of_months_date = $this->calculateNumberOfMonths($registered_subject->registration_date, date('Y-m-d'));
-                $payable += $registered_subject->amount * $number_of_months_date;
-            }
-        }
-
-        return $payable;
-    }
 
     private function calculateCreditMemos($academic_year, $student_id){
         return CreditMemo::where('student_id', $student_id)
@@ -123,20 +104,6 @@ class PaymentController extends Controller
         return DebitMemo::where('student_id', $student_id)
             ->whereYear('transaction_date', $academic_year)
             ->get();
-    }
-
-    private function calculateNumberOfMonths($start_date, $end_date)
-    {
-        $ts1 = strtotime($start_date);
-        $ts2 = strtotime($end_date);
-
-        $year1 = date('Y', $ts1);
-        $year2 = date('Y', $ts2);
-
-        $month1 = date('m', $ts1);
-        $month2 = date('m', $ts2);
-
-        return (($year2 - $year1) * 12) + ($month2 - $month1) + 1;
     }
 
     public function show($id, StudentPayableAmount $payableAmount, StudentPayableOtherFees $payableOtherFees, StudentBalance $studentBalance)
