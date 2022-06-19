@@ -38,7 +38,7 @@ class AccountSummaryController extends Controller
         $extra_charges = $this->getExtraCharges($financial_year);
 
         $payments = $this->getPaymentsToDate();
-
+        
         $invoices = $this->getInvoices($financial_year);
         
         $totals = $this->totals($account_summary, $extra_charges, $payments, $invoices);
@@ -122,6 +122,7 @@ class AccountSummaryController extends Controller
         return Invoice::selectRaw('student_id, sum(credit_amount) payments')
                         ->where('model', 'Payment')
                         ->whereBetween('transaction_date', [date('Y-01-01'), date('Y-m-d')])
+                        ->groupBy('student_id')
                         ->get();
     }
 
@@ -150,7 +151,7 @@ class AccountSummaryController extends Controller
     private function getAccountSummary($academic_year){
         
         $account_summary = $this->accountSummary($academic_year);
-        
+
         return $account_summary;
     }
 

@@ -42,7 +42,7 @@
             {{ Session::get('message') }}
         </div>
         @endif
-        @if($students)
+        @if(isset($students))
         <div class="card">
             <div class="card-header">
                 <strong> Select student </strong>

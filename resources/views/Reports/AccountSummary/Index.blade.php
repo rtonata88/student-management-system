@@ -57,6 +57,9 @@
 
                 @if($account_summary)
                 <strong>{{$account_summary->count()}} Results Found</strong>, <a href="{{route('reports.account-summary.export')}}">Export to excel</a>
+                <div class="alert alert-info">
+                    <strong>Please note: </strong>Exporting of this report may take up to 5 minutes due to the amount of calculations involved. The downloaded file will be available as soon as its done doing the calculations.
+                </div>
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%; font-size:12px">
                     <thead>
                         <tr>
@@ -77,7 +80,7 @@
                             <th>{{number_format($totals['payable_amount'], 2, '.',',')}}</th>
                             <th>{{number_format($totals['course_balance'], 2, '.',',')}}</th>
                         </tr>
-
+                        
                         @foreach($account_summary->take(10) as $summary)
                         <?php
                         $payment = $payments->where('student_id', $summary->student_id)->first()->payments ?? 0;
