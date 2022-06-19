@@ -13,6 +13,12 @@
 <div class="row">
     <div class="col-md-3 col-xs-12">
         <div class="card">
+            @if(Session::has('success'))
+            <div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                {{ Session::get('success') }}
+            </div>
+            @endif
             <div class="card-header">
                 <strong>Report filter</strong>
             </div>

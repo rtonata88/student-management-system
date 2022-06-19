@@ -78,7 +78,11 @@
                             <td>{{$payment->student->student_names}} {{$payment->student->surname}}</td>
                             <td>{{$payment->transaction_date}}</td>
                             <td>{{$payment->line_description}}</td>
-                            <td>{{$users->where('id', $payment->capturedBy->received_by)->first()->name}}</td>
+                            <td>
+                                @if($payment->capturedBy)
+                                {{$users->where('id', $payment->capturedBy->received_by)->first()->name}}
+                                @endif
+                            </td>
                             <td>{{number_format($payment->credit_amount, 2, '.',',')}}</td>
                         </tr>
                         @endforeach

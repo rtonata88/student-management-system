@@ -78,6 +78,7 @@
                         <th>Credit</th>
                         <th>Balance</th>
                     </tr>
+                    <?php $balance = 0; ?>
                     @foreach($invoices as $invoice)
                     <?php
                     $balance = ($invoice->debit_amount > 0) ? $balance += $invoice->debit_amount : $balance -= $invoice->credit_amount
@@ -104,21 +105,7 @@
                     </tr>
                 </table>
             </div>
-            <!-- <div class="card-footer">
-                <p><strong>Aging Report</strong></p>
-                <table class="table table-responsive-sm table-bordered table-sm" style="width:50%">
-                    <tr class="text-center">
-                        <th>30 Days</th>
-                        <th>60 Days</th>
-                        <th>90+</th>
-                    </tr>
-                    <tr class="text-center">
-                        <td>{{number_format($aging_report["30"], 2, '.',',')}}</td>
-                        <td>{{number_format($aging_report["60"], 2, '.',',')}}</td>
-                        <td>{{number_format($aging_report["90"], 2, '.',',')}}</td>
-                    </tr>
-                </table>
-            </div> -->
+           
         </div>
     </div>
 </div>

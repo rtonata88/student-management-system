@@ -99,7 +99,7 @@
                                     <select class="form-control select form-control-sm input-no-border" name="system[{{$subject->id}}]">
                                         <option>Select</option>
                                         @foreach($education_system as $system)
-                                        <option value="{{$system->value}}" @if($symbols->where('module_id', $subject->id)->first()->system == $system->value) {{'selected'}} @endif>{{$system->label}} {{$symbols->where('module_id', $subject->id)->first()->system}}</option>
+                                        <option value="{{$system->value}}" @if($symbols->where('module_id', $subject->id)->first()->system ?? '' == $system->value) {{'selected'}} @endif>{{$system->label}} {{$symbols->where('module_id', $subject->id)->first()->system ?? ''}}</option>
                                         @endforeach
                                     </select>
                                 </td>

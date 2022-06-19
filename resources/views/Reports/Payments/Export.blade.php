@@ -20,7 +20,11 @@
               <td style="width:100px;">{{$payment->transaction_date}}</td>
               <td style="width:200px;">{{$payment->line_description}}</td>
               <td style="width:100px;">{{$payment->credit_amount}}</td>
-              <td style="width:200px;">{{$users->where('id', $payment->capturedBy->received_by)->first()->name}}</td>
+              <td style="width:200px;">
+                  @if($payment->capturedBy)
+                  {{$users->where('id', $payment->capturedBy->received_by)->first()->name}}
+                  @endif
+              </td>
               <td style="width:300px;">
                   @foreach($guardians->where('student_id', $payment->student_id) as $index => $guardian)
                   <p>{{$guardian->guardian_names}} {{$guardian->surname}} ({{$guardian->relationship}}) - {{$guardian->contact_number}}</p>

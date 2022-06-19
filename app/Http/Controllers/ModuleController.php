@@ -38,7 +38,9 @@ class ModuleController extends Controller
     public function store(Request $request){
         $module = Module::create($request->all());
 
-        $this->AttachExtraFees($request->fee_id, $module);
+        if($request->fee_id){
+            $this->AttachExtraFees($request->fee_id, $module);
+        }
 
         return redirect()->route('subjects.index');
     }
@@ -46,7 +48,9 @@ class ModuleController extends Controller
     public function update(Request $request, $id){
         $subject = Module::find($id);
         $subject->update($request->all());
-        $this->AttachExtraFees($request->fee_id,$subject);
+        if ($request->fee_id) {
+            $this->AttachExtraFees($request->fee_id,$subject);
+        }
 
         return redirect()->route('subjects.index');
     }

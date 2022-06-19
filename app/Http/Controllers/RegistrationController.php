@@ -95,6 +95,7 @@ class RegistrationController extends Controller
     {
         $request->validate([
             'academic_year' => 'required',
+            'subject' => 'required'
         ]);
         
         $subjects = Module::whereIn('id', $request->subject)->get();
@@ -268,11 +269,12 @@ class RegistrationController extends Controller
 
         $student_extra_charges = StudentExtraCharge::whereYear('transaction_date', $academic_year->academic_year)
                                                     ->where('student_id', $request->student_id)
-                                                    ->whereIn('fee_id', $request->other_fees)
+                                                    ->whereIn('fee_id', $request->other_fees ?? [])
                                                     ->pluck('fee_id')
                                                     ->toArray();
         
        // dd($student_extra_charges);
+       if($request->other_fees){
         for ($i = 0; $i < count($request->other_fees); $i++) {
             
             if(!in_array($request->other_fees[$i], $invoices)){
@@ -309,6 +311,7 @@ class RegistrationController extends Controller
                 ]);
             }
         }
+    }
 
         if($newInvoices){
             Invoice::insert($newInvoices);
@@ -357,7 +360,7 @@ class RegistrationController extends Controller
         $reference_number = rand(100000, 999999);
 
         $invoice = Invoice::where('reference_number', $reference_number)->first();
-        if (count($invoice) > 0) {
+        if ($invoice) {
             $this->generateInvoiceReferenceNumber();
         }
 

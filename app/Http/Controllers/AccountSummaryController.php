@@ -165,7 +165,9 @@ class AccountSummaryController extends Controller
 
     public function export()
     {
-        return Excel::download(new AccountSummaryReport, 'Account_Summary_' . date('M') . '.xlsx');
+        (new AccountSummaryReport)->queue('Account_Summary_' . date('M') . '.xlsx');
+
+        return response()->download(storage_path('app').'/Account_Summary_' . date('M') . '.xlsx');
     }
 
 }

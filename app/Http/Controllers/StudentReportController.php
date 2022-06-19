@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\Center;
+use App\Exports\AccountSummaryReport;
 use App\Exports\Students;
 use App\Exports\SubjectRegistration;
 use App\Module;
@@ -62,7 +63,10 @@ class StudentReportController extends Controller
     }
 
     public function export(){
-        return Excel::download(new SubjectRegistration, 'student_report_'.date('Y-m-d'). '.xlsx');
+
+        (new SubjectRegistration)->queue('student_report_' . date('M') . '.xlsx');
+
+        return response()->download(storage_path('app') .'/student_report_' . date('M') . '.xlsx');
     }
     
 }

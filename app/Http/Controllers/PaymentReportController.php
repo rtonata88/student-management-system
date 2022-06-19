@@ -75,12 +75,14 @@ class PaymentReportController extends Controller
         session()->put('guardians', $guardians);
 
         session()->put('users', $users);
-
+        
         return view('Reports.Payments.Index', compact('payments', 'users'));
     }
 
     public function export()
     {
-        return Excel::download(new PaymentsReport, 'payments_report_' . date('Y-m-d') . '.xlsx');
+        (new PaymentsReport)->queue('payments_report_' . date('Y-m-d') . '.xlsx');
+
+        return response()->download(storage_path('app') .'/payments_report_' . date('Y-m-d') . '.xlsx');
     }
 }

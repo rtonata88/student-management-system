@@ -119,7 +119,7 @@ class StudentController extends Controller
         $student_number = rand(10000, 99999);
 
         $student = Student::where('student_number', $student_number)->first();
-        if(count($student) > 0){
+        if($student){
             $this->generateStudentNumber();
         }
 
