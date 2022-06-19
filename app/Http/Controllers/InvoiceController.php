@@ -4,15 +4,12 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\CompanySetup;
-use App\CreditMemo;
-use App\DebitMemo;
 use App\Registration;
 use App\Invoice;
-use App\ModuleRegistration;
+use App\Services\StudentBalance;
 use App\Services\StudentPayableAmount;
 use App\Services\StudentPayableOtherFees;
 use App\Student;
-use App\StudentExtraCharge;
 use Session;
 use Illuminate\Http\Request;
 
@@ -57,7 +54,7 @@ class InvoiceController extends Controller
         return redirect()->back();
     }
 
-    public function show($id, StudentPayableAmount $payableAmount, StudentPayableOtherFees $payableOtherFees)
+    public function show($id, StudentPayableAmount $payableAmount, StudentPayableOtherFees $payableOtherFees, StudentBalance $studentBalance)
     {
         $student = Student::find($id);
         
@@ -71,26 +68,13 @@ class InvoiceController extends Controller
 
         $tuition_fees = $payableAmount->calculatePayableAmount($academic_year, $student->id);
         
-        $other_fees = $$payableOtherFees->calculatePayableOtherFees($academic_year, $student->id);
+        $other_fees = $payableOtherFees->calculatePayableOtherFees($academic_year, $student->id);
         
         $payable_amount = $tuition_fees +  $other_fees;
 
-        $course_balance = $this->calculateBalance($academic_year, $student->id);
+        $course_balance = $studentBalance->calculateBalance($academic_year, $student->id);
 
         return view('Finance.Invoice.Show', compact('invoices', 'student', 'student_center', 'tuition_fees', 'other_fees', 'course_balance', 'payable_amount'));
-    }
-
-    private function calculateBalance($financial_year, $student_id)
-    {
-        
-        $invoice = Invoice::select('debit_amount', 'credit_amount')
-                            ->where('financial_year', $financial_year)
-                            ->where('student_id', $student_id)
-                            ->get();
-
-        $balance = $invoice->sum('debit_amount') - $invoice->sum('credit_amount');
-
-        return $balance;
     }
 
     private function getStudentCenter($academic_year, $student_id){
@@ -102,7 +86,8 @@ class InvoiceController extends Controller
         return $enrolment->center;
     }
 
-    public function print($student_id){
+    public function print($student_id, StudentPayableAmount $payableAmount, StudentPayableOtherFees $payableOtherFees, StudentBalance $studentBalance)
+    {
         $student = Student::find($student_id);
 
         $company = CompanySetup::find(1);
@@ -110,18 +95,18 @@ class InvoiceController extends Controller
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
         $invoices = Invoice::where('student_id', $student_id)
-            ->where('financial_year', $academic_year)
-            ->get();
+                            ->where('financial_year', $academic_year)
+                            ->get();
 
         $student_center = $this->getStudentCenter($academic_year, $student->id);
 
-        $tuition_fees = $this->calculatePayableAmount($academic_year, $student->id);
+        $tuition_fees = $payableAmount->calculatePayableAmount($academic_year, $student->id);
 
-        $other_fees = $this->calculatePayableOtherFees($academic_year, $student->id);
+        $other_fees = $payableOtherFees->calculatePayableOtherFees($academic_year, $student->id);
 
         $payable_amount = $tuition_fees +  $other_fees;
 
-        $course_balance = $this->calculateBalance($academic_year, $student->id);
+        $course_balance = $studentBalance->calculateBalance($academic_year, $student->id);
 
         return view('Finance.Invoice.Print', compact('invoices', 'student', 'company', 'student_center', 'tuition_fees', 'other_fees', 'payable_amount', 'course_balance'));
     }
