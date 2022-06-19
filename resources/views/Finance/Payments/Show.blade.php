@@ -43,7 +43,7 @@
                                 </tr>
                                 <tr>
                                     <th>Academic year</th>
-                                    <td>{{$academic_year->academic_year}}</td>
+                                    <td>{{$academic_year}}</td>
                                 </tr>
                                 <tr>
                                     <th>Student names</th>

@@ -119,7 +119,13 @@
                         <tbody>
                             <tr>
                                 <td>Tuition fees</td>
-                                <td>{{number_format($tuition_fees, 2, '.',',')}}</td>
+                                <td>
+                                    @if($tuition_fees > 0)
+                                    {{number_format($tuition_fees, 2, '.',',')}}
+                                    @else
+                                    0.00
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     @if($tuition_fees > 0)
                                     <span class="badge badge-warning">
@@ -131,7 +137,9 @@
                                     </span>
                                     @endif
                                 </td>
-                                <td> {{Form::number('tuition_fees',$tuition_fees, ['class' => 'form-control fees', 'required'])}}</td>
+                                <td>
+                                    {{Form::number('tuition_fees', ($tuition_fees > 0) ? $tuition_fees : 0, ['class' => 'form-control fees', 'required'])}}
+                                </td>
                             </tr>
                             @foreach($extra_fees as $fee)
                             <tr>

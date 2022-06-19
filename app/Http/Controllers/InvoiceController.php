@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\AcademicYear;
 use App\CompanySetup;
+use App\CreditMemo;
+use App\DebitMemo;
 use App\Registration;
 use App\Invoice;
 use App\Services\StudentBalance;
@@ -65,25 +67,28 @@ class InvoiceController extends Controller
                             ->get();
         
         $student_center = $this->getStudentCenter($academic_year, $student->id);
-
-        $tuition_fees = $payableAmount->calculatePayableAmount($academic_year, $student->id);
         
-        $other_fees = $payableOtherFees->calculatePayableOtherFees($academic_year, $student->id);
+        $debit_memos = $this->calculateDebitMemos($academic_year, $id);
+
+        $credit_memos = $this->calculateCreditMemos($academic_year, $id);
+
+        $fees_debit_memos = $debit_memos->where('debit_type', 'tuition')->sum('amount');
+
+        $fees_credit_memos = $credit_memos->where('credit_type', 'tuition')->sum('amount');
+        
+        $tuition_fees = $payableAmount->calculatePayableAmount($academic_year, $student->id, $fees_debit_memos, $fees_credit_memos);
+
+        $extraFees_debit_memos = $debit_memos->where('debit_type', 'other_fees')->sum('amount');
+
+        $extraFees_credit_memos = $credit_memos->where('credit_type', 'other_fees')->sum('amount');
+        
+        $other_fees = $payableOtherFees->calculatePayableOtherFees($academic_year, $student->id, $extraFees_debit_memos, $extraFees_credit_memos);
         
         $payable_amount = $tuition_fees +  $other_fees;
 
         $course_balance = $studentBalance->calculateBalance($academic_year, $student->id);
 
         return view('Finance.Invoice.Show', compact('invoices', 'student', 'student_center', 'tuition_fees', 'other_fees', 'course_balance', 'payable_amount'));
-    }
-
-    private function getStudentCenter($academic_year, $student_id){
-
-        $enrolment = Registration::where('academic_year',$academic_year)
-                                ->where('student_id', $student_id)
-                                ->first();
-        
-        return $enrolment->center;
     }
 
     public function print($student_id, StudentPayableAmount $payableAmount, StudentPayableOtherFees $payableOtherFees, StudentBalance $studentBalance)
@@ -100,9 +105,21 @@ class InvoiceController extends Controller
 
         $student_center = $this->getStudentCenter($academic_year, $student->id);
 
-        $tuition_fees = $payableAmount->calculatePayableAmount($academic_year, $student->id);
+        $debit_memos = $this->calculateDebitMemos($academic_year, $student->id);
 
-        $other_fees = $payableOtherFees->calculatePayableOtherFees($academic_year, $student->id);
+        $credit_memos = $this->calculateCreditMemos($academic_year, $student->id);
+
+        $fees_debit_memos = $debit_memos->where('debit_type', 'tuition')->sum('amount');
+
+        $fees_credit_memos = $credit_memos->where('credit_type', 'tuition')->sum('amount');
+
+        $extraFees_debit_memos = $debit_memos->where('debit_type', 'other_fees')->sum('amount');
+
+        $extraFees_credit_memos = $credit_memos->where('credit_type', 'other_fees')->sum('amount');
+
+        $tuition_fees = $payableAmount->calculatePayableAmount($academic_year, $student->id, $fees_debit_memos, $fees_credit_memos);
+
+        $other_fees = $payableOtherFees->calculatePayableOtherFees($academic_year, $student->id, $extraFees_debit_memos, $extraFees_credit_memos);
 
         $payable_amount = $tuition_fees +  $other_fees;
 
@@ -111,4 +128,26 @@ class InvoiceController extends Controller
         return view('Finance.Invoice.Print', compact('invoices', 'student', 'company', 'student_center', 'tuition_fees', 'other_fees', 'payable_amount', 'course_balance'));
     }
 
+    private function getStudentCenter($academic_year, $student_id)
+    {
+
+        $enrolment = Registration::where('academic_year', $academic_year)
+            ->where('student_id', $student_id)
+            ->first();
+
+        return $enrolment->center;
+    }
+
+    private function calculateDebitMemos($academic_year, $student_id)
+    {
+        return DebitMemo::where('student_id', $student_id)
+            ->whereYear('transaction_date', $academic_year)
+            ->get();
+    }
+    private function calculateCreditMemos($academic_year, $student_id)
+    {
+        return CreditMemo::where('student_id', $student_id)
+            ->whereYear('transaction_date', $academic_year)
+            ->get();
+    }
 }

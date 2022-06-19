@@ -2,25 +2,19 @@
 
 namespace App\Services;
 
-use App\CreditMemo;
-use App\DebitMemo;
 use App\Invoice;
 use App\ModuleRegistration;
 
 class StudentPayableAmount {
 
-    public function calculatePayableAmount($academic_year, $id){
+    public function calculatePayableAmount($academic_year, $id, $debit_memos, $credit_memos){
         $registered_subjects_payable = $this->payableAmountForRegisteredSubjects($academic_year, $id);
-
+        
         $canceled_subjects_payable = $this->payableAmountForCanceledSubjects($academic_year, $id);
-
-        $debit_memos = $this->calculateDebitMemos($academic_year, $id);
 
         $total_payable = $registered_subjects_payable + $canceled_subjects_payable + $debit_memos;
 
         $payments = $this->calculatePaymentsToDate($id);
-
-        $credit_memos = $this->calculateCreditMemos($academic_year, $id);
 
         $total_payable = ($total_payable - $payments - $credit_memos);
 
@@ -69,13 +63,6 @@ class StudentPayableAmount {
         return $payable;
     }
 
-    private function calculateDebitMemos($academic_year, $student_id)
-    {
-        return DebitMemo::where('student_id', $student_id)
-            ->whereYear('transaction_date', $academic_year)
-            ->sum('amount');
-    }
-
     private function calculatePaymentsToDate($student_id)
     {
         return Invoice::select('credit_amount')
@@ -83,13 +70,6 @@ class StudentPayableAmount {
         ->where('student_id', $student_id)
             ->whereBetween('transaction_date', [date('Y-01-01'), date('Y-m-d')])
             ->sum('credit_amount');
-    }
-
-    private function calculateCreditMemos($academic_year, $student_id)
-    {
-        return CreditMemo::where('student_id', $student_id)
-            ->whereYear('transaction_date', $academic_year)
-            ->sum('amount');
     }
 
     private function calculateNumberOfMonths($start_date, $end_date)
