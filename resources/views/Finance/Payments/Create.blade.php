@@ -113,7 +113,7 @@
                                 <th>Payment Description</th>
                                 <th>Amount due (N$)</th>
                                 <th>Status</th>
-                                <th>Amount paid (N$)</th>
+                                <th>Amount paid + Credits (N$)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -142,35 +142,43 @@
                                 </td>
                             </tr>
                             @foreach($extra_fees as $fee)
+                            @php
+                            $amount_due = ($fee->outstanding - $fee->credit_memos) + $fee->debit_memos
+                            @endphp
                             <tr>
                                 <td>{{$fee->fee_description}}</td>
-                                <td>{{$fee->amount}}</td>
+                                <td>
+                                    @if($amount_due > 0)
+                                    {{$amount_due}}
+                                    @else
+                                    0.00
+                                    @endif
+                                </td>
                                 <td class="text-center">
-                                    @if($fee->amount_paid == 0)
+                                    @if($amount_due >= $fee->amount)
                                     <span class="badge badge-danger">
                                         Not paid
                                     </span>
-                                    @elseif($fee->amount_paid >= $fee->amount)
-                                    <span class="badge badge-success">
+                                    @elseif($amount_due <= 0) <span class="badge badge-success">
                                         Paid
-                                    </span>
-                                    @else
-                                    <span class="badge badge-warning">
-                                        Partially paid
-                                    </span>
-                                    @endif
+                                        </span>
+                                        @else
+                                        <span class="badge badge-warning">
+                                            Partially paid
+                                        </span>
+                                        @endif
 
                                 </td>
                                 <td>
-                                    @if($fee->amount_paid == 0)
-                                    <input type="number" name="other_fee[{{$fee->id}}]" class="form-control input-no-border fees" value="{{$fee->amount}}">
-                                    @elseif($fee->amount_paid >= $fee->amount)
-                                    {{$fee->amount}}
-                                    @else
-                                    <input type="number" name="other_fee[{$fee->id}}]" class="form-control input-no-border fees" value="{{$fee->amount - $fee->amount_paid}}">
-                                    @endif
-                                    <input type="hidden" name="fee_id[]" class="form-control input-no-border" value="{{$fee->id}}">
-                                    <input type="hidden" name="fee_description[{{$fee->id}}]" value="{{$fee->fee_description}}">
+                                    @if($amount_due <= 0)
+                                    {{$fee->credit_memos + $fee->amount_paid}}
+                                    @elseif($amount_due <= $fee->amount)
+                                        <input type="number" name="other_fee[{{$fee->fee_id}}]" class="form-control input-no-border fees" value="{{$amount_due}}">
+                                    @elseif($amount_due <= 0) 
+                                    {{$fee->credit_memos + $fee->amount_paid}} 
+                                    @endif 
+                                    <input type="hidden" name="fee_id[]" class="form-control" value="{{$fee->fee_id}}">
+                                    <input type="hidden" name="fee_description[{{$fee->fee_id}}]" value="{{$fee->fee_description}}">
                                 </td>
                             </tr>
                             @endforeach

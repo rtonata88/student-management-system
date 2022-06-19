@@ -7,6 +7,7 @@ use App\CreditMemo;
 use App\DebitMemo;
 use App\Invoice;
 use App\ModuleRegistration;
+use App\OtherFeesSummary;
 use App\Payment;
 use App\Services\StudentBalance;
 use App\Services\StudentPayableAmount;
@@ -87,7 +88,7 @@ class PaymentController extends Controller
     }
 
     private function getChargedExtraFees($student_id, $academic_year){
-        return StudentExtraCharge::whereYear('transaction_date', $academic_year->academic_year)
+        return OtherFeesSummary::where('academic_year', $academic_year->academic_year)
                                 ->where('student_id', $student_id)
                                 ->get();
     }
@@ -161,7 +162,7 @@ class PaymentController extends Controller
             $request->validate([
                 'receipt_amount' => 'required|numeric',
                 'payment_date' => 'required|date',
-                'receipt_number' => 'required|unique:payments'
+               // 'receipt_number' => 'required|unique:payments'
             ]);
 
         $payment_data = $request->all();
@@ -218,17 +219,25 @@ class PaymentController extends Controller
 
     public function updateExtraChargePayment($request){
         
-        $extra_charges = StudentExtraCharge::whereIn('id', $request->fee_id)->get();
-        
-        for($i=0; $i<count($request->fee_id); $i++){
-            $extra_charge_id = $request->fee_id[$i];
+        $extra_charges = StudentExtraCharge::where('student_id', $request->student_id)
+                                            ->whereIn('fee_id', $request->fee_id)
+                                            ->get();
 
+        for($i=0; $i < count($request->fee_id); $i++){
+            
+            $extra_charge_id = $request->fee_id[$i];
+            
             if (isset($request->other_fee[$extra_charge_id])) {
-                $current_amount = $extra_charges->where('id', $extra_charge_id)->first()->amount_paid;
-                StudentExtraCharge::where('id',$extra_charge_id)
-                    ->update([
-                        'amount_paid' => $current_amount + $request->other_fee[$extra_charge_id],
-                    ]);
+
+                if ($request->other_fee[$extra_charge_id] > 0) {
+                    
+                    $current_amount = $extra_charges->where('fee_id', $extra_charge_id)->first()->amount_paid;
+                    
+                    StudentExtraCharge::where('fee_id',$extra_charge_id)
+                        ->update([
+                            'amount_paid' => $current_amount + $request->other_fee[$extra_charge_id],
+                        ]);
+                }
             }
         }
     }

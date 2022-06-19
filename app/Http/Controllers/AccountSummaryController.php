@@ -154,15 +154,6 @@ class AccountSummaryController extends Controller
         return $account_summary;
     }
 
-    private function calculateBalance($invoices, $student_id)
-    {
-        $debits = $invoices->where('student_id', $student_id)->sum('debit');
-
-        $credits = $invoices->where('student_id', $student_id)->sum('credit');
-        
-        return ($debits - $credits);
-    }
-
     public function export()
     {
         (new AccountSummaryReport)->queue('Account_Summary_' . date('M') . '.xlsx');
