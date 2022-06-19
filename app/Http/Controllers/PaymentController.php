@@ -203,7 +203,7 @@ class PaymentController extends Controller
             ->whereYear('payment_date', $academic_year->academic_year)
             ->get();
 
-        return view('Finance.Payments.Show', compact('payments','student', 'academic_year','balance' ,'registration_status', 'payable_amount', 'other_fees', 'tuition_fees', 'extra_fees', 'monthly_amount'));
+        return view('Finance.Payments.Show', compact('payments','student', 'academic_year','balance' ,'registration_status', 'payable_amount', 'other_fees', 'tuition_fees'));
     }
 
     private function calculatePayableOtherFees($academic_year, $student_id){
@@ -248,51 +248,41 @@ class PaymentController extends Controller
     }
 
     public function creditStudentInvoice($request, $payment){
-        $invoice_items = [];
+        
         if($request->tuition_fees > 0){ 
-            array_push(
-                $invoice_items,
-                [
-                    'student_id' => $request->student_id,
-                    'reference_number' => $request->receipt_number,
-                    'model' => "Payment",
-                    'model_id' => $payment->id,
-                    'financial_year' => $request->academic_year,
-                    'transaction_date' => $request->payment_date,
-                    'line_description' => "Tuition Fees - Payment",
-                    'debit_amount' => 0,
-                    'credit_amount' => $request->tuition_fees,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ]
-            );
+            Invoice::create([
+                'student_id' => $request->student_id,
+                'reference_number' => $request->receipt_number,
+                'model' => "Payment",
+                'model_id' => $payment->id,
+                'financial_year' => $request->academic_year,
+                'transaction_date' => $request->payment_date,
+                'line_description' => "Tuition Fees - Payment",
+                'debit_amount' => 0,
+                'credit_amount' => $request->tuition_fees
+            ]);
         }
-
+        
         for ($i = 0; $i < count($request->fee_id); $i++) {
             $extra_charge_id = $request->fee_id[$i];
-
-            if ($request->other_fee[$extra_charge_id] > 0) {
-                array_push(
-                    $invoice_items,
-                    [
-                        'student_id' => $request->student_id,
-                        'reference_number' => $request->receipt_number,
-                        'model' => "StudentExtraCharge",
-                        'model_id' => $extra_charge_id,
-                        'financial_year' => $request->academic_year,
-                        'transaction_date' => $request->payment_date,
-                        'line_description' => $request->fee_description[$extra_charge_id]." - Payment",
-                        'debit_amount' => 0,
-                        'credit_amount' => $request->other_fee[$extra_charge_id],
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'updated_at' => date('Y-m-d H:i:s'),
-                    ]
-                );
+            
+            if (isset($request->other_fee[$extra_charge_id])) {
+                if($request->other_fee[$extra_charge_id] > 0){
+                    Invoice::create(
+                        [
+                            'student_id' => $request->student_id,
+                            'reference_number' => $request->receipt_number,
+                            'model' => "StudentExtraCharge",
+                            'model_id' => $extra_charge_id,
+                            'financial_year' => $request->academic_year,
+                            'transaction_date' => $request->payment_date,
+                            'line_description' => $request->fee_description[$extra_charge_id]." - Payment",
+                            'debit_amount' => 0,
+                            'credit_amount' => $request->other_fee[$extra_charge_id]
+                        ]
+                    );
+                }
             }
-        }
-
-        if (count($invoice_items) > 0) {
-            Invoice::insert($invoice_items);
         }
     }
 
@@ -303,7 +293,7 @@ class PaymentController extends Controller
         for($i=0; $i<count($request->fee_id); $i++){
             $extra_charge_id = $request->fee_id[$i];
 
-            if ($request->other_fee[$extra_charge_id] > 0) {
+            if (isset($request->other_fee[$extra_charge_id])) {
                 $current_amount = $extra_charges->where('id', $extra_charge_id)->first()->amount_paid;
                 StudentExtraCharge::where('id',$extra_charge_id)
                     ->update([
