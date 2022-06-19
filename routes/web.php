@@ -98,6 +98,6 @@ Route::get('/academic-year/status/{id}', 'AcademicYearController@updateStatus')-
 //Access Management
 Route::resource('/users','UsersController');
 
-Route::get('richard', function(){
-    return phpinfo();
-});
+// Route::get('richard', function(){
+//     return phpinfo();
+// });
