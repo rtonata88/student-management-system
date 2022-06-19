@@ -48,7 +48,7 @@ class UsersController extends Controller
     public function show($username){
 		$user = User::where('username', $username)->first();
 
-    	return view('Users.Show', compact('user', 'assigned_permissions'));
+    	return view('Users.Show', compact('user'));
     }
 
     public function store(Request $requests)
