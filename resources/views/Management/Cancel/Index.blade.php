@@ -4,7 +4,7 @@
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
         <li class="breadcrumb-item">Management</li>
-        <li class="breadcrumb-item active"><a href="/enrolment">Cancel Enrolment </a></li>
+        <li class="breadcrumb-item active"><a href="/cancel-registration">Cancel Enrolment </a></li>
         <!-- Breadcrumb Menu-->
     </ol>
 </div>

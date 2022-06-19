@@ -49,7 +49,7 @@ class CancelRegistrationController extends Controller
 
         Session::flash('not_found', 'The entered student number does not match any record. Please make sure you have entered a correct student number');
 
-        return view('Management.Enrolment.Search', compact('student'));
+        return view('Management.Cancel.Search');
     }
 
     public function showCancellationScreen($student_id)
@@ -115,7 +115,7 @@ class CancelRegistrationController extends Controller
         $reference_number = rand(100000, 999999);
 
         $invoice = Invoice::where('reference_number', $reference_number)->first();
-        if (count($invoice) > 0) {
+        if ($invoice) {
             $this->generateInvoiceReferenceNumber();
         }
 
