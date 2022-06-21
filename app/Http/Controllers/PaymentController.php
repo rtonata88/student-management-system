@@ -218,7 +218,7 @@ class PaymentController extends Controller
     }
 
     public function updateExtraChargePayment($request){
-        
+       
         $extra_charges = StudentExtraCharge::where('student_id', $request->student_id)
                                             ->whereIn('fee_id', $request->fee_id)
                                             ->get();
@@ -233,10 +233,11 @@ class PaymentController extends Controller
                     
                     $current_amount = $extra_charges->where('fee_id', $extra_charge_id)->first()->amount_paid;
                     
-                    StudentExtraCharge::where('fee_id',$extra_charge_id)
-                        ->update([
-                            'amount_paid' => $current_amount + $request->other_fee[$extra_charge_id],
-                        ]);
+                    StudentExtraCharge::where('student_id', $request->student_id)
+                                        ->where('fee_id',$extra_charge_id)
+                                        ->update([
+                                            'amount_paid' => $current_amount + $request->other_fee[$extra_charge_id],
+                                        ]);
                 }
             }
         }

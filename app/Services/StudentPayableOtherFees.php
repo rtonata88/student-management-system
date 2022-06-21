@@ -10,11 +10,11 @@ class StudentPayableOtherFees {
     {
        
         $extra_fees = $this->getChargedExtraFees($id, $academic_year);
-
+       
         $charged = $extra_fees->sum('amount');
-
+       
         $paid = $extra_fees->sum('amount_paid');
-        
+        //dd($paid);
         return ($charged + $debit_memos) - ($paid + $credit_memos);
     }
 
