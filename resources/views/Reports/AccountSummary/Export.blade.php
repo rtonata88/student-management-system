@@ -2,7 +2,8 @@
      <thead>
          <tr>
              <th style="width:80px;">Student number</th>
-             <th style="width:100px;">Student Names</th>
+             <th style="width:100px;">Names</th>
+             <th style="width:100px;">Surname</th>
              <th style="width:100px;">Center</th>
              <th style="width:50px;">Student Contact</th>
              <th style="width:250px;">Guardian Information</th>
@@ -27,7 +28,8 @@
             ?>
          <tr>
              <td>{{$summary->student_number2}}</td>
-             <td>{{$summary->student_names}} {{$summary->surname}}</td>
+             <td>{{$summary->student_names}}</td>
+             <td>{{$summary->surname}}</td>
              <td>{{$centers[$summary->center_id]}}</td>
              <td></td>
              <td>

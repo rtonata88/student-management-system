@@ -50,7 +50,8 @@ class AccountSummaryReport implements FromCollection, ShouldAutoSize, WithCustom
 
             $student_data = array();
             $student_data['StudentNumber'] = $summary->student_number2;
-            $student_data['StudentNames'] = $summary->student_names . " " . $summary->surname;
+            $student_data['StudentNames'] = $summary->student_names;
+            $student_data['Surname'] = $summary->surname;
             $student_data['Center'] = $centers[$summary->center_id];
             $student_data['StudentContact'] = $summary->contact_number;
             $student_data['Guardian'] = $guardian_information;
@@ -83,6 +84,7 @@ class AccountSummaryReport implements FromCollection, ShouldAutoSize, WithCustom
         $headings = [
             'Student number',
             'Student Names',
+            'Surname',
             'Center',
             'Student Contact',
             'Guardian Information',

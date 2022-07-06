@@ -3,6 +3,7 @@
           <tr>
               <th>Student number</th>
               <th>Names</th>
+              <th>Surname</th>
               <th>Center</th>
               <th>Subject</th>
               <th>Registration Status</th>
@@ -17,7 +18,8 @@
 
           <tr>
               <td style="width:100px">{{$registration->student->student_number2}}</td>
-              <td style="width:200px">{{$registration->student->student_names}} {{$registration->student->surname}}</td>
+              <td style="width:200px">{{$registration->student->student_names}}</td>
+              <td style="width:200px">{{$registration->student->surname}}</td>
               <td style="width:100px">
                   {{$registration->registration
                                 ->where('student_id', $registration->student_id)
