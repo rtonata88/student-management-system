@@ -15,6 +15,7 @@ use App\Student;
 use App\StudentExtraCharge;
 
 use Session;
+use DB;
 
 class RegistrationController extends Controller
 {
@@ -188,7 +189,10 @@ class RegistrationController extends Controller
         }
 
         if (count($invoices) > 0) {
-            Invoice::insert($invoices);
+            DB::transaction(
+                function () use ($invoices) {
+                    Invoice::insert($invoices);
+                });
         }
 
         $fees = Fees::all();
@@ -249,11 +253,19 @@ class RegistrationController extends Controller
             }
         }
         if(count($invoices) > 0){
-            Invoice::insert($invoices);
+            DB::transaction(
+                function () use ($invoices) {
+                    Invoice::insert($invoices);
+                }
+            );
         }
 
         if (count($new_student_extra_charges) > 0) {
-            StudentExtraCharge::insert($new_student_extra_charges);
+            DB::transaction(
+                function () use ($new_student_extra_charges) {
+                    StudentExtraCharge::insert($new_student_extra_charges);
+                }
+            );
         }
         
     }
@@ -314,11 +326,19 @@ class RegistrationController extends Controller
     }
 
         if($newInvoices){
-            Invoice::insert($newInvoices);
+            DB::transaction(
+                function () use ($invoices) {
+                    Invoice::insert($invoices);
+                }
+            );
         }
 
         if(count($new_student_extra_charges) > 0){
-            StudentExtraCharge::insert($new_student_extra_charges);
+            DB::transaction(
+                function () use ($new_student_extra_charges) {
+                    StudentExtraCharge::insert($new_student_extra_charges);
+                }
+            );
         }
         
     }
@@ -408,7 +428,11 @@ class RegistrationController extends Controller
 
         if(count($new_student_extra_charges) > 0)
         {
-            StudentExtraCharge::insert($new_student_extra_charges);
+            DB::transaction(
+                function () use ($new_student_extra_charges) {
+                    StudentExtraCharge::insert($new_student_extra_charges);
+                }
+            );
         }
     }
 }

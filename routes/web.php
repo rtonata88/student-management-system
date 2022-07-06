@@ -21,8 +21,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/load/{profile}/{section}', 'ProfilesController@loadEditSection');
-Route::get('/detach/{profile}/{section}', 'ProfilesController@detach');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -55,8 +53,6 @@ Route::get('/invoices/print/{student_id}', 'InvoiceController@print')->name('inv
 
 Route::resource('/payments', 'PaymentController');
 Route::post('/payments/filter', 'PaymentController@filter')->name('payments.filter');
-Route::resource('/statements', 'StatementController');
-Route::post('/statements/filter', 'StatementController@filter')->name('statements.filter');
 
 Route::resource('/debit-memos', 'DebitMemoController');
 Route::post('/debit-memos/filter', 'DebitMemoController@filter')->name('debit-memos.filter');

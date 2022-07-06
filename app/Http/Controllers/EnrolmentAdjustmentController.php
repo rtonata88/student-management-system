@@ -59,30 +59,118 @@ class EnrolmentAdjustmentController extends Controller
     {
         $student = Student::find($student_id);
 
-        $subjects = Module::all();
-        $fees = Fees::all();
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
         $centers = Center::pluck('center_name', 'id');
         $registration = $student->registration->where('academic_year', $academic_year)->first();
         $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
-        $registered_modules = ModuleRegistration::where('student_id', $student->id)
-            ->where('academic_year', $academic_year);
+        $subjects = ModuleRegistration::with('subject')->where('student_id', $student->id)
+                                    ->where('academic_year', $academic_year)
+                                    ->get();
 
-        $symbols = $registered_modules->get();
 
-        $registered_modules = $registered_modules->pluck('module_id')->toArray();
-
-        $charged_fees = Invoice::where('model', 'Fees')
+        $invoice = Invoice::select('model_id','debit_amount')->where('model', 'Module')
             ->where('student_id', $student->id)
             ->where('financial_year', $academic_year)
-            ->pluck('model_id')
-            ->toArray();
+            ->get();
 
 
-        $education_system = EducationSystem::all();
+        return view('Management.Enrolment-Adjustment.Index', compact('student', 'subjects', 'invoice', 'academic_year', 'centers', 'registration_status', 'registered_modules'));
+    }
 
-        return view('Management.Enrolment-Adjustment.Index', compact('education_system', 'student', 'subjects', 'fees', 'academic_year', 'centers', 'registration_status', 'registered_modules', 'charged_fees', 'symbols'));
+    public function edit($id){
+        
+        $subject = ModuleRegistration::find($id);
+
+        if(!is_null($subject->cancellation_date)){
+            return redirect()->back()->with('message', 'Cancelled subjects cannot be modified.');
+        }
+
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+
+        $invoice = Invoice::select('model_id', 'debit_amount')->where('model', 'Module')
+            ->where('student_id', $subject->student_id)
+            ->where('financial_year', $academic_year)
+            ->get();
+
+        return view('Management.Enrolment-Adjustment.Edit', compact('subject', 'invoice', 'academic_year'));
+    }
+
+    public function store(Request $request){
+        $academic_year = AcademicYear::where('academic_year', $request->academic_year)->first();
+
+        if($academic_year->status == 0){
+            return redirect()->back()->with('message', 'The Academic Year is in active');
+        }
+        
+        if(($request->registration_date < $academic_year->start_date) || ($request->registration_date > $academic_year->end_date)){
+            return redirect()->back()->with('message', 'Registration must be between the academic period.');
+        }
+
+        ModuleRegistration::where('id',$request->module_registration_id)
+                            ->update(['registration_date' => $request->registration_date]);
+        
+        Invoice::where('student_id', $request->student_id)
+                ->where('model_id', $request->module_id)
+                ->where('financial_year', $request->academic_year)
+                ->delete();
+
+        $reference_number = $this->generateInvoiceReferenceNumber();
+
+        Invoice::create([
+            'student_id' => $request->student_id,
+            'reference_number' => $reference_number,
+            'model' => "Module",
+            'model_id' => $request->module_id,
+            'financial_year' => $request->academic_year,
+            'transaction_date' =>  $request->registration_date,
+            'line_description' => $request->subject,
+            'debit_amount' => $this->calculateAmount(
+                $academic_year,
+                $request->amount,
+                $request->registration_date
+            ),
+            'credit_amount' => 0        
+        ]);
+
+        return redirect()->route('enrolment.adjustment.showScreen', $request->student_id)->with('message', 'Module successfully adjusted!');
+        
+    }
+
+    private function generateInvoiceReferenceNumber()
+    {
+        $reference_number = rand(100000, 999999);
+
+        $invoice = Invoice::where('reference_number', $reference_number)->first();
+        if ($invoice) {
+            $this->generateInvoiceReferenceNumber();
+        }
+
+        return $reference_number;
+    }
+
+    private function calculateAmount($year, $subject_fee, $registration_date)
+    {
+
+        $number_of_months = $this->calculateNumberOfMonths($registration_date, $year->end_date);
+
+        $amount = $number_of_months * $subject_fee;
+
+        return $amount;
+    }
+
+    private function calculateNumberOfMonths($start_date, $end_date)
+    {
+        $ts1 = strtotime($start_date);
+        $ts2 = strtotime($end_date);
+
+        $year1 = date('Y', $ts1);
+        $year2 = date('Y', $ts2);
+
+        $month1 = date('m', $ts1);
+        $month2 = date('m', $ts2);
+
+        return (($year2 - $year1) * 12) + ($month2 - $month1) + 1;
     }
 
 }
