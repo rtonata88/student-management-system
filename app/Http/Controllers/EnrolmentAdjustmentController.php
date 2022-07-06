@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\AcademicYear;
+use App\Center;
+use App\EducationSystem;
+use App\Fees;
+use App\Invoice;
+use App\Module;
+use App\ModuleRegistration;
 use App\Student;
 use Illuminate\Http\Request;
 
@@ -47,4 +54,35 @@ class EnrolmentAdjustmentController extends Controller
 
         return view('Management.Enrolment-Adjustment.Search', compact('students'));
     }
+
+    public function showEnrollmentScreen($student_id)
+    {
+        $student = Student::find($student_id);
+
+        $subjects = Module::all();
+        $fees = Fees::all();
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+        $centers = Center::pluck('center_name', 'id');
+        $registration = $student->registration->where('academic_year', $academic_year)->first();
+        $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
+
+        $registered_modules = ModuleRegistration::where('student_id', $student->id)
+            ->where('academic_year', $academic_year);
+
+        $symbols = $registered_modules->get();
+
+        $registered_modules = $registered_modules->pluck('module_id')->toArray();
+
+        $charged_fees = Invoice::where('model', 'Fees')
+            ->where('student_id', $student->id)
+            ->where('financial_year', $academic_year)
+            ->pluck('model_id')
+            ->toArray();
+
+
+        $education_system = EducationSystem::all();
+
+        return view('Management.Enrolment-Adjustment.Index', compact('education_system', 'student', 'subjects', 'fees', 'academic_year', 'centers', 'registration_status', 'registered_modules', 'charged_fees', 'symbols'));
+    }
+
 }
