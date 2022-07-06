@@ -39,6 +39,10 @@ Route::resource('/enrolment', 'RegistrationController');
 Route::post('/enrolment/filter', 'RegistrationController@filter')->name('enrolment.filter');
 Route::get('enrolment/show-form/{student_id}', 'RegistrationController@showEnrollmentScreen')->name('enrolment.showEnrollmentScreen');
 
+Route::resource('/enrolment-adjustment', 'EnrolmentAdjustmentController');
+Route::post('/enrolment-adjustment/filter', 'EnrolmentAdjustmentController@filter')->name('enrolment.adjustment.filter');
+Route::get('enrolment-adjustment/show-form/{student_id}', 'EnrolmentAdjustmentController@showEnrollmentScreen')->name('enrolment.adjustment.showScreen');
+
 Route::resource('/cancel-registration', 'CancelRegistrationController');
 Route::post('/cancel-registration/filter', 'CancelRegistrationController@filter')->name('cancel-registration.filter');
 Route::get('cancel/show-form/{student_id}', 'CancelRegistrationController@showCancellationScreen')->name('cancellation.showCancellationScreen');

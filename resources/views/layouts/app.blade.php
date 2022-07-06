@@ -90,7 +90,7 @@
       </li>
       @endpermission
       @permission('enrolment')
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment">
+      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment-adjustment">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
           </svg> Enrolment Adjustments</a>
