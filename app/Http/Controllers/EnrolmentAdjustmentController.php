@@ -10,4 +10,9 @@ class EnrolmentAdjustmentController extends Controller
     {
         $this->middleware('auth');
     }
+
+    public function index()
+    {
+        return view('Management.Enrolment-Adjustment.Search');
+    }
 }
