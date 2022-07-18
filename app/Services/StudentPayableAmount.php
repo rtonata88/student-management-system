@@ -34,7 +34,7 @@ class StudentPayableAmount {
 
         if ($registered_subjects) {
             foreach ($registered_subjects as $registered_subject) {
-                $number_of_months_date = $this->calculateNumberOfMonths($registered_subject->registration_date, date('Y-m-d'));
+                $number_of_months_date = $this->calculateNumberOfMonths($registered_subject->registration_date, date('Y-m-d')) + 1;
                 $payable += $registered_subject->amount * $number_of_months_date;
             }
         }
@@ -83,6 +83,6 @@ class StudentPayableAmount {
         $month1 = date('m', $ts1);
         $month2 = date('m', $ts2);
 
-        return (($year2 - $year1) * 12) + ($month2 - $month1) + 1;
+        return (($year2 - $year1) * 12) + ($month2 - $month1);
     }
 }
