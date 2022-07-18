@@ -64,6 +64,7 @@ class InvoiceController extends Controller
         
         $invoices = Invoice::where('student_id', $id)
                             ->where('financial_year', $academic_year)
+                            ->orderBy('transaction_date')
                             ->get();
         
         $student_center = $this->getStudentCenter($academic_year, $student->id);
