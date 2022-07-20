@@ -115,8 +115,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-sm btn-success">Confirm enrolment</button>
-                <a href="/enrolment">Cancel</a>
+                <a href="/enrolment-adjustment">Cancel</a>
             </div>
         </div>
     </div>

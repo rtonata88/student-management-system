@@ -11,33 +11,73 @@
 @endsection
 @section('content')
 <div class="row">
-    <div class=" offset-1 col-md-9">
+    @if($student)
+    <div class="offset-2 col-md-9">
         <div class="card">
             <div class="card-header">
-                <strong> Student information </strong>
+                <strong>Student information</strong>
             </div>
             <div class="card-body">
-                {!! Form::open(array('route' => array('cancel-registration.store'), 'method' => 'post')) !!}
-                <input type="hidden" name="student_id" value="{{$student->id}}">
-                <table class="table-sm" style="width:100%">
-                    <tr>
-                        <th style="width: 150px">Student number </th>
-                        <td>{{$student->student_number2}}</td>
-                    </tr>
-                    <tr>
-                        <th style="width: 150px">Student names </th>
-                        <td>{{$student->student_names}}</td>
-                    </tr>
-                    <tr>
-                        <th style="width: 150px">Surname </th>
-                        <td>{{$student->surname}}</td>
-                    </tr>
-                    <tr>
-                        <th style="width: 100px">Date of Birth</th>
-                        <td>{{$student->date_of_birth}}</td>
-                    </tr>
+                <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Academic year</th>
+                            <th>Student number</th>
+                            <th>Student names</th>
+                            <th>Surname</th>
+                            <th>DOB</th>
+                            <th>Registration status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{$academic_year}}</td>
+                            <td>{{$student->student_number2}}</td>
+                            <td>{{$student->student_names}}</td>
+                            <td>{{$student->surname}}</td>
+                            <td>{{$student->date_of_birth}}</td>
+                            <td>
+                                @if($registration_status == 'Registered')
+                                <span class="badge badge-success">
+                                    {{$registration_status}}
+                                </span>
+                                @elseif($registration_status == 'Canceled')
+                                <span class="badge badge-danger">
+                                    {{$registration_status}}
+                                </span>
+                                @else
+                                <span class="badge badge-warning text-white">
+                                    Not registered
+                                </span>
+                                @endif
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
-                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="offset-2 col-md-9">
+        <div class="card">
+            <div class="card-header">
+                <strong> Academic and Module registrations </strong>
+            </div>
+            <div class="card-body">
+                @if(Session::has('message'))
+                <div class="alert alert-warning">
+                    {{Session::get('message')}}
+                </div>
+                @endif
+                <div class="form-group">
+                    {{Form::label('academic_year', 'Academic Year')}}
+                    {{Form::text('academic_year', $academic_year, ['class' => 'form-control', 'readonly', 'required'])}}
+                </div>
+                <div class="form-group">
+                    {{Form::label('center_id', 'Center')}}
+                    {{Form::select('center_id', $centers,null, ['class' => 'form-control', 'readonly'])}}
+                </div>
                 <div class="form-group">
                     <strong><label>Select subjects below: </label></strong>
                     <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
@@ -45,39 +85,42 @@
                             <tr>
                                 <th>Subject</th>
                                 <th>Subject code</th>
-                                <th>Amount</th>
-                                <th class="text-center">Tick to Cancel</th>
+                                <th>Registration Date</th>
+                                <th>Registration Status</th>
+                                <th>Cancellation Date</th>
+                                <th>Amount Charged (N$)</th>
+                                <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($student->registered_modules as $registered_module)
+                            @foreach($subjects as $subject)
                             <tr>
-                                <td>{{$registered_module->subject->subject_name}}</td>
-                                <td>{{$registered_module->subject->subject_code}}</td>
-                                <td>{{$registered_module->subject->subject_fees}}</td>
-                                <td class="text-center">
-                                    @if($registered_module->registration_status == 'Registered')
-                                    <input type="checkbox" value="{{$registered_module->module_id}}" name="subject[]">
-                                    @else
-                                    <a href="{{route('cancellation.remove', [$student->id, $registered_module->module_id])}}" class="btn btn-secondary btn-sm">Remove Cancellation</a>
-                                    @endif
+                                <td>{{$subject->subject->subject_name}}</td>
+                                <td>{{$subject->subject->subject_code}}</td>
+                                <td>{{$subject->registration_date}}</td>
+                                <td>{{$subject->registration_status}}</td>
+                                <td>{{$subject->cancellation_date}}</td>
+                                <td>{{$invoice->where('model_id', $subject->module_id)->first()->debit_amount}}</td>
+                                <td class=" text-center">
+                                    <a href="{{route('enrolment-adjustment.edit', $subject->id)}}">
+                                        <svg class="c-icon mr-2">
+                                            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
+                                        </svg>Edit
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                <div class="form-group">
-                    {{Form::label('cancelation_reason', 'Cancellation reason')}}
-                    {{Form::textarea('cancelation_reason', null, ['class' => 'form-control', 'required', 'placeholder' => 'Please type a cancelation reason here'])}}
-                </div>
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-sm btn-success">Confirm cancellation</button>
-                <a href="/cancel-registration">Cancel</a>
+                <button type="submit" class="btn btn-sm btn-success">Confirm enrolment</button>
+                <a href="/enrolment">Cancel</a>
             </div>
-            {!! Form::close() !!}
         </div>
     </div>
+</div>
+@endif
 </div>
 @endsection
