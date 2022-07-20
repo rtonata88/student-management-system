@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\AcademicYear;
+use App\Center;
 use App\Student;
 use App\Invoice;
 use App\Module;
@@ -57,13 +58,21 @@ class CancelRegistrationController extends Controller
         $student = Student::find($student_id);
 
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+        $centers = Center::pluck('center_name', 'id');
+        $registration = $student->registration->where('academic_year', $academic_year)->first();
+        $registration_status = (!is_null($registration)) ? $registration->registration_status : 'Not registered';
 
-        $charged_fees = Invoice::where('model', 'Fees')
-            ->where('student_id', $student->id)
-            ->where('financial_year', $academic_year)
+        $subjects = ModuleRegistration::with('subject')->where('student_id', $student->id)
+            ->where('academic_year', $academic_year)
             ->get();
 
-        return view('Management.Cancel.Index', compact('student', 'academic_year', 'charged_fees'));
+
+        $invoice = Invoice::select('model_id', 'debit_amount')->where('model', 'Module')
+                            ->where('student_id', $student->id)
+                            ->where('financial_year', $academic_year)
+                            ->get();
+
+        return view('Management.Cancel.Index', compact('student', 'subjects', 'invoice', 'academic_year', 'centers', 'registration_status', 'registered_modules'));
     }
 
     public function store(Request $request)
