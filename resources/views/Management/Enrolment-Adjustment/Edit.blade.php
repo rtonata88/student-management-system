@@ -15,12 +15,21 @@
     <div class="offset-2 col-md-9">
         <div class="card">
             <div class="card-header">
-                <strong> Academic and Module registrations </strong>
+                <strong> Academic and Subject registrations </strong>
             </div>
             <div class="card-body">
                 @if(Session::has('message'))
                 <div class="alert alert-danger">
                     {{Session::get('message')}}
+                </div>
+                @endif
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
                 @endif
                 <div class="form-group">
@@ -43,7 +52,7 @@
                 </div>
 
             </div>
-          
+
             <div class="card-footer">
                 <button type="submit" class="btn btn-sm btn-success">Confirm enrolment</button>
                 <a href="/enrolment-adjustment/show-form/{{$subject->student_id}}">Cancel</a>

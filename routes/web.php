@@ -44,6 +44,8 @@ Route::get('enrolment-adjustment/show-form/{student_id}', 'EnrolmentAdjustmentCo
 Route::resource('/cancel-registration', 'CancelRegistrationController');
 Route::post('/cancel-registration/filter', 'CancelRegistrationController@filter')->name('cancel-registration.filter');
 Route::get('cancel/show-form/{student_id}', 'CancelRegistrationController@showCancellationScreen')->name('cancellation.showCancellationScreen');
+Route::get('cancel/form/{id}', 'CancelRegistrationController@edit')->name('cancel-subject.edit');
+Route::post('cancel/form/{id}', 'CancelRegistrationController@store')->name('cancellation.store');
 Route::get('cancel/remove/{student_id}/{module_id}', 'CancelRegistrationController@removeCancellation')->name('cancellation.remove');
 
 //Finance

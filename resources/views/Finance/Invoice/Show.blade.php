@@ -70,7 +70,7 @@
                     </div>
                 </div>
 
-                <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
+                <table class="table table-responsive-sm table-hover table-bordered table-sm" style="width:100%">
                     <tr>
                         <th>Date</th>
                         <th>Description</th>

@@ -75,31 +75,64 @@ class CancelRegistrationController extends Controller
         return view('Management.Cancel.Index', compact('student', 'subjects', 'invoice', 'academic_year', 'centers', 'registration_status', 'registered_modules'));
     }
 
-    public function store(Request $request)
+    public function edit($id)
+    {
+
+        $subject = ModuleRegistration::find($id);
+
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+
+        $invoice = Invoice::select('model_id', 'debit_amount')->where('model', 'Module')
+                            ->where('student_id', $subject->student_id)
+                            ->where('financial_year', $academic_year)
+                            ->get();
+
+        return view('Management.Cancel.Edit', compact('subject', 'invoice', 'academic_year'));
+    }
+
+    public function store(Request $request, $id)
     {
         $request->validate([
             'cancelation_reason' => 'required',
         ]);
-        
-        $academic_year = AcademicYear::where('status', 1)->first();
 
-        ModuleRegistration::whereIn('module_id', $request->subject)
-                            ->where('student_id', $request->student_id)
-                            ->where('academic_year', $academic_year->academic_year)
+        $module_registration = ModuleRegistration::find($id);
+
+        $academic_year = AcademicYear::where('academic_year', $request->academic_year)->first();
+
+        if ($academic_year->status == 0) {
+            return redirect()->back()->with('message', 'The Academic Year is not active');
+        }
+
+        if (($request->cancellation_date < $academic_year->start_date) || ($request->cancellation_date > $academic_year->end_date)) {
+            return redirect()->back()->with('message', 'Cancellation date must be between the academic period.');
+        }
+
+        if (($request->cancellation_date < $module_registration->registration_date)) {
+            return redirect()->back()->with('message', 'Cancellation date cannot be less than registration date of the module.');
+        }
+
+        ModuleRegistration::where('id', $id)
                             ->update([
-                                'cancellation_date' => date('Y-m-d'),
+                                'cancellation_date' => $request->cancellation_date,
                                 'cancellation_reason' => $request->cancelation_reason,
                                 'registration_status' => 'Canceled'
                             ]);
 
-        
-        $this->cancelStudentEnrolment($academic_year, $request);
+        Invoice::where('student_id', $request->student_id)
+            ->where('model', 'Module')
+            ->where('model_id', $request->module_id)
+            ->where('debit_amount', '<=', 0)
+            ->where('financial_year', $request->academic_year)
+            ->delete();
+
+        //$this->cancelStudentEnrolment($academic_year, $request);
 
         $reference_number = $this->generateInvoiceReferenceNumber();
 
-        $this->creditModuleFees($academic_year, $reference_number, $request);
+        $this->creditModuleFees($academic_year, $reference_number, $request, $module_registration);
 
-        return redirect()->route('invoices.show', $request->student_id);
+        return redirect()->route('cancellation.showCancellationScreen', $request->student_id);
     }
 
     private function cancelStudentEnrolment($academic_year, $request){
@@ -112,7 +145,7 @@ class CancelRegistrationController extends Controller
             Registration::where('student_id', $request->student_id)
                         ->where('academic_year', $academic_year->academic_year)
                         ->update([
-                            'cancellation_date' => date('Y-m-d'),
+                            'cancellation_date' => $request->cancelation_date,
                             'cancellation_reason' => $request->cancelation_reason,
                             'registration_status' => 'Canceled']);
         }
@@ -131,38 +164,23 @@ class CancelRegistrationController extends Controller
         return $reference_number;
     }
 
-    private function creditModuleFees($academic_year, $reference_number, $request)
+    private function creditModuleFees($academic_year, $reference_number, $request, $module_registration)
     {
-        $invoices = [];
-        
-        $subjects = Module::whereIn('id', $request->subject)->get();
-        
-        for ($i = 0; $i < count($request->subject); $i++) {
-            array_push(
-                $invoices,
-                [
-                    'student_id' => $request->student_id,
-                    'reference_number' => $reference_number,
-                    'model' => "Module",
-                    'model_id' => $request->subject[$i],
-                    'financial_year' => $academic_year->academic_year,
-                    'transaction_date' => date('Y-m-d'),
-                    'line_description' => 'CANCEL'.' - '.$subjects->where('id', $request->subject[$i])->first()->subject_name,
-                    'debit_amount' => 0,
-                    'credit_amount' => $this->calculateAmount(
-                        $academic_year,
-                        $subjects->where('id', $request->subject[$i])
-                            ->first()
-                            ->subject_fees
-                    ),
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ]
-            );
-        }
-
-        Invoice::insert($invoices);
-
+       return Invoice::create([
+            'student_id' => $request->student_id,
+            'reference_number' => $reference_number,
+            'model' => "Module",
+            'model_id' => $request->module_id,
+            'financial_year' => $academic_year->academic_year,
+            'transaction_date' => $request->cancellation_date,
+            'line_description' => 'CANCEL'.' - '.$request->subject,
+            'debit_amount' => 0,
+            'credit_amount' => $this->calculateAmount(
+                $academic_year,
+                $module_registration->amount,
+                $request->cancellation_date
+            ),
+        ]);
     }
 
     public function removeCancellation($student_id, $module_id){
@@ -213,7 +231,8 @@ class CancelRegistrationController extends Controller
                 'line_description' => $subject->subject_name,
                 'debit_amount' => $this->calculateAmount(
                     $academic_year,
-                    $module_registration->amount
+                    $module_registration->amount,
+                    date('Y-m-d')
                 ),
                 'credit_amount' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
@@ -224,10 +243,10 @@ class CancelRegistrationController extends Controller
         Invoice::insert($invoices);
     }
 
-    private function calculateAmount($year, $subject_fee)
+    private function calculateAmount($year, $subject_fee, $start_date)
     {
 
-        $number_of_months = $this->calculateNumberOfMonths(date('Y-m-d'), $year->end_date);
+        $number_of_months = $this->calculateNumberOfMonths($start_date, $year->end_date) + 1;
 
         $amount = $number_of_months * $subject_fee;
         

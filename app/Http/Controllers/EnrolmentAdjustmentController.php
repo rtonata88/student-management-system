@@ -100,7 +100,7 @@ class EnrolmentAdjustmentController extends Controller
         $academic_year = AcademicYear::where('academic_year', $request->academic_year)->first();
 
         if($academic_year->status == 0){
-            return redirect()->back()->with('message', 'The Academic Year is in active');
+            return redirect()->back()->with('message', 'The Academic Year is not active');
         }
         
         if(($request->registration_date < $academic_year->start_date) || ($request->registration_date > $academic_year->end_date)){
@@ -111,7 +111,9 @@ class EnrolmentAdjustmentController extends Controller
                             ->update(['registration_date' => $request->registration_date]);
         
         Invoice::where('student_id', $request->student_id)
+                ->where('model', 'Module')
                 ->where('model_id', $request->module_id)
+                ->where('debit_amount', '>', 0)
                 ->where('financial_year', $request->academic_year)
                 ->delete();
 

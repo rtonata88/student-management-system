@@ -101,11 +101,11 @@
                                 <td>{{$subject->registration_status}}</td>
                                 <td>{{$subject->cancellation_date}}</td>
                                 <td>{{$invoice->where('model_id', $subject->module_id)->first()->debit_amount}}</td>
-                                <td class=" text-center">
-                                    <a href="{{route('enrolment-adjustment.edit', $subject->id)}}">
+                                <td class=" text-center" style="width: 150px;">
+                                    <a href="{{route('cancel-subject.edit', $subject->id)}}">
                                         <svg class="c-icon mr-2">
-                                            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
-                                        </svg>Edit
+                                            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-ban')}}"></use>
+                                        </svg>Cancel Subject
                                     </a>
                                 </td>
                             </tr>
@@ -115,8 +115,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-sm btn-success">Confirm enrolment</button>
-                <a href="/enrolment">Cancel</a>
+                <a href="/cancel-registration">Cancel</a>
             </div>
         </div>
     </div>
