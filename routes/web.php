@@ -24,6 +24,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
 Route::get('/success', function () {
     return view('auth.success');
 })->name('auth.success');
@@ -100,6 +101,10 @@ Route::get('/academic-year/status/{id}', 'AcademicYearController@updateStatus')-
 //Access Management
 Route::resource('/users','UsersController');
 
+Route::get('/start-page', function(){
+    return view('start-page');
+});
 // Route::get('richard', function(){
 //     return phpinfo();
 // });
+

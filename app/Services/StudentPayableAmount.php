@@ -13,11 +13,11 @@ class StudentPayableAmount {
         $canceled_subjects_payable = $this->payableAmountForCanceledSubjects($academic_year, $id);
 
         $total_payable = $registered_subjects_payable + $canceled_subjects_payable + $debit_memos;
-
+        
         $payments = $this->calculatePaymentsToDate($id);
-
+        
         $total_payable = ($total_payable - $payments - $credit_memos);
-
+        
         return $total_payable;
     }
 
@@ -52,14 +52,14 @@ class StudentPayableAmount {
             ->get();
 
         $payable = 0;
-
+        
         if ($cancelled_subjects) {
             foreach ($cancelled_subjects as $cancelled_subject) {
                 $number_of_months_date = $this->calculateNumberOfMonths($cancelled_subject->registration_date, $cancelled_subject->cancellation_date);
                 $payable += $cancelled_subject->amount * $number_of_months_date;
             }
         }
-
+        
         return $payable;
     }
 

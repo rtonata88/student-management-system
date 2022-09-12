@@ -78,7 +78,7 @@ class InvoiceController extends Controller
         $fees_credit_memos = $credit_memos->where('credit_type', 'tuition')->sum('amount');
         
         $tuition_fees = $payableAmount->calculatePayableAmount($academic_year, $student->id, $fees_debit_memos, $fees_credit_memos);
-
+        
         $extraFees_debit_memos = $debit_memos->where('debit_type', 'other_fees')->sum('amount');
 
         $extraFees_credit_memos = $credit_memos->where('credit_type', 'other_fees')->sum('amount');

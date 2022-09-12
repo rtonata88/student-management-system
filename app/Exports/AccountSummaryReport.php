@@ -30,7 +30,8 @@ class AccountSummaryReport implements FromCollection, ShouldAutoSize, WithCustom
 
         $export_data = collect();
 
-        foreach ($account_summary as $summary) {
+        foreach ($account_summary as $summary) 
+        {
             $payment = $payments->where('student_id', $summary->student_id)->first()->payments ?? 0;
             $other_fees = floatval($extra_charges->where('student_id', $summary->student_id)->first()->outstanding) ?? 0;
             $payable_amount = ($other_fees + $summary->tuition_fees_payable) - $payment;

@@ -18845,4 +18845,13 @@ a.text-dark:hover, a.text-dark:focus {
   }
 }
 
+.main-menu-item :hover{
+  background-color: #e6e7e8;
+  border-radius: 5px;
+}
+
+.main-menu-item a{
+  text-decoration: none;
+}
+
 /*# sourceMappingURL=style.css.map */

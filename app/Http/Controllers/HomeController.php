@@ -35,6 +35,12 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
+        //dd($user->hasPermissionTo('access-dashboard'));
+        if (!$user->hasPermission('dashboard')) {
+            return view('start-page');
+        }
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
         $registered_students = Registration::where('academic_year', $academic_year)
