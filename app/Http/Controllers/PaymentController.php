@@ -162,7 +162,7 @@ class PaymentController extends Controller
             $request->validate([
                 'receipt_amount' => 'required|numeric',
                 'payment_date' => 'required|date',
-               // 'receipt_number' => 'required|unique:payments'
+                'receipt_number' => 'required|unique:payments'
             ]);
 
         $payment_data = $request->all();

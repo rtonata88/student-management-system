@@ -166,7 +166,8 @@ class CancelRegistrationController extends Controller
 
     private function creditModuleFees($academic_year, $reference_number, $request, $module_registration)
     {
-       return Invoice::create([
+      
+       Invoice::create([
             'student_id' => $request->student_id,
             'reference_number' => $reference_number,
             'model' => "Module",
@@ -181,6 +182,7 @@ class CancelRegistrationController extends Controller
                 $request->cancellation_date
             ),
         ]);
+
     }
 
     public function removeCancellation($student_id, $module_id){

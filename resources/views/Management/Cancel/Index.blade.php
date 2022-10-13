@@ -94,6 +94,8 @@
                         </thead>
                         <tbody>
                             @foreach($subjects as $subject)
+
+                            
                             <tr>
                                 <td>{{$subject->subject->subject_name}}</td>
                                 <td>{{$subject->subject->subject_code}}</td>
