@@ -54,7 +54,7 @@ class PaymentReportController extends Controller
 
         $payments = Invoice::with('capturedBy', 'student')->whereIn('model', ['StudentExtraCharge', 'Payment'])
                             ->whereBetween('transaction_date', [$date_from, $date_to]);
-
+        
         if (isset($request->receipt_number)) {
             $payments = $payments->where('reference_number', $request->receipt_number);
         }
@@ -65,7 +65,7 @@ class PaymentReportController extends Controller
         }
 
         $payments = $payments->get();
-
+        
         $guardians = StudentGuardian::whereIn('student_id', $payments->pluck('student_id'))->get();
         
         $users = User::select('id','name')->get();

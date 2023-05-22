@@ -52,6 +52,7 @@
                 <strong>Report results</strong>
             </div>
             <div class="card-body">
+                
                 @if($payments)
                 <a href="{{route('reports.payments.export')}}">Export to excel</a>
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%; font-size: 12px">
