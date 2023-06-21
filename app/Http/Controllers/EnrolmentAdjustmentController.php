@@ -75,7 +75,7 @@ class EnrolmentAdjustmentController extends Controller
             ->get();
 
 
-        return view('Management.Enrolment-Adjustment.Index', compact('student', 'subjects', 'invoice', 'academic_year', 'centers', 'registration_status', 'registered_modules'));
+        return view('Management.Enrolment-Adjustment.Index', compact('student', 'subjects', 'invoice', 'academic_year', 'centers', 'registration_status'));
     }
 
     public function edit($id){
