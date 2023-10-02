@@ -161,7 +161,7 @@ class PaymentController extends Controller
         
             $request->validate([
                 'receipt_amount' => 'required|numeric',
-                'payment_date' => 'required|date',
+                'payment_date' => 'required|date|after_or_equal:' . now()->startOfYear()->toDateString() . '|before_or_equal:' . now()->endOfYear()->toDateString(),
                 'receipt_number' => 'required|unique:payments'
             ]);
 
