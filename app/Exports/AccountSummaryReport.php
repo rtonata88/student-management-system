@@ -5,98 +5,73 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithCustomChunkSize;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Events\BeforeExport;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AccountSummaryReport implements FromCollection, ShouldAutoSize, WithCustomChunkSize, WithHeadings, WithStyles, WithColumnWidths
+
+class AccountSummaryReport implements FromView, WithEvents, ShouldAutoSize, WithCustomChunkSize, WithStyles, WithColumnWidths, ShouldQueue
 {
     use Exportable;
 
-    public function collection()
-    {
-        ini_set('max_execution_time', '600');
+    protected $centers;
+    protected $financial_year;
+    protected $account_summary; 
+    protected $extra_charges; 
+    protected $extra_charges_details; 
+    protected $payments;
+    protected $invoices;
+    protected $totals;
+    protected $modules;
+    protected $fees;
+    protected $module_registrations;
+    protected $guardians;
+    protected $company;
 
-        $account_summary = session()->get('account_summary');
-        $modules         = session()->get('modules');
-        $module_registrations = session()->get('module_registrations');
-        $extra_charges   = session()->get('extra_charges');
-        $payments        = session()->get('payments');
-        $centers         = session()->get('centers');
-        $guardians       = session()->get('guardians');
-        $invoices       = session()->get('invoices');
-
-        $export_data = collect();
-
-        foreach ($account_summary as $summary) 
-        {
-            $payment = $payments->where('student_id', $summary->student_id)->first()->payments ?? 0;
-            $other_fees = floatval($extra_charges->where('student_id', $summary->student_id)->first()->outstanding) ?? 0;
-            $payable_amount = ($other_fees + $summary->tuition_fees_payable) - $payment;
-            $debit = $invoices->where('student_id', $summary->student_id)->first()->debit ?? 0;
-            $credit = $invoices->where('student_id', $summary->student_id)->first()->credit ?? 0;
-            $course_balance = $debit - $credit;
-
-            $guardian_information = "";
-            $index = 0;
-            foreach ($guardians->where('student_id', $summary->student_id) as $guardian) {
-                $guardian_information .= $guardian->guardian_names . " " . $guardian->surname . "(" . $guardian->relationship . ") - " . $guardian->contact_number;
-                if($index < $guardians->where('student_id', $summary->student_id)->count()){
-                    $guardian_information .= "\n";
-                }
-                $index++;
-            }
-
-            $student_data = array();
-            $student_data['StudentNumber'] = $summary->student_number2;
-            $student_data['StudentNames'] = $summary->student_names;
-            $student_data['Surname'] = $summary->surname;
-            $student_data['Center'] = $centers[$summary->center_id];
-            $student_data['StudentContact'] = $summary->contact_number;
-            $student_data['Guardian'] = $guardian_information;
-            $student_data['TuitionFees'] = $summary->tuition_fees_payable - $payment;
-            $student_data['OtherFees'] = $other_fees;
-            $student_data['TotalPayable'] = $payable_amount;
-            $student_data['CourseBalance'] = $course_balance;
-
-            foreach($modules as $subject){
-                
-                if($module_registrations->where('module_id', $subject->id)->where('student_id', $summary->student_id)->first()){
-                    $student_data[$subject->subject_name] = 'Enrolled';
-                } else {
-                    $student_data[$subject->subject_name] = "";
-                }
-            }
-        
-            $export_data->prepend(
-                $student_data
-            );
-        }
-
-        return  $export_data;
+    public function __construct($centers, $financial_year, $account_summary, $extra_charges, $extra_charges_details, $payments, $invoices,$totals, $modules, $fees, $module_registrations, $guardians, $company){
+        $this->centers = $centers;
+        $this->financial_year = $financial_year;
+        $this->account_summary = $account_summary;
+        $this->extra_charges = $extra_charges;
+        $this->extra_charges_details = $extra_charges_details;
+        $this->payments = $payments;
+        $this->invoices = $invoices;
+        $this->totals = $totals;
+        $this->modules = $modules;
+        $this->fees = $fees;
+        $this->module_registrations = $module_registrations;
+        $this->guardians = $guardians;
+        $this->company = $company;
     }
 
-    public function headings(): array
+    public function view(): View
     {
-        $modules = session()->get('modules')->pluck('subject_name')->toArray();
-
-        $headings = [
-            'Student number',
-            'Student Names',
-            'Surname',
-            'Center',
-            'Student Contact',
-            'Guardian Information',
-            'Tuition Fees (N$)',
-            'Other fees (N$)',
-            'Total Payable (N$)',
-            'Course Balance (N$)'
-        ];
-
-        return array_merge($headings, $modules);
+        return view('Reports.AccountSummary.Export', [
+            'account_summary'           => $this->account_summary,
+            'modules'                   => $this->modules,
+            'module_registrations'      => $this->module_registrations,
+            'extra_charges'             => $this->extra_charges,
+            'extra_charges_details'     => $this->extra_charges_details,
+            'payments'                  => $this->payments,
+            'centers'                   => $this->centers,
+            'guardians'                 => $this->guardians,
+            'invoices'                  => $this->invoices,
+            'totals'                    => $this->totals,
+            'modules'                   => $this->modules,
+            'fees'                      => $this->fees,
+            'module_registrations'      => $this->module_registrations,
+            'guardians'                 => $this->guardians,
+            'company'                   => $this->company
+        ]);
     }
+
+    
 
     public function chunkSize(): int
     {
@@ -119,6 +94,31 @@ class AccountSummaryReport implements FromCollection, ShouldAutoSize, WithCustom
             'F' => 30,
             'G' => 30,
             'H' => 30,
+        ];
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            BeforeExport::class => function (BeforeExport $event) {
+                // Apply general styling for the entire sheet
+                $event->writer->getDelegate()->getDefaultStyle()->getFont()->setSize(10);
+                $event->writer->getDelegate()->getDefaultStyle()->getFont()->setName('Arial');
+                
+
+            },
+            AfterSheet::class => function (AfterSheet $event) {
+                // Apply styling to the headings row
+                $event->sheet->getStyle('A9:' . $event->sheet->getHighestColumn() . '10')
+                    ->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('DCE6F0');
+
+                $event->sheet->getStyle($event->sheet->calculateWorksheetDimension())->getNumberFormat()->setFormatCode('#,##0');
+
+                // Add a border around the headings row
+                $event->sheet->getStyle('A9:' . $event->sheet->getHighestColumn() . '10')
+                ->getBorders()->getOutline()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                
+            },
         ];
     }
 }

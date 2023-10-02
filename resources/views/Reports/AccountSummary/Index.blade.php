@@ -13,12 +13,6 @@
 <div class="row">
     <div class="col-md-3 col-xs-12">
         <div class="card">
-            @if(Session::has('success'))
-            <div class="alert alert-danger alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                {{ Session::get('success') }}
-            </div>
-            @endif
             <div class="card-header">
                 <strong>Report filter</strong>
             </div>
@@ -54,12 +48,57 @@
                 <strong>Report results</strong>
             </div>
             <div class="card-body">
-
+                @if(Session::has('success'))
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    {{ Session::get('success') }}
+                </div>
+                @endif
                 @if($account_summary)
                 <strong>{{$account_summary->count()}} Results Found</strong>, <a href="{{route('reports.account-summary.export')}}">Export to excel</a>
                 <div class="alert alert-info">
-                    <strong>Please note: </strong>Exporting of this report may take up to 5 minutes due to the amount of calculations involved. The downloaded file will be available as soon as its done doing the calculations.
+                    <strong>Please note: </strong> The report will be automatically generated on the 1st of every month by the system. Nevertheless, you can also generate it at any other time by clicking the "Export to Excel" link above on an ad-hoc basis.
                 </div>
+
+                <div class="alert alert-warning">
+                    Exporting of this report may take up to 10 minutes due to the amount of calculations involved. As soon as its done doing the calculations, the downloaded file will be available in the table below.
+                </div>
+                @if($report_request)
+                <div class="alert alert-warning">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>File</th>
+                            <th>Date Requested</th>
+                            <th>Requested by</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr>
+                            <td>{{ $report_request->document_path }}</td>
+                            <td>{{ $report_request->request_datetime }}</td>
+                            <td>{{ $report_request->requested_by }}</td>
+                            <td class="text-center">
+                                @if($report_request->status === 'Busy')
+                                <div class="spinner-border spinner-border-sm text-warning" role="status">
+                                    <span class="visually-hidden"></span>
+                                </div>
+                                @else
+                                {{ $report_request->status }}
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if($report_request->status === 'Complete')
+                                <a href="{{ route('download.account-summary-report') }}">
+                                    <svg class="c-icon mr-2">
+                                        <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-cloud-download')}}"></use>
+                                    </svg>
+                                </a>
+                                @endif
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                @endif
                 <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%; font-size:12px">
                     <thead>
                         <tr>
@@ -80,7 +119,7 @@
                             <th>{{number_format($totals['payable_amount'], 2, '.',',')}}</th>
                             <th>{{number_format($totals['course_balance'], 2, '.',',')}}</th>
                         </tr>
-                        
+
                         @foreach($account_summary->take(10) as $summary)
                         <?php
                         $payment = $payments->where('student_id', $summary->student_id)->first()->payments ?? 0;
