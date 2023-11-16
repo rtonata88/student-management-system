@@ -72,7 +72,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($account_summary->take(10) as $summary)
+        @foreach($account_summary as $summary)
         <?php
         $payment = $payments->where('student_id', $summary->student_id)->first()->payments ?? 0;
         $other_fees = $extra_charges->where('student_id', $summary->student_id)->first()->outstanding ?? 0;

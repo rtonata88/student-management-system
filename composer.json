@@ -18,7 +18,7 @@
         "owen-it/laravel-auditing": "13.0.3",
         "santigarcor/laratrust": "7.1.0"
     },
-    "require-dev": {
+    "require-dev": { 
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "^9.3.3"
     },

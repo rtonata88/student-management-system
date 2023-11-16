@@ -72,7 +72,7 @@ class CancelRegistrationController extends Controller
                             ->where('financial_year', $academic_year)
                             ->get();
 
-        return view('Management.Cancel.Index', compact('student', 'subjects', 'invoice', 'academic_year', 'centers', 'registration_status', 'registered_modules'));
+        return view('Management.Cancel.Index', compact('student', 'subjects', 'invoice', 'academic_year', 'centers', 'registration_status'));
     }
 
     public function edit($id)
