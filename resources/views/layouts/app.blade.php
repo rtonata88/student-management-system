@@ -46,7 +46,7 @@
 <body class="c-app">
   <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
     <div class="c-sidebar-brand d-lg-down-none">
-      <span class="text-uppercase font-weight-bold">STUDENT MANAGEMENT SYSTEM</span>
+      <span class="text-uppercase font-weight-bold">EDUCIMS TUTORIALS SYSTEM</span>
     </div>
     <ul class="c-sidebar-nav">
       <li class="c-sidebar-nav-item">
@@ -56,68 +56,105 @@
           </svg> Dashboard
         </a>
       </li>
-      @permission('MANAGEMENT')
-      <li class="c-sidebar-nav-title">MANAGEMENT</li>
-      @permission('students')
+      @permission('ADMINISTRATION_MANAGEMENT')
+      <li class="c-sidebar-nav-title">ADMINISTRATION MANAGEMENT</li>
+      @permission('view-students')
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-group')}}"></use>
           </svg> Students</a>
       </li>
       @endpermission
-      @permission('fees')
+      <!-- @permission('view-fees')
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fees">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-money')}}"></use>
           </svg> Fees</a>
       </li>
       @endpermission
-      @permission('subjects')
+      @permission('view-subjects')
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/subjects">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-book')}}"></use>
           </svg> Subjects</a>
       </li>
+      @endpermission -->
       @endpermission
-      @endpermission
+
       @permission('REGISTRATION_MANAGEMENT')
       <li class="c-sidebar-nav-title">REGISTRATION MANAGEMENT</li>
-      @permission('enrolment')
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment">
-          <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check')}}"></use>
-          </svg> Enrolment</a>
-      </li>
+        @permission('enrolment')
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check')}}"></use>
+            </svg> Enrolment</a>
+        </li>
+        @endpermission
+        @permission('enrolment')
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment-adjustment">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
+            </svg> Enrolment Adjustments</a>
+        </li>
+        @endpermission
+        @permission('cancel-enrolment')
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/cancel-registration">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-ban')}}"></use>
+            </svg> Cancel Enrolment</a>
+        </li>
+        @endpermission
       @endpermission
-      @permission('enrolment')
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment-adjustment">
-          <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
-          </svg> Enrolment Adjustments</a>
-      </li>
+
+      @permission('ASSESSMENT_MANAGEMENT')
+      <li class="c-sidebar-nav-title">ASSESSMENT MANAGEMENT</li>
+        
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/class-lists">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check')}}"></use>
+            </svg>Class List</a>
+        </li>
+
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/assessment-marks">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check')}}"></use>
+            </svg>Enter Marks</a>
+        </li>
+
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/assessments">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check')}}"></use>
+            </svg>Assessments</a>
+        </li>
+
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/assessment-types">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check')}}"></use>
+            </svg>Assessment Types</a>
+        </li>
+
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/subject-allocations">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check')}}"></use>
+            </svg>Subject Allocations</a>
+        </li>
+
       @endpermission
-      @permission('cancel-enrolment')
-      <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/cancel-registration">
-          <svg class="c-sidebar-nav-icon">
-            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-ban')}}"></use>
-          </svg> Cancel Enrolment</a>
-      </li>
-      @endpermission
-      @endpermission
-      @permission('FINANCE')
-      <li class="c-sidebar-nav-title">FINANCE</li>
+
+      @permission('FINANCE_MANAGEMENT')
+      <li class="c-sidebar-nav-title">FINANCE MANAGEMENT</li>
       @permission('invoice')
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoices">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-wallet')}}"></use>
-          </svg> Student Statement</a>
+          </svg>Student Statement</a>
       </li>
       @endpermission
       @permission('payments')
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payments">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-bank')}}"></use>
-          </svg> Payments</a>
+          </svg>Payments</a>
       </li>
       @endpermission
       @permission('credit-memos')
@@ -135,8 +172,9 @@
       </li>
       @endpermission
       @endpermission
-      @permission('REPORTS')
-      <li class="c-sidebar-nav-title">REPORTS</li>
+
+      @permission('REPORTS_MANAGEMENT')
+      <li class="c-sidebar-nav-title">REPORTS MANAGEMENT</li>
       @permission('student-report')
       <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.students.index')}}">
           <svg class="c-sidebar-nav-icon">
@@ -168,35 +206,49 @@
       </li>
       @endpermission
       @endpermission
-      @permission('ADMINISTRATION')
-      <li class="c-sidebar-nav-title">Administration</li>
-      @permission('access-management-menu')
+
+      @permission('SETUPS_MANAGEMENT')
+      <li class="c-sidebar-nav-title">SETUPS MANAGEMENT</li>
+      @permission('access-control-menu')
       <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-lock-locked')}}"></use>
-          </svg> Access management</a>
+          </svg> Access Control</a>
         <ul class="c-sidebar-nav-dropdown-items">
           @permission('users')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/users"><span class="c-sidebar-nav-icon"></span> Users</a></li>
+          @endpermission
+          @permission('roles')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/roles"><span class="c-sidebar-nav-icon"></span>Roles</a></li>
+          @endpermission
+          @permission('permissions')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/permissions"><span class="c-sidebar-nav-icon"></span>Permissions</a></li>
           @endpermission
         </ul>
       </li>
       @endpermission
       @endpermission
-      @permission('SETUP')
+
+      @permission('setup-menu')
       <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-cog')}}"></use>
           </svg> Setups</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          @permission('academic-years')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('academic-year.index')}}"><span class="c-sidebar-nav-icon"></span> Academic Years</a></li>
+          @permission('view-fees')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fees"><span class="c-sidebar-nav-icon"></span>Fees</a></li>
           @endpermission
           @permission('centers')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('centers.index')}}"><span class="c-sidebar-nav-icon"></span> Centers</a></li>
           @endpermission
+          @permission('view-subjects')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/subjects"><span class="c-sidebar-nav-icon"></span>Subjects</a></li>
+          @endpermission
           @permission('company')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('company.show', 1)}}"><span class="c-sidebar-nav-icon"></span> Company</a></li>
+          @endpermission
+          @permission('academic-years')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('academic-year.index')}}"><span class="c-sidebar-nav-icon"></span>Academic Years</a></li>
           @endpermission
         </ul>
       </li>

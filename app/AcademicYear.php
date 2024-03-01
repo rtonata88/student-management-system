@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class AcademicYear extends Model
 {
     protected $fillable = ['academic_year', 'start_date', 'end_date', 'status'];
+
+    public function subjectAllocations()
+    {
+        return $this->hasMany(SubjectAllocation::class);
+    }
 }

@@ -32,9 +32,19 @@ class User extends Authenticatable implements Auditable
         'password', 'remember_token',
     ];
 
-    public function permissions(){
+    public function permissions()
+    {
         return $this->belongsToMany('App\Permission');
     }
 
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role');
+    }
 
+    public function subjectAllocations()
+    {
+        return $this->hasMany(SubjectAllocation::class);
+    }
+    
 }

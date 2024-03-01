@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ModuleRegistration extends Model
 {
-    public function subject(){
+    public function subject()
+    {
         return $this->belongsTo(Module::class, 'module_id', 'id');
     }
 
@@ -17,12 +18,23 @@ class ModuleRegistration extends Model
 
     public function registration()
     {
-        if(is_null($this->student_id)){
+        if(is_null($this->student_id))
+        {
             return $this->hasOne(Registration::class, 'academic_year', 'academic_year');
         } else {
             return $this->hasOne(Registration::class, 'academic_year', 'academic_year')->where('registrations.student_id', $this->student_id);
         }
         
     }
+
+    public function subjectAllocation()
+    {
+        return $this->belongsTo(SubjectAllocation::class, 'module_id');
+    }
+
+    // public function registration()
+    // {
+    //     return $this->belongsTo(Registration::class, 'student_id');
+    // }
 
 }

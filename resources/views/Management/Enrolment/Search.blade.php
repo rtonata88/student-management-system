@@ -27,7 +27,7 @@
                 <button type="submit" class="btn btn-sm btn-success">
                     Search
                 </button>
-                <a href="/students" class="btn btn-sm">
+                <a href="/enrolment" class="btn btn-sm">
                     Clear
                 </a>
                 {!! Form::close() !!}

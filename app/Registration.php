@@ -9,15 +9,24 @@ class Registration extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
-    public function subject(){
+    public function subject()
+    {
         return $this->belongsTo(Module::class, 'module_id');
     }
 
-    public function center(){
+    public function center()
+    {
         return $this->belongsTo(Center::class, 'center_id');
     }
 
-    public function student(){
+    public function student()
+    {
         return $this->belongsTo(Student::class, 'student_id');
+    }
+
+    //registration has many students - NT
+    public function students()
+    {
+        return $this->hasMany(Student::class);
     }
 }

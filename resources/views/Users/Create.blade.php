@@ -54,34 +54,7 @@
                         </div>
                     </div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            {{Form::label('roles', 'Access Levels', array('class' => 'control-label'))}}
-                            <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th class="text-center">Tick to Assign</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($permissions as $permission)
-                                    <tr>
-                                        <td>{{$permission->display_name}}</td>
-                                        <td>{{$permission->description}}</td>
-                                        <td class="text-center">
-                                            <input type="checkbox" value="{{$permission->id}}" name="permissions[]">
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                
                 <button type="submit" class="btn btn-success"> Save</button>
                 <a href="/users" class="btn"> Cancel</a>
 

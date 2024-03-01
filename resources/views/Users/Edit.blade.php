@@ -12,7 +12,7 @@
 @endsection
 @section('content')
 <div class="row">
-    <div class="offset-3 col-sm-12 col-md-6">
+    <div class="offset-2 col-sm-12 col-md-8">
         <div class="card">
             <div class="card-header">
                 <strong>Users</strong>
@@ -36,7 +36,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             {{Form::label('email', 'Email')}}
-                            {{Form::text('email', null, ['class' => 'form-control', 'required'])}}
+                            {{Form::text('email', $user->email, ['class' => 'form-control', 'required'])}}
                         </div>
                     </div>
                 </div>
@@ -66,18 +66,18 @@
                             <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
+                                        <th>Display Name</th>
                                         <th>Description</th>
                                         <th class="text-center">Tick to Assign</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($permissions as $permission)
+                                    @foreach($roles as $role)
                                     <tr>
-                                        <td>{{$permission->display_name}}</td>
-                                        <td>{{$permission->description}}</td>
+                                        <td>{{$role->display_name}}</td>
+                                        <td>{{$role->description}}</td>
                                         <td class="text-center">
-                                            <input type="checkbox" value="{{$permission->id}}" @if(in_array($permission->id, $assigned_permissions)) checked @endif name="permissions[]">
+                                            <input type="checkbox" value="{{$role->id}}" @if(in_array($role->id, $assigned_roles)) checked @endif name="roles[]">
                                         </td>
                                     </tr>
                                     @endforeach

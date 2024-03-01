@@ -11,7 +11,13 @@ class Module extends Model implements Auditable
 
     protected $fillable = ['subject_name', 'subject_code', 'subject_fees'];
 
-    public function extra_fees(){
+    public function extra_fees()
+    {
         return $this->hasMany(ModuleExtraFee::class);
+    }
+
+    public function subjectAllocations()
+    {
+        return $this->hasMany(SubjectAllocation::class);
     }
 }

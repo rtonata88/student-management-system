@@ -25,7 +25,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/success', function () {
+Route::get('/success', function () 
+{
     return view('auth.success');
 })->name('auth.success');
 
@@ -99,12 +100,51 @@ Route::resource('/centers', 'CenterController');
 Route::resource('/academic-year', 'AcademicYearController');
 Route::get('/academic-year/status/{id}', 'AcademicYearController@updateStatus')->name('academic-year.status');
 
-//Access Management
+//Access Management - setups
 Route::resource('/users','UsersController');
+Route::resource('/roles','RolesController');
+
+//Access Management - Permissions
+Route::resource('/permissions','PermissionsController');
+// Route::get('/permissions/{id}/create', 'PermissionsController@create')->name('permissions.createWithId');
+
+//Assessment Management - Subjects Allocations
+Route::resource('/subject-allocations','SubjectAllocationController');
+Route::post('/subject-allocations/filter', 'SubjectAllocationController@filter')->name('subject-allocations.filter');
+Route::get('/subject-allocations/show-form/{student_id}', 'SubjectAllocationController@showAllocationScreen')->name('subject-allocations.showAllocationScreen');
+Route::get('/subject-allocations/un-allocate/{id}', 'SubjectAllocationController@unAllocate')->name('subject-allocations.unAllocate');
+
+//Assessment Management - Class List
+Route::resource('/class-lists','ClassListController');
+
+//Assessment Management - Assessment Types
+Route::get('/assessment-types','AssessmentTypeController@index');
+Route::get('/assessment-types/{subject_allocation_id}','AssessmentTypeController@showAssessmentTypes');
+Route::get('/assessment-types/create/{subject_allocation_id}','AssessmentTypeController@create');
+Route::get('/assessment-types/edit/{id}','AssessmentTypeController@edit');
+Route::post('/assessment-types/store', 'AssessmentTypeController@store');
+Route::post('/assessment-types/update/{id}', 'AssessmentTypeController@update')->name('assessment-types.update');
+
+//Assessment Management - Assessments
+Route::get('/assessments','AssessmentController@index');
+Route::get('/assessments/show-assessments-types/{subject_allocated}','AssessmentController@showAssessmentTypes');
+Route::get('/assessments/show-assessments/{assessment_type}','AssessmentController@showAssessments');
+Route::get('/assessments/create/{assessment_type}','AssessmentController@create');
+Route::get('/assessments/{assessment_type_id}/edit/{assessment_id}','AssessmentController@edit');
+Route::post('/assessments/store', 'AssessmentController@store');
+Route::post('/assessments/update/{id}', 'AssessmentController@update')->name('assessments.update');
+
+//Assessment Management - Assessment Marks
+Route::get('/assessment-marks', 'AssessmentMarkController@index'); //show subjects allocated -> assessment types -> assessments
+Route::get('/assessment-marks/{subject_allocation_id}', 'AssessmentMarkController@showAssessments'); // assessment types & assessments
+Route::get('/assessment-marks/create/{assessment_id}', 'AssessmentMarkController@create');
+Route::get('/assessment-marks/store', 'AssessmentMarkController@store')->name('assessment-marks.store');
+Route::get('/assessment-marks/update/{assessment_id}', 'AssessmentMarkController@update');
 
 Route::get('/start-page', function(){
     return view('start-page');
 });
+
 // Route::get('richard', function(){
 //     return phpinfo();
 // });

@@ -12,7 +12,7 @@
 @endsection
 @section('content')
 <div class="row">
-    <div class="offset-3 col-sm-12 col-md-6">
+    <div class="offset-2 col-sm-12 col-md-8">
         <div class="card">
             <div class="card-header">
                 <strong>User</strong>
@@ -42,7 +42,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            Assigned permissions
+                            <strong>Assigned Roles & Permissions</strong>
+                            <br>
+                            <br>
                             <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                                 <thead>
                                     <tr>
@@ -51,11 +53,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($user->permissions as $permission)
+                                    @foreach($user->roles as $role)
                                     <tr>
-                                        <td>{{$permission->display_name}}</td>
-                                        <td>{{$permission->description}}</td>
+                                        <td><strong>{{$role->display_name}}</strong></td>
+                                        <td><strong>{{$role->description}}</strong></td>
                                     </tr>
+                                        @foreach($role->permissions as $permission)
+                                        <tr>
+                                            <td><small>{{$permission->display_name}}</small></td>
+                                            <td><small>{{$permission->description}}</small></td>
+                                        </tr>
+                                        @endforeach
                                     @endforeach
                                 </tbody>
                             </table>

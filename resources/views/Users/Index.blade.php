@@ -4,7 +4,7 @@
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
         <li class="breadcrumb-item">Access Management</li>
-        <li class="breadcrumb-item">Users </li>
+        <li class="breadcrumb-item">Users</li>
         <!-- Breadcrumb Menu-->
     </ol>
 </div>
