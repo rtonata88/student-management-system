@@ -304,7 +304,7 @@
         </div>
       </main>
       <footer class="c-footer">
-        <div class="text-uppercase"> &copy; {{date('Y')}} OSKOLA STUDENT MANAGEMENT SYSTEM.
+        <div class="text-uppercase"> &copy; {{date('Y')}} EDUCIMS - a SCHOOL MANAGEMENT SYSTEM
         </div>
       </footer>
     </div>
