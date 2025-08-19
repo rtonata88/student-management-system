@@ -8,6 +8,7 @@ use App\Center;
 use App\Http\Requests\NewStudent;
 use App\StudentGuardian;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 class StudentController extends Controller
 {
     public function __construct()
@@ -17,7 +18,9 @@ class StudentController extends Controller
 
     public function index()
     {
-        $students = Student::paginate(50);
+        $students = Student::leftJoin('student_admissions', 'students.id', '=', 'student_admissions.student_id')
+            ->select('students.*', 'student_admissions.admission_status')
+            ->paginate(50);
         
         return view('Management.Students.Index', compact('students'));
     }
@@ -57,15 +60,17 @@ class StudentController extends Controller
     public function edit($id)
     {
         $student = Student::find($id);
+        $returnUrl = request('return');
 
-        return view('Management.Students.Edit', compact('student'));
+        return view('Management.Students.Edit', compact('student', 'returnUrl'));
     }
 
     public function show($id)
     {
         $student = Student::find($id);
+        $returnUrl = request('return');
 
-        return view('Management.Students.Show', compact('student'));
+        return view('Management.Students.Show', compact('student', 'returnUrl'));
     }
 
     public function store(NewStudent $request)
@@ -95,6 +100,10 @@ class StudentController extends Controller
 
         $this->createStudentGuardian($student, $request);
 
+        $returnUrl = request('return');
+        if ($returnUrl === 'manual-admissions') {
+            return redirect()->route('manual-admissions.index');
+        }
         return redirect()->route('students.show', $id);
     }
 
@@ -124,5 +133,50 @@ class StudentController extends Controller
         }
 
         return $student_number;
+    }
+
+    public function getAdmissionStatus($id)
+    {
+        $admission = DB::table('student_admissions')
+            ->where('student_id', $id)
+            ->orderBy('status_date', 'desc')
+            ->first();
+
+        return response()->json([
+            'success' => true,
+            'admission' => $admission
+        ]);
+    }
+
+    public function updateAdmissionStatus(Request $request, $id)
+    {
+        $request->validate([
+            'admission_status' => 'required|in:rejected,provisionally_admitted,full_admission',
+            'remarks' => 'nullable|string|max:1000'
+        ]);
+
+        try {
+            // Use updateOrInsert to ensure only one record per student
+            DB::table('student_admissions')->updateOrInsert(
+                ['student_id' => $id], // Where condition
+                [
+                    'admission_status' => $request->admission_status,
+                    'remarks' => $request->remarks,
+                    'status_date' => now(),
+                    'updated_at' => now(),
+                    'created_at' => now() // Only used if inserting
+                ]
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Admission status updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update admission status'
+            ], 500);
+        }
     }
 }

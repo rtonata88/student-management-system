@@ -25,6 +25,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/welcome', 'HomeController@welcome')->name('welcome');
+
 Route::get('/success', function () 
 {
     return view('auth.success');
@@ -34,10 +36,20 @@ Route::get('/success', function ()
 //Management
 Route::resource('/students', 'StudentController');
 Route::post('/students/filter', 'StudentController@filter')->name('students.filter');
+Route::post('/students/{id}/admission-status', 'StudentController@updateAdmissionStatus')->name('students.admission-status');
+Route::get('/students/{id}/admission-status', 'StudentController@getAdmissionStatus')->name('students.get-admission-status');
+
+// Manual Admissions
+Route::get('/manual-admissions', 'ManualAdmissionsController@index')->name('manual-admissions.index');
+Route::post('/manual-admissions/filter', 'ManualAdmissionsController@filter')->name('manual-admissions.filter');
+Route::post('/manual-admissions/{id}/admission-status', 'ManualAdmissionsController@updateAdmissionStatus')->name('manual-admissions.admission-status');
+Route::get('/manual-admissions/{id}/admission-status', 'ManualAdmissionsController@getAdmissionStatus')->name('manual-admissions.get-admission-status');
+Route::get('/manual-admissions/{id}/admission-letter', 'ManualAdmissionsController@generateAdmissionLetter')->name('manual-admissions.admission-letter');
 
 Route::resource('/enrolment', 'RegistrationController');
 Route::post('/enrolment/filter', 'RegistrationController@filter')->name('enrolment.filter');
 Route::get('enrolment/show-form/{student_id}', 'RegistrationController@showEnrollmentScreen')->name('enrolment.showEnrollmentScreen');
+Route::get('enrolment/proof/{student_id}', 'RegistrationController@generateProofOfRegistration')->name('enrolment.proof');
 
 Route::resource('/enrolment-adjustment', 'EnrolmentAdjustmentController');
 Route::post('/enrolment-adjustment/filter', 'EnrolmentAdjustmentController@filter')->name('enrolment.adjustment.filter');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\User;
 use App\Role;
+use App\Permission;
 
 use Session;
 use Hash;
@@ -39,7 +40,9 @@ class UsersController extends Controller
     	$user = User::where('username', $username)->first();
 		$roles = Role::all();
 		$assigned_roles = $user->roles->pluck('id')->toArray();
-    	return view('Users.Edit', compact('user', 'roles', 'assigned_roles'));
+		$permissions = Permission::all();
+		$assigned_permissions = $user->permissions->pluck('id')->toArray();
+    	return view('Users.Edit', compact('user', 'roles', 'assigned_roles', 'permissions', 'assigned_permissions'));
     }
 
     public function show($username)
@@ -84,20 +87,11 @@ class UsersController extends Controller
 
     	$user->update($requests->except('password'));
         
-        // Sync roles
-        $user->syncRoles($requests->roles);
-        if($requests->roles)
-        {
-            $roleNames = Role::whereIn('id',$requests->roles)->get()->pluck('name');
-            // Sync permissions based on the assigned roles
-            $permissions = Role::whereIn('name', $roleNames)
-            ->with('permissions')->get()->pluck('permissions')
-            ->flatten()->unique('id')->pluck('name')->toArray();
-            $user->syncPermissions($permissions); 
-        }else
-        {   
-            $permissions = [];
-            $user->syncPermissions($permissions); 
+        // Sync permissions directly
+        if(isset($requests->permissions)){
+            $user->syncPermissions($requests->permissions);
+        } else {
+            $user->syncPermissions([]);
         }
         
 		Session::flash('message', 'User record updated successfully!!!');

@@ -30,4 +30,13 @@ class Student extends Model implements Auditable
     public function extra_charges(){
         return $this->hasMany(StudentExtraCharge::class);
     }
+
+    public function admission(){
+        return $this->hasOne(StudentAdmission::class);
+    }
+
+    // Accessor to get admission status directly from the student model
+    public function getAdmissionStatusAttribute(){
+        return $this->admission ? $this->admission->admission_status : null;
+    }
 }

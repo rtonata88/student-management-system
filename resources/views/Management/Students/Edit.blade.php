@@ -4,7 +4,11 @@
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
         <li class="breadcrumb-item">Management</li>
+        @if(isset($returnUrl) && $returnUrl === 'manual-admissions')
+        <li class="breadcrumb-item"><a href="/manual-admissions">Manual Admissions</a></li>
+        @else
         <li class="breadcrumb-item"><a href="/students">Student Info </a></li>
+        @endif
         <li class="breadcrumb-item active">{{$student->student_names}} {{$student->surname}}</li>
         <!-- Breadcrumb Menu-->
     </ol>
@@ -12,7 +16,10 @@
 @endsection
 
 @section('content')
-{!! Form::model($student, array('route'=>array('students.show', $student->id), 'class'=>'form-horizontal', 'method'=>'PATCH')) !!}
+{!! Form::model($student, array('route'=>array('students.update', $student->id), 'class'=>'form-horizontal', 'method'=>'PATCH')) !!}
+@if(isset($returnUrl))
+    {!! Form::hidden('return', $returnUrl) !!}
+@endif
 <div class="row">
     <div class="col-md-2 col-xs-12"></div>
     <div class="col-md-8 col-xs-12">

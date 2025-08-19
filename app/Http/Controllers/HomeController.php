@@ -55,6 +55,17 @@ class HomeController extends Controller
         return view('home', compact('registered_learners', 'total_invoices', 'total_payments', 'learners_per_subject'));
     }
 
+    /**
+     * Show the welcome page for users when they login.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function welcome()
+    {
+        $user = Auth::user();
+        return view('welcome-user', compact('user'));
+    }
+
     private function totalLearners($academic_year){
         return  Registration::where('academic_year', $academic_year)
                                 ->where('registration_status', 'Registered')

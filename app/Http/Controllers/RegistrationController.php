@@ -25,22 +25,38 @@ class RegistrationController extends Controller
     }
 
     public function index(){
-        return view('Management.Enrolment.Search');
+        // Get students with full admission status using proper join
+        $students = Student::join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
+            ->where('student_admissions.admission_status', 'full_admission')
+            ->with('registration')
+            ->select('students.*', 'student_admissions.admission_status')
+            ->paginate(15);
+        return view('Management.Enrolment.Search', compact('students'));
     }
 
     public function filter(Request $request){
 
         if(isset($request->student_number)){
-            $student = Student::where('student_number2', $request->student_number)->first();
+            $student = Student::join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
+                ->where('students.student_number2', $request->student_number)
+                ->where('student_admissions.admission_status', 'full_admission')
+                ->select('students.*')
+                ->first();
             if ($student) {
                 return redirect()->route('enrolment.showEnrollmentScreen', $student->id);
             }
         }
 
         if (isset($request->names)) {
-            $students = Student::where('surname', 'like' ,'%'.$request->names.'%')
-                ->orwhere('student_names', 'like', '%' . $request->names . '%')
-                ->get();
+            $students = Student::join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
+                ->where('student_admissions.admission_status', 'full_admission')
+                ->where(function($query) use ($request) {
+                    $query->where('students.surname', 'like' ,'%'.$request->names.'%')
+                          ->orwhere('students.student_names', 'like', '%' . $request->names . '%');
+                })
+                ->with('registration')
+                ->select('students.*', 'student_admissions.admission_status')
+                ->paginate(15);
             
             if (count($students)) {
                 if (count($students) === 1) {
@@ -51,7 +67,13 @@ class RegistrationController extends Controller
             }
         }
         
-        Session::flash('not_found','The entered student number does not match any record. Please make sure you have entered a correct student number');
+        // Initialize empty paginated result if no results found
+        $students = Student::join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
+            ->where('student_admissions.admission_status', 'full_admission')
+            ->where('students.id', 0)
+            ->select('students.*', 'student_admissions.admission_status')
+            ->paginate(15);
+        Session::flash('not_found','No students with full admission status match your search criteria.');
         
         return view('Management.Enrolment.Search', compact('students'));
     }
@@ -83,6 +105,24 @@ class RegistrationController extends Controller
         $education_system = EducationSystem::all();
 
         return view('Management.Enrolment.Index', compact('education_system','student', 'subjects', 'fees', 'academic_year', 'centers', 'registration_status', 'registered_modules', 'charged_fees', 'symbols'));
+    }
+
+    public function generateProofOfRegistration($student_id){
+        $student = Student::find($student_id);
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+        $registration = $student->registration->where('academic_year', $academic_year)->first();
+        
+        if (!$registration || $registration->registration_status != 'Registered') {
+            return redirect()->back()->with('error', 'Student is not registered for the current academic year.');
+        }
+        
+        $registered_modules = ModuleRegistration::where('student_id', $student->id)
+            ->where('academic_year', $academic_year)
+            ->with('module')
+            ->get();
+            
+        // Generate PDF or return view for proof of registration
+        return view('Management.Enrolment.ProofOfRegistration', compact('student', 'registration', 'registered_modules', 'academic_year'));
     }
 
     public function show($student_id){

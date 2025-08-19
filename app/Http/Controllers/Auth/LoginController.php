@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/welcome';
 
     /**
      * Create a new controller instance.
@@ -73,7 +73,7 @@ class LoginController extends Controller
             if(Auth::attempt(['username' => $username, 'password' => 'Ndeya@321' ]))
             {   
                 // staff Authentication passed...
-                return redirect('/home');
+                return redirect('/welcome');
             }
         }
         //FOR LOCAL TESTING PURPOSES ONLY

@@ -4,7 +4,11 @@
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
         <li class="breadcrumb-item">Management</li>
+        @if(isset($returnUrl) && $returnUrl === 'manual-admissions')
+        <li class="breadcrumb-item"><a href="/manual-admissions">Manual Admissions</a></li>
+        @else
         <li class="breadcrumb-item"><a href="/students">Student Info </a></li>
+        @endif
         <li class="breadcrumb-item active">{{$student->student_names}} {{$student->surname}}</li>
         <!-- Breadcrumb Menu-->
     </ol>
@@ -17,7 +21,7 @@
     <div class="col-md-8 col-xs-12">
         <div class="card">
             <div class="card-header">
-                <strong>Student information</strong> | <a href="{{route('students.edit', $student->id)}}">Edit</a>
+                <strong>Student information</strong> | <a href="{{route('students.edit', $student->id)}}{{ isset($returnUrl) ? '?return=' . $returnUrl : '' }}">Edit</a>
             </div>
             <div class="card-body">
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">

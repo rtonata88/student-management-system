@@ -62,7 +62,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            {{Form::label('roles', 'Access Levels', array('class' => 'control-label'))}}
+                            {{Form::label('permissions', 'Access Levels', array('class' => 'control-label'))}}
                             <table class="table table-responsive-sm table-bordered table-striped table-sm" style="width:100%">
                                 <thead>
                                     <tr>
@@ -72,12 +72,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($roles as $role)
+                                    @foreach($permissions as $permission)
                                     <tr>
-                                        <td>{{$role->display_name}}</td>
-                                        <td>{{$role->description}}</td>
+                                        <td>{{$permission->display_name}}</td>
+                                        <td>{{$permission->description}}</td>
                                         <td class="text-center">
-                                            <input type="checkbox" value="{{$role->id}}" @if(in_array($role->id, $assigned_roles)) checked @endif name="roles[]">
+                                            <input type="checkbox" value="{{$permission->id}}" @if(in_array($permission->id, $assigned_permissions)) checked @endif name="permissions[]">
                                         </td>
                                     </tr>
                                     @endforeach

@@ -3,8 +3,8 @@
 <div class="c-subheader px-3">
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
-        <li class="breadcrumb-item">Management</li>
-        <li class="breadcrumb-item active"><a href="/students">Students</a></li>
+        <li class="breadcrumb-item">Admissions</li>
+        <li class="breadcrumb-item active"><a href="/manual-admissions">Manual Admissions</a></li>
         <!-- Breadcrumb Menu-->
     </ol>
 </div>
@@ -16,12 +16,12 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center flex-wrap">
                 <div class="mb-2 mb-md-0">
-                    <h2 class="mb-1">Student Biographical Information</h2>
-                    <p class="text-muted mb-0">Manage and view all student records</p>
+                    <h2 class="mb-1">Manual Admissions</h2>
+                    <p class="text-muted mb-0">Manage students with full admission status</p>
                 </div>
                 <div class="d-flex align-items-center flex-wrap gap-2">
                     <!-- Search Filters -->
-                    {!! Form::open(array('route' => array('students.filter'), 'method' => 'post', 'class'=> 'd-flex align-items-center flex-wrap gap-2 me-3')) !!}
+                    {!! Form::open(array('route' => array('manual-admissions.filter'), 'method' => 'post', 'class'=> 'd-flex align-items-center flex-wrap gap-2 me-3')) !!}
                     <div class="input-group" style="width: 200px;">
                         {{Form::text('student_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student Number'])}}
                     </div>
@@ -31,17 +31,10 @@
                     <button type="submit" class="btn btn-sm btn-outline-primary">
                         <i class="fa fa-search"></i> Search
                     </button>
-                    <a href="/students" class="btn btn-sm btn-outline-secondary">
+                    <a href="/manual-admissions" class="btn btn-sm btn-outline-secondary">
                         <i class="fa fa-refresh"></i> Clear
                     </a>
                     {!! Form::close() !!}
-                    
-                    <!-- Add Student Button -->
-                    @permission('add-student')
-                    <a href="{{route('students.create')}}" class="btn btn-primary btn-sm">
-                        <i class="fa fa-plus"></i> Add New
-                    </a>
-                    @endpermission
                 </div>
             </div>
         </div>
@@ -64,7 +57,7 @@
                                     <th class="border-0">MOBILE #</th>
                                     <th class="border-0">EMAIL ADDRESS</th>
                                     <th class="border-0 text-center">ACTION</th>
-                                    <th class="border-0 text-center"></th>
+                                    <th class="border-0 text-center">STATUS</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -110,47 +103,36 @@
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 @permission('show-student')
-                                                <a class="dropdown-item" href="{{route('students.show', $student->id)}}">
-                                                    View
+                                                <a class="dropdown-item" href="{{route('students.show', $student->id)}}?return=manual-admissions">
+                                                    <i class="fa fa-eye"></i> View
                                                 </a>
                                                 @endpermission
                                                 @permission('edit-student')
-                                                <a class="dropdown-item" href="{{route('students.edit', $student->id)}}">
-                                                    Update
+                                                <a class="dropdown-item" href="{{route('students.edit', $student->id)}}?return=manual-admissions">
+                                                    <i class="fa fa-edit"></i> Update
                                                 </a>
                                                 @endpermission
                                                 <a class="dropdown-item" href="#" onclick="event.preventDefault(); openAdmissionModal({{$student->id}}, '{{str_replace("'", "\\'", $student->student_names)}} {{str_replace("'", "\\'", $student->surname)}}'); return false;">
-                                                    Admissions
+                                                    <i class="fa fa-graduation-cap"></i> Admissions
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item text-success" href="#" onclick="event.preventDefault(); generateAdmissionLetter({{$student->id}}); return false;">
+                                                    <i class="fa fa-file-pdf-o"></i> Admission Letter
                                                 </a>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="py-3 text-center d-flex justify-content-center align-items-center">
-                                        @php
-                                            $statusClass = 'status-dot-none';
-                                            if ($student->admission_status == 'rejected') {
-                                                $statusClass = 'status-dot-rejected';
-                                            } elseif ($student->admission_status == 'provisionally_admitted') {
-                                                $statusClass = 'status-dot-provisional';
-                                            } elseif ($student->admission_status == 'full_admission') {
-                                                $statusClass = 'status-dot-admitted';
-                                            }
-                                        @endphp
-                                        <div class="status-dot {{ $statusClass }}" title="{{ ucfirst(str_replace('_', ' ', $student->admission_status ?? 'No status')) }}"></div>
+                                        <div class="status-dot status-dot-admitted" title="Full Admission"></div>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
                                     <td colspan="9" class="text-center py-5">
                                         <div class="text-muted">
-                                            <i class="fa fa-users fa-3x mb-3"></i>
-                                            <h5>No Students Found</h5>
-                                            <p>There are no students matching your search criteria.</p>
-                                            @permission('add-student')
-                                            <a href="{{route('students.create')}}" class="btn btn-primary">
-                                                <i class="fa fa-plus"></i> Add First Student
-                                            </a>
-                                            @endpermission
+                                            <i class="fa fa-graduation-cap fa-3x mb-3"></i>
+                                            <h5>No Fully Admitted Students Found</h5>
+                                            <p>There are no students with full admission status matching your search criteria.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -288,25 +270,15 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-/* Status dot colors - light gradients matching system theme */
-.status-dot-none {
-    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-    opacity: 0.6;
-}
-
-.status-dot-rejected {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-    opacity: 0.7;
-}
-
-.status-dot-provisional {
-    background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
-    opacity: 0.7;
-}
-
 .status-dot-admitted {
     background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
     opacity: 0.7;
+}
+
+/* Admission Letter button styling */
+.dropdown-item.text-success:hover {
+    background-color: #d4edda !important;
+    color: #155724 !important;
 }
 
 @media (max-width: 768px) {
@@ -373,7 +345,7 @@ function openAdmissionModal(studentId, studentName) {
     document.getElementById('studentName').textContent = studentName;
     
     // Fetch existing admission status
-    fetch('/students/' + studentId + '/admission-status', {
+    fetch('/manual-admissions/' + studentId + '/admission-status', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -434,6 +406,27 @@ function closeAdmissionModal() {
     }
 }
 
+function generateAdmissionLetter(studentId) {
+    // Show loading state
+    const originalText = event.target.innerHTML;
+    event.target.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Generating...';
+    event.target.disabled = true;
+    
+    // Create a temporary link to trigger download
+    const link = document.createElement('a');
+    link.href = '/manual-admissions/' + studentId + '/admission-letter';
+    link.download = '';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Reset button state after a short delay
+    setTimeout(() => {
+        event.target.innerHTML = originalText;
+        event.target.disabled = false;
+    }, 2000);
+}
+
 // Handle form submission
 document.getElementById('admissionForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -444,7 +437,7 @@ document.getElementById('admissionForm').addEventListener('submit', function(e) 
     const remarks = formData.get('remarks');
     
     // Submit to backend
-    fetch('/students/' + studentId + '/admission-status', {
+    fetch('/manual-admissions/' + studentId + '/admission-status', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -460,6 +453,7 @@ document.getElementById('admissionForm').addEventListener('submit', function(e) 
         if (data.success) {
             alert('Admission status updated successfully!');
             closeAdmissionModal();
+            location.reload(); // Refresh to show updated data
         } else {
             alert('Error: ' + data.message);
         }
