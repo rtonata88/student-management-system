@@ -222,7 +222,9 @@
           @permission('inventory-view')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/inventories"><span class="c-sidebar-nav-icon"></span> Inventories</a></li>
           @endpermission
+          @permission('fixed-assets-view')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fixed-assets"><span class="c-sidebar-nav-icon"></span> Fixed Assets</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/maintenance"><span class="c-sidebar-nav-icon"></span> Maintenance</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fleet-management"><span class="c-sidebar-nav-icon"></span> Fleet Management</a></li>
         </ul>

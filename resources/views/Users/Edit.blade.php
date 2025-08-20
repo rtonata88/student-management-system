@@ -77,7 +77,7 @@
                                         <td>{{$permission->display_name}}</td>
                                         <td>{{$permission->description}}</td>
                                         <td class="text-center">
-                                            <input type="checkbox" value="{{$permission->id}}" @if(in_array($permission->id, $assigned_permissions)) checked @endif name="permissions[]">
+                                            <input type="checkbox" value="{{$permission->id}}" @if(in_array($permission->id, $assigned_permissions ?? [])) checked @endif name="permissions[]">
                                         </td>
                                     </tr>
                                     @endforeach

@@ -14,5 +14,7 @@ class DatabaseSeeder extends Seeder
        //$users = factory(App\User::class, 1000)->create();
     	//$users = factory(App\Organization::class, 100)->create();
     	$users = factory(App\Profile::class, 5000)->create();
+    	
+    	$this->call(FixedAssetSeeder::class);
     }
 }

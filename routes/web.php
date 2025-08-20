@@ -161,6 +161,15 @@ Route::get('/inventory/expired', 'InventoryController@expired')->name('inventori
 //Inventory Categories
 Route::resource('/inventory-categories', 'InventoryCategoryController');
 
+// Fixed Assets Routes
+Route::resource('/fixed-assets', 'FixedAssetController');
+Route::get('/fixed-assets/{fixedAsset}/schedule-maintenance', 'FixedAssetController@scheduleMaintenance')->name('fixed-assets.schedule-maintenance');
+Route::post('/fixed-assets/{fixedAsset}/schedule-maintenance', 'FixedAssetController@processMaintenanceSchedule')->name('fixed-assets.process-maintenance-schedule');
+Route::get('/fixed-assets/reports/maintenance-due', 'FixedAssetController@maintenanceDue')->name('fixed-assets.maintenance-due');
+Route::get('/fixed-assets/reports/warranty-expired', 'FixedAssetController@warrantyExpired')->name('fixed-assets.warranty-expired');
+
+Route::resource('/fixed-asset-categories', 'FixedAssetCategoryController');
+
 //Access Management - Permissions
 Route::resource('/permissions','PermissionsController');
 // Route::get('/permissions/{id}/create', 'PermissionsController@create')->name('permissions.createWithId');
