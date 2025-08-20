@@ -13,11 +13,35 @@ class AddColumnsToCreditMemos extends Migration
      */
     public function up()
     {
+    {
+    {
+    {
         Schema::table('credit_memos', function (Blueprint $table) {
             $table->string('credit_type')->after('transaction_date');
             $table->string('model')->after('credit_type');
             $table->integer('model_id')->after('model');
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     }
 
     /**

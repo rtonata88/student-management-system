@@ -13,12 +13,23 @@ class CreateGendersTable extends Migration
      */
     public function up()
     {
-        Schema::create('genders', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('genders')) {
+            Schema::create('genders', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('language_id');
             $table->string('gender');
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

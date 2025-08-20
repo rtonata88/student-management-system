@@ -13,10 +13,34 @@ class AddSympolToModuleRegistration extends Migration
      */
     public function up()
     {
+    {
+    {
+    {
         Schema::table('module_registrations', function (Blueprint $table) {
             $table->string('subject_symbol')->nullable()->after('cancellation_date');
             $table->string('system')->nullable()->after('subject_symbol');
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     }
 
     /**

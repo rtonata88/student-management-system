@@ -13,7 +13,9 @@ class CreatePaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('payments')) {
+            Schema::create('payments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('student_id');
             $table->date('payment_date');
@@ -22,6 +24,15 @@ class CreatePaymentsTable extends Migration
             $table->integer('received_by');
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

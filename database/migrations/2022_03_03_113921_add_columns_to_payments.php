@@ -13,9 +13,33 @@ class AddColumnsToPayments extends Migration
      */
     public function up()
     {
+    {
+    {
+    {
         Schema::table('payments', function (Blueprint $table) {
             $table->string('receipt_number')->after('id');
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     }
 
     /**

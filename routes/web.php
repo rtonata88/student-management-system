@@ -40,11 +40,11 @@ Route::post('/students/{id}/admission-status', 'StudentController@updateAdmissio
 Route::get('/students/{id}/admission-status', 'StudentController@getAdmissionStatus')->name('students.get-admission-status');
 
 // Manual Admissions
-Route::get('/manual-admissions', 'ManualAdmissionsController@index')->name('manual-admissions.index')->middleware('role:admin|permission:manual-admissions');
-Route::post('/manual-admissions/filter', 'ManualAdmissionsController@filter')->name('manual-admissions.filter')->middleware('role:admin|permission:manual-admissions');
-Route::post('/manual-admissions/{id}/admission-status', 'ManualAdmissionsController@updateAdmissionStatus')->name('manual-admissions.admission-status')->middleware('role:admin|permission:process-admissions');
-Route::get('/manual-admissions/{id}/admission-status', 'ManualAdmissionsController@getAdmissionStatus')->name('manual-admissions.get-admission-status')->middleware('role:admin|permission:manual-admissions');
-Route::get('/manual-admissions/{id}/admission-letter', 'ManualAdmissionsController@generateAdmissionLetter')->name('manual-admissions.admission-letter')->middleware('role:admin|permission:generate-admission-letters');
+Route::get('/manual-admissions', 'ManualAdmissionsController@index')->name('manual-admissions.index');
+Route::post('/manual-admissions/filter', 'ManualAdmissionsController@filter')->name('manual-admissions.filter');
+Route::post('/manual-admissions/{id}/admission-status', 'ManualAdmissionsController@updateAdmissionStatus')->name('manual-admissions.admission-status');
+Route::get('/manual-admissions/{id}/admission-status', 'ManualAdmissionsController@getAdmissionStatus')->name('manual-admissions.get-admission-status');
+Route::get('/manual-admissions/{id}/admission-letter', 'ManualAdmissionsController@generateAdmissionLetter')->name('manual-admissions.admission-letter');
 
 Route::resource('/enrolment', 'RegistrationController');
 Route::post('/enrolment/filter', 'RegistrationController@filter')->name('enrolment.filter');
@@ -161,14 +161,26 @@ Route::get('/inventory/expired', 'InventoryController@expired')->name('inventori
 //Inventory Categories
 Route::resource('/inventory-categories', 'InventoryCategoryController');
 
-// Fixed Assets Routes
+// Fixed Assets Management
 Route::resource('/fixed-assets', 'FixedAssetController');
 Route::get('/fixed-assets/{fixedAsset}/schedule-maintenance', 'FixedAssetController@scheduleMaintenance')->name('fixed-assets.schedule-maintenance');
-Route::post('/fixed-assets/{fixedAsset}/schedule-maintenance', 'FixedAssetController@processMaintenanceSchedule')->name('fixed-assets.process-maintenance-schedule');
+Route::post('/fixed-assets/{fixedAsset}/schedule-maintenance', 'FixedAssetController@storeMaintenanceSchedule')->name('fixed-assets.store-maintenance-schedule');
 Route::get('/fixed-assets/reports/maintenance-due', 'FixedAssetController@maintenanceDue')->name('fixed-assets.maintenance-due');
 Route::get('/fixed-assets/reports/warranty-expired', 'FixedAssetController@warrantyExpired')->name('fixed-assets.warranty-expired');
 
+// Fixed Asset Categories Management
 Route::resource('/fixed-asset-categories', 'FixedAssetCategoryController');
+
+// Maintenance Management
+Route::resource('/maintenance', 'MaintenanceController');
+Route::post('/maintenance/{maintenance}/approve', 'MaintenanceController@approve')->name('maintenance.approve');
+Route::post('/maintenance/{maintenance}/reject', 'MaintenanceController@reject')->name('maintenance.reject');
+Route::get('/maintenance/reports/dashboard', 'MaintenanceController@reports')->name('maintenance.reports');
+Route::get('/maintenance/reports/overdue', 'MaintenanceController@overdueRequests')->name('maintenance.overdue-requests');
+Route::get('/maintenance/reports/completed', 'MaintenanceController@completedRequests')->name('maintenance.completed-requests');
+
+// Maintenance Categories Management
+Route::resource('/maintenance-categories', 'MaintenanceCategoryController');
 
 //Access Management - Permissions
 Route::resource('/permissions','PermissionsController');
@@ -209,6 +221,95 @@ Route::get('/assessment-marks/update/{assessment_id}', 'AssessmentMarkController
 
 Route::get('/start-page', function(){
     return view('start-page');
+});
+
+//Fleet Management Routes
+Route::prefix('fleet-management')->name('fleet.')->middleware('permission:fleet-management')->group(function () {
+    Route::get('/', 'FleetManagementController@index')->name('dashboard');
+    
+    // Vehicle Management
+    Route::get('/vehicles', 'FleetManagementController@vehicles')->name('vehicles');
+    Route::get('/vehicles/create', 'FleetManagementController@createVehicle')->name('vehicles.create');
+    Route::post('/vehicles', 'FleetManagementController@storeVehicle')->name('vehicles.store');
+    Route::get('/vehicles/{vehicle}/edit', 'FleetManagementController@editVehicle')->name('vehicles.edit');
+    Route::put('/vehicles/{vehicle}', 'FleetManagementController@updateVehicle')->name('vehicles.update');
+    Route::delete('/vehicles/{vehicle}', 'FleetManagementController@destroyVehicle')->name('vehicles.destroy');
+    
+    // Driver Management
+    Route::get('/drivers', 'FleetManagementController@drivers')->name('drivers');
+    Route::get('/drivers/create', 'FleetManagementController@createDriver')->name('drivers.create');
+    Route::post('/drivers', 'FleetManagementController@storeDriver')->name('drivers.store');
+    Route::get('/drivers/{driver}/edit', 'FleetManagementController@editDriver')->name('drivers.edit');
+    Route::put('/drivers/{driver}', 'FleetManagementController@updateDriver')->name('drivers.update');
+    Route::delete('/drivers/{driver}', 'FleetManagementController@destroyDriver')->name('drivers.destroy');
+    
+    // Trip Management
+    Route::get('/trips', 'FleetManagementController@trips')->name('trips');
+    Route::get('/trips/create', 'FleetManagementController@createTrip')->name('trips.create');
+    Route::post('/trips', 'FleetManagementController@storeTrip')->name('trips.store');
+    
+    // Fuel Management
+    Route::get('/fuel', 'FleetManagementController@fuel')->name('fuel');
+    Route::get('/fuel/create', 'FleetManagementController@createFuelRecord')->name('fuel.create');
+    Route::post('/fuel', 'FleetManagementController@storeFuelRecord')->name('fuel.store');
+    
+    // Service Management
+    Route::get('/services', 'FleetManagementController@services')->name('services');
+    Route::get('/services/create', 'FleetManagementController@createService')->name('services.create');
+    Route::post('/services', 'FleetManagementController@storeService')->name('services.store');
+    
+    // Vehicle Assignments
+    Route::get('/assignments', 'FleetManagementController@assignments')->name('assignments');
+    Route::get('/assignments/create', 'FleetManagementController@createAssignment')->name('assignments.create');
+    Route::post('/assignments', 'FleetManagementController@storeAssignment')->name('assignments.store');
+    
+    // Reports
+    Route::get('/reports', 'FleetManagementController@reports')->name('reports');
+});
+
+//Hostel Management Routes
+Route::prefix('hostel-administration')->name('hostel.administration.')->group(function () {
+    Route::get('/', 'HostelAdministrationController@index')->name('index');
+    
+    // Hostel Management
+    Route::get('/hostels', 'HostelAdministrationController@hostels')->name('hostels');
+    Route::get('/hostels/create', 'HostelAdministrationController@createHostel')->name('hostels.create');
+    Route::post('/hostels', 'HostelAdministrationController@storeHostel')->name('hostels.store');
+    Route::get('/hostels/{hostel}/edit', 'HostelAdministrationController@editHostel')->name('hostels.edit');
+    Route::put('/hostels/{hostel}', 'HostelAdministrationController@updateHostel')->name('hostels.update');
+    
+    // Block Management
+    Route::get('/blocks/{hostelId?}', 'HostelAdministrationController@blocks')->name('blocks');
+    Route::get('/blocks-create', 'HostelAdministrationController@createBlock')->name('blocks.create');
+    Route::post('/blocks', 'HostelAdministrationController@storeBlock')->name('blocks.store');
+    
+    // Room Management
+    Route::get('/rooms/{blockId?}', 'HostelAdministrationController@rooms')->name('rooms');
+    Route::get('/rooms-create', 'HostelAdministrationController@createRoom')->name('rooms.create');
+    Route::post('/rooms', 'HostelAdministrationController@storeRoom')->name('rooms.store');
+    
+    // Bed Management
+    Route::get('/beds/{roomId?}', 'HostelAdministrationController@beds')->name('beds');
+    
+    // Student Allocation
+    Route::get('/allocations', 'HostelAdministrationController@allocations')->name('allocations');
+    Route::get('/allocations/create', 'HostelAdministrationController@createAllocation')->name('allocations.create');
+    Route::post('/allocations', 'HostelAdministrationController@storeAllocation')->name('allocations.store');
+    
+    // Fee Structure
+    Route::get('/fee-structures', 'HostelAdministrationController@feeStructures')->name('fee-structures');
+    
+    // Payments
+    Route::get('/payments', 'HostelAdministrationController@payments')->name('payments');
+    
+    // Maintenance
+    Route::get('/maintenance', 'HostelAdministrationController@maintenance')->name('maintenance');
+    
+    // Visitors
+    Route::get('/visitors', 'HostelAdministrationController@visitors')->name('visitors');
+    
+    // Reports
+    Route::get('/reports', 'HostelAdministrationController@reports')->name('reports');
 });
 
 // Route::get('richard', function(){

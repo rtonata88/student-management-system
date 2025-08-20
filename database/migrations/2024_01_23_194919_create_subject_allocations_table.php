@@ -13,7 +13,9 @@ class CreateSubjectAllocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('subject_allocations', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('subject_allocations')) {
+            Schema::create('subject_allocations', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
             $table->integer('subject_id');
@@ -21,6 +23,15 @@ class CreateSubjectAllocationsTable extends Migration
             $table->integer('academic_year_id');         
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

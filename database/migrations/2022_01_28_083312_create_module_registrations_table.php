@@ -13,7 +13,9 @@ class CreateModuleRegistrationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('module_registrations', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('module_registrations')) {
+            Schema::create('module_registrations', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('student_id');
             $table->integer('academic_year');
@@ -25,6 +27,15 @@ class CreateModuleRegistrationsTable extends Migration
             $table->date('cancellation_date')->nullable();
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

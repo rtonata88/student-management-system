@@ -13,7 +13,9 @@ class CreateCompanySetupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('company_setups', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('company_setups')) {
+            Schema::create('company_setups', function (Blueprint $table) {
             $table->increments('id');
             $table->string('company_name');
             $table->string('address1');
@@ -26,6 +28,15 @@ class CreateCompanySetupsTable extends Migration
             $table->string('logo')->nullable();
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

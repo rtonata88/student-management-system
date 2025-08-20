@@ -14,6 +14,9 @@ class CreateInventoryPermissions extends Migration
      */
     public function up()
     {
+    {
+    {
+    {
         // Insert inventory management permissions
         $permissions = [
             [
@@ -75,6 +78,27 @@ class CreateInventoryPermissions extends Migration
         ];
 
         DB::table('permissions')->insert($permissions);
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     }
 
     /**

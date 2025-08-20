@@ -13,7 +13,9 @@ class CreateDebitMemosTable extends Migration
      */
     public function up()
     {
-        Schema::create('debit_memos', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('debit_memos')) {
+            Schema::create('debit_memos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('student_id');
             $table->date('transaction_date');
@@ -22,6 +24,15 @@ class CreateDebitMemosTable extends Migration
             $table->integer('captured_by');
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

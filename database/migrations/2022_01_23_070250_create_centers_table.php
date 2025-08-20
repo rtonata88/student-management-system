@@ -13,12 +13,23 @@ class CreateCentersTable extends Migration
      */
     public function up()
     {
-        Schema::create('centers', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('centers')) {
+            Schema::create('centers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('center_name');
             $table->string('location');
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

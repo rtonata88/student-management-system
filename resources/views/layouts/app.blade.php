@@ -193,6 +193,51 @@
       </li>
       @endpermission
 
+      @permission('fleet-management')
+      <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-truck')}}"></use>
+          </svg> Fleet Management</a>
+        <ul class="c-sidebar-nav-dropdown-items">
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.dashboard') }}"><span class="c-sidebar-nav-icon"></span> Dashboard</a></li>
+          @permission('fleet-vehicles-view')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.vehicles') }}"><span class="c-sidebar-nav-icon"></span> Vehicles</a></li>
+          @endpermission
+          @permission('fleet-drivers-view')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.drivers') }}"><span class="c-sidebar-nav-icon"></span> Drivers</a></li>
+          @endpermission
+          @permission('fleet-trips-view')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.trips') }}"><span class="c-sidebar-nav-icon"></span> Trip Logs</a></li>
+          @endpermission
+          @permission('fleet-fuel-view')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.fuel') }}"><span class="c-sidebar-nav-icon"></span> Fuel Records</a></li>
+          @endpermission
+          @permission('fleet-services-view')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.services') }}"><span class="c-sidebar-nav-icon"></span> Vehicle Services</a></li>
+          @endpermission
+          @permission('fleet-assignments-view')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.assignments') }}"><span class="c-sidebar-nav-icon"></span> Vehicle Assignments</a></li>
+          @endpermission
+          @permission('fleet-reports-view')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.reports') }}"><span class="c-sidebar-nav-icon"></span> Reports</a></li>
+          @endpermission
+        </ul>
+      </li>
+      @endpermission
+
+      @permission('HOSTEL_MANAGEMENT')
+      <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-home')}}"></use>
+          </svg> Hostel Management</a>
+        <ul class="c-sidebar-nav-dropdown-items">
+          @permission('hostel-administration')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/hostel-administration"><span class="c-sidebar-nav-icon"></span> Administration</a></li>
+          @endpermission
+        </ul>
+      </li>
+      @endpermission
+
       @permission('ADMINISTRATION')
       <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
           <svg class="c-sidebar-nav-icon">
@@ -225,7 +270,9 @@
           @permission('fixed-assets-view')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fixed-assets"><span class="c-sidebar-nav-icon"></span> Fixed Assets</a></li>
           @endpermission
+          @permission('maintenance-view')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/maintenance"><span class="c-sidebar-nav-icon"></span> Maintenance</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fleet-management"><span class="c-sidebar-nav-icon"></span> Fleet Management</a></li>
         </ul>
       </li>
@@ -239,8 +286,14 @@
         <ul class="c-sidebar-nav-dropdown-items">
           @permission('finance-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.account-summary.index')}}"><span class="c-sidebar-nav-icon"></span> Account Summary</a></li>
+          @endpermission
+          @permission('finance-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.audit')}}"><span class="c-sidebar-nav-icon"></span> Audit Report</a></li>
+          @endpermission
+          @permission('finance-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.finance.index')}}"><span class="c-sidebar-nav-icon"></span> Finance</a></li>
+          @endpermission
+          @permission('finance-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.payments.index')}}"><span class="c-sidebar-nav-icon"></span> Payments</a></li>
           @endpermission
           @permission('student-report')
@@ -276,10 +329,13 @@
       <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-cog')}}"></use>
-          </svg> Setups</a>
+          </svg> System Setups</a>
         <ul class="c-sidebar-nav-dropdown-items">
           @permission('fees')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/fees"><span class="c-sidebar-nav-icon"></span>Fees</a></li>
+          @endpermission
+          @permission('company')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('company.show', 1)}}"><span class="c-sidebar-nav-icon"></span> Company</a></li>
           @endpermission
           @permission('centers')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('centers.index')}}"><span class="c-sidebar-nav-icon"></span> Centers</a></li>
@@ -287,12 +343,13 @@
           @permission('subjects')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/subjects"><span class="c-sidebar-nav-icon"></span>Subjects</a></li>
           @endpermission
-          @permission('company')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('company.show', 1)}}"><span class="c-sidebar-nav-icon"></span> Company</a></li>
-          @endpermission
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/departments"><span class="c-sidebar-nav-icon"></span> Departments</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/designations"><span class="c-sidebar-nav-icon"></span> Designations</a></li>
           @permission('academic-years')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('academic-year.index')}}"><span class="c-sidebar-nav-icon"></span>Academic Years</a></li>
           @endpermission
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/asset-categories"><span class="c-sidebar-nav-icon"></span> Asset Categories</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/inventory-categories"><span class="c-sidebar-nav-icon"></span> Inventory Categories</a></li>
         </ul>
       </li>
       @endpermission

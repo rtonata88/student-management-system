@@ -1,0 +1,183 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateFleetManagementTables extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+    {
+        // Vehicle Categories
+        if (!Schema::hasTable('vehicle_categories')) {
+            if (!Schema::hasTable('vehicle_categories')) {
+            if (!Schema::hasTable('vehicle_categories')) {
+                Schema::create('vehicle_categories', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->text('description')->nullable();
+                $table->boolean('active')->default(true);
+                $table->timestamps();
+            });
+        }
+
+        // Vehicles
+        if (!Schema::hasTable('vehicles')) {
+            if (!Schema::hasTable('vehicles')) {
+            if (!Schema::hasTable('vehicles')) {
+                Schema::create('vehicles', function (Blueprint $table) {
+                $table->id();
+                $table->string('registration_number')->unique();
+                $table->string('make');
+                $table->string('model');
+                $table->year('year');
+                $table->string('color')->nullable();
+                $table->string('engine_number')->nullable();
+                $table->string('chassis_number')->nullable();
+                $table->integer('seating_capacity');
+                $table->decimal('fuel_capacity', 8, 2);
+                $table->enum('fuel_type', ['petrol', 'diesel', 'electric', 'hybrid']);
+                $table->enum('status', ['active', 'maintenance', 'retired', 'accident'])->default('active');
+                $table->date('purchase_date')->nullable();
+                $table->decimal('purchase_price', 12, 2)->nullable();
+                $table->date('insurance_expiry')->nullable();
+                $table->date('license_expiry')->nullable();
+                $table->text('notes')->nullable();
+                $table->foreignId('category_id')->constrained('vehicle_categories');
+                $table->timestamps();
+            });
+        }
+
+        // Drivers
+        if (!Schema::hasTable('drivers')) {
+            if (!Schema::hasTable('drivers')) {
+            if (!Schema::hasTable('drivers')) {
+                Schema::create('drivers', function (Blueprint $table) {
+                $table->id();
+                $table->string('employee_number')->unique();
+                $table->string('first_name');
+                $table->string('last_name');
+                $table->string('phone');
+                $table->string('email')->nullable();
+                $table->string('license_number')->unique();
+                $table->date('license_expiry');
+                $table->enum('license_class', ['A', 'B', 'C', 'D', 'E']);
+                $table->date('hire_date');
+                $table->enum('status', ['active', 'inactive', 'suspended'])->default('active');
+                $table->text('address')->nullable();
+                $table->date('date_of_birth')->nullable();
+                $table->string('emergency_contact_name')->nullable();
+                $table->string('emergency_contact_phone')->nullable();
+                $table->timestamps();
+            });
+        }
+
+        // Trip Logs
+        if (!Schema::hasTable('trip_logs')) {
+            if (!Schema::hasTable('trip_logs')) {
+            if (!Schema::hasTable('trip_logs')) {
+                Schema::create('trip_logs', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('vehicle_id')->constrained('vehicles');
+                $table->foreignId('driver_id')->constrained('drivers');
+                $table->string('origin');
+                $table->string('destination');
+                $table->string('trip_purpose')->nullable();
+                $table->date('departure_date');
+                $table->time('departure_time');
+                $table->date('arrival_date')->nullable();
+                $table->time('arrival_time')->nullable();
+                $table->integer('odometer_start');
+                $table->integer('odometer_end')->nullable();
+                $table->decimal('distance_km', 8, 2)->nullable();
+                $table->decimal('fuel_consumed', 8, 2)->nullable();
+                $table->integer('passengers_count')->default(0);
+                $table->text('route_taken')->nullable();
+                $table->text('notes')->nullable();
+                $table->enum('status', ['ongoing', 'completed', 'cancelled'])->default('ongoing');
+                $table->timestamps();
+            });
+        }
+
+        // Fuel Records
+        if (!Schema::hasTable('fuel_records')) {
+            if (!Schema::hasTable('fuel_records')) {
+            if (!Schema::hasTable('fuel_records')) {
+                Schema::create('fuel_records', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('vehicle_id')->constrained('vehicles');
+                $table->foreignId('driver_id')->nullable()->constrained('drivers');
+                $table->date('date');
+                $table->string('fuel_type');
+                $table->decimal('quantity', 8, 2);
+                $table->decimal('price_per_liter', 8, 3);
+                $table->decimal('total_cost', 8, 2);
+                $table->decimal('odometer_reading', 10, 2);
+                $table->string('fuel_station')->nullable();
+                $table->string('receipt_number')->nullable();
+                $table->text('notes')->nullable();
+                $table->timestamps();
+            });
+        }
+
+        // Vehicle Services/Maintenance
+        if (!Schema::hasTable('vehicle_services')) {
+            if (!Schema::hasTable('vehicle_services')) {
+            if (!Schema::hasTable('vehicle_services')) {
+                Schema::create('vehicle_services', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('vehicle_id')->constrained('vehicles');
+                $table->enum('service_type', ['routine', 'repair', 'inspection', 'emergency']);
+                $table->string('service_description');
+                $table->date('service_date');
+                $table->integer('odometer_reading');
+                $table->decimal('cost', 10, 2);
+                $table->string('service_provider');
+                $table->date('next_service_date')->nullable();
+                $table->integer('next_service_odometer')->nullable();
+                $table->text('parts_replaced')->nullable();
+                $table->text('notes')->nullable();
+                $table->enum('status', ['scheduled', 'in_progress', 'completed', 'cancelled'])->default('scheduled');
+                $table->timestamps();
+            });
+        }
+
+        // Vehicle Assignments (which driver is assigned to which vehicle)
+        if (!Schema::hasTable('vehicle_assignments')) {
+            if (!Schema::hasTable('vehicle_assignments')) {
+            if (!Schema::hasTable('vehicle_assignments')) {
+                Schema::create('vehicle_assignments', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('vehicle_id')->constrained('vehicles');
+                $table->foreignId('driver_id')->constrained('drivers');
+                $table->date('assigned_date');
+                $table->date('unassigned_date')->nullable();
+                $table->boolean('is_primary')->default(false);
+                $table->text('notes')->nullable();
+                $table->timestamps();
+            });
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('vehicle_assignments');
+        Schema::dropIfExists('vehicle_services');
+        Schema::dropIfExists('fuel_records');
+        Schema::dropIfExists('trip_logs');
+        Schema::dropIfExists('drivers');
+        Schema::dropIfExists('vehicles');
+        Schema::dropIfExists('vehicle_categories');
+    }
+}

@@ -64,10 +64,10 @@
                                 @forelse($students as $student)
                                 <tr class="border-bottom">
                                     <td class="ps-3 py-3">
-                                        <strong class="text-primary">{{$student->student_number2}}</strong>
+                                        <strong class="text-primary">{{$student->student_number2 ?? 'N/A'}}</strong>
                                     </td>
-                                    <td class="py-3">{{$student->surname}}</td>
-                                    <td class="py-3">{{$student->student_names}}</td>
+                                    <td class="py-3">{{$student->surname ?? 'N/A'}}</td>
+                                    <td class="py-3">{{$student->student_names ?? 'N/A'}}</td>
                                     <td class="py-3">
                                         @if($student->date_of_birth)
                                             {{\Carbon\Carbon::parse($student->date_of_birth)->format('Y-m-d')}}
@@ -112,7 +112,7 @@
                                                     <i class="fa fa-edit"></i> Update
                                                 </a>
                                                 @endpermission
-                                                <a class="dropdown-item" href="#" onclick="event.preventDefault(); openAdmissionModal({{$student->id}}, '{{str_replace("'", "\\'", $student->student_names)}} {{str_replace("'", "\\'", $student->surname)}}'); return false;">
+                                                <a class="dropdown-item" href="#" onclick="event.preventDefault(); openAdmissionModal({{$student->id}}, '{{str_replace("'", "\\'", $student->student_names ?? '')}} {{str_replace("'", "\\'", $student->surname ?? '')}}'); return false;">
                                                     <i class="fa fa-graduation-cap"></i> Admissions
                                                 </a>
                                                 <div class="dropdown-divider"></div>

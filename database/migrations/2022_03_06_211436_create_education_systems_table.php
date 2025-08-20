@@ -13,12 +13,23 @@ class CreateEducationSystemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('education_systems', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('education_systems')) {
+            Schema::create('education_systems', function (Blueprint $table) {
             $table->increments('id');
             $table->string('value');
             $table->string('label');
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

@@ -13,7 +13,9 @@ class CreateStudentGuardiansTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_guardians', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('student_guardians')) {
+            Schema::create('student_guardians', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('student_id');
             $table->string('guardian_names');
@@ -23,6 +25,15 @@ class CreateStudentGuardiansTable extends Migration
             $table->string('contact_email')->nullable();
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

@@ -14,6 +14,9 @@ class CreateFixedAssetsPermissions extends Migration
      */
     public function up()
     {
+    {
+    {
+    {
         $permissions = [
             [
                 'name' => 'fixed-assets-view',
@@ -61,6 +64,27 @@ class CreateFixedAssetsPermissions extends Migration
                 ])
             );
         }
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     }
 
     /**

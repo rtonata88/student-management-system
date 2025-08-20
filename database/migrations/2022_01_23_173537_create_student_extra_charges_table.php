@@ -13,7 +13,9 @@ class CreateStudentExtraChargesTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_extra_charges', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('student_extra_charges')) {
+            Schema::create('student_extra_charges', function (Blueprint $table) {
             $table->increments('id');
             $table->date('transaction_date');
             $table->bigInteger('student_id');
@@ -23,6 +25,15 @@ class CreateStudentExtraChargesTable extends Migration
             $table->string('status');
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

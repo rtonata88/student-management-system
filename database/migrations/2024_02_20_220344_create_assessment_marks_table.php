@@ -13,7 +13,8 @@ class CreateAssessmentMarksTable extends Migration
      */
     public function up()
     {
-        Schema::create('assessment_marks', function (Blueprint $table) {
+        if (!Schema::hasTable('assessment_marks')) {
+            Schema::create('assessment_marks', function (Blueprint $table) {
             $table->id();
             $table->integer('student_id');
             $table->integer('assessment_id');
@@ -22,7 +23,8 @@ class CreateAssessmentMarksTable extends Migration
             $table->integer('mark');
             $table->integer('entered_by');
             $table->timestamps();
-        });
+            });
+        }
     }
 
     /**

@@ -13,9 +13,33 @@ class AddPaidAmountToExtraCharges extends Migration
      */
     public function up()
     {
+    {
+    {
+    {
         Schema::table('student_extra_charges', function (Blueprint $table) {
             $table->decimal('amount_paid', 15, 2)->after('amount')->default(0.00);
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     }
 
     /**

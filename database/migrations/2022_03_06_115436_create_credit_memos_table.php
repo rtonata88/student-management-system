@@ -13,7 +13,9 @@ class CreateCreditMemosTable extends Migration
      */
     public function up()
     {
-        Schema::create('credit_memos', function (Blueprint $table) {
+    {
+        if (!Schema::hasTable('credit_memos')) {
+            Schema::create('credit_memos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('student_id');
             $table->date('transaction_date');
@@ -22,6 +24,15 @@ class CreateCreditMemosTable extends Migration
             $table->integer('captured_by');
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+            });
+        }
     }
 
     /**

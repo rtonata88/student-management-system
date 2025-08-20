@@ -16,7 +16,7 @@ class ManualAdmissionsController extends Controller
 
     public function index()
     {
-        $students = Student::leftJoin('student_admissions', 'students.id', '=', 'student_admissions.student_id')
+        $students = Student::join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
             ->select('students.*', 'student_admissions.admission_status')
             ->where('student_admissions.admission_status', 'full_admission')
             ->paginate(50);
@@ -26,7 +26,7 @@ class ManualAdmissionsController extends Controller
 
     public function filter(Request $request)
     {
-        $query = Student::leftJoin('student_admissions', 'students.id', '=', 'student_admissions.student_id')
+        $query = Student::join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
             ->select('students.*', 'student_admissions.admission_status')
             ->where('student_admissions.admission_status', 'full_admission');
 

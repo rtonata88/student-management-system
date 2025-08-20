@@ -39,10 +39,10 @@ class UsersController extends Controller
     {
     	$user = User::where('username', $username)->first();
 		$roles = Role::all();
-		$assigned_roles = $user->roles->pluck('id')->toArray();
+		$assigned_roles = $user->roles ? $user->roles->pluck('id')->toArray() : [];
 		$permissions = Permission::all();
-		$assigned_permissions = $user->permissions->pluck('id')->toArray();
-		$user_permissions = $user->permissions->pluck('name')->toArray();
+		$assigned_permissions = $user->permissions ? $user->permissions->pluck('id')->toArray() : [];
+		$user_permissions = $user->permissions ? $user->permissions->pluck('name')->toArray() : [];
     	return view('Users.Edit', compact('user', 'roles', 'assigned_roles', 'permissions', 'assigned_permissions', 'user_permissions'));
     }
 
