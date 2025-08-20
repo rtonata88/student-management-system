@@ -13,22 +13,13 @@ class CreateModulesTable extends Migration
      */
     public function up()
     {
-    {
         if (!Schema::hasTable('modules')) {
             Schema::create('modules', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('subject_code');
-            $table->string('subject_name');
-            $table->string('subject_fees');
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+                $table->increments('id');
+                $table->string('subject_code');
+                $table->string('subject_name');
+                $table->string('subject_fees');
+                $table->timestamps();
             });
         }
     }

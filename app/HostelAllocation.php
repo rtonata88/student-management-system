@@ -24,7 +24,7 @@ class HostelAllocation extends Model
     // Relationships
     public function student()
     {
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
     public function hostel()
@@ -80,5 +80,89 @@ class HostelAllocation extends Model
         
         $endDate = $this->check_out_date ?: now();
         return $this->check_in_date->diffInDays($endDate);
+    }
+
+    // Payment calculation methods
+    public function getTotalPaidAmount()
+    {
+        return $this->payments()->where('status', 'paid')->sum('amount');
+    }
+
+    public function getPendingPayments()
+    {
+        return $this->payments()->where('status', 'pending')->get();
+    }
+
+    public function getOverduePayments()
+    {
+        return $this->payments()->where('status', 'overdue')->get();
+    }
+
+    public function calculateMonthlyDue($month = null, $year = null)
+    {
+        $month = $month ?: now()->month;
+        $year = $year ?: now()->year;
+        
+        // Check if already paid for this month
+        $existingPayment = $this->payments()
+            ->where('payment_type', 'monthly_fee')
+            ->whereMonth('due_date', $month)
+            ->whereYear('due_date', $year)
+            ->first();
+            
+        if ($existingPayment && $existingPayment->status === 'paid') {
+            return 0;
+        }
+        
+        return $this->monthly_fee;
+    }
+
+    public function getTotalOutstandingAmount()
+    {
+        $monthsOccupied = $this->getMonthsOccupied();
+        $totalDue = $monthsOccupied * $this->monthly_fee;
+        $totalPaid = $this->getTotalPaidAmount();
+        
+        return max(0, $totalDue - $totalPaid);
+    }
+
+    public function getMonthsOccupied()
+    {
+        if (!$this->allocation_date) return 0;
+        
+        $startDate = $this->allocation_date;
+        $endDate = $this->check_out_date ?: now();
+        
+        return $startDate->diffInMonths($endDate) + 1; // +1 to include current month
+    }
+
+    public function generateMonthlyPayments()
+    {
+        $startDate = $this->allocation_date;
+        $endDate = $this->expected_checkout_date ?: now()->addYear();
+        
+        $currentDate = $startDate->copy()->startOfMonth();
+        
+        while ($currentDate <= $endDate) {
+            // Check if payment already exists for this month
+            $existingPayment = $this->payments()
+                ->where('payment_type', 'monthly_fee')
+                ->whereMonth('due_date', $currentDate->month)
+                ->whereYear('due_date', $currentDate->year)
+                ->first();
+                
+            if (!$existingPayment) {
+                HostelPayment::create([
+                    'allocation_id' => $this->id,
+                    'student_id' => $this->student_id,
+                    'payment_type' => 'monthly_fee',
+                    'amount' => $this->monthly_fee,
+                    'due_date' => $currentDate->copy()->endOfMonth(),
+                    'status' => 'pending'
+                ]);
+            }
+            
+            $currentDate->addMonth();
+        }
     }
 }

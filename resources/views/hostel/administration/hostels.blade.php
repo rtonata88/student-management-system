@@ -43,7 +43,7 @@
                                 <tr>
                                     <td>{{ $hostel->name }}</td>
                                     <td>{{ $hostel->code }}</td>
-                                    <td>{{ Str::limit($hostel->address, 30) }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($hostel->address, 30) }}</td>
                                     <td>
                                         <span class="badge badge-{{ $hostel->gender == 'male' ? 'primary' : ($hostel->gender == 'female' ? 'danger' : 'info') }}">
                                             {{ ucfirst($hostel->gender) }}

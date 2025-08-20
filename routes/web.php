@@ -265,6 +265,12 @@ Route::prefix('fleet-management')->name('fleet.')->middleware('permission:fleet-
     
     // Reports
     Route::get('/reports', 'FleetManagementController@reports')->name('reports');
+    Route::get('/reports/vehicle-utilization', 'FleetManagementController@vehicleUtilizationReport')->name('reports.vehicle-utilization');
+    Route::get('/reports/fuel-consumption', 'FleetManagementController@fuelConsumptionReport')->name('reports.fuel-consumption');
+    Route::get('/reports/maintenance', 'FleetManagementController@maintenanceReport')->name('reports.maintenance');
+    Route::get('/reports/driver-performance', 'FleetManagementController@driverPerformanceReport')->name('reports.driver-performance');
+    Route::get('/reports/cost-analysis', 'FleetManagementController@costAnalysisReport')->name('reports.cost-analysis');
+    Route::get('/reports/trip-summary', 'FleetManagementController@tripSummaryReport')->name('reports.trip-summary');
 });
 
 //Hostel Management Routes
@@ -296,11 +302,14 @@ Route::prefix('hostel-administration')->name('hostel.administration.')->group(fu
     Route::get('/allocations/create', 'HostelAdministrationController@createAllocation')->name('allocations.create');
     Route::post('/allocations', 'HostelAdministrationController@storeAllocation')->name('allocations.store');
     
+    // Payment Management
+    Route::get('/payments', 'HostelAdministrationController@payments')->name('payments');
+    Route::get('/payments/create', 'HostelAdministrationController@createPayment')->name('payments.create');
+    Route::post('/payments', 'HostelAdministrationController@storePayment')->name('payments.store');
+    Route::post('/payments/record', 'HostelAdministrationController@recordPayment')->name('payments.record');
+    
     // Fee Structure
     Route::get('/fee-structures', 'HostelAdministrationController@feeStructures')->name('fee-structures');
-    
-    // Payments
-    Route::get('/payments', 'HostelAdministrationController@payments')->name('payments');
     
     // Maintenance
     Route::get('/maintenance', 'HostelAdministrationController@maintenance')->name('maintenance');

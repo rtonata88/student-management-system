@@ -233,9 +233,7 @@ class HostelAdministrationController extends Controller
 
     public function createAllocation()
     {
-        $students = User::whereHas('roles', function($q) {
-            $q->where('name', 'Student');
-        })->get();
+        $students = \App\Student::orderBy('surname')->orderBy('student_names')->get();
         
         $availableBeds = HostelBed::with(['hostel', 'block', 'room'])
                                  ->where('status', 'available')
@@ -247,7 +245,7 @@ class HostelAdministrationController extends Controller
     public function storeAllocation(Request $request)
     {
         $request->validate([
-            'student_id' => 'required|exists:users,id',
+            'student_id' => 'required|exists:students,id',
             'bed_id' => 'required|exists:hostel_beds,id',
             'allocation_date' => 'required|date',
             'monthly_fee' => 'required|numeric|min:0',
@@ -262,18 +260,35 @@ class HostelAdministrationController extends Controller
 
         DB::transaction(function () use ($request, $bed) {
             // Create allocation
-            HostelAllocation::create([
+            $allocation = HostelAllocation::create([
                 'student_id' => $request->student_id,
                 'hostel_id' => $bed->hostel_id,
                 'block_id' => $bed->block_id,
                 'room_id' => $bed->room_id,
                 'bed_id' => $bed->id,
                 'allocation_date' => $request->allocation_date,
+                'expected_checkout_date' => $request->expected_checkout_date,
                 'monthly_fee' => $request->monthly_fee,
                 'security_deposit' => $request->security_deposit,
                 'status' => 'active',
-                'allocated_by' => auth()->id()
+                'allocated_by' => auth()->id(),
+                'remarks' => $request->remarks
             ]);
+
+            // Create security deposit payment record
+            if ($request->security_deposit > 0) {
+                HostelPayment::create([
+                    'allocation_id' => $allocation->id,
+                    'student_id' => $request->student_id,
+                    'payment_type' => 'security_deposit',
+                    'amount' => $request->security_deposit,
+                    'due_date' => $request->allocation_date,
+                    'status' => 'pending'
+                ]);
+            }
+
+            // Generate monthly payment records
+            $allocation->generateMonthlyPayments();
 
             // Update bed status
             $bed->update(['status' => 'occupied']);
@@ -299,10 +314,75 @@ class HostelAdministrationController extends Controller
     public function payments()
     {
         $payments = HostelPayment::with(['student', 'allocation.hostel'])
-                                ->orderBy('created_at', 'desc')
+                                ->orderBy('due_date', 'desc')
                                 ->get();
         
         return view('hostel.administration.payments', compact('payments'));
+    }
+
+    public function recordPayment(Request $request)
+    {
+        $request->validate([
+            'payment_id' => 'required|exists:hostel_payments,id',
+            'amount' => 'required|numeric|min:0',
+            'payment_method' => 'required|string',
+            'payment_reference' => 'nullable|string',
+            'payment_date' => 'required|date'
+        ]);
+
+        $payment = HostelPayment::findOrFail($request->payment_id);
+        
+        $payment->update([
+            'amount' => $request->amount,
+            'payment_method' => $request->payment_method,
+            'payment_reference' => $request->payment_reference,
+            'payment_date' => $request->payment_date,
+            'status' => 'paid',
+            'received_by' => auth()->id()
+        ]);
+
+        return redirect()->route('hostel.administration.payments')
+                        ->with('success', 'Payment recorded successfully.');
+    }
+
+    public function createPayment()
+    {
+        $allocations = HostelAllocation::with(['student', 'hostel', 'room'])
+                                     ->where('status', 'active')
+                                     ->get();
+        
+        return view('hostel.administration.create-payment', compact('allocations'));
+    }
+
+    public function storePayment(Request $request)
+    {
+        $request->validate([
+            'allocation_id' => 'required|exists:hostel_allocations,id',
+            'payment_type' => 'required|in:monthly_fee,security_deposit,maintenance,fine,other',
+            'amount' => 'required|numeric|min:0',
+            'payment_method' => 'required|string',
+            'payment_reference' => 'nullable|string',
+            'payment_date' => 'required|date',
+            'due_date' => 'nullable|date'
+        ]);
+
+        $allocation = HostelAllocation::findOrFail($request->allocation_id);
+
+        HostelPayment::create([
+            'allocation_id' => $allocation->id,
+            'student_id' => $allocation->student_id,
+            'payment_type' => $request->payment_type,
+            'amount' => $request->amount,
+            'payment_method' => $request->payment_method,
+            'payment_reference' => $request->payment_reference,
+            'payment_date' => $request->payment_date,
+            'due_date' => $request->due_date ?: $request->payment_date,
+            'status' => 'paid',
+            'received_by' => auth()->id()
+        ]);
+
+        return redirect()->route('hostel.administration.payments')
+                        ->with('success', 'Payment recorded successfully.');
     }
 
     // Maintenance Management

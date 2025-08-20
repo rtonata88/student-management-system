@@ -29,7 +29,7 @@ class FleetManagementController extends Controller
         $totalDrivers = Driver::count();
         $activeDrivers = Driver::where('status', 'active')->count();
         $ongoingTrips = TripLog::where('status', 'ongoing')->count();
-        $monthlyFuelCost = FuelRecord::whereMonth('fuel_date', now()->month)->sum('total_cost');
+        $monthlyFuelCost = FuelRecord::whereMonth('date', now()->month)->sum('total_cost');
         $pendingServices = VehicleService::where('status', 'scheduled')->count();
 
         return view('fleet.dashboard', compact(
@@ -263,9 +263,10 @@ class FleetManagementController extends Controller
         $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
             'driver_id' => 'required|exists:drivers,id',
-            'fuel_date' => 'required|date',
-            'liters' => 'required|numeric|min:0',
-            'cost_per_liter' => 'required|numeric|min:0',
+            'date' => 'required|date',
+            'quantity' => 'required|numeric|min:0',
+            'price_per_liter' => 'required|numeric|min:0',
+            'fuel_type' => 'required',
             'odometer_reading' => 'required|integer|min:0',
             'fuel_station' => 'required'
         ]);
@@ -355,6 +356,108 @@ class FleetManagementController extends Controller
     {
         // Permission checked by middleware
         
-        return view('fleet.reports.index');
+        $totalVehicles = Vehicle::count();
+        $totalTrips = TripLog::count();
+        $monthlyFuelCost = FuelRecord::whereMonth('date', now()->month)->sum('total_cost');
+        $pendingServices = VehicleService::where('status', 'scheduled')->count();
+        
+        return view('fleet.reports.index', compact('totalVehicles', 'totalTrips', 'monthlyFuelCost', 'pendingServices'));
+    }
+
+    /**
+     * Vehicle Utilization Report
+     */
+    public function vehicleUtilizationReport()
+    {
+        // Permission checked by middleware
+        
+        $vehicles = Vehicle::with(['tripLogs' => function($query) {
+            $query->whereMonth('departure_time', now()->month);
+        }])->get();
+        
+        return view('fleet.reports.vehicle-utilization', compact('vehicles'));
+    }
+
+    /**
+     * Fuel Consumption Report
+     */
+    public function fuelConsumptionReport()
+    {
+        // Permission checked by middleware
+        
+        $fuelRecords = FuelRecord::with('vehicle')
+            ->whereMonth('date', now()->month)
+            ->orderBy('date', 'desc')
+            ->get();
+            
+        $totalFuelCost = $fuelRecords->sum('total_cost');
+        $totalQuantity = $fuelRecords->sum('quantity');
+        
+        return view('fleet.reports.fuel-consumption', compact('fuelRecords', 'totalFuelCost', 'totalQuantity'));
+    }
+
+    /**
+     * Maintenance Report
+     */
+    public function maintenanceReport()
+    {
+        // Permission checked by middleware
+        
+        $services = VehicleService::with('vehicle')->orderBy('service_date', 'desc')->get();
+        $upcomingServices = VehicleService::where('status', 'scheduled')->get();
+        
+        return view('fleet.reports.maintenance', compact('services', 'upcomingServices'));
+    }
+
+    /**
+     * Driver Performance Report
+     */
+    public function driverPerformanceReport()
+    {
+        // Permission checked by middleware
+        
+        $drivers = Driver::with(['tripLogs' => function($query) {
+            $query->whereMonth('departure_time', now()->month);
+        }])->get();
+        
+        return view('fleet.reports.driver-performance', compact('drivers'));
+    }
+
+    /**
+     * Cost Analysis Report
+     */
+    public function costAnalysisReport()
+    {
+        // Permission checked by middleware
+        
+        $fuelCosts = FuelRecord::selectRaw('MONTH(date) as month, SUM(total_cost) as total')
+            ->whereYear('date', now()->year)
+            ->groupBy('month')
+            ->get();
+            
+        $maintenanceCosts = VehicleService::selectRaw('MONTH(service_date) as month, SUM(cost) as total')
+            ->whereYear('service_date', now()->year)
+            ->groupBy('month')
+            ->get();
+        
+        return view('fleet.reports.cost-analysis', compact('fuelCosts', 'maintenanceCosts'));
+    }
+
+    /**
+     * Trip Summary Report
+     */
+    public function tripSummaryReport()
+    {
+        // Permission checked by middleware
+        
+        $trips = TripLog::with(['vehicle', 'driver'])
+            ->whereMonth('departure_time', now()->month)
+            ->orderBy('departure_time', 'desc')
+            ->get();
+            
+        $totalDistance = $trips->sum('distance_km');
+        $totalTrips = $trips->count();
+        
+        return view('fleet.reports.trip-summary', compact('trips', 'totalDistance', 'totalTrips'));
     }
 }

@@ -13,23 +13,14 @@ class CreateFeesTable extends Migration
      */
     public function up()
     {
-    {
         if (!Schema::hasTable('fees')) {
             Schema::create('fees', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('fee_description');
-            $table->string('automatic_charge');
-            $table->string('charge_type');
-            $table->decimal('amount', 15, 2);
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+                $table->increments('id');
+                $table->string('fee_description');
+                $table->string('automatic_charge');
+                $table->string('charge_type');
+                $table->decimal('amount', 15, 2);
+                $table->timestamps();
             });
         }
     }

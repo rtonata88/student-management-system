@@ -13,30 +13,21 @@ class CreateStudentsTable extends Migration
      */
     public function up()
     {
-    {
         if (!Schema::hasTable('students')) {
             Schema::create('students', function (Blueprint $table) {
-            $table->increments('id');
-            $table->bigInteger('student_number');
-            $table->string('student_number2')->nullable();
-            $table->string('surname');
-            $table->string('student_names');
-            $table->string('initials');
-            $table->string('gender');
-            $table->string('contact_number');
-            $table->string('contact_email')->nullable();
-            $table->date('date_of_birth');
-            $table->string('birth_certificate');
-            $table->bigInteger('id_number');
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+                $table->increments('id');
+                $table->bigInteger('student_number');
+                $table->string('student_number2')->nullable();
+                $table->string('surname');
+                $table->string('student_names');
+                $table->string('initials');
+                $table->string('gender');
+                $table->string('contact_number');
+                $table->string('contact_email')->nullable();
+                $table->date('date_of_birth');
+                $table->string('birth_certificate');
+                $table->bigInteger('id_number');
+                $table->timestamps();
             });
         }
     }

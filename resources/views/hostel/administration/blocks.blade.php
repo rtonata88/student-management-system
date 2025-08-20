@@ -54,7 +54,7 @@
                                     <td>{{ $block->hostel->name }}</td>
                                     <td>{{ $block->name }}</td>
                                     <td>{{ $block->code }}</td>
-                                    <td>{{ Str::limit($block->description, 50) ?: 'No description' }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($block->description, 50) ?: 'No description' }}</td>
                                     <td>{{ $block->floor_count }}</td>
                                     <td>{{ $block->rooms->count() }}</td>
                                     <td>

@@ -13,28 +13,19 @@ class CreateInvoicesTable extends Migration
      */
     public function up()
     {
-    {
         if (!Schema::hasTable('invoices')) {
             Schema::create('invoices', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('student_id');
-            $table->integer('reference_number');
-            $table->string('model');
-            $table->integer('model_id');
-            $table->integer('financial_year');
-            $table->date('transaction_date');
-            $table->string('line_description');
-            $table->string('debit_amount');
-            $table->string('credit_amount');
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+                $table->increments('id');
+                $table->integer('student_id');
+                $table->integer('reference_number');
+                $table->string('model');
+                $table->integer('model_id');
+                $table->integer('financial_year');
+                $table->date('transaction_date');
+                $table->string('line_description');
+                $table->string('debit_amount');
+                $table->string('credit_amount');
+                $table->timestamps();
             });
         }
     }

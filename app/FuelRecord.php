@@ -8,10 +8,10 @@ class FuelRecord extends Model
 {
     protected $fillable = [
         'vehicle_id',
-        'driver_id',
-        'fuel_date',
-        'liters',
-        'cost_per_liter',
+        'date',
+        'fuel_type',
+        'quantity',
+        'price_per_liter',
         'total_cost',
         'odometer_reading',
         'fuel_station',
@@ -20,12 +20,12 @@ class FuelRecord extends Model
     ];
 
     protected $dates = [
-        'fuel_date'
+        'date'
     ];
 
     protected $casts = [
-        'liters' => 'decimal:2',
-        'cost_per_liter' => 'decimal:2',
+        'quantity' => 'decimal:2',
+        'price_per_liter' => 'decimal:2',
         'total_cost' => 'decimal:2'
     ];
 
@@ -48,24 +48,24 @@ class FuelRecord extends Model
     /**
      * Calculate total cost automatically
      */
-    public function setCostPerLiterAttribute($value)
+    public function setPricePerliterAttribute($value)
     {
-        $this->attributes['cost_per_liter'] = $value;
+        $this->attributes['price_per_liter'] = $value;
         
-        if ($value && $this->liters) {
-            $this->attributes['total_cost'] = $value * $this->liters;
+        if ($value && $this->quantity) {
+            $this->attributes['total_cost'] = $value * $this->quantity;
         }
     }
 
     /**
      * Calculate total cost automatically
      */
-    public function setLitersAttribute($value)
+    public function setQuantityAttribute($value)
     {
-        $this->attributes['liters'] = $value;
+        $this->attributes['quantity'] = $value;
         
-        if ($value && $this->cost_per_liter) {
-            $this->attributes['total_cost'] = $value * $this->cost_per_liter;
+        if ($value && $this->price_per_liter) {
+            $this->attributes['total_cost'] = $value * $this->price_per_liter;
         }
     }
 
@@ -74,7 +74,7 @@ class FuelRecord extends Model
      */
     public function scopeDateRange($query, $startDate, $endDate)
     {
-        return $query->whereBetween('fuel_date', [$startDate, $endDate]);
+        return $query->whereBetween('date', [$startDate, $endDate]);
     }
 
     /**

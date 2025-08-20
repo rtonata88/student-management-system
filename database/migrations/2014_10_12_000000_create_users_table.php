@@ -13,24 +13,15 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-    {
         if (!Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->tinyInteger('approved')->default(0);
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+                $table->increments('id');
+                $table->string('name');
+                $table->string('username')->unique();
+                $table->tinyInteger('approved')->default(0);
+                $table->string('password');
+                $table->rememberToken();
+                $table->timestamps();
             });
         }
     }
