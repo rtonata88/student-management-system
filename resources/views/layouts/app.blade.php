@@ -89,7 +89,9 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-user-follow')}}"></use>
           </svg> Admissions</a>
         <ul class="c-sidebar-nav-dropdown-items">
+          @permission('manual-admissions')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/manual-admissions"><span class="c-sidebar-nav-icon"></span> Manual Admissions</a></li>
+          @endpermission
         </ul>
       </li>
       @endpermission
@@ -119,15 +121,15 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-task')}}"></use>
           </svg> Assessments</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/class-routine"><span class="c-sidebar-nav-icon"></span> Class Routine</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/examination-schedule"><span class="c-sidebar-nav-icon"></span> Examination Schedule</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/my-modules"><span class="c-sidebar-nav-icon"></span> My Modules</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/process-final-marks"><span class="c-sidebar-nav-icon"></span> Process Final Marks</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/promotions"><span class="c-sidebar-nav-icon"></span> Promotions</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/test-marks"><span class="c-sidebar-nav-icon"></span> Test Marks</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/exam-marks"><span class="c-sidebar-nav-icon"></span> Exam Marks</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/promotions"><span class="c-sidebar-nav-icon"></span> Promotions</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/class-routine"><span class="c-sidebar-nav-icon"></span> Class Routine</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/module-allocation"><span class="c-sidebar-nav-icon"></span> Module Allocation</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/marks-suppression"><span class="c-sidebar-nav-icon"></span> Marks Suppression</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/examination-schedule"><span class="c-sidebar-nav-icon"></span> Examination Schedule</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/process-final-marks"><span class="c-sidebar-nav-icon"></span> Process Final Marks</a></li>
         </ul>
       </li>
       @endpermission
@@ -173,19 +175,19 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-dollar')}}"></use>
           </svg> Student Debtors</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          @permission('invoice')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoices"><span class="c-sidebar-nav-icon"></span> Student Statement</a></li>
-          @endpermission
           @permission('payments')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payments"><span class="c-sidebar-nav-icon"></span> Payments</a></li>
-          @endpermission
-          @permission('credit-memos')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/credit-memos"><span class="c-sidebar-nav-icon"></span> Credit Memos</a></li>
           @endpermission
           @permission('debit-memos')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/debit-memos"><span class="c-sidebar-nav-icon"></span> Debit Memos</a></li>
           @endpermission
+          @permission('credit-memos')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/credit-memos"><span class="c-sidebar-nav-icon"></span> Credit Memos</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/student-blocks"><span class="c-sidebar-nav-icon"></span> Student Blocks</a></li>
+          @permission('invoice')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoices"><span class="c-sidebar-nav-icon"></span> Student Statement</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/block-exceptions"><span class="c-sidebar-nav-icon"></span> Block Exceptions</a></li>
         </ul>
       </li>
@@ -197,9 +199,15 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-people')}}"></use>
           </svg> Human Resources</a>
         <ul class="c-sidebar-nav-dropdown-items">
+          @permission('employee-bio')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/employee-bio"><span class="c-sidebar-nav-icon"></span> Employee Bio</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/leave-management"><span class="c-sidebar-nav-icon"></span> Leave Management</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/leave-applications"><span class="c-sidebar-nav-icon"></span> Leave Applications</a></li>
+          @endpermission
+          @permission('leave-management')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('leave-management.index') }}"><span class="c-sidebar-nav-icon"></span> Leave Management</a></li>
+          @endpermission
+          @permission('leave-applications')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('leave-applications.index') }}"><span class="c-sidebar-nav-icon"></span> Leave Applications</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payroll-management"><span class="c-sidebar-nav-icon"></span> Payroll Management</a></li>
         </ul>
       </li>

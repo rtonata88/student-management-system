@@ -11,6 +11,11 @@ class ModuleRegistration extends Model
         return $this->belongsTo(Module::class, 'module_id', 'id');
     }
 
+    public function module()
+    {
+        return $this->belongsTo(Module::class, 'module_id', 'id');
+    }
+
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id', 'id');

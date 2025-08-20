@@ -127,9 +127,20 @@ class RegistrationController extends Controller
 
     public function show($student_id){
         $student = Student::find($student_id);
-        $invoice = Invoice::where('student_id', $student_id)->where('academic_year', 'Registered')->get();
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+        $invoices = Invoice::where('student_id', $student_id)
+                          ->where('financial_year', $academic_year)
+                          ->get();
+        
+        $registration = $student->registration->where('academic_year', $academic_year)->first();
+        $registered_modules = ModuleRegistration::where('student_id', $student_id)
+                                              ->where('academic_year', $academic_year)
+                                              ->with('module')
+                                              ->get();
+        
+        $total = $invoices->sum('debit_amount');
 
-        return view('Management.Enrolment.Show', compact('student', 'enrolment', 'extra_fees', 'total'));
+        return view('Management.Enrolment.Show', compact('student', 'registration', 'invoices', 'registered_modules', 'total', 'academic_year'));
     }
 
     public function store(Request $request)

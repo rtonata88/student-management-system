@@ -40,11 +40,11 @@ Route::post('/students/{id}/admission-status', 'StudentController@updateAdmissio
 Route::get('/students/{id}/admission-status', 'StudentController@getAdmissionStatus')->name('students.get-admission-status');
 
 // Manual Admissions
-Route::get('/manual-admissions', 'ManualAdmissionsController@index')->name('manual-admissions.index');
-Route::post('/manual-admissions/filter', 'ManualAdmissionsController@filter')->name('manual-admissions.filter');
-Route::post('/manual-admissions/{id}/admission-status', 'ManualAdmissionsController@updateAdmissionStatus')->name('manual-admissions.admission-status');
-Route::get('/manual-admissions/{id}/admission-status', 'ManualAdmissionsController@getAdmissionStatus')->name('manual-admissions.get-admission-status');
-Route::get('/manual-admissions/{id}/admission-letter', 'ManualAdmissionsController@generateAdmissionLetter')->name('manual-admissions.admission-letter');
+Route::get('/manual-admissions', 'ManualAdmissionsController@index')->name('manual-admissions.index')->middleware('role:admin|permission:manual-admissions');
+Route::post('/manual-admissions/filter', 'ManualAdmissionsController@filter')->name('manual-admissions.filter')->middleware('role:admin|permission:manual-admissions');
+Route::post('/manual-admissions/{id}/admission-status', 'ManualAdmissionsController@updateAdmissionStatus')->name('manual-admissions.admission-status')->middleware('role:admin|permission:process-admissions');
+Route::get('/manual-admissions/{id}/admission-status', 'ManualAdmissionsController@getAdmissionStatus')->name('manual-admissions.get-admission-status')->middleware('role:admin|permission:manual-admissions');
+Route::get('/manual-admissions/{id}/admission-letter', 'ManualAdmissionsController@generateAdmissionLetter')->name('manual-admissions.admission-letter')->middleware('role:admin|permission:generate-admission-letters');
 
 Route::resource('/enrolment', 'RegistrationController');
 Route::post('/enrolment/filter', 'RegistrationController@filter')->name('enrolment.filter');
@@ -115,6 +115,39 @@ Route::get('/academic-year/status/{id}', 'AcademicYearController@updateStatus')-
 //Access Management - setups
 Route::resource('/users','UsersController');
 Route::resource('/roles','RolesController');
+
+//Employee Management
+Route::get('/employee-bio', 'EmployeeController@index')->name('employees.index');
+Route::get('/employees/{id}', 'EmployeeController@show')->name('employees.show');
+Route::get('/employees/{id}/edit', 'EmployeeController@edit')->name('employees.edit');
+Route::put('/employees/{id}', 'EmployeeController@update')->name('employees.update');
+Route::delete('/employees/{id}', 'EmployeeController@destroy')->name('employees.destroy');
+
+//Leave Management (Admin)
+Route::get('/leave-management', 'LeaveManagementController@index')->name('leave-management.index');
+Route::get('/leave-management/create', 'LeaveManagementController@create')->name('leave-management.create');
+Route::post('/leave-management', 'LeaveManagementController@store')->name('leave-management.store');
+Route::get('/leave-management/{leaveRequest}', 'LeaveManagementController@show')->name('leave-management.show');
+Route::get('/leave-management/{leaveRequest}/edit', 'LeaveManagementController@edit')->name('leave-management.edit');
+Route::put('/leave-management/{leaveRequest}', 'LeaveManagementController@update')->name('leave-management.update');
+Route::delete('/leave-management/{leaveRequest}', 'LeaveManagementController@destroy')->name('leave-management.destroy');
+Route::post('/leave-management/{leaveRequest}/approve', 'LeaveManagementController@approve')->name('leave-management.approve');
+Route::post('/leave-management/{leaveRequest}/reject', 'LeaveManagementController@reject')->name('leave-management.reject');
+
+//Leave Applications (Employee)
+Route::get('/leave-applications', 'LeaveApplicationController@index')->name('leave-applications.index');
+Route::get('/leave-applications/create', 'LeaveApplicationController@create')->name('leave-applications.create');
+Route::post('/leave-applications', 'LeaveApplicationController@store')->name('leave-applications.store');
+Route::get('/leave-applications/{leaveApplication}', 'LeaveApplicationController@show')->name('leave-applications.show');
+Route::get('/leave-applications/{leaveApplication}/edit', 'LeaveApplicationController@edit')->name('leave-applications.edit');
+Route::put('/leave-applications/{leaveApplication}', 'LeaveApplicationController@update')->name('leave-applications.update');
+Route::delete('/leave-applications/{leaveApplication}', 'LeaveApplicationController@destroy')->name('leave-applications.destroy');
+Route::post('/leave-applications/{leaveApplication}/cancel', 'LeaveApplicationController@cancel')->name('leave-applications.cancel');
+
+//Payroll Management
+Route::get('/payroll-management', function () {
+    return view('payroll.coming-soon');
+})->name('payroll-management.index');
 
 //Access Management - Permissions
 Route::resource('/permissions','PermissionsController');

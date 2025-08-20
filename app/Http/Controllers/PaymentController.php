@@ -88,9 +88,8 @@ class PaymentController extends Controller
     }
 
     private function getChargedExtraFees($student_id, $academic_year){
-        return OtherFeesSummary::where('academic_year', $academic_year->academic_year)
-                                ->where('student_id', $student_id)
-                                ->get();
+        // Use the alternative method to bypass the problematic database view
+        return OtherFeesSummary::getExtraCharges($student_id, $academic_year->academic_year);
     }
 
 

@@ -46,5 +46,10 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasMany(SubjectAllocation::class);
     }
+
+    public function employeeProfile()
+    {
+        return $this->hasOne(EmployeeProfile::class);
+    }
     
 }

@@ -10,34 +10,77 @@
 </div>
 @endsection
 @section('content')
-<div class="row">
-    <div class="col-md-3 col-xs-12">
-        <div class="card">
-            <div class="card-header">
-                <strong>Search</strong>
+<div class="container-fluid">
+    <!-- Search Section -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+            {!! Form::open(array('route' => array('subject-allocations.filter'), 'method' => 'post', 'class'=> 'form-inline')) !!}
+            
+            <div class="row w-100 align-items-end">
+                <div class="col-md-3 mb-3">
+                    <label for="name" class="form-label text-muted small font-weight-bold mb-2 d-block">
+                        NAME:
+                    </label>
+                    {{Form::text('name', null, [
+                        'class' => 'form-control', 
+                        'placeholder' => 'Enter name here...',
+                        'id' => 'name'
+                    ])}}
+                </div>
+                
+                <div class="col-md-1 mb-3 d-flex align-items-end justify-content-center">
+                    <div style="padding-bottom: 8px;">
+                        <span class="badge badge-secondary px-2 py-1">OR</span>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label for="username" class="form-label text-muted small font-weight-bold mb-2 d-block">
+                        USERNAME:
+                    </label>
+                    {{Form::text('username', null, [
+                        'class' => 'form-control', 
+                        'placeholder' => 'Enter username here...',
+                        'id' => 'username'
+                    ])}}
+                </div>
+                
+                <div class="col-md-1 mb-3 d-flex align-items-end justify-content-center">
+                    <div style="padding-bottom: 8px;">
+                        <span class="badge badge-secondary px-2 py-1">OR</span>
+                    </div>
+                </div>
+                
+                <div class="col-md-2 mb-3">
+                    <label for="email" class="form-label text-muted small font-weight-bold mb-2 d-block">
+                        EMAIL:
+                    </label>
+                    {{Form::email('email', null, [
+                        'class' => 'form-control', 
+                        'placeholder' => 'Enter email here...',
+                        'id' => 'email'
+                    ])}}
+                </div>
+                
+                <div class="col-md-2 mb-3">
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-3">
+                            Search
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
+                            Clear
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                {!! Form::open(array('route' => array('subject-allocations.filter'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
-                <div class="form-group">
-                    {{Form::text('name', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Name'])}}
-                </div>
-                <div class="form-group">
-                    {{Form::text('username', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Username'])}}
-                </div>
-                <div class="form-group">
-                    {{Form::email('email', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Email'])}}
-                </div>
-                <button type="submit" class="btn btn-sm btn-success">
-                    Search
-                </button>
-                <a href="/subject-allocations" class="btn btn-sm">
-                    Clear
-                </a>
-                {!! Form::close() !!}
-            </div>
+            
+            {!! Form::close() !!}
         </div>
     </div>
-    <div class="col-md-9">
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
         @if (Session::has('error'))
         <div class="alert alert-danger">
             {{Session::get('error')}}
@@ -91,4 +134,25 @@
     </div>
 </div>
 </div>
+@endsection
+
+<script>
+function clearForm() {
+    document.getElementById('name').value = '';
+    document.getElementById('username').value = '';
+    document.getElementById('email').value = '';
+    
+    // Also clear any search results if they exist
+    const resultsSection = document.querySelector('.col-12 .card');
+    if (resultsSection) {
+        resultsSection.style.display = 'none';
+    }
+    
+    // Remove any error messages
+    const alertDanger = document.querySelector('.alert-danger');
+    if (alertDanger) {
+        alertDanger.style.display = 'none';
+    }
+}
+</script>
 @endsection

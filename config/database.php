@@ -51,6 +51,10 @@ return [
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'strict' => false,
+            'modes' => [],
+            'options' => [
+                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET sql_mode=''"
+            ],
             'engine' => null,
             //'options'   => [ \PDO::ATTR_EMULATE_PREPARES => true ]
         ],

@@ -10,32 +10,60 @@
 </div>
 @endsection
 @section('content')
-<div class="row">
-    <div class="col-md-3 col-xs-12">
-        <div class="card">
-            <div class="card-header">
-                <strong>Search</strong>
-            </div>
-            <div class="card-body">
-                {!! Form::open(array('route' => array('debit-memos.filter'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
-                <div class="form-group">
-                    {{Form::text('student_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student number'])}}
+<div class="container-fluid">
+    <!-- Search Section -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+            {!! Form::open(array('route' => array('debit-memos.filter'), 'method' => 'post', 'class'=> 'form-inline')) !!}
+            
+            <div class="row w-100 align-items-end">
+                <div class="col-md-4 mb-3">
+                    <label for="student_number" class="form-label text-muted small font-weight-bold mb-2 d-block">
+                        STUDENT NUMBER:
+                    </label>
+                    {{Form::text('student_number', null, [
+                        'class' => 'form-control', 
+                        'placeholder' => 'Enter student number here...',
+                        'id' => 'student_number'
+                    ])}}
                 </div>
-                <div class="form-group">
-                    {{Form::text('names', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Student names'])}}
+                
+                <div class="col-md-1 mb-3 d-flex align-items-end justify-content-center">
+                    <div style="padding-bottom: 8px;">
+                        <span class="badge badge-secondary px-3 py-2">OR</span>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-sm btn-success">
-                    Search
-                </button>
-                <a href="/debit-memos" class="btn btn-sm">
-                    Clear
-                </a>
-                {!! Form::close() !!}
+                
+                <div class="col-md-3 mb-3">
+                    <label for="names" class="form-label text-muted small font-weight-bold mb-2 d-block">
+                        STUDENT NAMES:
+                    </label>
+                    {{Form::text('names', null, [
+                        'class' => 'form-control', 
+                        'placeholder' => 'Enter student names here...',
+                        'id' => 'names'
+                    ])}}
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4">
+                            Search
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
+                            Clear
+                        </button>
+                    </div>
+                </div>
             </div>
+            
+            {!! Form::close() !!}
         </div>
     </div>
 
-    <div class="col-md-9 col-sm-12">
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
         @if(Session::has('message'))
         <div class="alert alert-danger alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -71,6 +99,26 @@
             </div>
         </div>
         @endif
+        </div>
     </div>
 </div>
+
+<script>
+function clearForm() {
+    document.getElementById('student_number').value = '';
+    document.getElementById('names').value = '';
+    
+    // Also clear any search results if they exist
+    const resultsSection = document.querySelector('.col-12 .card');
+    if (resultsSection) {
+        resultsSection.style.display = 'none';
+    }
+    
+    // Remove any error messages
+    const alertDanger = document.querySelector('.alert-danger');
+    if (alertDanger) {
+        alertDanger.style.display = 'none';
+    }
+}
+</script>
 @endsection
