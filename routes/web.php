@@ -149,6 +149,18 @@ Route::get('/payroll-management', function () {
     return view('payroll.coming-soon');
 })->name('payroll-management.index');
 
+//Inventory Management
+Route::resource('/inventories', 'InventoryController');
+Route::get('/inventories/{inventory}/adjust-stock', 'InventoryController@adjustStock')->name('inventories.adjust-stock');
+Route::post('/inventories/{inventory}/adjust-stock', 'InventoryController@processStockAdjustment')->name('inventories.process-stock-adjustment');
+Route::get('/inventories/{inventory}/stock-movement', 'InventoryController@stockMovement')->name('inventories.stock-movement');
+Route::post('/inventories/{inventory}/stock-movement', 'InventoryController@processStockMovement')->name('inventories.process-stock-movement');
+Route::get('/inventory/low-stock', 'InventoryController@lowStock')->name('inventories.low-stock');
+Route::get('/inventory/expired', 'InventoryController@expired')->name('inventories.expired');
+
+//Inventory Categories
+Route::resource('/inventory-categories', 'InventoryCategoryController');
+
 //Access Management - Permissions
 Route::resource('/permissions','PermissionsController');
 // Route::get('/permissions/{id}/create', 'PermissionsController@create')->name('permissions.createWithId');
