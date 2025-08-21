@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\SubjectAllocation;
 use Illuminate\Http\Request;
-
 use App\User;
 use App\Module;
 use App\AcademicYear;
 use App\Center;
-
 use Session;
 
 class SubjectAllocationController extends Controller
@@ -18,10 +16,9 @@ class SubjectAllocationController extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -41,7 +38,7 @@ class SubjectAllocationController extends Controller
                     return redirect()->route('subject-allocations.showAllocationScreen', $users->first()->id);
                 } else 
                 {
-                    return view('Assessments.Subject-Allocations.Search', compact('user'));
+                    return view('Assessments.Subject-Allocations.Search', compact('users'));
                 }
             }
         }
@@ -51,7 +48,7 @@ class SubjectAllocationController extends Controller
             $users = User::where('username', $request->username)->first();
             if ($users)
             {
-                return redirect()->route('subject-allocations.showAllocationScreen', $users->first()->id);
+                return redirect()->route('subject-allocations.showAllocationScreen', $users->id);
             }
         }
 
@@ -60,7 +57,7 @@ class SubjectAllocationController extends Controller
             $users = User::where('email', $request->email)->first();
             if ($users)
             {
-                return redirect()->route('subject-allocations.showAllocationScreen', $users->first()->id);
+                return redirect()->route('subject-allocations.showAllocationScreen', $users->id);
             }
         }
         
@@ -80,20 +77,7 @@ class SubjectAllocationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -103,8 +87,6 @@ class SubjectAllocationController extends Controller
             'center' => 'required',
             'academic_year' => 'required'
         ]);
-
-        //dd($request->subject);
 
         //go through each subject submitted and check whether its already allocated
         foreach($request->subject as $subject)
@@ -131,51 +113,14 @@ class SubjectAllocationController extends Controller
                 Session::flash('error','Subject allocation was not successful! You cannot allocate duplicates');
                 return redirect()->back();
             }
-
-            Session::flash('success','Subject allocation was successful!');
-            return redirect()->back();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\SubjectAllocation  $subjectAllocation
-     * @return \Illuminate\Http\Response
-     */
-    public function show(SubjectAllocation $subjectAllocation)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\SubjectAllocation  $subjectAllocation
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(SubjectAllocation $subjectAllocation)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\SubjectAllocation  $subjectAllocation
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, SubjectAllocation $subjectAllocation)
-    {
-        //
+        
+        Session::flash('success','Subject allocation was successful!');
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\SubjectAllocation  $subjectAllocation
-     * @return \Illuminate\Http\Response
      */
     public function unAllocate($id)
     {

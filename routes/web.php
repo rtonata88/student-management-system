@@ -187,8 +187,28 @@ Route::resource('/maintenance-categories', 'MaintenanceCategoryController');
 Route::resource('/permissions','PermissionsController');
 // Route::get('/permissions/{id}/create', 'PermissionsController@create')->name('permissions.createWithId');
 
-//Assessment Management - Subjects Allocations
-Route::resource('/subject-allocations','SubjectAllocationController');
+//Assessment Management - Module Allocations
+Route::resource('module-allocations', 'ModuleAllocationController')->middleware('auth');
+
+// My Modules routes
+Route::group(['middleware' => 'auth', 'prefix' => 'my-modules'], function() {
+    Route::get('/', 'MyModulesController@index')->name('my-modules.index');
+    Route::get('/{allocation}/class-list', 'MyModulesController@classList')->name('my-modules.class-list');
+    Route::get('/{allocation}/attendance', 'MyModulesController@attendance')->name('my-modules.attendance');
+    Route::get('/my-modules/class-notes/{id}', 'MyModulesController@classNotes')->name('my-modules.class-notes');
+});
+
+// Class Routine Management
+Route::middleware('auth')->group(function () {
+    Route::get('/class-routine', 'ClassRoutineController@index')->name('class-routine.index');
+    Route::get('/class-routine/create', 'ClassRoutineController@create')->name('class-routine.create');
+    Route::post('/class-routine', 'ClassRoutineController@store')->name('class-routine.store');
+    Route::get('/class-routine/{id}/edit', 'ClassRoutineController@edit')->name('class-routine.edit');
+    Route::put('/class-routine/{id}', 'ClassRoutineController@update')->name('class-routine.update');
+    Route::delete('/class-routine/{id}', 'ClassRoutineController@destroy')->name('class-routine.destroy');
+    Route::get('/class-routine/print', 'ClassRoutineController@print')->name('class-routine.print');
+});
+
 Route::post('/subject-allocations/filter', 'SubjectAllocationController@filter')->name('subject-allocations.filter');
 Route::get('/subject-allocations/show-form/{student_id}', 'SubjectAllocationController@showAllocationScreen')->name('subject-allocations.showAllocationScreen');
 Route::get('/subject-allocations/un-allocate/{id}', 'SubjectAllocationController@unAllocate')->name('subject-allocations.unAllocate');
@@ -214,7 +234,7 @@ Route::get('/assessments/{id}/edit','AssessmentTypeController@edit')->name('asse
 Route::put('/assessments/{id}','AssessmentTypeController@update')->name('assessments.update');
 Route::get('/assessments/{assessment_type_id}/edit/{assessment_id}','AssessmentController@edit');
 Route::post('/assessments/store', 'AssessmentController@store');
-Route::post('/assessments/update/{id}', 'AssessmentController@update')->name('assessments.update');
+Route::post('/assessments/update/{id}', 'AssessmentController@update')->name('assessment-items.update');
 
 //Assessment Management - Assessment Weights
 Route::get('/assessment-weights', 'AssessmentWeightController@index')->name('assessment-weights.index');
@@ -236,15 +256,42 @@ Route::delete('/exam-paper-weights/{moduleId}/{academicYearId}/{assessmentTypeId
 Route::get('/assessment-marks', 'AssessmentMarkController@index'); //show subjects allocated -> assessment types -> assessments
 Route::get('/assessment-marks/{subject_allocation_id}', 'AssessmentMarkController@showAssessments'); // assessment types & assessments
 Route::get('/assessment-marks/create/{assessment_id}', 'AssessmentMarkController@create');
-Route::get('/assessment-marks/store', 'AssessmentMarkController@store')->name('assessment-marks.store');
-Route::get('/assessment-marks/update/{assessment_id}', 'AssessmentMarkController@update');
+Route::post('/assessment-marks/store', 'AssessmentMarkController@store')->name('assessment-marks.store');
+Route::put('/assessment-marks/update/{assessment_id}', 'AssessmentMarkController@update');
 
-//Examination Management
+//Assessment Management    // Test Marks Routes
+    Route::get('/test-marks', 'TestMarksController@index')->name('test-marks.index')->middleware('permission:test-marks');
+    Route::get('/test-marks/{module}/{centre}/{assessmentType}/capture', 'TestMarksController@captureMarks')->name('test-marks.capture')->middleware('permission:capture-test-marks');
+    Route::post('/test-marks/{module}/{centre}/{assessmentType}/store', 'TestMarksController@storeMarks')->name('test-marks.store')->middleware('permission:capture-test-marks');
+    Route::get('/test-marks/{module}/{centre}/view-all', 'TestMarksController@viewAll')->name('test-marks.view-all')->middleware('permission:view-all-test-marks');
+    Route::delete('/test-marks/{testMark}', 'TestMarksController@destroy')->name('test-marks.destroy')->middleware('permission:delete-test-marks');
+
+// Exam Marks Routes
+Route::get('/exam-marks', 'ExamMarksController@index')->name('exam-marks.index')->middleware('permission:exam-marks');
+Route::get('/exam-marks/{examType}/{module}/{centre}/{examPaper}/capture', 'ExamMarksController@captureMarks')->name('exam-marks.capture')->middleware('permission:capture-exam-marks');
+Route::post('/exam-marks/{examType}/{module}/{centre}/{examPaper}/store', 'ExamMarksController@storeMarks')->name('exam-marks.store')->middleware('permission:capture-exam-marks');
+Route::get('/exam-marks/{examType}/{module}/{centre}/view-all', 'ExamMarksController@viewAll')->name('exam-marks.view-all')->middleware('permission:view-all-exam-marks');
+Route::delete('/exam-marks/{examMark}', 'ExamMarksController@destroy')->name('exam-marks.destroy')->middleware('permission:delete-exam-marks');
+
 Route::resource('/examinations', 'ExaminationController');
+
+// Examination Schedule Routes
+Route::get('/examination-schedule', 'ExaminationScheduleController@index')->name('examination-schedule.index')->middleware('permission:view-examination-schedule');
+Route::get('/examination-schedule/create', 'ExaminationScheduleController@create')->name('examination-schedule.create')->middleware('permission:create-examination-schedule');
+Route::post('/examination-schedule', 'ExaminationScheduleController@store')->name('examination-schedule.store')->middleware('permission:create-examination-schedule');
+Route::get('/examination-schedule/{id}/edit', 'ExaminationScheduleController@edit')->name('examination-schedule.edit')->middleware('permission:edit-examination-schedule');
+Route::put('/examination-schedule/{id}', 'ExaminationScheduleController@update')->name('examination-schedule.update')->middleware('permission:edit-examination-schedule');
+Route::delete('/examination-schedule/{id}', 'ExaminationScheduleController@destroy')->name('examination-schedule.destroy')->middleware('permission:delete-examination-schedule');
+Route::get('/examination-schedule/timetable', 'ExaminationScheduleController@timetable')->name('examination-schedule.timetable')->middleware('permission:view-examination-schedule');
+Route::get('/examination-schedule/print', 'ExaminationScheduleController@print')->name('examination-schedule.print')->middleware('permission:print-examination-schedule');
+
+// AJAX Routes for Examination Schedule
+Route::get('/examination-schedule/get-subject-allocations', 'ExaminationScheduleController@getSubjectAllocations')->name('examination-schedule.get-subject-allocations')->middleware('permission:view-examination-schedule');
+Route::get('/examination-schedule/get-venues', 'ExaminationScheduleController@getVenues')->name('examination-schedule.get-venues')->middleware('permission:view-examination-schedule');
+Route::get('/examination-schedule/check-conflicts', 'ExaminationScheduleController@checkConflicts')->name('examination-schedule.check-conflicts')->middleware('permission:view-examination-schedule');
 
 //Result Codes Management
 Route::resource('/result-codes', 'ResultCodeController');
-
 // Grading Scales Management
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('grading-scales', 'GradingScaleController');

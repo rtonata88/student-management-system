@@ -20,4 +20,24 @@ class Module extends Model implements Auditable
     {
         return $this->hasMany(SubjectAllocation::class);
     }
+
+    public function assessmentWeights()
+    {
+        return $this->hasMany(AssessmentWeight::class);
+    }
+
+    public function testMarks()
+    {
+        return $this->hasMany(TestMark::class);
+    }
+
+    public function examPaperWeights()
+    {
+        return $this->hasMany(ExamPaperWeight::class);
+    }
+
+    public function examMarks()
+    {
+        return $this->hasMany(ExamMark::class);
+    }
 }

@@ -42,8 +42,13 @@ class ExamPaperWeightController extends Controller
                 ->orWhere('paper_name', 'like', "%{$search}%")
                 ->orWhere('paper_code', 'like', "%{$search}%");
             })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->join('modules', 'exam_paper_weights.module_id', '=', 'modules.id')
+            ->join('examinations', 'exam_paper_weights.examination_id', '=', 'examinations.id')
+            ->orderBy('modules.subject_name')
+            ->orderBy('examinations.name')
+            ->orderBy('exam_paper_weights.paper_name')
+            ->select('exam_paper_weights.*')
+            ->get();
 
         return view('Assessments.ExamPaperWeights.Index', compact('examPaperWeights', 'search'));
     }
@@ -96,10 +101,10 @@ class ExamPaperWeightController extends Controller
         }
 
         // Delete existing papers for this module, academic year, and exam type
-        $existingWeights = ExamPaperWeight::where('module_id', $request->module_id)
+        ExamPaperWeight::where('module_id', $request->module_id)
             ->where('academic_year_id', $request->academic_year_id)
             ->where('examination_id', $request->examination_id)
-            ->get();
+            ->delete();
 
         // Create new papers
         foreach ($request->exam_papers as $paper) {
@@ -132,6 +137,8 @@ class ExamPaperWeightController extends Controller
             abort(403, 'Unauthorized access to edit exam paper weights.');
         }
         
+        $modules = Module::orderBy('subject_name')->get();
+        $academicYears = AcademicYear::orderBy('academic_year')->get();
         $module = Module::findOrFail($moduleId);
         $academicYear = AcademicYear::findOrFail($academicYearId);
         $examination = Examination::findOrFail($assessmentTypeId);

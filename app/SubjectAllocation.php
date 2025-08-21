@@ -10,7 +10,7 @@ class SubjectAllocation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'module_id', 'center_id' , 'academic_year_id'
+        'user_id', 'subject_id', 'center_id' , 'academic_year_id'
     ];
 
     public function academicYear()
@@ -20,7 +20,7 @@ class SubjectAllocation extends Model
 
     public function module()
     {
-        return $this->belongsTo(Module::class);
+        return $this->belongsTo(Module::class, 'subject_id');
     }
 
     public function center()
@@ -28,10 +28,15 @@ class SubjectAllocation extends Model
         return $this->belongsTo(Center::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function assessment_types()
     {
             // dd($this);
-        return $this->hasMany(AssessmentType::class,'subject_id','module_id');
+        return $this->hasMany(AssessmentType::class,'subject_id','subject_id');
     }
 
     // //registered students

@@ -16,5 +16,7 @@ class DatabaseSeeder extends Seeder
     	$users = factory(App\Profile::class, 5000)->create();
     	
     	$this->call(FixedAssetSeeder::class);
+        $this->call(TestMarksPermissionsSeeder::class);
+        $this->call(ExamMarksPermissionsSeeder::class);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateModuleExtraFeesTable extends Migration
+class CreateExamPapersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateModuleExtraFeesTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('module_extra_fees')) {
-            Schema::create('module_extra_fees', function (Blueprint $table) {
+        if (!Schema::hasTable('exam_papers')) {
+            Schema::create('exam_papers', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('module_id');
-                $table->integer('fee_id');
-                $table->decimal('amount', 15, 2);
+                $table->string('paper_name');
+                $table->string('paper_code')->unique();
+                $table->text('description')->nullable();
+                $table->boolean('active')->default(true);
                 $table->timestamps();
             });
         }
@@ -31,6 +32,6 @@ class CreateModuleExtraFeesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('module_extra_fees');
+        Schema::dropIfExists('exam_papers');
     }
 }

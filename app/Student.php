@@ -39,6 +39,14 @@ class Student extends Model implements Auditable
         return $this->belongsTo(Center::class);
     }
 
+    public function testMarks(){
+        return $this->hasMany(TestMark::class);
+    }
+
+    public function examMarks(){
+        return $this->hasMany(ExamMark::class);
+    }
+
     // Accessor to get admission status directly from the student model
     public function getAdmissionStatusAttribute(){
         return $this->admission ? $this->admission->admission_status : null;

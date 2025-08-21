@@ -58,7 +58,7 @@
                                 <tbody>
                                     @php
                                         $groupedWeights = $examPaperWeights->groupBy(function($item) {
-                                            return $item->module_id . '_' . $item->academic_year_id . '_' . $item->assessment_type_id;
+                                            return $item->module_id . '_' . $item->academic_year_id . '_' . $item->examination_id;
                                         });
                                     @endphp
                                     
@@ -112,10 +112,6 @@
                             </table>
                         </div>
 
-                        <!-- Pagination -->
-                        <div class="d-flex justify-content-center">
-                            {{ $examPaperWeights->appends(['search' => $search])->links() }}
-                        </div>
                     @else
                         <div class="text-center py-4">
                             <p class="text-muted">No exam paper weights found.</p>

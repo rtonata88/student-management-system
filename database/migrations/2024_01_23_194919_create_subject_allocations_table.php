@@ -13,23 +13,21 @@ class CreateSubjectAllocationsTable extends Migration
      */
     public function up()
     {
-    {
         if (!Schema::hasTable('subject_allocations')) {
             Schema::create('subject_allocations', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id');
-            $table->integer('subject_id');
-            $table->integer('center_id');
-            $table->integer('academic_year_id');         
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+                $table->id();
+                $table->unsignedInteger('user_id');
+                $table->unsignedInteger('module_id');
+                $table->unsignedInteger('center_id');
+                $table->unsignedInteger('academic_year_id');
+                $table->timestamps();
+                
+                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+                $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
+                $table->foreign('center_id')->references('id')->on('centers')->onDelete('cascade');
+                $table->foreign('academic_year_id')->references('id')->on('academic_years')->onDelete('cascade');
+                
+                $table->unique(['user_id', 'module_id', 'center_id', 'academic_year_id'], 'unique_allocation');
             });
         }
     }

@@ -121,12 +121,20 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-task')}}"></use>
           </svg> Assessments</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/my-modules"><span class="c-sidebar-nav-icon"></span> My Modules</a></li>
+          @permission('view-my-modules')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('my-modules.index') }}"><span class="c-sidebar-nav-icon"></span> My Modules</a></li>
+          @endpermission
+          @permission('test-marks')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/test-marks"><span class="c-sidebar-nav-icon"></span> Test Marks</a></li>
+          @endpermission
+          @permission('exam-marks')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/exam-marks"><span class="c-sidebar-nav-icon"></span> Exam Marks</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/promotions"><span class="c-sidebar-nav-icon"></span> Promotions</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/class-routine"><span class="c-sidebar-nav-icon"></span> Class Routine</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/module-allocation"><span class="c-sidebar-nav-icon"></span> Module Allocation</a></li>
+          @permission('view-module-allocations')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('module-allocations.index') }}"><span class="c-sidebar-nav-icon"></span> Module Allocation</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/marks-suppression"><span class="c-sidebar-nav-icon"></span> Marks Suppression</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/examination-schedule"><span class="c-sidebar-nav-icon"></span> Examination Schedule</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/process-final-marks"><span class="c-sidebar-nav-icon"></span> Process Final Marks</a></li>
@@ -168,6 +176,14 @@
         </li>
 
       @endpermission
+
+      @can('view-class-routine')
+        <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('class-routine.index') }}">
+            <svg class="c-sidebar-nav-icon">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-calendar')}}"></use>
+            </svg>Class Routine</a>
+        </li>
+      @endcan
 
       @permission('FINANCE')
       <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
@@ -370,7 +386,51 @@
         </ul>
       </li>
       @endpermission
+
+      <!-- Support Centre Section -->
+      <li class="c-sidebar-nav-title">SUPPORT CENTRE</li>
+      <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="https://educims.com/support.html" target="_blank">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-book')}}"></use>
+          </svg> User Manuals
+        </a>
+      </li>
+      <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="https://www.youtube.com/@educims" target="_blank">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-video')}}"></use>
+          </svg> Video Tutorials
+        </a>
+      </li>
+      <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="https://educims.com/contact.html" target="_blank">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-help')}}"></use>
+          </svg> FAQ & Help
+        </a>
+      </li>
+      <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="#" onclick="showQuickSupport(); return false;">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-phone')}}"></use>
+          </svg> Quick Support
+        </a>
+      </li>
     </ul>
+    
+    <!-- Support Widget Card -->
+    <div class="support-widget-card">
+      <div class="support-icon">
+        <svg>
+          <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-help')}}"></use>
+        </svg>
+      </div>
+      <h6 class="support-title">Support & Manuals</h6>
+      <p class="support-subtitle">+264 81 37 0 37 26<br>info@educims.com</p>
+      <a href="https://educims.com/support.html" target="_blank" class="support-btn" style="display: inline-block; text-decoration: none; text-align: center;">Get Support</a>
+    </div>
+    
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
   </div>
   <div class="c-wrapper c-fixed-components">
@@ -396,7 +456,7 @@
                   <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
                 </svg>
               </div>
-              <span style="color: #495057; font-weight: 500; font-size: 14px;">Account</span>
+              <span style="color: #495057; font-weight: 500; font-size: 14px;">{{ explode(' ', Auth::user()->name)[0] }}</span>
               <svg style="color: #6c757d; width: 10px; height: 10px;">
                 <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chevron-bottom')}}"></use>
               </svg>
@@ -432,6 +492,81 @@
       </footer>
     </div>
   </div>
+
+  <!-- Quick Support Modal -->
+  <div id="quickSupportModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="quickSupportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="quickSupportModalLabel">
+            <svg class="mr-2" style="width: 20px; height: 20px; fill: currentColor;">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-phone')}}"></use>
+            </svg>
+            Quick Support
+          </h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="mb-4">
+              <svg style="width: 48px; height: 48px; color: #667eea;">
+                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-contact')}}"></use>
+              </svg>
+            </div>
+            <h6 class="mb-3 text-primary">Contact Information</h6>
+            <div class="contact-info">
+              <div class="mb-3">
+                <svg class="mr-2" style="width: 16px; height: 16px; color: #667eea;">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-location-pin')}}"></use>
+                </svg>
+                <strong>Address:</strong><br>
+                <span class="ml-4">5 Handel Street, Windhoek West, Namibia</span>
+              </div>
+              <div class="mb-3">
+                <svg class="mr-2" style="width: 16px; height: 16px; color: #667eea;">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-phone')}}"></use>
+                </svg>
+                <strong>Phone:</strong><br>
+                <span class="ml-4">
+                  <a href="tel:+264813703726" class="text-primary">+264 81 37 0 37 26</a>
+                </span>
+              </div>
+              <div class="mb-3">
+                <svg class="mr-2" style="width: 16px; height: 16px; color: #667eea;">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-envelope-closed')}}"></use>
+                </svg>
+                <strong>Email:</strong><br>
+                <span class="ml-4">
+                  <a href="mailto:info@educims.com" class="text-primary">info@educims.com</a>
+                </span>
+              </div>
+              <div class="mb-3">
+                <svg class="mr-2" style="width: 16px; height: 16px; color: #667eea;">
+                  <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-globe')}}"></use>
+                </svg>
+                <strong>Website:</strong><br>
+                <span class="ml-4">
+                  <a href="https://www.educims.com" target="_blank" class="text-primary">www.educims.com</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <a href="mailto:info@educims.com" class="btn btn-primary">
+            <svg class="mr-1" style="width: 16px; height: 16px; fill: currentColor;">
+              <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-envelope-closed')}}"></use>
+            </svg>
+            Send Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- CoreUI and necessary plugins-->
   <script src="{{asset('new/node_modules/@coreui/coreui/dist/js/coreui.bundle.min.js')}}"></script>
 
@@ -500,6 +635,14 @@
   <script src="{{asset('new/node_modules/@coreui/utils/dist/coreui-utils.js')}}"></script>
   <script src="{{asset('assets/js/datatables.js')}}"></script>
   <script src="{{asset('new/js/main.js')}}"></script>
+  
+  <!-- Quick Support Modal JavaScript -->
+  <script>
+    function showQuickSupport() {
+      $('#quickSupportModal').modal('show');
+    }
+  </script>
+  
   @stack('dataTableScript')
   @stack('profiles')
   @stack('contactsJS')
@@ -585,6 +728,142 @@
 
 .dropdown-header.bg-primary {
   background: var(--primary-gradient) !important;
+}
+
+/* Quick Support Modal Styling */
+#quickSupportModal .modal-header {
+  background: var(--primary-gradient) !important;
+  border-bottom: none;
+}
+
+#quickSupportModal .contact-info {
+  text-align: left;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+#quickSupportModal .contact-info div {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  margin-bottom: 10px;
+}
+
+#quickSupportModal .contact-info strong {
+  color: #495057;
+  margin-bottom: 5px;
+}
+
+#quickSupportModal .contact-info a {
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+#quickSupportModal .contact-info a:hover {
+  color: var(--secondary-color) !important;
+}
+
+#quickSupportModal .btn-primary {
+  background: var(--primary-gradient);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+#quickSupportModal .btn-primary:hover {
+  background: var(--hover-gradient);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Support Widget Card Styling */
+.support-widget-card {
+  margin: 20px 15px 15px 15px;
+  padding: 20px;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.support-widget-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.support-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #4285f4 0%, #667eea 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+.support-icon svg {
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+.support-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.support-subtitle {
+  font-size: 13px;
+  color: #bdc3c7;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.support-btn {
+  background: white;
+  color: #2c3e50;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.support-btn:hover {
+  background: #f8f9fa;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.support-btn:active {
+  transform: translateY(0px);
+  background: #e9ecef;
+}
+
+.support-btn:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Hide support widget when sidebar is minimized */
+.c-sidebar.c-sidebar-minimized .support-widget-card {
+  display: none;
 }
 </style>
 

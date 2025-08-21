@@ -92,6 +92,12 @@
                                         if (strpos($permission->name, 'fleet-') === 0) {
                                             return 'FLEET MANAGEMENT';
                                         }
+                                        if (strpos($permission->name, 'module-allocation') === 0 || in_array($permission->name, ['view-module-allocations', 'create-module-allocations', 'edit-module-allocations', 'delete-module-allocations'])) {
+                                            return 'MODULE ALLOCATION';
+                                        }
+                                        if (strpos($permission->name, 'my-modules') === 0 || in_array($permission->name, ['view-my-modules', 'view-class-list', 'view-attendance', 'view-class-notes'])) {
+                                            return 'MY MODULES';
+                                        }
                                         if (strpos($permission->name, 'leave-') === 0 || strpos($permission->name, 'employee-') === 0 || strpos($permission->name, 'hr-') === 0 || in_array($permission->name, ['employee-bio', 'leave-management', 'leave-applications'])) {
                                             return 'HUMAN RESOURCES';
                                         }
@@ -147,6 +153,11 @@
                                             return 'REPORTS OPERATIONS';
                                         }
                                         
+                                        // Group class routine permissions
+                                        if (in_array($permission->name, ['view-class-routine', 'create-class-routine', 'edit-class-routine', 'delete-class-routine', 'manage-venues', 'manage-class-durations', 'print-class-routine'])) {
+                                            return 'CLASS ROUTINE MANAGEMENT';
+                                        }
+                                        
                                         // Group user management
                                         if (in_array($permission->name, ['access-management-menu', 'users', 'add-user', 'edit-users'])) {
                                             return 'USER MANAGEMENT';
@@ -185,6 +196,21 @@
                                         // Group promotional statuses permissions
                                         if (in_array($permission->name, ['promotional-statuses', 'add-promotional-statuses', 'edit-promotional-statuses', 'delete-promotional-statuses'])) {
                                             return 'PROMOTIONAL STATUSES MANAGEMENT';
+                                        }
+                                        
+                                        // Group test marks permissions
+                                        if (in_array($permission->name, ['test-marks', 'capture-test-marks', 'view-all-test-marks', 'delete-test-marks'])) {
+                                            return 'TEST MARKS MANAGEMENT';
+                                        }
+                                        
+                                        // Group exam marks permissions
+                                        if (in_array($permission->name, ['exam-marks', 'capture-exam-marks', 'view-all-exam-marks', 'delete-exam-marks'])) {
+                                            return 'EXAM MARKS MANAGEMENT';
+                                        }
+                                        
+                                        // Group examination schedule permissions
+                                        if (in_array($permission->name, ['view-examination-schedule', 'create-examination-schedule', 'edit-examination-schedule', 'delete-examination-schedule', 'print-examination-schedule', 'manage-examination-schedule'])) {
+                                            return 'EXAMINATION SCHEDULE MANAGEMENT';
                                         }
                                         
                                         // Group setup permissions

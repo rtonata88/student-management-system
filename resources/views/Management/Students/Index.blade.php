@@ -321,6 +321,24 @@
     opacity: 0.7;
 }
 
+.dropdown-menu {
+    z-index: 1050 !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.dropdown {
+    position: relative;
+}
+
+.table-responsive {
+    overflow: visible !important;
+}
+
+.table td {
+    position: relative;
+}
+
 @media (max-width: 768px) {
     .d-flex.flex-wrap .input-group {
         width: 100% !important;

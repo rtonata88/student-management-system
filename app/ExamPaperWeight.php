@@ -37,4 +37,12 @@ class ExamPaperWeight extends Model
     {
         return $this->belongsTo('App\Examination');
     }
+
+    /**
+     * Get the exam paper that owns the exam paper weight.
+     */
+    public function examPaper()
+    {
+        return $this->belongsTo(ExamPaper::class, 'paper_code', 'paper_code');
+    }
 }
