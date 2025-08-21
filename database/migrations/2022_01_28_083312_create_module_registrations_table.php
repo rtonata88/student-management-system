@@ -13,27 +13,18 @@ class CreateModuleRegistrationsTable extends Migration
      */
     public function up()
     {
-    {
         if (!Schema::hasTable('module_registrations')) {
             Schema::create('module_registrations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->bigInteger('student_id');
-            $table->integer('academic_year');
-            $table->date('registration_date');
-            $table->string('registration_status');
-            $table->integer('module_id');
-            $table->decimal('amount', 15, 2);
-            $table->string('cancellation_reason')->nullable();
-            $table->date('cancellation_date')->nullable();
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+                $table->increments('id');
+                $table->bigInteger('student_id');
+                $table->integer('academic_year');
+                $table->date('registration_date');
+                $table->string('registration_status');
+                $table->integer('module_id');
+                $table->decimal('amount', 15, 2);
+                $table->string('cancellation_reason')->nullable();
+                $table->date('cancellation_date')->nullable();
+                $table->timestamps();
             });
         }
     }

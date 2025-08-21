@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AssessmentType extends Model
+class Examination extends Model
 {
     use HasFactory;
 
@@ -16,9 +16,8 @@ class AssessmentType extends Model
         'mark_cap' => 'decimal:2'
     ];
 
-    public function assessments()
+    public function scopeActive($query)
     {
-        return $this->hasMany(Assessment::class,'assessment_type_id');
+        return $query->where('active', true);
     }
-
 }

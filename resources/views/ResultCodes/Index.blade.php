@@ -11,7 +11,7 @@
                 Settings
             </a>
         </li>
-        <li class="breadcrumb-item active">Assessment Types</li>
+        <li class="breadcrumb-item active">Result Codes</li>
         <!-- Breadcrumb Menu-->
     </ol>
 </div>
@@ -22,9 +22,9 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
-                    <form method="GET" action="{{ route('assessments.index') }}" class="form-inline">
+                    <form method="GET" action="{{ route('result-codes.index') }}" class="form-inline">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Search assessment types..." value="{{ $search }}" style="width: 300px;">
+                            <input type="text" name="search" class="form-control" placeholder="Search result codes..." value="{{ $search }}" style="width: 300px;">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" type="submit">
                                     <svg class="c-icon">
@@ -35,8 +35,8 @@
                         </div>
                     </form>
                 </div>
-                @permission('add-assessment-types')
-                <a href="/assessments/create" class="btn btn-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                @permission('add-result-codes')
+                <a href="/result-codes/create" class="btn btn-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
                     <svg class="c-icon mr-1">
                         <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-plus')}}"></use>
                     </svg>
@@ -70,40 +70,55 @@
                     <table class="table table-hover" style="width:100%">
                         <thead style="background-color: #f8f9fa;">
                             <tr>
-                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">ASSESSMENT TYPE NAME</th>
+                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">NAME</th>
                                 <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">CODE</th>
-                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">MARK CAP (%)</th>
+                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">DESCRIPTION</th>
+                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">PASS/FAIL</th>
                                 <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">ACTIVE</th>
-                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;"></th>
+                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($assessmentTypes as $assessmentType)
+                            @forelse($resultCodes as $resultCode)
                             <tr>
-                                <td style="padding: 16px 12px; font-weight: 500;">{{ $assessmentType->name }}</td>
-                                <td style="padding: 16px 12px; color: #6c757d;">{{ $assessmentType->code }}</td>
-                                <td style="padding: 16px 12px; color: #6c757d;">{{ number_format($assessmentType->mark_cap, 2) }}</td>
+                                <td style="padding: 16px 12px; font-weight: 500;">{{ $resultCode->name }}</td>
+                                <td style="padding: 16px 12px; color: #6c757d;">{{ $resultCode->code }}</td>
+                                <td style="padding: 16px 12px; color: #6c757d;">{{ $resultCode->description ? (strlen($resultCode->description) > 50 ? substr($resultCode->description, 0, 50) . '...' : $resultCode->description) : '-' }}</td>
+                                <td style="padding: 16px 12px;">
+                                    <span class="badge {{ $resultCode->pass_fail == 'Pass' ? 'badge-success' : 'badge-danger' }}">
+                                        {{ $resultCode->pass_fail }}
+                                    </span>
+                                </td>
                                 <td style="padding: 16px 12px;">
                                     <label class="c-switch c-switch-pill c-switch-success">
-                                        <input type="checkbox" class="c-switch-input" {{ $assessmentType->active ? 'checked' : '' }} disabled>
+                                        <input type="checkbox" class="c-switch-input" {{ $resultCode->active ? 'checked' : '' }} disabled>
                                         <span class="c-switch-slider"></span>
                                     </label>
                                 </td>
                                 <td style="padding: 16px 12px;">
-                                    @permission('edit-assessment-types')
-                                    <a href="/assessments/{{ $assessmentType->id }}/edit" class="btn btn-sm btn-outline-secondary" style="border-radius: 6px; padding: 6px 12px;">
+                                    @permission('edit-result-codes')
+                                    <a href="/result-codes/{{ $resultCode->id }}/edit" class="btn btn-sm btn-outline-secondary" style="border-radius: 6px; padding: 6px 12px;">
                                         Edit
                                     </a>
+                                    @endpermission
+                                    @permission('delete-result-codes')
+                                    <form method="POST" action="/result-codes/{{ $resultCode->id }}" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this result code?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger ml-1" style="border-radius: 6px; padding: 6px 12px;">
+                                            Delete
+                                        </button>
+                                    </form>
                                     @endpermission
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center py-4" style="color: #6c757d;">
+                                <td colspan="6" class="text-center py-4" style="color: #6c757d;">
                                     @if($search)
-                                        No assessment types found matching "{{ $search }}"
+                                        No result codes found matching "{{ $search }}"
                                     @else
-                                        No assessment types found. <a href="/assessments/create">Create your first assessment type</a>
+                                        No result codes found. <a href="/result-codes/create">Create your first result code</a>
                                     @endif
                                 </td>
                             </tr>
@@ -112,9 +127,9 @@
                     </table>
                 </div>
 
-                @if($assessmentTypes->hasPages())
+                @if($resultCodes->hasPages())
                 <div class="d-flex justify-content-center mt-4">
-                    {{ $assessmentTypes->appends(request()->query())->links() }}
+                    {{ $resultCodes->appends(request()->query())->links() }}
                 </div>
                 @endif
             </div>
@@ -170,6 +185,28 @@
 
 .c-switch-input:checked + .c-switch-slider:before {
     transform: translateX(20px);
+}
+
+.badge-success {
+    color: #fff;
+    background-color: #28a745;
+}
+
+.badge-danger {
+    color: #fff;
+    background-color: #dc3545;
+}
+
+.badge {
+    display: inline-block;
+    padding: .25em .4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
 }
 </style>
 @endsection

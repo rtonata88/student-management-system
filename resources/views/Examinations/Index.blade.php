@@ -11,7 +11,7 @@
                 Settings
             </a>
         </li>
-        <li class="breadcrumb-item active">Assessment Types</li>
+        <li class="breadcrumb-item active">Examinations</li>
         <!-- Breadcrumb Menu-->
     </ol>
 </div>
@@ -22,9 +22,9 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
-                    <form method="GET" action="{{ route('assessments.index') }}" class="form-inline">
+                    <form method="GET" action="{{ route('examinations.index') }}" class="form-inline">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Search assessment types..." value="{{ $search }}" style="width: 300px;">
+                            <input type="text" name="search" class="form-control" placeholder="Search examinations..." value="{{ $search }}" style="width: 300px;">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" type="submit">
                                     <svg class="c-icon">
@@ -35,8 +35,8 @@
                         </div>
                     </form>
                 </div>
-                @permission('add-assessment-types')
-                <a href="/assessments/create" class="btn btn-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                @permission('add-examinations')
+                <a href="/examinations/create" class="btn btn-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
                     <svg class="c-icon mr-1">
                         <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-plus')}}"></use>
                     </svg>
@@ -70,30 +70,39 @@
                     <table class="table table-hover" style="width:100%">
                         <thead style="background-color: #f8f9fa;">
                             <tr>
-                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">ASSESSMENT TYPE NAME</th>
+                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">EXAMINATION NAME</th>
                                 <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">CODE</th>
                                 <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">MARK CAP (%)</th>
                                 <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">ACTIVE</th>
-                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;"></th>
+                                <th style="font-weight: 600; color: #6c757d; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($assessmentTypes as $assessmentType)
+                            @forelse($examinations as $examination)
                             <tr>
-                                <td style="padding: 16px 12px; font-weight: 500;">{{ $assessmentType->name }}</td>
-                                <td style="padding: 16px 12px; color: #6c757d;">{{ $assessmentType->code }}</td>
-                                <td style="padding: 16px 12px; color: #6c757d;">{{ number_format($assessmentType->mark_cap, 2) }}</td>
+                                <td style="padding: 16px 12px; font-weight: 500;">{{ $examination->name }}</td>
+                                <td style="padding: 16px 12px; color: #6c757d;">{{ $examination->code }}</td>
+                                <td style="padding: 16px 12px; color: #6c757d;">{{ number_format($examination->mark_cap, 2) }}</td>
                                 <td style="padding: 16px 12px;">
                                     <label class="c-switch c-switch-pill c-switch-success">
-                                        <input type="checkbox" class="c-switch-input" {{ $assessmentType->active ? 'checked' : '' }} disabled>
+                                        <input type="checkbox" class="c-switch-input" {{ $examination->active ? 'checked' : '' }} disabled>
                                         <span class="c-switch-slider"></span>
                                     </label>
                                 </td>
                                 <td style="padding: 16px 12px;">
-                                    @permission('edit-assessment-types')
-                                    <a href="/assessments/{{ $assessmentType->id }}/edit" class="btn btn-sm btn-outline-secondary" style="border-radius: 6px; padding: 6px 12px;">
+                                    @permission('edit-examinations')
+                                    <a href="/examinations/{{ $examination->id }}/edit" class="btn btn-sm btn-outline-secondary" style="border-radius: 6px; padding: 6px 12px;">
                                         Edit
                                     </a>
+                                    @endpermission
+                                    @permission('delete-examinations')
+                                    <form method="POST" action="/examinations/{{ $examination->id }}" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this examination?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger ml-1" style="border-radius: 6px; padding: 6px 12px;">
+                                            Delete
+                                        </button>
+                                    </form>
                                     @endpermission
                                 </td>
                             </tr>
@@ -101,9 +110,9 @@
                             <tr>
                                 <td colspan="5" class="text-center py-4" style="color: #6c757d;">
                                     @if($search)
-                                        No assessment types found matching "{{ $search }}"
+                                        No examinations found matching "{{ $search }}"
                                     @else
-                                        No assessment types found. <a href="/assessments/create">Create your first assessment type</a>
+                                        No examinations found. <a href="/examinations/create">Create your first examination</a>
                                     @endif
                                 </td>
                             </tr>
@@ -112,9 +121,9 @@
                     </table>
                 </div>
 
-                @if($assessmentTypes->hasPages())
+                @if($examinations->hasPages())
                 <div class="d-flex justify-content-center mt-4">
-                    {{ $assessmentTypes->appends(request()->query())->links() }}
+                    {{ $examinations->appends(request()->query())->links() }}
                 </div>
                 @endif
             </div>

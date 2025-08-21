@@ -22,12 +22,24 @@ class AssessmentTypeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    //a list of subjects allocated to user
-    public function index()
+    //a list of assessment types
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        $subjects_allocated = SubjectAllocation::where('user_id', $user->id)->groupBy('module_id','academic_year_id')->get();
-        return view('Assessments.Assessment-Types.Index', compact('subjects_allocated'));
+        // Check if user has permission to view assessments
+        if (!Auth::user()->hasPermission('assessments')) {
+            abort(403, 'Unauthorized access to assessment types.');
+        }
+        
+        $search = $request->get('search');
+        
+        $assessmentTypes = AssessmentType::when($search, function ($query, $search) {
+            return $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('code', 'like', "%{$search}%");
+        })
+        ->orderBy('name')
+        ->paginate(10);
+
+        return view('Assessments.Assessments.Index', compact('assessmentTypes', 'search'));
     }
 
     /**
@@ -50,10 +62,14 @@ class AssessmentTypeController extends Controller
     }
 
     //create
-    public function create($subject_allocation)
+    public function create()
     {   
-        $subject_allocation = SubjectAllocation::find($subject_allocation);
-        return view('Assessments.Assessment-Types.Create', compact('subject_allocation'));
+        // Check if user has permission to add assessment types
+        if (!Auth::user()->hasPermission('add-assessment-types')) {
+            abort(403, 'Unauthorized access to create assessment types.');
+        }
+        
+        return view('Assessments.Assessments.Create');
     }
 
     /**
@@ -64,32 +80,27 @@ class AssessmentTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $subject_allocation = SubjectAllocation::find($request->subject_allocation_id);
-        $subject = Module::find($subject_allocation->module_id);
-
-        //calc to make sure assessment types add upto 100%
-        $assessment_types_weight = AssessmentType::where('subject_id', $subject->id)
-        ->where('academic_year_id',$subject_allocation->academic_year_id)
-        ->sum('weight');
-
-        if(($assessment_types_weight + $request->weight) <= 100 )
-        {
-            $assessment_type = new AssessmentType;
-            $assessment_type->name  = $request->name;
-            $assessment_type->weight  = $request->weight;
-            $assessment_type->subject_id  = $subject->id;
-            $assessment_type->academic_year_id  = $subject_allocation->academic_year_id;
-            $assessment_type->created_by  = Auth::user()->id;
-            $assessment_type->save();
-
-            Session::flash('success','Assessment type saved successfully');
-            return redirect('assessment-types/'.$subject_allocation->id);
+        // Check if user has permission to add assessment types
+        if (!Auth::user()->hasPermission('add-assessment-types')) {
+            abort(403, 'Unauthorized access to create assessment types.');
         }
-        else
-        {
-            Session::flash('error','Assessment type not saved successfully. Total weight should be equal to 100%');
-            return redirect('assessment-types/'.$subject_allocation->id);
-        }
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:10|unique:assessment_types,code',
+            'mark_cap' => 'required|numeric|min:0|max:100',
+            'active' => 'boolean'
+        ]);
+
+        AssessmentType::create([
+            'name' => $request->name,
+            'code' => strtoupper($request->code),
+            'mark_cap' => $request->mark_cap,
+            'active' => $request->has('active')
+        ]);
+
+        Session::flash('success', 'Assessment type created successfully');
+        return redirect()->route('assessments.index');
     }
 
     
@@ -112,9 +123,13 @@ class AssessmentTypeController extends Controller
      */
     public function edit($id)
     {
-        //
-        $assessment_type = AssessmentType::find($id);
-        return view('Assessments.Assessment-Types.Edit', compact('assessment_type'));
+        // Check if user has permission to edit assessment types
+        if (!Auth::user()->hasPermission('edit-assessment-types')) {
+            abort(403, 'Unauthorized access to edit assessment types.');
+        }
+        
+        $assessmentType = AssessmentType::findOrFail($id);
+        return view('Assessments.Assessments.Edit', compact('assessmentType'));
     }
 
     /**
@@ -126,29 +141,29 @@ class AssessmentTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //calc to make sure assessment types add upto 100%
-        $assessment_type = AssessmentType::find($id);
-
-        $assessment_types_weight = AssessmentType::where('subject_id', $assessment_type->subject_id)
-        ->where('academic_year_id',$assessment_type->academic_year_id)
-        ->sum('weight');
-
-        if(($assessment_types_weight - $assessment_type->weight + $request->weight) <= 100 )
-        {
-            // $assessment_type = new AssessmentType;
-            $assessment_type->name  = $request->name;
-            $assessment_type->weight  = $request->weight;
-            $assessment_type->created_by  = Auth::user()->id;
-            $assessment_type->save();
-
-            Session::flash('success','Assessment type saved successfully');
-            return redirect('assessment-types/'.$subject_allocation->id);
+        // Check if user has permission to edit assessment types
+        if (!Auth::user()->hasPermission('edit-assessment-types')) {
+            abort(403, 'Unauthorized access to update assessment types.');
         }
-        else
-        {
-            Session::flash('error','Assessment type not saved successfully. Total weight should be equal to 100%');
-            return redirect('assessment-types/'.$subject_allocation->id);
-        }
+        
+        $assessmentType = AssessmentType::findOrFail($id);
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:10|unique:assessment_types,code,' . $id,
+            'mark_cap' => 'required|numeric|min:0|max:100',
+            'active' => 'boolean'
+        ]);
+
+        $assessmentType->update([
+            'name' => $request->name,
+            'code' => strtoupper($request->code),
+            'mark_cap' => $request->mark_cap,
+            'active' => $request->has('active')
+        ]);
+
+        Session::flash('success', 'Assessment type updated successfully');
+        return redirect()->route('assessments.index');
     }
 
     /**

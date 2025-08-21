@@ -205,13 +205,32 @@ Route::post('/assessment-types/store', 'AssessmentTypeController@store');
 Route::post('/assessment-types/update/{id}', 'AssessmentTypeController@update')->name('assessment-types.update');
 
 //Assessment Management - Assessments
-Route::get('/assessments','AssessmentController@index');
+Route::get('/assessments','AssessmentTypeController@index')->name('assessments.index');
 Route::get('/assessments/show-assessments-types/{subject_allocated}','AssessmentController@showAssessmentTypes');
 Route::get('/assessments/show-assessments/{assessment_type}','AssessmentController@showAssessments');
-Route::get('/assessments/create/{assessment_type}','AssessmentController@create');
+Route::get('/assessments/create','AssessmentTypeController@create')->name('assessments.create');
+Route::post('/assessments','AssessmentTypeController@store')->name('assessments.store');
+Route::get('/assessments/{id}/edit','AssessmentTypeController@edit')->name('assessments.edit');
+Route::put('/assessments/{id}','AssessmentTypeController@update')->name('assessments.update');
 Route::get('/assessments/{assessment_type_id}/edit/{assessment_id}','AssessmentController@edit');
 Route::post('/assessments/store', 'AssessmentController@store');
 Route::post('/assessments/update/{id}', 'AssessmentController@update')->name('assessments.update');
+
+//Assessment Management - Assessment Weights
+Route::get('/assessment-weights', 'AssessmentWeightController@index')->name('assessment-weights.index');
+Route::get('/assessment-weights/create', 'AssessmentWeightController@create')->name('assessment-weights.create');
+Route::post('/assessment-weights', 'AssessmentWeightController@store')->name('assessment-weights.store');
+Route::get('/assessment-weights/{moduleId}/{academicYearId}/edit', 'AssessmentWeightController@edit')->name('assessment-weights.edit');
+Route::put('/assessment-weights/{moduleId}/{academicYearId}', 'AssessmentWeightController@update')->name('assessment-weights.update');
+Route::delete('/assessment-weights/{moduleId}/{academicYearId}', 'AssessmentWeightController@destroy')->name('assessment-weights.destroy');
+
+//Assessment Management - Exam Paper Weights
+Route::get('/exam-paper-weights', 'ExamPaperWeightController@index')->name('exam-paper-weights.index');
+Route::get('/exam-paper-weights/create', 'ExamPaperWeightController@create')->name('exam-paper-weights.create');
+Route::post('/exam-paper-weights', 'ExamPaperWeightController@store')->name('exam-paper-weights.store');
+Route::get('/exam-paper-weights/{moduleId}/{academicYearId}/{assessmentTypeId}/edit', 'ExamPaperWeightController@edit')->name('exam-paper-weights.edit');
+Route::put('/exam-paper-weights/{moduleId}/{academicYearId}/{assessmentTypeId}', 'ExamPaperWeightController@update')->name('exam-paper-weights.update');
+Route::delete('/exam-paper-weights/{moduleId}/{academicYearId}/{assessmentTypeId}', 'ExamPaperWeightController@destroy')->name('exam-paper-weights.destroy');
 
 //Assessment Management - Assessment Marks
 Route::get('/assessment-marks', 'AssessmentMarkController@index'); //show subjects allocated -> assessment types -> assessments
@@ -220,6 +239,21 @@ Route::get('/assessment-marks/create/{assessment_id}', 'AssessmentMarkController
 Route::get('/assessment-marks/store', 'AssessmentMarkController@store')->name('assessment-marks.store');
 Route::get('/assessment-marks/update/{assessment_id}', 'AssessmentMarkController@update');
 
+//Examination Management
+Route::resource('/examinations', 'ExaminationController');
+
+//Result Codes Management
+Route::resource('/result-codes', 'ResultCodeController');
+
+// Grading Scales Management
+Route::group(['middleware' => ['auth']], function () {
+    Route::resource('grading-scales', 'GradingScaleController');
+});
+
+// Promotional Statuses Management
+Route::group(['middleware' => ['auth']], function () {
+    Route::resource('promotional-statuses', 'PromotionalStatusController');
+});
 Route::get('/start-page', function(){
     return view('start-page');
 });

@@ -152,6 +152,41 @@
                                             return 'USER MANAGEMENT';
                                         }
                                         
+                                        // Group assessment type permissions
+                                        if (in_array($permission->name, ['assessments', 'add-assessment-types', 'edit-assessment-types', 'delete-assessment-types'])) {
+                                            return 'ASSESSMENT TYPES MANAGEMENT';
+                                        }
+                                        
+                                        // Group assessment weights permissions
+                                        if (in_array($permission->name, ['assessment-weights', 'add-assessment-weights', 'edit-assessment-weights', 'delete-assessment-weights'])) {
+                                            return 'ASSESSMENT WEIGHTS MANAGEMENT';
+                                        }
+                                        
+                                        // Group exam paper weights permissions
+                                        if (in_array($permission->name, ['exam-paper-weights', 'add-exam-paper-weights', 'edit-exam-paper-weights', 'delete-exam-paper-weights'])) {
+                                            return 'EXAM PAPER WEIGHTS MANAGEMENT';
+                                        }
+                                        
+                                        // Group examination permissions
+                                        if (in_array($permission->name, ['examinations', 'add-examinations', 'edit-examinations', 'delete-examinations'])) {
+                                            return 'EXAMINATIONS MANAGEMENT';
+                                        }
+                                        
+                                        // Group result codes permissions
+                                        if (in_array($permission->name, ['result-codes', 'add-result-codes', 'edit-result-codes', 'delete-result-codes'])) {
+                                            return 'RESULT CODES MANAGEMENT';
+                                        }
+                                        
+                                        // Group grading scales permissions
+                                        if (in_array($permission->name, ['grading-scales', 'add-grading-scales', 'edit-grading-scales', 'delete-grading-scales'])) {
+                                            return 'GRADING SCALES MANAGEMENT';
+                                        }
+                                        
+                                        // Group promotional statuses permissions
+                                        if (in_array($permission->name, ['promotional-statuses', 'add-promotional-statuses', 'edit-promotional-statuses', 'delete-promotional-statuses'])) {
+                                            return 'PROMOTIONAL STATUSES MANAGEMENT';
+                                        }
+                                        
                                         // Group setup permissions
                                         if (in_array($permission->name, ['academic-years', 'add-academic-years', 'edit-academic-years', 'centers', 'add-centers', 'edit-centers', 'company', 'edit-company'])) {
                                             return 'SYSTEM SETUP';

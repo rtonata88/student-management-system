@@ -353,6 +353,23 @@
         </ul>
       </li>
       @endpermission
+
+      @permission('SETUP')
+      <li class="c-sidebar-nav-item c-sidebar-nav-dropdown"><a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-education')}}"></use>
+          </svg> Academic Structure</a>
+        <ul class="c-sidebar-nav-dropdown-items">
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/assessments"><span class="c-sidebar-nav-icon"></span> Assessments</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/assessment-weights"><span class="c-sidebar-nav-icon"></span> Assessment Weights</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/examinations"><span class="c-sidebar-nav-icon"></span> Examinations</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/exam-paper-weights"><span class="c-sidebar-nav-icon"></span> Exam Paper Weights</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/result-codes"><span class="c-sidebar-nav-icon"></span> Result Codes</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/grading-scales"><span class="c-sidebar-nav-icon"></span> Grading Scales</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/promotional-statuses"><span class="c-sidebar-nav-icon"></span> Promotional Statuses</a></li>
+        </ul>
+      </li>
+      @endpermission
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
   </div>
@@ -570,6 +587,9 @@
   background: var(--primary-gradient) !important;
 }
 </style>
+
+@yield('scripts')
+
 </body>
 
 </html>

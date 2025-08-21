@@ -13,23 +13,14 @@ class CreateAcademicYearsTable extends Migration
      */
     public function up()
     {
-    {
         if (!Schema::hasTable('academic_years')) {
             Schema::create('academic_years', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('academic_year');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->tinyInteger('status');
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+                $table->increments('id');
+                $table->integer('academic_year');
+                $table->date('start_date');
+                $table->date('end_date');
+                $table->tinyInteger('status');
+                $table->timestamps();
             });
         }
     }
