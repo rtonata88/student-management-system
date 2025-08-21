@@ -28,7 +28,7 @@ class RegistrationController extends Controller
         // Get students with full admission status using proper join
         $students = Student::join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
             ->where('student_admissions.admission_status', 'full_admission')
-            ->with('registration')
+            ->with(['registration', 'center'])
             ->select('students.*', 'student_admissions.admission_status')
             ->paginate(15);
         return view('Management.Enrolment.Search', compact('students'));
@@ -38,7 +38,10 @@ class RegistrationController extends Controller
 
         if(isset($request->student_number)){
             $student = Student::join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
-                ->where('students.student_number2', $request->student_number)
+                ->where(function($query) use ($request) {
+                    $query->where('students.student_number', $request->student_number)
+                          ->orWhere('students.student_number2', $request->student_number);
+                })
                 ->where('student_admissions.admission_status', 'full_admission')
                 ->select('students.*')
                 ->first();
@@ -54,7 +57,7 @@ class RegistrationController extends Controller
                     $query->where('students.surname', 'like' ,'%'.$request->names.'%')
                           ->orwhere('students.student_names', 'like', '%' . $request->names . '%');
                 })
-                ->with('registration')
+                ->with(['registration', 'center'])
                 ->select('students.*', 'student_admissions.admission_status')
                 ->paginate(15);
             
@@ -120,9 +123,37 @@ class RegistrationController extends Controller
             ->where('academic_year', $academic_year)
             ->with('module')
             ->get();
+
+        // Get company data for letterhead
+        $company = \App\CompanySetup::first();
             
         // Generate PDF or return view for proof of registration
-        return view('Management.Enrolment.ProofOfRegistration', compact('student', 'registration', 'registered_modules', 'academic_year'));
+        return view('Management.Enrolment.ProofOfRegistration', compact('student', 'registration', 'registered_modules', 'academic_year', 'company'));
+    }
+
+    public function downloadProofOfRegistration($student_id){
+        $student = Student::find($student_id);
+        $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
+        $registration = $student->registration->where('academic_year', $academic_year)->first();
+        
+        if (!$registration || $registration->registration_status != 'Registered') {
+            return redirect()->back()->with('error', 'Student is not registered for the current academic year.');
+        }
+        
+        $registered_modules = ModuleRegistration::where('student_id', $student->id)
+            ->where('academic_year', $academic_year)
+            ->with('module')
+            ->get();
+
+        // Get company data for letterhead
+        $company = \App\CompanySetup::first();
+
+        // Generate PDF
+        $pdf = \PDF::loadView('Management.Enrolment.ProofOfRegistrationPDF', compact('student', 'registration', 'registered_modules', 'academic_year', 'company'));
+        
+        $filename = 'proof_of_registration_' . $student->student_number . '_' . date('Y-m-d') . '.pdf';
+        
+        return $pdf->download($filename);
     }
 
     public function show($student_id){

@@ -16,7 +16,8 @@ class ManualAdmissionsController extends Controller
 
     public function index()
     {
-        $students = Student::join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
+        $students = Student::with('center')
+            ->join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
             ->select('students.*', 'student_admissions.admission_status')
             ->where('student_admissions.admission_status', 'full_admission')
             ->paginate(50);
@@ -26,12 +27,16 @@ class ManualAdmissionsController extends Controller
 
     public function filter(Request $request)
     {
-        $query = Student::join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
+        $query = Student::with('center')
+            ->join('student_admissions', 'students.id', '=', 'student_admissions.student_id')
             ->select('students.*', 'student_admissions.admission_status')
             ->where('student_admissions.admission_status', 'full_admission');
 
         if (isset($request->student_number) && !empty($request->student_number)) {
-            $query->where('students.student_number2', $request->student_number);
+            $query->where(function($q) use ($request) {
+                $q->where('students.student_number2', $request->student_number)
+                  ->orWhere('students.student_number', $request->student_number);
+            });
         }
 
         if (isset($request->names) && !empty($request->names)) {
@@ -105,8 +110,11 @@ class ManualAdmissionsController extends Controller
             ], 404);
         }
 
+        // Get company information for letterhead
+        $company = DB::table('company_setups')->first();
+
         try {
-            $pdf = Pdf::loadView('Management.ManualAdmissions.AdmissionLetter', compact('student'));
+            $pdf = Pdf::loadView('Management.ManualAdmissions.AdmissionLetter', compact('student', 'company'));
             
             $filename = 'admission_letter_' . $student->student_number2 . '_' . date('Y-m-d') . '.pdf';
             

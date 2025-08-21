@@ -62,8 +62,10 @@
                             <thead class="table-light">
                                 <tr>
                                     <th class="border-0 ps-3">STUDENT #</th>
+                                    <th class="border-0">SET #</th>
                                     <th class="border-0">SURNAME</th>
                                     <th class="border-0">FIRST NAMES</th>
+                                    <th class="border-0">CENTER</th>
                                     <th class="border-0">D.O.B</th>
                                     <th class="border-0">ID NUMBER</th>
                                     <th class="border-0">MOBILE #</th>
@@ -76,10 +78,20 @@
                                 @forelse($students as $student)
                                 <tr class="border-bottom">
                                     <td class="ps-3 py-3">
+                                        <strong class="text-primary">{{$student->student_number}}</strong>
+                                    </td>
+                                    <td class="py-3">
                                         <strong class="text-primary">{{$student->student_number2}}</strong>
                                     </td>
                                     <td class="py-3">{{$student->surname}}</td>
                                     <td class="py-3">{{$student->student_names}}</td>
+                                    <td class="py-3">
+                                        @if($student->center)
+                                            {{$student->center->center_name}}
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
                                     <td class="py-3">
                                         @if($student->date_of_birth)
                                             {{\Carbon\Carbon::parse($student->date_of_birth)->format('Y-m-d')}}
@@ -153,7 +165,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="8" class="text-center py-5">
+                                    <td colspan="10" class="text-center py-5">
                                         <div class="text-muted">
                                             <i class="fa fa-graduation-cap fa-3x mb-3"></i>
                                             <h5>No Students Available for Enrollment</h5>

@@ -103,13 +103,13 @@
           </svg> Registrations</a>
         <ul class="c-sidebar-nav-dropdown-items">
           @permission('enrolment')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment"><span class="c-sidebar-nav-icon"></span> Enrolment</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment"><span class="c-sidebar-nav-icon"></span> Register</a></li>
           @endpermission
           @permission('enrolment')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment-adjustment"><span class="c-sidebar-nav-icon"></span> Enrolment Adjustments</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/enrolment-adjustment"><span class="c-sidebar-nav-icon"></span> Modify Registration</a></li>
           @endpermission
           @permission('cancel-enrolment')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/cancel-registration"><span class="c-sidebar-nav-icon"></span> Cancel Enrolment</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/cancel-registration"><span class="c-sidebar-nav-icon"></span> Cancel Registration</a></li>
           @endpermission
         </ul>
       </li>

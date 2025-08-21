@@ -21,8 +21,8 @@
                         <span class="text-gradient">Welcome to</span><br>
                         <span class="text-primary fw-bold">EDUCIMS TUTORIALS SYSTEM</span>
                     </h1>
-                    <p class="hero-subtitle lead text-muted">
-                        Hello, <span class="fw-bold text-primary">{{ $user->name }}</span>! 
+                    <p class="hero-subtitle lead">
+                        Hello, <span class="fw-bold text-warning">{{ $user->name }}</span>! 
                         <span class="wave">👋</span> We're excited to have you here today.
                     </p>
                     <div class="hero-stats mt-4">

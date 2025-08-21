@@ -11,49 +11,55 @@
 @endsection
 @section('content')
 <div class="container-fluid">
-    <!-- Search Section -->
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body p-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
-            {!! Form::open(array('route' => array('credit-memos.filter'), 'method' => 'post', 'class'=> 'form-inline')) !!}
+    <!-- Modern Search Section -->
+    <div class="search-container mb-5">
+        <div class="search-card">
+            <div class="search-header">
+                <h4 class="search-title">
+                    <i class="fas fa-file-invoice-dollar me-2"></i>
+                    Find Student for Credit Memo
+                </h4>
+                <p class="search-subtitle">Search by student number or name to create credit memo</p>
+            </div>
             
-            <div class="row w-100 align-items-end">
-                <div class="col-md-4 mb-3">
-                    <label for="student_number" class="form-label text-muted small font-weight-bold mb-2 d-block">
-                        STUDENT NUMBER:
-                    </label>
-                    {{Form::text('student_number', null, [
-                        'class' => 'form-control', 
-                        'placeholder' => 'Enter student number here...',
-                        'id' => 'student_number'
-                    ])}}
-                </div>
-                
-                <div class="col-md-1 mb-3 d-flex align-items-end justify-content-center">
-                    <div style="padding-bottom: 8px;">
-                        <span class="badge badge-secondary px-3 py-2">OR</span>
+            {!! Form::open(array('route' => array('credit-memos.filter'), 'method' => 'post', 'class'=> 'search-form')) !!}
+            
+            <div class="search-fields">
+                <div class="search-field-group">
+                    <div class="search-field">
+                        <label for="student_number" class="search-label">
+                            <i class="fas fa-id-card me-2"></i>Student Number
+                        </label>
+                        {{Form::text('student_number', null, [
+                            'class' => 'search-input', 
+                            'placeholder' => 'Enter student number or allocated number...',
+                            'id' => 'student_number'
+                        ])}}
+                    </div>
+                    
+                    <div class="search-divider">
+                        <span class="divider-text">OR</span>
+                    </div>
+                    
+                    <div class="search-field">
+                        <label for="names" class="search-label">
+                            <i class="fas fa-user me-2"></i>Student Name
+                        </label>
+                        {{Form::text('names', null, [
+                            'class' => 'search-input', 
+                            'placeholder' => 'Enter first name or surname...',
+                            'id' => 'names'
+                        ])}}
                     </div>
                 </div>
                 
-                <div class="col-md-3 mb-3">
-                    <label for="names" class="form-label text-muted small font-weight-bold mb-2 d-block">
-                        STUDENT NAMES:
-                    </label>
-                    {{Form::text('names', null, [
-                        'class' => 'form-control', 
-                        'placeholder' => 'Enter student names here...',
-                        'id' => 'names'
-                    ])}}
-                </div>
-                
-                <div class="col-md-4 mb-3">
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary px-4">
-                            Search
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
-                            Clear
-                        </button>
-                    </div>
+                <div class="search-actions">
+                    <button type="submit" class="btn-search">
+                        <i class="fas fa-search me-2"></i>Search
+                    </button>
+                    <button type="button" class="btn-clear" onclick="clearForm()">
+                        <i class="fas fa-times me-2"></i>Clear
+                    </button>
                 </div>
             </div>
             
@@ -121,4 +127,175 @@ function clearForm() {
     }
 }
 </script>
+
+<style>
+.search-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.search-card {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    border-radius: 20px;
+    padding: 0;
+    box-shadow: 0 20px 40px rgba(23, 162, 184, 0.15);
+    overflow: hidden;
+}
+
+.search-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0.5rem 0 0 0;
+    font-size: 0.95rem;
+}
+
+.search-form {
+    padding: 2rem;
+}
+
+.search-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.search-field-group {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: end;
+}
+
+.search-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-label {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.search-input {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.search-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+}
+
+.divider-text {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+}
+
+.search-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-search, .btn-clear {
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.btn-search {
+    background: rgba(255, 255, 255, 0.9);
+    color: #17a2b8;
+}
+
+.btn-search:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
+.btn-clear {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-clear:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .search-field-group {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .search-divider {
+        order: 2;
+    }
+    
+    .search-actions {
+        flex-direction: column;
+    }
+    
+    .btn-search, .btn-clear {
+        width: 100%;
+    }
+}
+</style>
 @endsection

@@ -19,9 +19,9 @@
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">Registration Details</h4>
                     <div>
-                        <button onclick="window.print()" class="btn btn-light btn-sm">
-                            <i class="fa fa-print"></i> Print
-                        </button>
+                        <a href="{{ route('enrolment.proof.download', $student->id) }}" class="btn btn-light btn-sm">
+                            <i class="fa fa-download"></i> Download Proof
+                        </a>
                         <a href="/enrolment" class="btn btn-outline-light btn-sm">
                             <i class="fa fa-arrow-left"></i> Back
                         </a>

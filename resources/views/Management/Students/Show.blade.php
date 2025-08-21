@@ -27,10 +27,10 @@
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5);width:250px;">Student Number </th>
-                        <td>{{$student->student_number2}}</td>
+                        <td>{{$student->student_number}}</td>
                     </tr>
                     <tr>
-                        <th style="background-color: rgba(227, 227, 227, 0.5);width:250px;">Reference Number </th>
+                        <th style="background-color: rgba(227, 227, 227, 0.5);width:250px;">Allocated Number </th>
                         <td>{{$student->student_number2}}</td>
                     </tr>
                     <tr>
@@ -44,6 +44,16 @@
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Initials </th>
                         <td>{{$student->initials}}</td>
+                    </tr>
+                    <tr>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Center </th>
+                        <td>
+                            @if($student->center)
+                                {{$student->center->center_name}}
+                            @else
+                                <span class="text-muted">Not assigned</span>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Email </th>

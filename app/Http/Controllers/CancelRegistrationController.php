@@ -28,7 +28,10 @@ class CancelRegistrationController extends Controller
     {
 
         if (isset($request->student_number)) {
-            $student = Student::with('currentRegistration')->where('student_number2', $request->student_number)->first();
+            $student = Student::with('currentRegistration')
+                              ->where('student_number2', $request->student_number)
+                              ->orWhere('student_number', $request->student_number)
+                              ->first();
             if ($student) {
                 return redirect()->route('cancellation.showCancellationScreen', $student->id);
             }

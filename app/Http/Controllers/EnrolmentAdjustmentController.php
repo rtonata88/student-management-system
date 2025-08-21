@@ -30,7 +30,9 @@ class EnrolmentAdjustmentController extends Controller
     {
 
         if (isset($request->student_number)) {
-            $student = Student::where('student_number2', $request->student_number)->first();
+            $student = Student::where('student_number2', $request->student_number)
+                              ->orWhere('student_number', $request->student_number)
+                              ->first();
             if ($student) {
                 return redirect()->route('enrolment.adjustment.showScreen', $student->id);
             }

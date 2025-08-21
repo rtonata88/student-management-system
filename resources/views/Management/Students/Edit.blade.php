@@ -39,8 +39,14 @@
                 @endif
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
-                        <th style="background-color: rgba(227, 227, 227, 0.5)">Student number <span class="text-danger">*</span></th>
-                        <td>{{Form::text('student_number2',null, ['class' => 'form-control input-no-border', 'required', 'placeholder' => 'Student number'])}}</td>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Student Number</th>
+                        <td>
+                            <input type="text" class="form-control input-no-border" value="{{$student->student_number}}" readonly style="background-color: #f8f9fa; color: #6c757d;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Allocated Number <span class="text-danger">*</span></th>
+                        <td>{{Form::text('student_number2',null, ['class' => 'form-control input-no-border', 'required', 'placeholder' => 'Allocated Number'])}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Student names <span class="text-danger">*</span></th>
@@ -53,6 +59,10 @@
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Initials <span class="text-danger">*</span></th>
                         <td>{{Form::text('initials',null, ['class' => 'form-control input-no-border', 'required', 'placeholder' => 'Inititals'])}}</td>
+                    </tr>
+                    <tr>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Center <span class="text-danger">*</span></th>
+                        <td>{{Form::select('center_id', $centers, null, ['class' => 'form-control select input-no-border', 'required', 'placeholder' => 'Select Center'])}}</td>
                     </tr>
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Email </th>

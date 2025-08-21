@@ -50,6 +50,7 @@ Route::resource('/enrolment', 'RegistrationController');
 Route::post('/enrolment/filter', 'RegistrationController@filter')->name('enrolment.filter');
 Route::get('enrolment/show-form/{student_id}', 'RegistrationController@showEnrollmentScreen')->name('enrolment.showEnrollmentScreen');
 Route::get('enrolment/proof/{student_id}', 'RegistrationController@generateProofOfRegistration')->name('enrolment.proof');
+Route::get('enrolment/proof/download/{student_id}', 'RegistrationController@downloadProofOfRegistration')->name('enrolment.proof.download');
 
 Route::resource('/enrolment-adjustment', 'EnrolmentAdjustmentController');
 Route::post('/enrolment-adjustment/filter', 'EnrolmentAdjustmentController@filter')->name('enrolment.adjustment.filter');
