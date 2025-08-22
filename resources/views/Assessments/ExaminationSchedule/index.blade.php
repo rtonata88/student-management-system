@@ -24,18 +24,28 @@
                                 </h4>
                             </div>
                             <div class="col-md-6 text-right">
+                                @if(Auth::user()->hasPermission('view-venue'))
+                                    <a href="{{ route('venues.index') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; margin-right: 5px; padding: 0.375rem 0.75rem;">
+                                        <i class="fa fa-building"></i> Manage Venues
+                                    </a>
+                                @endif
+                                @if(Auth::user()->hasPermission('view-time-slot'))
+                                    <a href="{{ route('time-slots.index') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; margin-right: 5px; padding: 0.375rem 0.75rem;">
+                                        <i class="fa fa-clock"></i> Manage Time Slots
+                                    </a>
+                                @endif
                                 @if(Auth::user()->hasPermission('create-examination-schedule'))
-                                    <a href="{{ route('examination-schedule.create') }}" class="btn btn-gradient-primary">
+                                    <a href="{{ route('examination-schedule.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; margin-right: 5px; padding: 0.375rem 0.75rem;">
                                         <i class="fa fa-plus"></i> Add Schedule
                                     </a>
                                 @endif
                                 @if(Auth::user()->hasPermission('view-examination-schedule'))
-                                    <a href="{{ route('examination-schedule.timetable', request()->query()) }}" class="btn btn-gradient-info">
+                                    <a href="{{ route('examination-schedule.timetable', request()->query()) }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; margin-right: 5px; padding: 0.375rem 0.75rem;">
                                         <i class="fa fa-table"></i> View Timetable
                                     </a>
                                 @endif
                                 @if(Auth::user()->hasPermission('print-examination-schedule'))
-                                    <a href="{{ route('examination-schedule.print', request()->query()) }}" target="_blank" class="btn btn-gradient-secondary">
+                                    <a href="{{ route('examination-schedule.print', request()->query()) }}" target="_blank" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                         <i class="fa fa-print"></i> Print
                                     </a>
                                 @endif
@@ -95,8 +105,8 @@
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label>&nbsp;</label>
-                                        <button type="submit" class="btn btn-primary btn-block">
-                                            <i class="fa fa-search"></i>
+                                        <button type="submit" class="btn btn-block" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                                            <i class="fa fa-search"></i> Filter
                                         </button>
                                     </div>
                                 </div>
@@ -195,7 +205,7 @@
                                 <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
                                 <p class="text-muted">No examination schedules found for the current academic year.</p>
                                 @if(Auth::user()->hasPermission('create-examination-schedule'))
-                                    <a href="{{ route('examination-schedule.create') }}" class="btn btn-primary">
+                                    <a href="{{ route('examination-schedule.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 12px 24px;">
                                         <i class="fa fa-plus"></i> Create First Schedule
                                     </a>
                                 @endif

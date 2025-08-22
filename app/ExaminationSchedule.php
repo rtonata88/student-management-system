@@ -8,8 +8,8 @@ use Carbon\Carbon;
 class ExaminationSchedule extends Model
 {
     protected $fillable = [
-        'academic_year_id', 'center_id', 'examination_id', 'subject_allocation_id',
-        'venue_id', 'class_duration_id', 'exam_date', 'notes', 'is_active', 'created_by'
+        'academic_year_id', 'center_id', 'examination_id', 'subject_id', 'teacher_id',
+        'subject_allocation_id', 'venue_id', 'class_duration_id', 'exam_date', 'notes', 'is_active', 'created_by'
     ];
 
     protected $casts = [
@@ -29,7 +29,22 @@ class ExaminationSchedule extends Model
 
     public function examination()
     {
-        return $this->belongsTo(AssessmentType::class, 'examination_id');
+        return $this->belongsTo(Examination::class, 'examination_id');
+    }
+
+    public function subject()
+    {
+        return $this->belongsTo(Module::class, 'subject_id');
+    }
+
+    public function headInvigilator()
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
     }
 
     public function subjectAllocation()
@@ -82,18 +97,44 @@ class ExaminationSchedule extends Model
         return $query->where('exam_date', '>=', Carbon::today());
     }
 
+    public function getHeadInvigilatorNameAttribute()
+    {
+        if ($this->headInvigilator) {
+            $user = $this->headInvigilator;
+            $fullName = trim($user->surname . ' ' . $user->other_names);
+            return !empty($fullName) ? $fullName : $user->name;
+        }
+        
+        return 'Not Assigned';
+    }
+
     public function getTeacherNameAttribute()
     {
+        // First try direct teacher relationship
+        if ($this->teacher) {
+            $user = $this->teacher;
+            $fullName = trim($user->surname . ' ' . $user->other_names);
+            return !empty($fullName) ? $fullName : $user->name;
+        }
+        
+        // Fallback to subject allocation if available
         if ($this->subjectAllocation && $this->subjectAllocation->user) {
             $user = $this->subjectAllocation->user;
             $fullName = trim($user->surname . ' ' . $user->other_names);
             return !empty($fullName) ? $fullName : $user->name;
         }
+        
         return 'Not Assigned';
     }
 
     public function getSubjectNameAttribute()
     {
+        // First try direct subject relationship
+        if ($this->subject) {
+            return $this->subject->subject_name;
+        }
+        
+        // Fallback to subject allocation if available
         return $this->subjectAllocation && $this->subjectAllocation->module 
             ? $this->subjectAllocation->module->subject_name 
             : 'Unknown Subject';
@@ -101,6 +142,12 @@ class ExaminationSchedule extends Model
 
     public function getSubjectCodeAttribute()
     {
+        // First try direct subject relationship
+        if ($this->subject) {
+            return $this->subject->subject_code;
+        }
+        
+        // Fallback to subject allocation if available
         return $this->subjectAllocation && $this->subjectAllocation->module 
             ? $this->subjectAllocation->module->subject_code 
             : 'N/A';

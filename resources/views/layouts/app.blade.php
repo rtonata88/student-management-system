@@ -73,8 +73,12 @@
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students"><span class="c-sidebar-nav-icon"></span> Student Bio</a></li>
           @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/exam-permits"><span class="c-sidebar-nav-icon"></span> Exam Permits</a></li>
+          @permission('student-cards')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/student-cards"><span class="c-sidebar-nav-icon"></span> Student Cards</a></li>
+          @endpermission
+          @permission('view-student-letters')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/student-letters"><span class="c-sidebar-nav-icon"></span> Student Letters</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/academic-record"><span class="c-sidebar-nav-icon"></span> Academic Record</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/notice-board"><span class="c-sidebar-nav-icon"></span> Notice Board</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/proof-of-registration"><span class="c-sidebar-nav-icon"></span> Proof of Registration</a></li>
@@ -300,6 +304,8 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
           </svg> System Reports</a>
         <ul class="c-sidebar-nav-dropdown-items">
+          
+          {{-- Existing Core Reports --}}
           @permission('finance-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.account-summary.index')}}"><span class="c-sidebar-nav-icon"></span> Account Summary</a></li>
           @endpermission
@@ -315,6 +321,114 @@
           @permission('student-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.students.index')}}"><span class="c-sidebar-nav-icon"></span> Student Registration</a></li>
           @endpermission
+
+          {{-- Academic Reports --}}
+          @permission('academic-performance-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Academic Performance</a></li>
+          @endpermission
+          @permission('assessment-analysis-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Assessment Analysis</a></li>
+          @endpermission
+          @permission('attendance-summary-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Attendance Summary</a></li>
+          @endpermission
+
+          {{-- Employee & HR Reports --}}
+          @permission('employee-attendance-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Employee Attendance</a></li>
+          @endpermission
+          @permission('employee-performance-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Employee Performance</a></li>
+          @endpermission
+          @permission('leave-summary-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Leave Summary</a></li>
+          @endpermission
+          @permission('payroll-summary-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Payroll Summary</a></li>
+          @endpermission
+
+          {{-- Examination Reports --}}
+          @permission('exam-results-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Exam Results</a></li>
+          @endpermission
+          @permission('exam-schedule-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Exam Schedule</a></li>
+          @endpermission
+
+          {{-- Financial Reports --}}
+          @permission('fee-collection-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Fee Collection</a></li>
+          @endpermission
+          @permission('fee-defaulters-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Fee Defaulters</a></li>
+          @endpermission
+          @permission('outstanding-balances-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Outstanding Balances</a></li>
+          @endpermission
+          @permission('revenue-analysis-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Revenue Analysis</a></li>
+          @endpermission
+
+          {{-- Fleet Management Reports --}}
+          @permission('fleet-utilization-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Fleet Utilization</a></li>
+          @endpermission
+          @permission('fleet-fuel-consumption-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Fuel Consumption</a></li>
+          @endpermission
+          @permission('vehicle-service-history-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Vehicle Service History</a></li>
+          @endpermission
+
+          {{-- Hostel Reports --}}
+          @permission('hostel-occupancy-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Hostel Occupancy</a></li>
+          @endpermission
+          @permission('hostel-fee-collection-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Hostel Fee Collection</a></li>
+          @endpermission
+
+          {{-- Inventory Reports --}}
+          @permission('inventory-stock-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Inventory Stock</a></li>
+          @endpermission
+          @permission('low-stock-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Low Stock</a></li>
+          @endpermission
+
+          {{-- Student Reports --}}
+          @permission('student-academic-transcript')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Student Transcripts</a></li>
+          @endpermission
+          @permission('student-demographics-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Student Demographics</a></li>
+          @endpermission
+          @permission('enrollment-statistics-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Enrollment Statistics</a></li>
+          @endpermission
+
+          {{-- System & Administrative Reports --}}
+          @permission('audit-trail-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Audit Trail</a></li>
+          @endpermission
+          @permission('system-activity-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> System Activity</a></li>
+          @endpermission
+          @permission('user-activity-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> User Activity</a></li>
+          @endpermission
+
+          {{-- Timetable Reports --}}
+          @permission('class-schedule-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Class Schedule</a></li>
+          @endpermission
+          @permission('room-utilization-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Room Utilization</a></li>
+          @endpermission
+          @permission('timetable-conflicts-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Timetable Conflicts</a></li>
+          @endpermission
+
         </ul>
       </li>
       @endpermission

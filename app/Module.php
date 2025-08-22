@@ -18,7 +18,7 @@ class Module extends Model implements Auditable
 
     public function subjectAllocations()
     {
-        return $this->hasMany(SubjectAllocation::class);
+        return $this->hasMany(SubjectAllocation::class, 'subject_id');
     }
 
     public function assessmentWeights()

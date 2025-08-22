@@ -138,6 +138,7 @@
                                         
                                         // Group reports
                                         if (in_array($permission->name, [
+                                            // Existing reports
                                             'student-report', 
                                             'finance-report',
                                             'assessment-report',
@@ -148,7 +149,119 @@
                                             'leave-reports',
                                             'maintenance-reports',
                                             'payroll-reports',
-                                            'timetable-reports'
+                                            'timetable-reports',
+                                            
+                                            // Academic Reports (alphabetical order)
+                                            'academic-performance-report',
+                                            'academic-year-summary-report',
+                                            'assessment-analysis-report',
+                                            'assessment-marks-report',
+                                            'assessment-statistics-report',
+                                            'attendance-summary-report',
+                                            'audit-trail-report',
+                                            
+                                            // Class and Curriculum Reports
+                                            'class-performance-report',
+                                            'class-routine-report',
+                                            'class-schedule-report',
+                                            'curriculum-coverage-report',
+                                            
+                                            // Data and System Reports
+                                            'data-backup-report',
+                                            
+                                            // Employee Reports
+                                            'employee-attendance-report',
+                                            'employee-benefits-report',
+                                            'employee-directory-report',
+                                            'employee-performance-report',
+                                            'employee-profile-report',
+                                            'enrollment-analysis-report',
+                                            'enrollment-statistics-report',
+                                            'enrollment-trends-report',
+                                            
+                                            // Examination Reports
+                                            'exam-marks-report',
+                                            'exam-results-report',
+                                            'exam-schedule-report',
+                                            'exam-statistics-report',
+                                            'examination-analysis-report',
+                                            
+                                            // Faculty and Staff Reports
+                                            'faculty-timetable-report',
+                                            'fee-collection-report',
+                                            'fee-defaulters-report',
+                                            'fee-structure-report',
+                                            'financial-summary-report',
+                                            'fleet-cost-analysis-report',
+                                            'fleet-driver-performance-report',
+                                            'fleet-fuel-consumption-report',
+                                            'fleet-maintenance-report',
+                                            'fleet-trip-summary-report',
+                                            'fleet-utilization-report',
+                                            
+                                            // Hostel Reports
+                                            'hostel-allocation-report',
+                                            'hostel-fee-collection-report',
+                                            'hostel-maintenance-report',
+                                            'hostel-occupancy-report',
+                                            'hostel-payment-report',
+                                            'hostel-visitor-report',
+                                            
+                                            // Inventory and Asset Reports
+                                            'inventory-movement-report',
+                                            'inventory-stock-report',
+                                            'inventory-valuation-report',
+                                            
+                                            // Leave Reports
+                                            'leave-balance-report',
+                                            'leave-history-report',
+                                            'leave-summary-report',
+                                            'low-stock-report',
+                                            
+                                            // Maintenance Reports
+                                            'asset-maintenance-report',
+                                            'maintenance-cost-report',
+                                            'maintenance-history-report',
+                                            'maintenance-schedule-report',
+                                            
+                                            // Outstanding and Overdue Reports
+                                            'outstanding-balances-report',
+                                            'overdue-maintenance-report',
+                                            
+                                            // Payment and Payroll Reports
+                                            'payment-history-report',
+                                            'payroll-summary-report',
+                                            'preventive-maintenance-report',
+                                            
+                                            // Registration and Revenue Reports
+                                            'registration-summary-report',
+                                            'revenue-analysis-report',
+                                            'room-utilization-report',
+                                            
+                                            // Staff and Stock Reports
+                                            'staff-allocation-report',
+                                            'stock-adjustment-report',
+                                            'student-academic-transcript',
+                                            'student-attendance-report',
+                                            'student-demographics-report',
+                                            'student-fee-statement',
+                                            'student-progress-report',
+                                            'student-registration-report',
+                                            'student-summary-report',
+                                            'subject-enrollment-report',
+                                            'supplier-performance-report',
+                                            'system-activity-report',
+                                            'system-performance-report',
+                                            
+                                            // Timetable and User Reports
+                                            'timetable-conflicts-report',
+                                            'user-activity-report',
+                                            'user-permissions-report',
+                                            
+                                            // Vehicle and Venue Reports
+                                            'vehicle-inspection-report',
+                                            'vehicle-service-history-report',
+                                            'venue-allocation-report'
                                         ])) {
                                             return 'REPORTS OPERATIONS';
                                         }
@@ -209,8 +322,18 @@
                                         }
                                         
                                         // Group examination schedule permissions
-                                        if (in_array($permission->name, ['view-examination-schedule', 'create-examination-schedule', 'edit-examination-schedule', 'delete-examination-schedule', 'print-examination-schedule', 'manage-examination-schedule'])) {
+                                        if (in_array($permission->name, ['view-examination-schedule', 'create-examination-schedule', 'edit-examination-schedule', 'delete-examination-schedule', 'print-examination-schedule', 'manage-examination-schedule', 'view-venue', 'create-venue', 'edit-venue', 'delete-venue', 'view-time-slot', 'create-time-slot', 'edit-time-slot', 'delete-time-slot'])) {
                                             return 'EXAMINATION SCHEDULE MANAGEMENT';
+                                        }
+                                        
+                                        // Group student cards permissions
+                                        if (in_array($permission->name, ['view-student-cards', 'create-student-cards', 'edit-student-cards', 'delete-student-cards', 'generate-student-cards', 'print-student-cards', 'upload-student-photo'])) {
+                                            return 'STUDENT CARDS MANAGEMENT';
+                                        }
+                                        
+                                        // Group student letters permissions
+                                        if (in_array($permission->name, ['view-student-letters', 'create-student-letters', 'edit-student-letters', 'delete-student-letters', 'generate-student-letters', 'print-student-letters', 'download-student-letters'])) {
+                                            return 'STUDENT LETTERS MANAGEMENT';
                                         }
                                         
                                         // Group setup permissions

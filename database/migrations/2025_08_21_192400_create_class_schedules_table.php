@@ -40,7 +40,7 @@ class CreateClassSchedulesTable extends Migration
                 $table->unique(['venue_id', 'class_duration_id', 'day_of_week', 'effective_from'], 'unique_venue_time_slot');
                 
                 // Prevent teacher conflicts
-                $table->index(['subject_allocation_id', 'class_duration_id', 'day_of_week']);
+                $table->index(['subject_allocation_id', 'class_duration_id', 'day_of_week'], 'cs_teacher_conflict_idx');
                 $table->index(['academic_year_id', 'center_id', 'is_active']);
             });
         }

@@ -13,23 +13,14 @@ class CreateAssessmentsTable extends Migration
      */
     public function up()
     {
-    {
         if (!Schema::hasTable('assessments')) {
             Schema::create('assessments', function (Blueprint $table) {
-            $table->id();
-            $table->integer('assessment_type_id');
-            $table->string('name');
-            $table->integer('weight');
-            $table->integer('created_by');
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+                $table->id();
+                $table->integer('assessment_type_id');
+                $table->string('name');
+                $table->integer('weight');
+                $table->integer('created_by');
+                $table->timestamps();
             });
         }
     }

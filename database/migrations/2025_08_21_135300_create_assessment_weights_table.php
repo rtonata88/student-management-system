@@ -18,7 +18,7 @@ class CreateAssessmentWeightsTable extends Migration
                 $table->increments('id');
                 $table->unsignedInteger('module_id');
                 $table->unsignedInteger('academic_year_id');
-                $table->unsignedInteger('assessment_type_id');
+                $table->unsignedBigInteger('assessment_type_id');
                 $table->string('description')->nullable();
                 $table->decimal('weight', 5, 2);
                 $table->timestamps();

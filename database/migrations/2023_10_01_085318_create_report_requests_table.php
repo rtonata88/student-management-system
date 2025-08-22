@@ -13,24 +13,15 @@ class CreateReportRequestsTable extends Migration
      */
     public function up()
     {
-    {
         if (!Schema::hasTable('report_requests')) {
             Schema::create('report_requests', function (Blueprint $table) {
-            $table->id();
-            $table->string('report_type');
-            $table->datetime('request_datetime');
-            $table->string('status');
-            $table->string('document_path');
-            $table->string('requested_by')->default('System');
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+                $table->id();
+                $table->string('report_type');
+                $table->datetime('request_datetime');
+                $table->string('status');
+                $table->string('document_path');
+                $table->string('requested_by')->default('System');
+                $table->timestamps();
             });
         }
     }

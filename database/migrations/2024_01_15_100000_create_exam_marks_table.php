@@ -16,23 +16,22 @@ class CreateExamMarksTable extends Migration
         if (!Schema::hasTable('exam_marks')) {
             Schema::create('exam_marks', function (Blueprint $table) {
                 $table->id();
-                $table->integer('student_id')->unsigned();
-                $table->integer('module_id')->unsigned();
-                $table->integer('academic_year_id')->unsigned();
-                $table->integer('exam_type_id')->unsigned();
-                $table->integer('exam_paper_id')->unsigned();
+                $table->unsignedInteger('student_id');
+                $table->unsignedInteger('module_id');
+                $table->unsignedInteger('academic_year_id');
+                $table->unsignedInteger('exam_type_id');
+                $table->unsignedBigInteger('exam_paper_id');
                 $table->decimal('marks_obtained', 5, 2);
                 $table->decimal('total_marks', 5, 2);
-                $table->integer('captured_by')->unsigned();
+                $table->unsignedInteger('captured_by')->nullable();
                 $table->timestamps();
 
-                // Foreign key constraints
+                // Foreign key constraints - only add for tables that exist at this point
                 $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
                 $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
                 $table->foreign('academic_year_id')->references('id')->on('academic_years')->onDelete('cascade');
-                $table->foreign('exam_type_id')->references('id')->on('assessment_types')->onDelete('cascade');
-                $table->foreign('exam_paper_id')->references('id')->on('exam_papers')->onDelete('cascade');
-                $table->foreign('captured_by')->references('id')->on('users')->onDelete('cascade');
+                $table->foreign('captured_by')->references('id')->on('users')->onDelete('set null');
+                // Note: exam_papers and assessment_types tables will be created later, foreign keys added in separate migration
 
                 // Unique constraint to prevent duplicate marks for same student, module, exam paper
                 $table->unique(['student_id', 'module_id', 'academic_year_id', 'exam_type_id', 'exam_paper_id'], 'unique_exam_mark');

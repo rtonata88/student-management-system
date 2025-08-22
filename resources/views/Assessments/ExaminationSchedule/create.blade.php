@@ -71,15 +71,28 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="subject_allocation_id">Subject & Teacher <span class="text-danger">*</span></label>
-                                        <select name="subject_allocation_id" id="subject_allocation_id" class="form-control" required>
+                                        <label for="module_id">Subject <span class="text-danger">*</span></label>
+                                        <select name="module_id" id="module_id" class="form-control" required>
                                             <option value="">Select Centre First</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="head_invigilator_id">Head Invigilator <span class="text-danger">*</span></label>
+                                        <select name="head_invigilator_id" id="head_invigilator_id" class="form-control" required>
+                                            <option value="">Select Head Invigilator</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}">
+                                                    {{ $user->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="venue_id">Venue <span class="text-danger">*</span></label>
                                         <select name="venue_id" id="venue_id" class="form-control" required>
@@ -131,8 +144,8 @@
                                     </a>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <button type="submit" class="btn btn-gradient-primary">
-                                        <i class="fa fa-save"></i> Create Schedule
+                                    <button type="submit" class="btn btn-system-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 500;">
+                                        <i class="fa fa-plus"></i> Create Schedule
                                     </button>
                                 </div>
                             </div>
@@ -147,10 +160,34 @@
 
 @section('styles')
 <style>
-.btn-gradient-primary {
-    background: linear-gradient(45deg, #007bff 0%, #0056b3 100%);
+.btn-system-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: none;
     color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+}
+
+.btn-system-gradient:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-system-gradient:focus,
+.btn-system-gradient:active {
+    color: white;
+    text-decoration: none;
+    outline: none;
 }
 
 .form-group label {
@@ -167,37 +204,38 @@
 @section('scripts')
 <script>
 $(document).ready(function() {
-    // Load subject allocations when centre changes
+    // Load subjects when centre changes
     $('#center_id').change(function() {
         var centerId = $(this).val();
-        var subjectSelect = $('#subject_allocation_id');
+        var moduleSelect = $('#module_id');
         var venueSelect = $('#venue_id');
         
         // Reset selects
-        subjectSelect.html('<option value="">Loading...</option>');
+        moduleSelect.empty().append('<option value="">Loading subjects...</option>');
         venueSelect.html('<option value="">Loading...</option>');
         
         if (centerId) {
-            // Load subject allocations
-            $.get('{{ route("examination-schedule.get-subject-allocations") }}', {center_id: centerId})
+            // Load subjects/modules
+            $.get('/examination-schedule/get-modules', { center_id: centerId })
                 .done(function(data) {
-                    subjectSelect.html('<option value="">Select Subject & Teacher</option>');
-                    $.each(data, function(index, allocation) {
-                        var teacherName = 'Not Assigned';
-                        if (allocation.user) {
-                            var fullName = (allocation.user.surname + ' ' + allocation.user.other_names).trim();
-                            teacherName = fullName || allocation.user.name;
-                        }
-                        
-                        subjectSelect.append(
-                            '<option value="' + allocation.id + '">' + 
-                            allocation.module.subject_name + ' (' + allocation.module.subject_code + ') - ' + teacherName +
-                            '</option>'
-                        );
-                    });
+                    console.log('Subjects response:', data);
+                    moduleSelect.empty().append('<option value="">Select Subject</option>');
+                    
+                    if (data && data.length > 0) {
+                        $.each(data, function(index, module) {
+                            var optionText = module.subject_name + ' (' + module.subject_code + ')';
+                            if (!module.is_allocated) {
+                                optionText += ' ⚠️ Not Allocated';
+                            }
+                            moduleSelect.append('<option value="' + module.id + '">' + optionText + '</option>');
+                        });
+                    } else {
+                        moduleSelect.append('<option value="">No subjects available</option>');
+                    }
                 })
-                .fail(function() {
-                    subjectSelect.html('<option value="">Error loading subjects</option>');
+                .fail(function(xhr, status, error) {
+                    console.error('Error loading subjects:', error);
+                    moduleSelect.empty().append('<option value="">Error loading subjects</option>');
                 });
             
             // Load venues
@@ -216,21 +254,23 @@ $(document).ready(function() {
                     venueSelect.html('<option value="">Error loading venues</option>');
                 });
         } else {
-            subjectSelect.html('<option value="">Select Centre First</option>');
+            moduleSelect.html('<option value="">Select Centre First</option>');
             venueSelect.html('<option value="">Select Centre First</option>');
         }
     });
     
+    // No need for dynamic teacher loading since Head Invigilator is pre-populated
+    
     // Check for conflicts when key fields change
     function checkConflicts() {
-        var subjectAllocationId = $('#subject_allocation_id').val();
+        var headInvigilatorId = $('#head_invigilator_id').val();
         var classDurationId = $('#class_duration_id').val();
         var examDate = $('#exam_date').val();
         var venueId = $('#venue_id').val();
         
-        if (subjectAllocationId && classDurationId && examDate && venueId) {
+        if (teacherId && classDurationId && examDate && venueId) {
             $.get('{{ route("examination-schedule.check-conflicts") }}', {
-                subject_allocation_id: subjectAllocationId,
+                teacher_id: teacherId,
                 class_duration_id: classDurationId,
                 exam_date: examDate,
                 venue_id: venueId
@@ -254,7 +294,7 @@ $(document).ready(function() {
         }
     }
     
-    $('#subject_allocation_id, #class_duration_id, #exam_date, #venue_id').change(checkConflicts);
+    $('#teacher_id, #class_duration_id, #exam_date, #venue_id').change(checkConflicts);
     
     // Form validation
     $('#scheduleForm').submit(function(e) {

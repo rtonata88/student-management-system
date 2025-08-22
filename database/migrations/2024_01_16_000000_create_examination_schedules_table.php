@@ -16,8 +16,8 @@ class CreateExaminationSchedulesTable extends Migration
         if (!Schema::hasTable('examination_schedules')) {
             Schema::create('examination_schedules', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->unsignedBigInteger('academic_year_id');
-                $table->unsignedBigInteger('center_id');
+                $table->unsignedInteger('academic_year_id');
+                $table->unsignedInteger('center_id');
                 $table->unsignedBigInteger('examination_id'); // Assessment Type (Mock Exam, Final Exam, etc.)
                 $table->unsignedBigInteger('subject_allocation_id');
                 $table->unsignedBigInteger('venue_id');
@@ -25,16 +25,15 @@ class CreateExaminationSchedulesTable extends Migration
                 $table->date('exam_date');
                 $table->text('notes')->nullable();
                 $table->boolean('is_active')->default(true);
-                $table->unsignedBigInteger('created_by');
+                $table->unsignedInteger('created_by');
                 $table->timestamps();
 
                 // Foreign key constraints
                 $table->foreign('academic_year_id')->references('id')->on('academic_years')->onDelete('cascade');
                 $table->foreign('center_id')->references('id')->on('centers')->onDelete('cascade');
-                $table->foreign('examination_id')->references('id')->on('assessment_types')->onDelete('cascade');
-                $table->foreign('subject_allocation_id')->references('id')->on('subject_allocations')->onDelete('cascade');
-                $table->foreign('venue_id')->references('id')->on('venues')->onDelete('cascade');
-                $table->foreign('class_duration_id')->references('id')->on('class_durations')->onDelete('cascade');
+                // Note: assessment_types table will be created later, so we'll add this foreign key constraint in a separate migration
+                // Note: subject_allocations table will be created later, so we'll add this foreign key constraint in a separate migration
+                // Note: venues and class_durations tables will be created later, so we'll add these foreign key constraints in a separate migration
                 $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
 
                 // Indexes for better performance

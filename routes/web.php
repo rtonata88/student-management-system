@@ -287,8 +287,18 @@ Route::get('/examination-schedule/print', 'ExaminationScheduleController@print')
 
 // AJAX Routes for Examination Schedule
 Route::get('/examination-schedule/get-subject-allocations', 'ExaminationScheduleController@getSubjectAllocations')->name('examination-schedule.get-subject-allocations')->middleware('permission:view-examination-schedule');
+Route::get('/examination-schedule/get-modules', 'ExaminationScheduleController@getModules')->name('examination-schedule.get-modules')->middleware('permission:view-examination-schedule');
+Route::get('/examination-schedule/get-teachers', 'ExaminationScheduleController@getTeachers')->name('examination-schedule.get-teachers')->middleware('permission:view-examination-schedule');
 Route::get('/examination-schedule/get-venues', 'ExaminationScheduleController@getVenues')->name('examination-schedule.get-venues')->middleware('permission:view-examination-schedule');
 Route::get('/examination-schedule/check-conflicts', 'ExaminationScheduleController@checkConflicts')->name('examination-schedule.check-conflicts')->middleware('permission:view-examination-schedule');
+
+// Venue Management Routes
+Route::resource('venues', 'VenueController')->middleware('permission:view-venue');
+Route::post('/venues/{venue}/toggle-status', 'VenueController@toggleStatus')->name('venues.toggle-status')->middleware('permission:edit-venue');
+
+// Time Slots Management Routes
+Route::resource('time-slots', 'TimeSlotsController')->middleware('permission:view-time-slot');
+Route::post('/time-slots/{timeSlot}/toggle-status', 'TimeSlotsController@toggleStatus')->name('time-slots.toggle-status')->middleware('permission:edit-time-slot');
 
 //Result Codes Management
 Route::resource('/result-codes', 'ResultCodeController');
@@ -403,7 +413,20 @@ Route::prefix('hostel-administration')->name('hostel.administration.')->group(fu
     Route::get('/reports', 'HostelAdministrationController@reports')->name('reports');
 });
 
+// Student Cards Routes
+Route::get('/student-cards', 'StudentCardController@index')->name('student-cards.index')->middleware('permission:view-student-cards');
+Route::post('/student-cards/filter', 'StudentCardController@filter')->name('student-cards.filter')->middleware('permission:view-student-cards');
+Route::get('/student-cards/{student}/generate', 'StudentCardController@generate')->name('student-cards.generate')->middleware('permission:generate-student-cards');
+Route::get('/student-cards/{student}/print', 'StudentCardController@print')->name('student-cards.print')->middleware('permission:print-student-cards');
+Route::post('/student-cards/{student}/upload-photo', 'StudentCardController@uploadPhoto')->name('student-cards.upload-photo')->middleware('permission:upload-student-photo');
+
+// Student Letters Routes
+Route::get('/student-letters', 'StudentLetterController@index')->name('student-letters.index')->middleware('permission:view-student-letters');
+Route::post('/student-letters/filter', 'StudentLetterController@filter')->name('student-letters.filter')->middleware('permission:view-student-letters');
+Route::get('/student-letters/{student}/generate', 'StudentLetterController@generate')->name('student-letters.generate')->middleware('permission:generate-student-letters');
+Route::post('/student-letters/{student}/preview', 'StudentLetterController@preview')->name('student-letters.preview')->middleware('permission:view-student-letters');
+Route::post('/student-letters/{student}/download', 'StudentLetterController@download')->name('student-letters.download')->middleware('permission:download-student-letters');
+
 // Route::get('richard', function(){
 //     return phpinfo();
 // });
-

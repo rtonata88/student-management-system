@@ -14,8 +14,10 @@ class AddCenterIdToStudentsTable extends Migration
     public function up()
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->unsignedBigInteger('center_id')->nullable()->after('initials');
-            $table->foreign('center_id')->references('id')->on('centers')->onDelete('set null');
+            if (!Schema::hasColumn('students', 'center_id')) {
+                $table->unsignedInteger('center_id')->after('student_names');
+                $table->foreign('center_id')->references('id')->on('centers')->onDelete('cascade');
+            }
         });
     }
 

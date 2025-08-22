@@ -11,8 +11,11 @@
 |
 */
 
+// Suppress deprecation warnings for PHP 8.4 compatibility
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
+
 $app = new Illuminate\Foundation\Application(
-    realpath(__DIR__.'/../')
+    $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
 /*
