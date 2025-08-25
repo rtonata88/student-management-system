@@ -81,7 +81,19 @@
                     </div>
 
                     <div class="letter-title">
-                        {{ ucwords(str_replace('_', ' ', $letterType)) }}
+                        @php
+                            $letterTitles = [
+                                'testimonial' => 'Testimonial Letter',
+                                'completion' => 'Letter of Completion',
+                                'achievement' => 'Letter of Achievement',
+                                'enrollment' => 'Letter of Enrollment',
+                                'conduct' => 'Letter of Good Conduct',
+                                'recommendation' => 'Letter of Recommendation',
+                                'attendance' => 'Letter of Attendance',
+                                'verification' => 'Student Verification Letter'
+                            ];
+                        @endphp
+                        {{ $letterTitles[$letterType] ?? ucwords(str_replace('_', ' ', $letterType)) }}
                     </div>
 
                     <div class="letter-salutation">
@@ -120,7 +132,10 @@
 
                         <div class="stamp-section">
                             <div class="stamp-placeholder">
-                                <div class="stamp-text">OFFICIAL STAMP</div>
+                                <div class="stamp-text">
+                                    <span>OFFICIAL</span><br>
+                                    <span>STAMP</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -178,8 +193,8 @@
 }
 
 .company-logo {
-    max-width: 150px;
-    max-height: 100px;
+    max-width: 200px;
+    max-height: 150px;
     object-fit: contain;
 }
 
@@ -248,9 +263,10 @@
 }
 
 .stamp-section {
-    position: absolute;
-    right: 3rem;
-    margin-top: -4rem;
+    position: relative;
+    float: right;
+    margin-top: -6rem;
+    margin-right: 2rem;
 }
 
 .stamp-placeholder {
@@ -262,6 +278,7 @@
     align-items: center;
     justify-content: center;
     background: #f8f9fa;
+    position: relative;
 }
 
 .stamp-text {
@@ -270,6 +287,11 @@
     color: #999;
     text-align: center;
     line-height: 1.2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
 }
 
 .btn-gradient-primary {
@@ -305,22 +327,59 @@
 }
 
 @media print {
-    .action-bar {
+    /* Hide all non-letter elements */
+    .action-bar,
+    .sidebar,
+    .c-sidebar,
+    .c-header,
+    .c-subheader,
+    .breadcrumb,
+    nav,
+    .navbar,
+    .btn,
+    button {
         display: none !important;
     }
     
-    .letter-preview {
-        box-shadow: none;
-        padding: 0;
-        margin: 0;
+    /* Reset all containers and body for full width printing */
+    * {
+        box-sizing: border-box !important;
     }
     
-    body {
-        background: white !important;
-    }
-    
-    .container-fluid {
+    html, body {
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
         padding: 0 !important;
+        background: white !important;
+        font-size: 12pt !important;
+    }
+    
+    .container-fluid,
+    .row,
+    .col-lg-10 {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .letter-preview {
+        width: 100% !important;
+        max-width: none !important;
+        box-shadow: none !important;
+        padding: 15mm !important;
+        margin: 0 !important;
+        background: white !important;
+        position: static !important;
+        transform: none !important;
+        page-break-inside: avoid;
+    }
+    
+    /* Ensure letter content uses full width */
+    .letterhead table,
+    .letter-body {
+        width: 100% !important;
     }
 }
 </style>

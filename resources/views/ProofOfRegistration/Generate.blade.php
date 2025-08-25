@@ -13,16 +13,19 @@
                             </h4>
                         </div>
                         <div class="col-md-4 text-right">
-                            @can('download-proof-of-registration')
-                                <a href="{{ route('proof-of-registration.download', $student->id) }}" class="btn btn-light btn-sm">
+                            <a href="{{ route('proof-of-registration.index') }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem; margin-right: 5px;">
+                                <i class="fa fa-arrow-left"></i> Back
+                            </a>
+                            @permission('download-proof-of-registration')
+                                <a href="{{ route('proof-of-registration.download', $student->id) }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem; margin-right: 5px;">
                                     <i class="fa fa-download"></i> Download PDF
                                 </a>
-                            @endcan
-                            @can('print-proof-of-registration')
-                                <a href="{{ route('proof-of-registration.print', $student->id) }}" target="_blank" class="btn btn-light btn-sm ml-2">
+                            @endpermission
+                            @permission('print-proof-of-registration')
+                                <a href="{{ route('proof-of-registration.print', $student->id) }}" target="_blank" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fa fa-print"></i> Print
                                 </a>
-                            @endcan
+                            @endpermission
                         </div>
                     </div>
                 </div>
@@ -122,7 +125,7 @@
                     <!-- Registered Modules -->
                     <div class="mb-4">
                         <h5 style="color: #333; border-bottom: 2px solid #f093fb; padding-bottom: 10px; margin-bottom: 20px;">
-                            <i class="fa fa-book"></i> Registered Modules ({{ $registered_modules->count() }} modules)
+                            <i class="fa fa-book"></i> Registered Subjects ({{ $registered_modules->count() }} subjects)
                         </h5>
                         
                         @if($registered_modules->count() > 0)
@@ -131,8 +134,8 @@
                                     <thead style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
                                         <tr>
                                             <th style="text-align: center;">#</th>
-                                            <th>Module Code</th>
-                                            <th>Module Name</th>
+                                            <th>Subject Code</th>
+                                            <th>Subject Name</th>
                                             <th style="text-align: center;">Symbol</th>
                                             <th style="text-align: center;">System</th>
                                             <th style="text-align: center;">Amount</th>
@@ -143,8 +146,12 @@
                                         @foreach($registered_modules as $index => $module)
                                         <tr>
                                             <td style="text-align: center; font-weight: bold;">{{ $index + 1 }}</td>
-                                            <td style="font-weight: bold; color: #333;">{{ $module->module->module_code ?? 'N/A' }}</td>
-                                            <td style="color: #333;">{{ $module->module->module_name ?? 'N/A' }}</td>
+                                            <td style="font-weight: bold; color: #333;">
+                                                {{ $module->module->subject_code ?? 'N/A' }}
+                                            </td>
+                                            <td style="color: #333;">
+                                                {{ $module->module->subject_name ?? 'N/A' }}
+                                            </td>
                                             <td style="text-align: center;">
                                                 <span class="badge badge-info">{{ $module->subject_symbol ?? 'N/A' }}</span>
                                             </td>
@@ -177,7 +184,7 @@
                             </div>
                         @else
                             <div class="alert alert-warning">
-                                <i class="fa fa-exclamation-triangle"></i> No modules registered for this student.
+                                <i class="fa fa-exclamation-triangle"></i> No subjects registered for this student.
                             </div>
                         @endif
                     </div>
@@ -188,7 +195,7 @@
                             <div class="card text-center" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
                                 <div class="card-body">
                                     <h4>{{ $registered_modules->count() }}</h4>
-                                    <p class="mb-0">Modules Registered</p>
+                                    <p class="mb-0">Subjects Registered</p>
                                 </div>
                             </div>
                         </div>
@@ -230,7 +237,7 @@
                             <strong>{{ $currentYear->academic_year }}</strong>.
                         </p>
                         <p style="color: #555; line-height: 1.6; margin-bottom: 0;">
-                            The student is enrolled for {{ $registered_modules->count() }} module(s) with a total 
+                            The student is enrolled for {{ $registered_modules->count() }} subject(s) with a total 
                             registration fee of <strong>${{ number_format($registered_modules->sum('amount'), 2) }}</strong>.
                         </p>
                     </div>

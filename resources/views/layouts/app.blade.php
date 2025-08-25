@@ -72,7 +72,9 @@
           @permission('students')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students"><span class="c-sidebar-nav-icon"></span> Student Bio</a></li>
           @endpermission
+          @permission('view-notice-board')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/notice-board"><span class="c-sidebar-nav-icon"></span> Notice Board</a></li>
+          @endpermission
           @permission('view-exam-permits')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/exam-permits"><span class="c-sidebar-nav-icon"></span> Exam Permits</a></li>
           @endpermission

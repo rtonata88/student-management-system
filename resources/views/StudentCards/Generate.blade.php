@@ -470,9 +470,25 @@
 </style>
 
 <!-- QR Code Library -->
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js" onload="generateQRCode()" onerror="handleQRError()"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <script>
 function generateQRCode() {
+    console.log('Attempting to generate QR code...');
+    
+    // Check if QRCode library is available
+    if (typeof QRCode === 'undefined') {
+        console.error('QRCode library not loaded');
+        handleQRError();
+        return;
+    }
+    
+    // Check if target element exists
+    const qrElement = document.getElementById('qrcode');
+    if (!qrElement) {
+        console.error('QR code element not found');
+        return;
+    }
+    
     // Generate QR code with student verification data
     const studentData = {
         name: "{{ $student->student_names }} {{ $student->surname }}",
@@ -484,9 +500,16 @@ function generateQRCode() {
         verificationUrl: "{{ url('/verify-student/' . $student->id) }}"
     };
     
-    const qrData = JSON.stringify(studentData);
+    // Use simpler data for QR code to avoid size issues
+    const qrData = `Student: {{ $student->student_names }} {{ $student->surname }}
+ID: {{ $student->student_number }}
+Institution: {{ $company->company_name ?? 'EDUCATIONAL INSTITUTION' }}
+Verify: {{ url('/verify-student/' . $student->id) }}`;
     
-    QRCode.toCanvas(document.getElementById('qrcode'), qrData, {
+    // Clear any existing content
+    qrElement.innerHTML = '';
+    
+    QRCode.toCanvas(qrElement, qrData, {
         width: 80,
         height: 80,
         margin: 1,
@@ -498,65 +521,66 @@ function generateQRCode() {
     }, function (error) {
         if (error) {
             console.error('QR Code generation failed:', error);
-            document.getElementById('qrcode').innerHTML = '<div class="qr-fallback">QR<br>CODE</div>';
+            handleQRError();
+        } else {
+            console.log('QR Code generated successfully');
         }
     });
 }
 
 function handleQRError() {
-    console.error('QRCode library failed to load');
-    document.getElementById('qrcode').innerHTML = '<div class="qr-fallback">QR<br>CODE</div>';
+    console.log('Showing QR fallback');
+    const qrElement = document.getElementById('qrcode');
+    if (qrElement) {
+        qrElement.innerHTML = '<div class="qr-fallback">QR<br>CODE</div>';
+    }
 }
 
-// Fallback if DOM is already loaded
-document.addEventListener('DOMContentLoaded', function() {
-    if (typeof QRCode !== 'undefined') {
+// Initialize QR code generation
+$(document).ready(function() {
+    console.log('Document ready, initializing QR code...');
+    
+    // Wait a bit for the QR library to load
+    setTimeout(function() {
         generateQRCode();
-    } else {
-        // Try loading QR code after a delay
-        setTimeout(function() {
-            if (typeof QRCode !== 'undefined') {
-                generateQRCode();
-            } else {
-                handleQRError();
-            }
-        }, 1000);
-    }
+    }, 500);
+    
+    // Also try again after a longer delay as fallback
+    setTimeout(function() {
+        const qrElement = document.getElementById('qrcode');
+        if (qrElement && qrElement.innerHTML.trim() === '') {
+            console.log('QR code still empty, trying again...');
+            generateQRCode();
+        }
+    }, 2000);
 });
 
 function openPhotoUpload(studentId, studentName) {
     console.log('Opening photo upload for student:', studentId, studentName);
     
-    // Check if elements exist
-    const studentNameEl = document.getElementById('studentName');
-    const photoFormEl = document.getElementById('photoUploadForm');
-    const photoInputEl = document.getElementById('photoInput');
-    const photoPreviewEl = document.getElementById('photoPreview');
-    
-    if (!studentNameEl || !photoFormEl || !photoInputEl || !photoPreviewEl) {
-        console.error('Modal elements not found');
-        return;
-    }
-    
-    studentNameEl.textContent = studentName;
-    photoFormEl.action = `/student-cards/${studentId}/upload-photo`;
-    
-    // Reset form
-    photoInputEl.value = '';
-    photoPreviewEl.style.display = 'none';
-    
-    // Show modal with fallback
-    if (typeof $ !== 'undefined' && $.fn.modal) {
-        $('#photoUploadModal').modal('show');
-    } else {
-        // Fallback for Bootstrap 5 or vanilla JS
-        const modal = document.getElementById('photoUploadModal');
-        if (modal) {
-            modal.style.display = 'block';
-            modal.classList.add('show');
-            document.body.classList.add('modal-open');
+    // Wait for DOM to be ready
+    $(document).ready(function() {
+        // Check if elements exist
+        const studentNameEl = document.getElementById('studentName');
+        const photoFormEl = document.getElementById('photoUploadForm');
+        const photoInputEl = document.getElementById('photoInput');
+        const photoPreviewEl = document.getElementById('photoPreview');
+        
+        if (!studentNameEl || !photoFormEl || !photoInputEl || !photoPreviewEl) {
+            console.error('Modal elements not found');
+            return;
         }
-    }
+        
+        studentNameEl.textContent = studentName;
+        photoFormEl.action = `/student-cards/${studentId}/upload-photo`;
+        
+        // Reset form
+        photoInputEl.value = '';
+        photoPreviewEl.style.display = 'none';
+        
+        // Show modal using jQuery
+        $('#photoUploadModal').modal('show');
+    });
 }
 
 // Initialize event listeners when DOM is ready
@@ -600,18 +624,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Add modal close functionality
-    const modalCloseBtn = document.querySelector('#photoUploadModal .close');
-    if (modalCloseBtn) {
-        modalCloseBtn.addEventListener('click', function() {
-            const modal = document.getElementById('photoUploadModal');
-            if (modal) {
-                modal.style.display = 'none';
-                modal.classList.remove('show');
-                document.body.classList.remove('modal-open');
-            }
-        });
-    }
+    // Add modal close functionality using jQuery
+    $('#photoUploadModal .close, #photoUploadModal [data-dismiss="modal"]').on('click', function() {
+        $('#photoUploadModal').modal('hide');
+    });
 });
 </script>
 @endsection

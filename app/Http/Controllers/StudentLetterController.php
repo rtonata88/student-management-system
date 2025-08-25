@@ -114,11 +114,28 @@ class StudentLetterController extends Controller
         // Generate letter content based on type
         $letterContent = $this->generateLetterContent($student, $letterType, $customContent);
         
-        $pdf = PDF::loadView('StudentLetters.Print', compact('student', 'company', 'letterType', 'letterContent'));
-        
-        $filename = $this->generateFilename($student, $letterType);
-        
-        return $pdf->download($filename);
+        try {
+            // Set DomPDF options to handle file writing issues
+            $pdf = PDF::loadView('StudentLetters.Print', compact('student', 'company', 'letterType', 'letterContent'));
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions([
+                'isRemoteEnabled' => false,
+                'isHtml5ParserEnabled' => true,
+                'isFontSubsettingEnabled' => true,
+                'tempDir' => storage_path('app/temp'),
+                'fontDir' => storage_path('fonts/'),
+                'fontCache' => storage_path('fonts/'),
+                'chroot' => storage_path('app/'),
+            ]);
+            
+            $filename = $this->generateFilename($student, $letterType);
+            
+            return $pdf->download($filename);
+        } catch (\Exception $e) {
+            \Log::error('PDF Generation Error: ' . $e->getMessage());
+            Session::flash('error', 'Unable to generate PDF. Error: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**

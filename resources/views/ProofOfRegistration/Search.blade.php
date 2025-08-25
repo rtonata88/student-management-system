@@ -1,161 +1,339 @@
 @extends('layouts.app')
-
+@section('breadcrumb')
+<div class="c-subheader px-3">
+    <!-- Breadcrumb-->
+    <ol class="breadcrumb border-0 m-0">
+        <li class="breadcrumb-item">Applications</li>
+        <li class="breadcrumb-item active"><a href="/proof-of-registration">Proof of Registration</a></li>
+        <!-- Breadcrumb Menu-->
+    </ol>
+</div>
+@endsection
 @section('content')
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card" style="background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.18);">
-                <div class="card-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
-                    <h4 class="card-title mb-0">
-                        <i class="fa fa-certificate"></i> Proof of Registration Search
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <!-- Search Form -->
-                    <form method="POST" action="{{ route('proof-of-registration.filter') }}">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="student_number" class="font-weight-bold">Student Number</label>
-                                    <input type="text" class="form-control" id="student_number" name="student_number" 
-                                           placeholder="Enter student number..." value="{{ old('student_number') }}">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="names" class="font-weight-bold">Student Names</label>
-                                    <input type="text" class="form-control" id="names" name="names" 
-                                           placeholder="Enter student names..." value="{{ old('names') }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-lg" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 25px; padding: 12px 30px; box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);">
-                                    <i class="fa fa-search"></i> Search Registered Students
-                                </button>
-                                <a href="{{ route('proof-of-registration.index') }}" class="btn btn-lg btn-secondary ml-2" style="border-radius: 25px; padding: 12px 30px;">
-                                    <i class="fa fa-refresh"></i> Clear
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-
-                    @if(session('message'))
-                        <div class="alert alert-info mt-4">
-                            <i class="fa fa-info-circle"></i> {{ session('message') }}
-                        </div>
-                    @endif
-
-                    @if(session('error'))
-                        <div class="alert alert-danger mt-4">
-                            <i class="fa fa-exclamation-circle"></i> {{ session('error') }}
-                        </div>
-                    @endif
-
-                    <!-- Search Results -->
-                    @if(isset($students) && $students->count() > 0)
-                        <div class="mt-4">
-                            <h5 class="font-weight-bold mb-3">
-                                <i class="fa fa-users"></i> Registered Students ({{ $students->count() }} student{{ $students->count() > 1 ? 's' : '' }} found)
-                            </h5>
-                            <div class="row">
-                                @foreach($students as $student)
-                                    @php
-                                        $currentYear = \App\AcademicYear::where('status', 1)->first();
-                                        $registration = $student->registration->where('academic_year', $currentYear->academic_year)->first();
-                                        $registeredModules = \App\ModuleRegistration::where('student_id', $student->id)
-                                            ->where('academic_year', $currentYear->academic_year)
-                                            ->count();
-                                    @endphp
-                                    <div class="col-md-6 col-lg-4 mb-4">
-                                        <div class="card h-100" style="background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7)); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3); border-radius: 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-4">
-                                                        @if($student->photo)
-                                                            <img src="{{ asset('storage/' . $student->photo) }}" 
-                                                                 alt="Student Photo" 
-                                                                 class="img-fluid rounded-circle" 
-                                                                 style="width: 60px; height: 60px; object-fit: cover;">
-                                                        @else
-                                                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" 
-                                                                 style="width: 60px; height: 60px;">
-                                                                <i class="fa fa-user text-white"></i>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="col-8">
-                                                        <h6 class="font-weight-bold mb-1" style="color: #333;">
-                                                            {{ $student->student_names }} {{ $student->surname }}
-                                                        </h6>
-                                                        <p class="text-muted mb-1 small">
-                                                            <strong>Number:</strong> {{ $student->student_number }}
-                                                        </p>
-                                                        <p class="text-muted mb-1 small">
-                                                            <strong>Center:</strong> {{ $student->center->center_name ?? 'N/A' }}
-                                                        </p>
-                                                        <p class="text-muted mb-1 small">
-                                                            <strong>Modules:</strong> {{ $registeredModules }}
-                                                        </p>
-                                                        <p class="text-muted mb-2 small">
-                                                            <strong>Registered:</strong> {{ $registration ? \Carbon\Carbon::parse($registration->registration_date)->format('d M Y') : 'N/A' }}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="mt-3">
-                                                    <span class="badge badge-success mb-2">
-                                                        <i class="fa fa-check-circle"></i> Registered for {{ $currentYear->academic_year }}
-                                                    </span>
-                                                    
-                                                    @can('generate-proof-of-registration')
-                                                        <a href="{{ route('proof-of-registration.generate', $student->id) }}" 
-                                                           class="btn btn-sm btn-block" 
-                                                           style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 20px; padding: 8px 16px; box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);">
-                                                            <i class="fa fa-certificate"></i> View Proof of Registration
-                                                        </a>
-                                                    @endcan
-                                                    
-                                                    @can('download-proof-of-registration')
-                                                        <a href="{{ route('proof-of-registration.download', $student->id) }}" 
-                                                           class="btn btn-sm btn-block mt-2" 
-                                                           style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 20px; padding: 8px 16px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
-                                                            <i class="fa fa-download"></i> Download PDF
-                                                        </a>
-                                                    @endcan
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
-                </div>
+    <!-- Modern Search Section -->
+    <div class="search-container mb-5">
+        <div class="search-card">
+            <div class="search-header">
+                <h4 class="search-title">
+                    <i class="fas fa-certificate me-2"></i>
+                    Find Student for Proof of Registration
+                </h4>
+                <p class="search-subtitle">Search by student number or name to generate proof of registration documents</p>
             </div>
+            
+            <form method="POST" action="{{ route('proof-of-registration.filter') }}" class="search-form">
+                @csrf
+                <div class="search-fields">
+                    <div class="search-field-group">
+                        <div class="search-field">
+                            <label for="student_number" class="search-label">
+                                <i class="fas fa-id-card me-2"></i>Student Number
+                            </label>
+                            <input type="text" class="search-input" id="student_number" name="student_number" 
+                                   placeholder="Enter student number..." value="{{ old('student_number') }}">
+                        </div>
+                        
+                        <div class="search-divider">
+                            <span class="divider-text">OR</span>
+                        </div>
+                        
+                        <div class="search-field">
+                            <label for="names" class="search-label">
+                                <i class="fas fa-user me-2"></i>Student Name
+                            </label>
+                            <input type="text" class="search-input" id="names" name="names" 
+                                   placeholder="Enter first name or surname..." value="{{ old('names') }}">
+                        </div>
+                    </div>
+                    
+                    <div class="search-actions">
+                        <button type="submit" class="btn-search">
+                            <i class="fas fa-search me-2"></i>Search
+                        </button>
+                        <button type="button" class="btn-clear" onclick="clearForm()">
+                            <i class="fas fa-times me-2"></i>Clear
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
+        @if(session('message'))
+        <div class="alert alert-info alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-info-circle"></i> {{ session('message') }}
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-exclamation-circle"></i> {{ session('error') }}
+        </div>
+        @endif
+
+        @if(isset($students) && $students->count() > 0)
+        <div class="card">
+            <div class="card-header">
+                <strong>Select student to generate proof of registration</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive-sm table-bordered table-striped table-hover table-sm" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Student Number</th>
+                            <th>Student Names</th>
+                            <th>Surname</th>
+                            <th>Centre</th>
+                            <th>Modules</th>
+                            <th>Registration Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($students as $student)
+                        @php
+                            $currentYear = \App\AcademicYear::where('status', 1)->first();
+                            $registration = $student->registration->where('academic_year', $currentYear->academic_year)->first();
+                            $registeredModules = \App\ModuleRegistration::where('student_id', $student->id)
+                                ->where('academic_year', $currentYear->academic_year)
+                                ->count();
+                        @endphp
+                        <tr>
+                            <td>{{$student->student_number}}</td>
+                            <td>{{$student->student_names}}</td>
+                            <td>{{$student->surname}}</td>
+                            <td>{{$student->center ? $student->center->center_name : 'N/A'}}</td>
+                            <td>{{$registeredModules}}</td>
+                            <td>{{ $registration ? \Carbon\Carbon::parse($registration->registration_date)->format('d M Y') : 'N/A' }}</td>
+                            <td>
+                                <div class="d-flex align-items-center" style="gap: 8px;">
+                                    @permission('generate-proof-of-registration')
+                                        <a href="{{ route('proof-of-registration.generate', $student->id) }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem; margin-right: 5px;">
+                                            <i class="fas fa-file-alt me-1"></i>Generate
+                                        </a>
+                                    @endpermission
+                                    
+                                    @permission('print-proof-of-registration')
+                                        <a href="{{ route('proof-of-registration.print', $student->id) }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem; margin-right: 5px;" target="_blank">
+                                            <i class="fas fa-print me-1"></i>Print
+                                        </a>
+                                    @endpermission
+                                    
+                                    @permission('download-proof-of-registration')
+                                        <a href="{{ route('proof-of-registration.download', $student->id) }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                                            <i class="fas fa-download me-1"></i>Download PDF
+                                        </a>
+                                    @endpermission
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @endif
         </div>
     </div>
 </div>
 
+<script>
+function clearForm() {
+    document.getElementById('student_number').value = '';
+    document.getElementById('names').value = '';
+    
+    // Also clear any search results if they exist
+    const resultsSection = document.querySelector('.col-12 .card');
+    if (resultsSection) {
+        resultsSection.style.display = 'none';
+    }
+    
+    // Remove any error messages
+    const alertInfo = document.querySelector('.alert-info');
+    const alertDanger = document.querySelector('.alert-danger');
+    if (alertInfo) {
+        alertInfo.style.display = 'none';
+    }
+    if (alertDanger) {
+        alertDanger.style.display = 'none';
+    }
+}
+</script>
+
 <style>
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+.search-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.search-card {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border-radius: 20px;
+    padding: 0;
+    box-shadow: 0 20px 40px rgba(240, 147, 251, 0.15);
+    overflow: hidden;
+}
+
+.search-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0.5rem 0 0 0;
+    font-size: 0.95rem;
+}
+
+.search-form {
+    padding: 2rem;
+}
+
+.search-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.search-field-group {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: end;
+}
+
+.search-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-label {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.search-input {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.search-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+}
+
+.divider-text {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+}
+
+.search-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-search, .btn-clear {
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.btn-search {
+    background: rgba(255, 255, 255, 0.9);
+    color: #f093fb;
+}
+
+.btn-search:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
+.btn-clear {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-clear:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .search-field-group {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
     
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 40px rgba(0,0,0,0.15) !important;
+    .search-divider {
+        order: 2;
     }
     
-    .btn {
-        transition: all 0.3s ease;
+    .search-actions {
+        flex-direction: column;
     }
     
-    .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0,0,0,0.2) !important;
+    .btn-search, .btn-clear {
+        width: 100%;
     }
+}
 </style>
 @endsection

@@ -99,11 +99,9 @@ class AcademicRecordController extends Controller
 
         $company = CompanySetup::first();
 
-        $pdf = PDF::loadView('AcademicRecord.Print', compact('student', 'testMarks', 'examMarks', 'company'));
-        
-        $filename = 'academic_record_' . $student->student_number . '_' . date('Y-m-d') . '.pdf';
-        
-        return $pdf->download($filename);
+        // Return print view directly - PDF generation can be handled by browser print function
+        return view('AcademicRecord.Print', compact('student', 'testMarks', 'examMarks', 'company'))
+            ->with('download', true);
     }
 
     /**

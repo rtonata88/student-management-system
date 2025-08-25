@@ -484,6 +484,22 @@ Route::get('/student-letters/{student}/generate', 'StudentLetterController@gener
 Route::post('/student-letters/{student}/preview', 'StudentLetterController@preview')->name('student-letters.preview')->middleware('permission:view-student-letters');
 Route::post('/student-letters/{student}/download', 'StudentLetterController@download')->name('student-letters.download')->middleware('permission:download-student-letters');
 
+// Notice Board Routes
+Route::get('/notice-board', 'NoticeBoardController@index')->name('notice-board.index')->middleware('permission:view-notice-board');
+Route::get('/notice-board/create', 'NoticeBoardController@create')->name('notice-board.create')->middleware('permission:create-notice');
+Route::post('/notice-board', 'NoticeBoardController@store')->name('notice-board.store')->middleware('permission:create-notice');
+Route::get('/notice-board/{id}', 'NoticeBoardController@show')->name('notice-board.show')->middleware('permission:view-notice-board');
+Route::get('/notice-board/{id}/edit', 'NoticeBoardController@edit')->name('notice-board.edit')->middleware('permission:edit-notice');
+Route::put('/notice-board/{id}', 'NoticeBoardController@update')->name('notice-board.update')->middleware('permission:edit-notice');
+Route::delete('/notice-board/{id}', 'NoticeBoardController@destroy')->name('notice-board.destroy')->middleware('permission:delete-notice');
+Route::get('/notice-board/{id}/toggle-publish', 'NoticeBoardController@togglePublish')->name('notice-board.toggle-publish')->middleware('permission:publish-notice');
+Route::post('/notice-board/{id}/remove-attachment', 'NoticeBoardController@removeAttachment')->name('notice-board.remove-attachment')->middleware('permission:manage-notice-attachments');
+
+// Statement of Results - Under Development
+Route::get('/statement-of-results', function () {
+    return view('statement-of-results.coming-soon');
+})->name('statement-of-results.index');
+
 // Route::get('richard', function(){
 //     return phpinfo();
 // });

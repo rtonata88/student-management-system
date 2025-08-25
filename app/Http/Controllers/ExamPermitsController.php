@@ -55,10 +55,13 @@ class ExamPermitsController extends Controller
         
         // Get examination schedules for the student's registered modules
         $moduleIds = $student->registered_modules->pluck('module_id');
-        $examSchedules = ExaminationSchedule::whereHas('subjectAllocation', function($query) use ($moduleIds) {
-            $query->whereIn('subject_id', $moduleIds);
+        $examSchedules = ExaminationSchedule::where(function($query) use ($moduleIds) {
+            $query->whereIn('subject_id', $moduleIds)
+                  ->orWhereHas('subjectAllocation', function($subQuery) use ($moduleIds) {
+                      $subQuery->whereIn('subject_id', $moduleIds);
+                  });
         })
-        ->with(['subjectAllocation.module', 'venue', 'classDuration'])
+        ->with(['subject', 'subjectAllocation.module', 'venue', 'classDuration', 'examination', 'center'])
         ->orderBy('exam_date')
         ->orderBy('class_duration_id')
         ->get();
@@ -77,10 +80,13 @@ class ExamPermitsController extends Controller
         
         // Get examination schedules for the student's registered modules
         $moduleIds = $student->registered_modules->pluck('module_id');
-        $examSchedules = ExaminationSchedule::whereHas('subjectAllocation', function($query) use ($moduleIds) {
-            $query->whereIn('subject_id', $moduleIds);
+        $examSchedules = ExaminationSchedule::where(function($query) use ($moduleIds) {
+            $query->whereIn('subject_id', $moduleIds)
+                  ->orWhereHas('subjectAllocation', function($subQuery) use ($moduleIds) {
+                      $subQuery->whereIn('subject_id', $moduleIds);
+                  });
         })
-        ->with(['subjectAllocation.module', 'venue', 'classDuration'])
+        ->with(['subject', 'subjectAllocation.module', 'venue', 'classDuration', 'examination', 'center'])
         ->orderBy('exam_date')
         ->orderBy('class_duration_id')
         ->get();
@@ -103,10 +109,13 @@ class ExamPermitsController extends Controller
         
         // Get examination schedules for the student's registered modules
         $moduleIds = $student->registered_modules->pluck('module_id');
-        $examSchedules = ExaminationSchedule::whereHas('subjectAllocation', function($query) use ($moduleIds) {
-            $query->whereIn('subject_id', $moduleIds);
+        $examSchedules = ExaminationSchedule::where(function($query) use ($moduleIds) {
+            $query->whereIn('subject_id', $moduleIds)
+                  ->orWhereHas('subjectAllocation', function($subQuery) use ($moduleIds) {
+                      $subQuery->whereIn('subject_id', $moduleIds);
+                  });
         })
-        ->with(['subjectAllocation.module', 'venue', 'classDuration'])
+        ->with(['subject', 'subjectAllocation.module', 'venue', 'classDuration', 'examination', 'center'])
         ->orderBy('exam_date')
         ->orderBy('class_duration_id')
         ->get();

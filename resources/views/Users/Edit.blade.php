@@ -79,6 +79,11 @@
                                             return $permission->display_name;
                                         }
                                         
+                                        // Group notice board permissions
+                                        if (in_array($permission->name, ['view-notice-board', 'create-notice', 'edit-notice', 'delete-notice', 'publish-notice', 'manage-notice-attachments'])) {
+                                            return 'NOTICE BOARD MANAGEMENT';
+                                        }
+                                        
                                         // Group by prefix patterns for modules (future-proof for when they're added)
                                         if (strpos($permission->name, 'inventory-') === 0) {
                                             return 'INVENTORY MANAGEMENT';

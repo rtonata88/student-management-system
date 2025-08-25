@@ -14,12 +14,12 @@
                         </div>
                         <div class="col-md-4 text-right">
                             @can('download-academic-records')
-                                <a href="{{ route('academic-records.download', $student->id) }}" class="btn btn-light btn-sm">
+                                <a href="{{ route('academic-records.download', $student->id) }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fa fa-download"></i> Download PDF
                                 </a>
                             @endcan
                             @can('print-academic-records')
-                                <a href="{{ route('academic-records.print', $student->id) }}" target="_blank" class="btn btn-light btn-sm ml-2">
+                                <a href="{{ route('academic-records.print', $student->id) }}" target="_blank" class="btn btn-sm ml-2" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fa fa-print"></i> Print
                                 </a>
                             @endcan
@@ -100,8 +100,8 @@
                                         @foreach($testMarks as $testMark)
                                         <tr>
                                             <td>{{ $testMark->academicYear->academic_year ?? 'N/A' }}</td>
-                                            <td>{{ $testMark->module->module_name ?? 'N/A' }}</td>
-                                            <td>{{ $testMark->assessmentType->assessment_type ?? 'N/A' }}</td>
+                                            <td>{{ $testMark->module->subject_name ?? 'N/A' }}</td>
+                                            <td>{{ $testMark->assessmentType->name ?? 'N/A' }}</td>
                                             <td class="text-center">{{ $testMark->marks_obtained ?? 'N/A' }}</td>
                                             <td class="text-center">{{ $testMark->total_marks ?? 'N/A' }}</td>
                                             <td class="text-center">
@@ -145,8 +145,8 @@
                                         @foreach($examMarks as $examMark)
                                         <tr>
                                             <td>{{ $examMark->academicYear->academic_year ?? 'N/A' }}</td>
-                                            <td>{{ $examMark->module->module_name ?? 'N/A' }}</td>
-                                            <td>{{ $examMark->examType->assessment_type ?? 'N/A' }}</td>
+                                            <td>{{ $examMark->module->subject_name ?? 'N/A' }}</td>
+                                            <td>{{ $examMark->examType->name ?? 'N/A' }}</td>
                                             <td>{{ $examMark->examPaper->paper_name ?? 'N/A' }}</td>
                                             <td class="text-center">{{ $examMark->marks_obtained ?? 'N/A' }}</td>
                                             <td class="text-center">{{ $examMark->total_marks ?? 'N/A' }}</td>

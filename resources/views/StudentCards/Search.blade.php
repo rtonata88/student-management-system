@@ -108,9 +108,6 @@
                                     <a href="{{route('student-cards.generate', $student->id)}}" class="btn btn-gradient-primary btn-sm">
                                         <i class="fas fa-id-card me-1"></i>Generate Card
                                     </a>
-                                    <button type="button" class="btn btn-gradient-success btn-sm" onclick="openPhotoUpload({{$student->id}}, '{{addslashes($student->student_names)}} {{addslashes($student->surname)}}')" title="Upload Photo" data-toggle="tooltip">
-                                        <i class="fas fa-camera"></i> Upload
-                                    </button>
                                     @if($student->photo)
                                         <span class="badge bg-info ms-2" title="Photo available" data-toggle="tooltip">
                                             <i class="fas fa-check"></i>

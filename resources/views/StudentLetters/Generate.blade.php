@@ -63,10 +63,10 @@
                         
                         {!! Form::open(['route' => ['student-letters.preview', $student->id], 'method' => 'post', 'id' => 'letterForm']) !!}
                         
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="letter_type" class="form-label">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="letter_type" class="form-label d-block">
                                         <i class="fas fa-list me-1"></i>Letter Type <span class="text-danger">*</span>
                                     </label>
                                     {{ Form::select('letter_type', $letterTypes, null, [
@@ -77,12 +77,12 @@
                                     ]) }}
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label class="form-label">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="letter_date" class="form-label d-block">
                                         <i class="fas fa-calendar me-1"></i>Letter Date
                                     </label>
-                                    <input type="text" class="form-control" value="{{ date('F j, Y') }}" readonly>
+                                    <input type="text" id="letter_date" class="form-control" value="{{ date('F j, Y') }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -259,6 +259,14 @@ document.getElementById('letter_type').addEventListener('change', function() {
 .card-header {
     border-radius: 15px 15px 0 0 !important;
     border: none;
+}
+
+/* Ensure form controls have consistent height */
+.form-select,
+.form-control {
+    height: 38px;
+    padding: 0.375rem 0.75rem;
+    line-height: 1.5;
 }
 </style>
 @endsection

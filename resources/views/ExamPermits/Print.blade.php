@@ -216,7 +216,9 @@
             <div class="company-info">Email: {{ $company->email ?? 'info@educims.com' }}</div>
         </div>
         <div class="header-right">
-            @if($company && $company->logo)
+            @if(file_exists(public_path('assets/Logo.png')))
+                <img src="{{ public_path('assets/Logo.png') }}" alt="Company Logo" class="logo">
+            @elseif($company && $company->logo && file_exists(public_path('storage/' . $company->logo)))
                 <img src="{{ public_path('storage/' . $company->logo) }}" alt="Company Logo" class="logo">
             @endif
         </div>
@@ -295,11 +297,20 @@
                             TBA
                         @endif
                     </td>
-                    <td>{{ $schedule->subjectAllocation->module->module_name ?? 'N/A' }}</td>
-                    <td>{{ $schedule->venue->name ?? 'TBA' }}</td>
+                    <td>{{ $schedule->subject_name ?? ($schedule->subject->subject_name ?? 'N/A') }}</td>
+                    <td>{{ $schedule->venue->venue_name ?? ($schedule->venue->name ?? 'TBA') }}</td>
                     <td>
-                        @if($schedule->classDuration)
-                            {{ $schedule->classDuration->duration ?? 'N/A' }}
+                        @if($schedule->classDuration && $schedule->classDuration->start_time && $schedule->classDuration->end_time)
+                            @php
+                                $start = \Carbon\Carbon::parse($schedule->classDuration->start_time);
+                                $end = \Carbon\Carbon::parse($schedule->classDuration->end_time);
+                                $duration = $start->diffInMinutes($end);
+                                $hours = intval($duration / 60);
+                                $minutes = $duration % 60;
+                            @endphp
+                            {{ $hours > 0 ? $hours . 'h ' : '' }}{{ $minutes > 0 ? $minutes . 'm' : '' }}
+                        @elseif($schedule->classDuration && $schedule->classDuration->duration)
+                            {{ $schedule->classDuration->duration }}
                         @else
                             N/A
                         @endif
@@ -332,7 +343,6 @@
         <div class="signature-box">
             <div class="signature-line">
                 <p class="signature-label">Student Signature</p>
-                <p class="signature-date">Date: _______________</p>
             </div>
         </div>
         <div class="signature-box">

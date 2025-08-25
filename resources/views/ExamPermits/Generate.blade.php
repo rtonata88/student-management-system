@@ -41,7 +41,9 @@
                             <p class="mb-0" style="color: #000;">Email: {{ $company->email ?? 'info@educims.com' }}</p>
                         </div>
                         <div class="col-4 text-end">
-                            @if($company && $company->logo)
+                            @if(file_exists(public_path('assets/Logo.png')))
+                                <img src="{{ asset('assets/Logo.png') }}" alt="Company Logo" style="max-height: 80px;">
+                            @elseif($company && $company->logo && file_exists(storage_path('app/public/' . $company->logo)))
                                 <img src="{{ asset('storage/' . $company->logo) }}" alt="Company Logo" style="max-height: 80px;">
                             @else
                                 <div class="bg-light p-3 d-inline-block" style="border: 1px solid #ddd;">
@@ -128,11 +130,20 @@
                                                 TBA
                                             @endif
                                         </td>
-                                        <td style="color: #000;">{{ $schedule->subjectAllocation->module->module_name ?? 'N/A' }}</td>
-                                        <td style="color: #000;">{{ $schedule->venue->name ?? 'TBA' }}</td>
+                                        <td style="color: #000;">{{ $schedule->subject_name ?? ($schedule->subject->subject_name ?? 'N/A') }}</td>
+                                        <td style="color: #000;">{{ $schedule->venue->venue_name ?? ($schedule->venue->name ?? 'TBA') }}</td>
                                         <td style="color: #000;">
-                                            @if($schedule->classDuration)
-                                                {{ $schedule->classDuration->duration ?? 'N/A' }}
+                                            @if($schedule->classDuration && $schedule->classDuration->start_time && $schedule->classDuration->end_time)
+                                                @php
+                                                    $start = \Carbon\Carbon::parse($schedule->classDuration->start_time);
+                                                    $end = \Carbon\Carbon::parse($schedule->classDuration->end_time);
+                                                    $duration = $start->diffInMinutes($end);
+                                                    $hours = intval($duration / 60);
+                                                    $minutes = $duration % 60;
+                                                @endphp
+                                                {{ $hours > 0 ? $hours . 'h ' : '' }}{{ $minutes > 0 ? $minutes . 'm' : '' }}
+                                            @elseif($schedule->classDuration && $schedule->classDuration->duration)
+                                                {{ $schedule->classDuration->duration }}
                                             @else
                                                 N/A
                                             @endif
@@ -167,7 +178,6 @@
                         <div class="col-6">
                             <div style="border-top: 1px solid #000; padding-top: 10px; text-align: center;">
                                 <p style="color: #000; margin: 0; font-weight: bold;">Student Signature</p>
-                                <p style="color: #000; margin: 0; font-size: 0.9rem;">Date: _______________</p>
                             </div>
                         </div>
                         <div class="col-6">

@@ -51,7 +51,7 @@ class ExamMark extends Model
      */
     public function examType()
     {
-        return $this->belongsTo(AssessmentType::class, 'exam_type_id');
+        return $this->belongsTo(Examination::class, 'exam_type_id');
     }
 
     /**

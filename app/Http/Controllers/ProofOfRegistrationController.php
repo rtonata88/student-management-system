@@ -74,7 +74,7 @@ class ProofOfRegistrationController extends Controller
         
         $registered_modules = ModuleRegistration::where('student_id', $student->id)
             ->where('academic_year', $currentYear->academic_year)
-            ->with('module')
+            ->with(['module', 'subject'])
             ->get();
 
         $company = CompanySetup::first();
@@ -98,16 +98,31 @@ class ProofOfRegistrationController extends Controller
         
         $registered_modules = ModuleRegistration::where('student_id', $student->id)
             ->where('academic_year', $currentYear->academic_year)
-            ->with('module')
+            ->with(['module', 'subject'])
             ->get();
 
         $company = CompanySetup::first();
 
-        $pdf = PDF::loadView('ProofOfRegistration.Print', compact('student', 'registration', 'registered_modules', 'currentYear', 'company'));
-        
-        $filename = 'proof_of_registration_' . $student->student_number . '_' . date('Y-m-d') . '.pdf';
-        
-        return $pdf->download($filename);
+        try {
+            $pdf = PDF::loadView('ProofOfRegistration.Print', compact('student', 'registration', 'registered_modules', 'currentYear', 'company'));
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions([
+                'isRemoteEnabled' => false,
+                'isHtml5ParserEnabled' => true,
+                'isFontSubsettingEnabled' => true,
+                'tempDir' => storage_path('app/temp'),
+                'fontDir' => storage_path('fonts/'),
+                'fontCache' => storage_path('fonts/'),
+                'chroot' => storage_path('app/'),
+            ]);
+            
+            $filename = 'proof_of_registration_' . $student->student_number . '_' . date('Y-m-d') . '.pdf';
+            
+            return $pdf->download($filename);
+        } catch (\Exception $e) {
+            \Log::error('PDF Generation Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Unable to generate PDF. Error: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -126,7 +141,7 @@ class ProofOfRegistrationController extends Controller
         
         $registered_modules = ModuleRegistration::where('student_id', $student->id)
             ->where('academic_year', $currentYear->academic_year)
-            ->with('module')
+            ->with(['module', 'subject'])
             ->get();
 
         $company = CompanySetup::first();
