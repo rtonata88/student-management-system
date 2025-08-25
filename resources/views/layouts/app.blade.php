@@ -72,16 +72,22 @@
           @permission('students')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/students"><span class="c-sidebar-nav-icon"></span> Student Bio</a></li>
           @endpermission
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/notice-board"><span class="c-sidebar-nav-icon"></span> Notice Board</a></li>
+          @permission('view-exam-permits')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/exam-permits"><span class="c-sidebar-nav-icon"></span> Exam Permits</a></li>
+          @endpermission
           @permission('student-cards')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/student-cards"><span class="c-sidebar-nav-icon"></span> Student Cards</a></li>
           @endpermission
           @permission('view-student-letters')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/student-letters"><span class="c-sidebar-nav-icon"></span> Student Letters</a></li>
           @endpermission
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/academic-record"><span class="c-sidebar-nav-icon"></span> Academic Record</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/notice-board"><span class="c-sidebar-nav-icon"></span> Notice Board</a></li>
+          @permission('view-academic-records')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/academic-records"><span class="c-sidebar-nav-icon"></span> Academic Record</a></li>
+          @endpermission
+          @permission('view-proof-of-registration')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/proof-of-registration"><span class="c-sidebar-nav-icon"></span> Proof of Registration</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/statement-of-results"><span class="c-sidebar-nav-icon"></span> Statement of Results</a></li>
         </ul>
       </li>

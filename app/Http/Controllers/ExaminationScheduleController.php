@@ -133,13 +133,23 @@ class ExaminationScheduleController extends Controller
             return back()->withErrors(['conflict' => 'Venue is already booked at this time.']);
         }
 
+        // Find or create a subject allocation for this subject and teacher
+        $subjectAllocation = null;
+        if ($request->module_id && $request->head_invigilator_id) {
+            $subjectAllocation = \App\SubjectAllocation::where('subject_id', $request->module_id)
+                ->where('user_id', $request->head_invigilator_id)
+                ->where('academic_year_id', $currentAcademicYear->id)
+                ->first();
+        }
+
         ExaminationSchedule::create([
             'academic_year_id' => $currentAcademicYear->id,
             'center_id' => $request->center_id,
             'examination_id' => $request->examination_id,
             'subject_id' => $request->module_id,
+            'teacher_id' => $request->head_invigilator_id,
             'head_invigilator_id' => $request->head_invigilator_id,
-            'subject_allocation_id' => null,
+            'subject_allocation_id' => $subjectAllocation ? $subjectAllocation->id : null,
             'venue_id' => $request->venue_id,
             'class_duration_id' => $request->class_duration_id,
             'exam_date' => $request->exam_date,

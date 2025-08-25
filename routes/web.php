@@ -416,9 +416,66 @@ Route::prefix('hostel-administration')->name('hostel.administration.')->group(fu
 // Student Cards Routes
 Route::get('/student-cards', 'StudentCardController@index')->name('student-cards.index')->middleware('permission:view-student-cards');
 Route::post('/student-cards/filter', 'StudentCardController@filter')->name('student-cards.filter')->middleware('permission:view-student-cards');
-Route::get('/student-cards/{student}/generate', 'StudentCardController@generate')->name('student-cards.generate')->middleware('permission:generate-student-cards');
-Route::get('/student-cards/{student}/print', 'StudentCardController@print')->name('student-cards.print')->middleware('permission:print-student-cards');
-Route::post('/student-cards/{student}/upload-photo', 'StudentCardController@uploadPhoto')->name('student-cards.upload-photo')->middleware('permission:upload-student-photo');
+Route::group(['middleware' => ['permission:generate-student-cards']], function () {
+    Route::get('/student-cards/generate/{student}', 'StudentCardController@generate')->name('student-cards.generate');
+});
+Route::group(['middleware' => ['permission:print-student-cards']], function () {
+    Route::get('/student-cards/print/{student}', 'StudentCardController@print')->name('student-cards.print');
+});
+Route::group(['middleware' => ['permission:upload-student-photo']], function () {
+    Route::post('/student-cards/{student}/upload-photo', 'StudentCardController@uploadPhoto')->name('student-cards.upload-photo');
+});
+
+// Exam Permits Routes
+Route::group(['middleware' => ['permission:view-exam-permits']], function () {
+    Route::get('/exam-permits', 'ExamPermitsController@index')->name('exam-permits.index');
+    Route::post('/exam-permits/filter', 'ExamPermitsController@filter')->name('exam-permits.filter');
+});
+Route::group(['middleware' => ['permission:generate-exam-permits']], function () {
+    Route::get('/exam-permits/generate/{student}', 'ExamPermitsController@generate')->name('exam-permits.generate');
+});
+Route::group(['middleware' => ['permission:download-exam-permits']], function () {
+    Route::get('/exam-permits/download/{student}', 'ExamPermitsController@download')->name('exam-permits.download');
+});
+Route::group(['middleware' => ['permission:print-exam-permits']], function () {
+    Route::get('/exam-permits/print/{student}', 'ExamPermitsController@print')->name('exam-permits.print');
+});
+
+// Academic Record Routes
+Route::group(['middleware' => ['permission:view-academic-records']], function () {
+    Route::get('/academic-records', 'AcademicRecordController@index')->name('academic-records.index');
+    Route::post('/academic-records/filter', 'AcademicRecordController@filter')->name('academic-records.filter');
+});
+
+Route::group(['middleware' => ['permission:generate-academic-records']], function () {
+    Route::get('/academic-records/generate/{student}', 'AcademicRecordController@generate')->name('academic-records.generate');
+});
+
+Route::group(['middleware' => ['permission:download-academic-records']], function () {
+    Route::get('/academic-records/download/{student}', 'AcademicRecordController@download')->name('academic-records.download');
+});
+
+Route::group(['middleware' => ['permission:print-academic-records']], function () {
+    Route::get('/academic-records/print/{student}', 'AcademicRecordController@print')->name('academic-records.print');
+});
+
+// Proof of Registration Routes
+Route::group(['middleware' => ['permission:view-proof-of-registration']], function () {
+    Route::get('/proof-of-registration', 'ProofOfRegistrationController@index')->name('proof-of-registration.index');
+    Route::post('/proof-of-registration/filter', 'ProofOfRegistrationController@filter')->name('proof-of-registration.filter');
+});
+
+Route::group(['middleware' => ['permission:generate-proof-of-registration']], function () {
+    Route::get('/proof-of-registration/generate/{student}', 'ProofOfRegistrationController@generate')->name('proof-of-registration.generate');
+});
+
+Route::group(['middleware' => ['permission:download-proof-of-registration']], function () {
+    Route::get('/proof-of-registration/download/{student}', 'ProofOfRegistrationController@download')->name('proof-of-registration.download');
+});
+
+Route::group(['middleware' => ['permission:print-proof-of-registration']], function () {
+    Route::get('/proof-of-registration/print/{student}', 'ProofOfRegistrationController@print')->name('proof-of-registration.print');
+});
 
 // Student Letters Routes
 Route::get('/student-letters', 'StudentLetterController@index')->name('student-letters.index')->middleware('permission:view-student-letters');

@@ -75,7 +75,7 @@
                                     // Group permissions by category
                                     $groupedPermissions = $permissions->groupBy(function($permission) {
                                         // Group by main menu categories first
-                                        if (in_array($permission->name, ['MANAGEMENT', 'REGISTRATION_MANAGEMENT', 'FINANCE', 'REPORTS', 'ADMINISTRATION', 'SETUP'])) {
+                                        if (in_array($permission->name, ['MANAGEMENT', 'REGISTRATION MANAGEMENT', 'FINANCE', 'REPORTS', 'ADMINISTRATION', 'SETUP'])) {
                                             return $permission->display_name;
                                         }
                                         
@@ -331,6 +331,21 @@
                                             return 'STUDENT CARDS MANAGEMENT';
                                         }
                                         
+                                        // Group exam permits permissions
+                                        if (in_array($permission->name, ['view-exam-permits', 'search-exam-permits', 'generate-exam-permits', 'download-exam-permits', 'print-exam-permits', 'manage-exam-permits'])) {
+                                            return 'EXAM PERMITS MANAGEMENT';
+                                        }
+                                        
+                                        // Group academic records permissions
+                                        if (in_array($permission->name, ['view-academic-records', 'search-academic-records', 'generate-academic-records', 'download-academic-records', 'print-academic-records', 'manage-academic-records'])) {
+                                            return 'ACADEMIC RECORDS MANAGEMENT';
+                                        }
+                                        
+                                        // Group proof of registration permissions
+                                        if (in_array($permission->name, ['view-proof-of-registration', 'search-proof-of-registration', 'generate-proof-of-registration', 'download-proof-of-registration', 'print-proof-of-registration', 'manage-proof-of-registration'])) {
+                                            return 'PROOF OF REGISTRATION MANAGEMENT';
+                                        }
+                                        
                                         // Group student letters permissions
                                         if (in_array($permission->name, ['view-student-letters', 'create-student-letters', 'edit-student-letters', 'delete-student-letters', 'generate-student-letters', 'print-student-letters', 'download-student-letters'])) {
                                             return 'STUDENT LETTERS MANAGEMENT';
@@ -338,7 +353,7 @@
                                         
                                         // Group setup permissions
                                         if (in_array($permission->name, ['academic-years', 'add-academic-years', 'edit-academic-years', 'centers', 'add-centers', 'edit-centers', 'company', 'edit-company'])) {
-                                            return 'SYSTEM SETUP';
+                                            return 'SETUP MENU';
                                         }
                                         
                                         // Group dashboard and general permissions
@@ -360,7 +375,7 @@
                                     <div class="card-header" id="heading{{ $index }}">
                                         <h2 class="mb-0">
                                             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse{{ $index }}" aria-expanded="false" aria-controls="collapse{{ $index }}" style="background: linear-gradient(135deg, #321fdb 0%, #2eb85c 100%); color: white; border: none; border-radius: 8px; padding: 12px 20px; margin-bottom: 2px; text-decoration: none;">
-                                                <strong>{{ $category }}</strong> ({{ $categoryPermissions->count() }} permissions)
+                                                <strong>{{ strtoupper($category) }}</strong> ({{ $categoryPermissions->count() }} permissions)
                                             </button>
                                         </h2>
                                     </div>
