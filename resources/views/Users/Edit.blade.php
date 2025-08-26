@@ -100,7 +100,7 @@
                                         if (strpos($permission->name, 'module-allocation') === 0 || in_array($permission->name, ['view-module-allocations', 'create-module-allocations', 'edit-module-allocations', 'delete-module-allocations'])) {
                                             return 'MODULE ALLOCATION';
                                         }
-                                        if (strpos($permission->name, 'my-modules') === 0 || in_array($permission->name, ['view-my-modules', 'view-class-list', 'view-attendance', 'view-class-notes'])) {
+                                        if (strpos($permission->name, 'my-modules') === 0 || in_array($permission->name, ['view-my-modules', 'view-class-list', 'view-attendance', 'create-attendance', 'edit-attendance', 'delete-attendance', 'mark-attendance', 'view-attendance-reports', 'export-attendance', 'view-subject-materials', 'create-subject-materials', 'edit-subject-materials', 'delete-subject-materials', 'upload-subject-materials', 'download-subject-materials', 'publish-subject-materials'])) {
                                             return 'MY MODULES';
                                         }
                                         if (strpos($permission->name, 'leave-') === 0 || strpos($permission->name, 'employee-') === 0 || strpos($permission->name, 'hr-') === 0 || in_array($permission->name, ['employee-bio', 'leave-management', 'leave-applications'])) {

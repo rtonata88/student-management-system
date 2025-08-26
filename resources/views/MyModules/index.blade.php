@@ -76,11 +76,11 @@
                                             </a>
                                             @endpermission
                                             
-                                            @permission('view-class-notes')
-                                            <a class="dropdown-item" href="{{ route('my-modules.class-notes', $allocation->id) }}">
-                                                <i class="fas fa-sticky-note"></i> Class Notes
-                                            </a>
-                                            @endpermission
+                                            @permission('view-subject-materials')
+                            <a class="dropdown-item" href="{{ route('my-modules.subject-materials', $allocation->id) }}">
+                                <i class="fas fa-folder-open"></i> Subject Materials
+                            </a>
+                            @endpermission
                                         </div>
                                     </div>
                                 </td>

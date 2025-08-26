@@ -195,7 +195,18 @@ Route::group(['middleware' => 'auth', 'prefix' => 'my-modules'], function() {
     Route::get('/', 'MyModulesController@index')->name('my-modules.index');
     Route::get('/{allocation}/class-list', 'MyModulesController@classList')->name('my-modules.class-list');
     Route::get('/{allocation}/attendance', 'MyModulesController@attendance')->name('my-modules.attendance');
-    Route::get('/my-modules/class-notes/{id}', 'MyModulesController@classNotes')->name('my-modules.class-notes');
+    Route::get('/{allocation}/mark-attendance', 'MyModulesController@markAttendance')->name('my-modules.mark-attendance');
+    Route::post('/{allocation}/store-attendance', 'MyModulesController@storeAttendance')->name('my-modules.store-attendance');
+    Route::get('/{allocation}/attendance-data', 'MyModulesController@attendanceData')->name('my-modules.attendance-data');
+    
+    // Subject Materials routes
+    Route::get('/{allocation}/subject-materials', 'MyModulesController@subjectMaterials')->name('my-modules.subject-materials');
+    Route::get('/{allocation}/upload-material', 'MyModulesController@uploadMaterial')->name('my-modules.upload-material');
+    Route::post('/{allocation}/store-material', 'MyModulesController@storeMaterial')->name('my-modules.store-material');
+    Route::get('/edit-material/{material}', 'MyModulesController@editMaterial')->name('my-modules.edit-material');
+    Route::put('/update-material/{material}', 'MyModulesController@updateMaterial')->name('my-modules.update-material');
+    Route::get('/download-material/{material}', 'MyModulesController@downloadMaterial')->name('my-modules.download-material');
+    Route::delete('/delete-material/{material}', 'MyModulesController@deleteMaterial')->name('my-modules.delete-material');
 });
 
 // Class Routine Management

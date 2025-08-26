@@ -96,8 +96,8 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>#</th>
-                                            <th>Module Code</th>
-                                            <th>Module Name</th>
+                                            <th>Subject Code</th>
+                                            <th>Subject Name</th>
                                             <th>Registration Date</th>
                                             <th class="text-end">Amount</th>
                                         </tr>
