@@ -8,7 +8,7 @@
                 <div class="card-header bg-primary text-white">
                     <div class="row align-items-center">
                         <div class="col-md-8">
-                            <h4 class="mb-0">Capture {{ $examPaper->paper_name }} marks</h4>
+                            <h4 class="mb-0">Capture {{ $examPaperWeight->paper_name }} marks</h4>
                         </div>
                         <div class="col-md-4 text-right">
                             <a href="{{ route('exam-marks.index') }}" class="btn btn-outline-light btn-sm">
@@ -48,7 +48,7 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Exam Paper:</strong></td>
-                                    <td>{{ $examPaper->paper_name }} ({{ $examPaperWeight->weight }}%)</td>
+                                    <td>{{ $examPaperWeight->paper_name }} ({{ $examPaperWeight->weight }}%)</td>
                                 </tr>
                             </table>
                         </div>
@@ -64,7 +64,7 @@
                                         <button class="btn btn-gradient-info" type="submit">
                                             <i class="fa fa-search"></i> Search
                                         </button>
-                                        <a href="{{ route('exam-marks.capture', [$examType->id, $module->id, $centre->id, $examPaper->id]) }}" class="btn btn-secondary">
+                                        <a href="{{ route('exam-marks.capture', [$examType->id, $module->id, $centre->id, $examPaperWeight->id]) }}" class="btn btn-secondary">
                                             <i class="fa fa-times"></i> Clear
                                         </a>
                                     </div>
@@ -74,14 +74,14 @@
                     </div>
 
                     @if($students->count() > 0)
-                        <form method="POST" action="{{ route('exam-marks.store', [$examType->id, $module->id, $centre->id, $examPaper->id]) }}">
+                        <form method="POST" action="{{ route('exam-marks.store', [$examType->id, $module->id, $centre->id, $examPaperWeight->id]) }}">
                             @csrf
                             
                             <div class="row mb-3">
                                 <div class="col-md-3">
                                     <label for="total_marks" class="form-label"><strong>Exam Total Marks:</strong></label>
                                     <input type="number" name="total_marks" id="total_marks" class="form-control" 
-                                           value="{{ old('total_marks', request('total_marks', 100)) }}" min="1" max="1000" required>
+                                           value="{{ old('total_marks', request('total_marks', $existingTotalMarks ?? 100)) }}" min="1" max="1000" required>
                                 </div>
                                 <div class="col-md-9 d-flex align-items-end">
                                     <button type="submit" class="btn btn-gradient-success">
@@ -97,7 +97,7 @@
                                             <th>Student Number</th>
                                             <th>Surname</th>
                                             <th>Student Name</th>
-                                            <th>{{ $examPaper->paper_name }}</th>
+                                            <th>{{ $examPaperWeight->paper_name }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -73,7 +73,7 @@
                                 <div class="col-md-3">
                                     <label for="total_marks" class="form-label"><strong>Test Total Marks:</strong></label>
                                     <input type="number" name="total_marks" id="total_marks" class="form-control" 
-                                           value="{{ old('total_marks', request('total_marks', 100)) }}" min="1" max="1000" required>
+                                           value="{{ old('total_marks', request('total_marks', $existingTotalMarks ?? 100)) }}" min="1" max="1000" required>
                                 </div>
                                 <div class="col-md-9 d-flex align-items-end">
                                     <button type="submit" class="btn btn-gradient-success">

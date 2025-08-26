@@ -33,7 +33,7 @@ class ExamMarksController extends Controller
             $q->where('academic_year_id', $currentAcademicYear->id);
         })->with(['examPaperWeights' => function($q) use ($currentAcademicYear) {
             $q->where('academic_year_id', $currentAcademicYear->id)
-              ->with(['examination', 'examPaper']);
+              ->with(['examination']);
         }]);
 
         if ($search) {
@@ -48,7 +48,7 @@ class ExamMarksController extends Controller
         // Get all modules allocated to the current user (including those without exam paper weights)
         $userAllocations = SubjectAllocation::with(['module.examPaperWeights' => function($q) use ($currentAcademicYear) {
                 $q->where('academic_year_id', $currentAcademicYear->id)
-                  ->with(['examination', 'examPaper']);
+                  ->with(['examination']);
             }, 'center', 'user'])
             ->where('user_id', Auth::id())
             ->where('academic_year_id', $currentAcademicYear->id)
@@ -164,26 +164,21 @@ class ExamMarksController extends Controller
     /**
      * Show students for marks capture for a specific exam paper
      */
-    public function captureMarks($examTypeId, $moduleId, $centreId, $examPaperId, Request $request)
+    public function captureMarks($examTypeId, $moduleId, $centreId, $examPaper, Request $request)
     {
         $examType = AssessmentType::findOrFail($examTypeId);
         $module = Module::findOrFail($moduleId);
         $centre = \App\Center::findOrFail($centreId);
-        $examPaper = ExamPaper::findOrFail($examPaperId);
+        $examPaperWeight = ExamPaperWeight::findOrFail($examPaper);
         $currentAcademicYear = AcademicYear::where('academic_year', date('Y'))->first();
         
         if (!$currentAcademicYear) {
             return redirect()->back()->with('error', 'No current academic year found.');
         }
-        
-        $examPaperWeight = ExamPaperWeight::where('module_id', $moduleId)
-            ->where('academic_year_id', $currentAcademicYear->id)
-            ->where('examination_id', $examTypeId)
-            ->where('paper_code', $examPaper->paper_code)
-            ->first();
 
-        if (!$examPaperWeight) {
-            return redirect()->back()->with('error', 'Exam paper weight not found for this module and exam paper.');
+        // Verify the exam paper weight belongs to the correct module and exam type
+        if ($examPaperWeight->module_id != $moduleId || $examPaperWeight->examination_id != $examTypeId) {
+            return redirect()->back()->with('error', 'Invalid exam paper weight for this module and exam type.');
         }
 
         $search = $request->get('search');
@@ -193,10 +188,10 @@ class ExamMarksController extends Controller
             ->whereHas('registered_modules', function($q) use ($moduleId, $currentAcademicYear) {
                 $q->where('module_id', $moduleId)
                   ->where('academic_year', $currentAcademicYear->academic_year);
-            })->with(['examMarks' => function($q) use ($moduleId, $examTypeId, $examPaperId, $currentAcademicYear) {
+            })->with(['examMarks' => function($q) use ($moduleId, $examTypeId, $examPaper, $currentAcademicYear) {
                 $q->where('module_id', $moduleId)
                   ->where('exam_type_id', $examTypeId)
-                  ->where('exam_paper_id', $examPaperId)
+                  ->where('exam_paper_id', $examPaper)
                   ->where('academic_year_id', $currentAcademicYear->id);
             }, 'center']);
 
@@ -210,15 +205,24 @@ class ExamMarksController extends Controller
 
         $students = $query->orderBy('surname')->orderBy('student_names')->get();
 
+        // Get existing total marks for this exam paper if any marks have been captured
+        $existingTotalMarks = null;
+        if ($students->isNotEmpty()) {
+            $firstStudentMark = $students->first()->examMarks->first();
+            if ($firstStudentMark) {
+                $existingTotalMarks = $firstStudentMark->total_marks;
+            }
+        }
+
         return view('Assessments.ExamMarks.capture', compact(
-            'examType', 'module', 'centre', 'examPaper', 'examPaperWeight', 'currentAcademicYear', 'students', 'search'
+            'examType', 'module', 'centre', 'examPaperWeight', 'currentAcademicYear', 'students', 'search', 'existingTotalMarks'
         ));
     }
 
     /**
      * Store or update exam marks
      */
-    public function storeMarks(Request $request, $examTypeId, $moduleId, $centreId, $examPaperId)
+    public function storeMarks(Request $request, $examTypeId, $moduleId, $centreId, $examPaper)
     {
         $request->validate([
             'marks' => 'required|array',
@@ -239,7 +243,7 @@ class ExamMarksController extends Controller
                             'module_id' => $moduleId,
                             'academic_year_id' => $currentAcademicYear->id,
                             'exam_type_id' => $examTypeId,
-                            'exam_paper_id' => $examPaperId,
+                            'exam_paper_id' => $examPaper,
                         ],
                         [
                             'marks_obtained' => $marksObtained,
@@ -276,8 +280,7 @@ class ExamMarksController extends Controller
         $examPaperWeights = ExamPaperWeight::where('module_id', $moduleId)
             ->where('academic_year_id', $currentAcademicYear->id)
             ->where('examination_id', $examTypeId)
-            ->with('examPaper')
-            ->orderBy('exam_paper_id')
+            ->orderBy('paper_name')
             ->get();
 
         if ($examPaperWeights->isEmpty()) {
@@ -292,8 +295,7 @@ class ExamMarksController extends Controller
             })->with(['examMarks' => function($q) use ($moduleId, $examTypeId, $currentAcademicYear) {
                 $q->where('module_id', $moduleId)
                   ->where('exam_type_id', $examTypeId)
-                  ->where('academic_year_id', $currentAcademicYear->id)
-                  ->with('examPaper');
+                  ->where('academic_year_id', $currentAcademicYear->id);
             }])->orderBy('surname')->orderBy('student_names')->get();
 
         // Calculate exam totals for each student
@@ -303,7 +305,7 @@ class ExamMarksController extends Controller
             $examData = [];
 
             foreach ($examPaperWeights as $weight) {
-                $mark = $studentMarks->get($weight->exam_paper_id);
+                $mark = $studentMarks->get($weight->id);
                 $percentage = 0;
                 $weightedMark = 0;
 
@@ -314,7 +316,7 @@ class ExamMarksController extends Controller
                 }
 
                 $examData[] = [
-                    'exam_paper' => $weight->examPaper,
+                    'paper_name' => $weight->paper_name,
                     'weight' => $weight->weight,
                     'marks_obtained' => $mark ? $mark->marks_obtained : null,
                     'total_marks' => $mark ? $mark->total_marks : null,

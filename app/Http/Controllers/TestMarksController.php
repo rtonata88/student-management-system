@@ -155,8 +155,14 @@ class TestMarksController extends Controller
 
         $students = $query->orderBy('surname')->orderBy('student_names')->get();
 
+        // Get existing total marks for this assessment if any marks have been captured
+        $existingTotalMarks = TestMark::where('module_id', $moduleId)
+            ->where('assessment_type_id', $assessmentTypeId)
+            ->where('academic_year_id', $currentAcademicYear->id)
+            ->value('total_marks');
+
         return view('Assessments.TestMarks.capture', compact(
-            'module', 'centre', 'assessmentType', 'assessmentWeight', 'currentAcademicYear', 'students', 'search'
+            'module', 'centre', 'assessmentType', 'assessmentWeight', 'currentAcademicYear', 'students', 'search', 'existingTotalMarks'
         ));
     }
 
@@ -167,8 +173,14 @@ class TestMarksController extends Controller
     {
         $request->validate([
             'marks' => 'required|array',
-            'marks.*' => 'nullable|numeric|min:0|max:100',
-            'total_marks' => 'required|numeric|min:1|max:100'
+            'marks.*' => 'nullable|numeric|min:0',
+            'total_marks' => 'required|numeric|min:1|max:1000'
+        ]);
+
+        // Validate that individual marks don't exceed total marks
+        $totalMarks = $request->input('total_marks');
+        $request->validate([
+            'marks.*' => "nullable|numeric|min:0|max:{$totalMarks}"
         ]);
 
         $currentAcademicYear = AcademicYear::where('academic_year', date('Y'))->first();

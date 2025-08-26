@@ -88,13 +88,10 @@
                                                                     @if($examType)
                                                                         <h6 class="dropdown-header">{{ $examType->name ?? 'Exam Type ' . $examTypeId }}</h6>
                                                                         @foreach($examPapers as $paperWeight)
-                                                                            @if($paperWeight->examPaper)
-                                                                                <a class="dropdown-item" href="{{ route('exam-marks.capture', [$examTypeId, $moduleData['module']->id, $moduleData['centre_id'], $paperWeight->examPaper->id]) }}">
-                                                                                    <i class="fa fa-pencil-alt"></i> 
-                                                                                    {{ $paperWeight->examPaper->paper_name ?? $paperWeight->paper_name ?? 'Paper ' . $paperWeight->examPaper->id }} 
-                                                                                    ({{ $paperWeight->weight }}%)
-                                                                                </a>
-                                                                            @endif
+                                                                            <a href="{{ route('exam-marks.capture', ['examType' => $examType->id, 'module' => $moduleData['module']->id, 'centre' => $moduleData['centre_id'], 'examPaper' => $paperWeight->id]) }}" 
+                                                   class="dropdown-item">
+                                                    {{ $paperWeight->paper_name }} ({{ $paperWeight->weight }}%)
+                                                </a>
                                                                         @endforeach
                                                                         @if(Auth::user()->hasPermission('view-all-exam-marks'))
                                                                             <div class="dropdown-divider"></div>
