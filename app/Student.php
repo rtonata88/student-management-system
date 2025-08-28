@@ -47,6 +47,10 @@ class Student extends Model implements Auditable
         return $this->hasMany(ExamMark::class);
     }
 
+    public function promotions(){
+        return $this->hasMany(StudentPromotion::class);
+    }
+
     // Accessor to get admission status directly from the student model
     public function getAdmissionStatusAttribute(){
         return $this->admission ? $this->admission->admission_status : null;

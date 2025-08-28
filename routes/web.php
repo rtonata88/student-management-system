@@ -211,13 +211,21 @@ Route::group(['middleware' => 'auth', 'prefix' => 'my-modules'], function() {
 
 // Class Routine Management
 Route::middleware('auth')->group(function () {
-    Route::get('/class-routine', 'ClassRoutineController@index')->name('class-routine.index');
-    Route::get('/class-routine/create', 'ClassRoutineController@create')->name('class-routine.create');
-    Route::post('/class-routine', 'ClassRoutineController@store')->name('class-routine.store');
-    Route::get('/class-routine/{id}/edit', 'ClassRoutineController@edit')->name('class-routine.edit');
-    Route::put('/class-routine/{id}', 'ClassRoutineController@update')->name('class-routine.update');
-    Route::delete('/class-routine/{id}', 'ClassRoutineController@destroy')->name('class-routine.destroy');
+    Route::get('class-routine', 'ClassRoutineController@index')->name('class-routine.index');
+    Route::get('class-routine/create', 'ClassRoutineController@create')->name('class-routine.create');
+    Route::post('class-routine', 'ClassRoutineController@store')->name('class-routine.store');
+    Route::post('class-routine/check-conflicts', 'ClassRoutineController@checkConflicts')->name('class-routine.check-conflicts');
+    Route::get('class-routine/{id}', 'ClassRoutineController@show')->name('class-routine.show');
+    Route::get('class-routine/{id}/edit', 'ClassRoutineController@edit')->name('class-routine.edit');
+    Route::put('class-routine/{id}', 'ClassRoutineController@update')->name('class-routine.update');
+    Route::delete('class-routine/{id}', 'ClassRoutineController@destroy')->name('class-routine.destroy');
     Route::get('/class-routine/print', 'ClassRoutineController@print')->name('class-routine.print');
+});
+
+// Class Duration Management Routes
+Route::middleware('auth')->group(function () {
+    Route::get('class-durations', 'ClassDurationController@index')->name('class-durations.index');
+    Route::put('class-durations', 'ClassDurationController@update')->name('class-durations.update');
 });
 
 Route::post('/subject-allocations/filter', 'SubjectAllocationController@filter')->name('subject-allocations.filter');
@@ -310,6 +318,13 @@ Route::post('/venues/{venue}/toggle-status', 'VenueController@toggleStatus')->na
 // Time Slots Management Routes
 Route::resource('time-slots', 'TimeSlotsController')->middleware('permission:view-time-slot');
 Route::post('/time-slots/{timeSlot}/toggle-status', 'TimeSlotsController@toggleStatus')->name('time-slots.toggle-status')->middleware('permission:edit-time-slot');
+
+//Assessment Management - Student Promotions
+Route::get('/promotions', 'PromotionsController@index')->name('promotions.index')->middleware('permission:view-student-promotions');
+Route::get('/promotions/search', 'PromotionsController@search')->name('promotions.search')->middleware('permission:view-student-promotions');
+Route::get('/promotions/{student}/marks', 'PromotionsController@showMarks')->name('promotions.marks')->middleware('permission:promote-students');
+Route::post('/promotions/{student}/promote', 'PromotionsController@promote')->name('promotions.promote')->middleware('permission:promote-students');
+Route::get('/promotions/{student}/history', 'PromotionsController@history')->name('promotions.history')->middleware('permission:view-promotion-history');
 
 //Result Codes Management
 Route::resource('/result-codes', 'ResultCodeController');

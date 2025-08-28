@@ -272,7 +272,7 @@
                                         }
                                         
                                         // Group class routine permissions
-                                        if (in_array($permission->name, ['view-class-routine', 'create-class-routine', 'edit-class-routine', 'delete-class-routine', 'manage-venues', 'manage-class-durations', 'print-class-routine'])) {
+                                        if (in_array($permission->name, ['view-class-routine', 'create-class-routine', 'edit-class-routine', 'delete-class-routine', 'manage-venues', 'manage-class-durations', 'print-class-routine', 'view-class-duration', 'create-class-duration', 'edit-class-duration', 'delete-class-duration'])) {
                                             return 'CLASS ROUTINE MANAGEMENT';
                                         }
                                         
@@ -354,6 +354,11 @@
                                         // Group student letters permissions
                                         if (in_array($permission->name, ['view-student-letters', 'create-student-letters', 'edit-student-letters', 'delete-student-letters', 'generate-student-letters', 'print-student-letters', 'download-student-letters'])) {
                                             return 'STUDENT LETTERS MANAGEMENT';
+                                        }
+                                        
+                                        // Group student promotions permissions
+                                        if (in_array($permission->name, ['view-student-promotions', 'create-student-promotions', 'edit-student-promotions', 'delete-student-promotions', 'promote-students', 'view-promotion-history', 'export-promotion-reports'])) {
+                                            return 'STUDENT PROMOTIONS MANAGEMENT';
                                         }
                                         
                                         // Group setup permissions

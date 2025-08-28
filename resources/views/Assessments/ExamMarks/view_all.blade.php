@@ -44,7 +44,12 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Exam Type:</strong></td>
-                                    <td>{{ $examType->exam_type }}</td>
+                                    <td>
+                                        {{ $examType->exam_type ?? $examType->name }}
+                                        @if($examType->name && $examType->name !== ($examType->exam_type ?? $examType->name))
+                                            <br><small class="text-muted">{{ $examType->name }}</small>
+                                        @endif
+                                    </td>
                                 </tr>
                             </table>
                         </div>

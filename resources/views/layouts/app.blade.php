@@ -142,7 +142,9 @@
           @permission('exam-marks')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/exam-marks"><span class="c-sidebar-nav-icon"></span> Exam Marks</a></li>
           @endpermission
+          @permission('view-student-promotions')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/promotions"><span class="c-sidebar-nav-icon"></span> Promotions</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/class-routine"><span class="c-sidebar-nav-icon"></span> Class Routine</a></li>
           @permission('view-module-allocations')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('module-allocations.index') }}"><span class="c-sidebar-nav-icon"></span> Module Allocation</a></li>

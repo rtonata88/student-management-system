@@ -80,8 +80,8 @@ class ClassRoutineController extends Controller
         $centers = Center::orderBy('center_name')->get();
         $venues = Venue::with('center')->active()->orderBy('venue_name')->get();
         $classDurations = ClassDuration::active()->notBreak()->ordered()->get();
+        $defaultDuration = \App\Models\ClassDuration::getDefaultDuration();
         $subjectAllocations = SubjectAllocation::with(['module', 'user', 'center'])
-            ->where('academic_year_id', $currentAcademicYear->id ?? null)
             ->orderBy('id')
             ->get();
 
@@ -97,7 +97,7 @@ class ClassRoutineController extends Controller
 
         return view('ClassRoutine.create', compact(
             'academicYears', 'centers', 'venues', 'classDurations', 
-            'subjectAllocations', 'daysOfWeek', 'currentAcademicYear'
+            'subjectAllocations', 'daysOfWeek', 'currentAcademicYear', 'defaultDuration'
         ));
     }
 
@@ -108,31 +108,31 @@ class ClassRoutineController extends Controller
             'center_id' => 'required|exists:centers,id',
             'subject_allocation_id' => 'required|exists:subject_allocations,id',
             'venue_id' => 'required|exists:venues,id',
-            'class_duration_id' => 'required|exists:class_durations,id',
             'day_of_week' => 'required|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+            'start_time' => 'required|date_format:H:i',
             'effective_from' => 'required|date',
             'effective_to' => 'nullable|date|after_or_equal:effective_from',
             'notes' => 'nullable|string|max:1000'
         ]);
 
-        // Check for teacher conflicts
-        if (ClassSchedule::hasTeacherConflict(
+        // Check for teacher time conflicts
+        if (ClassSchedule::hasTeacherTimeConflict(
             $request->subject_allocation_id,
-            $request->class_duration_id,
+            $request->start_time,
             $request->day_of_week,
             $request->effective_from
         )) {
-            return back()->withErrors(['conflict' => 'Teacher already has a class scheduled at this time.'])->withInput();
+            return back()->withErrors(['conflict' => 'Teacher already has a class scheduled during this time period.'])->withInput();
         }
 
-        // Check for venue conflicts
-        if (ClassSchedule::hasVenueConflict(
+        // Check for venue time conflicts
+        if (ClassSchedule::hasVenueTimeConflict(
             $request->venue_id,
-            $request->class_duration_id,
+            $request->start_time,
             $request->day_of_week,
             $request->effective_from
         )) {
-            return back()->withErrors(['conflict' => 'Venue is already booked for this time slot.'])->withInput();
+            return back()->withErrors(['conflict' => 'Venue is already booked during this time period.'])->withInput();
         }
 
         ClassSchedule::create([
@@ -140,8 +140,9 @@ class ClassRoutineController extends Controller
             'center_id' => $request->center_id,
             'subject_allocation_id' => $request->subject_allocation_id,
             'venue_id' => $request->venue_id,
-            'class_duration_id' => $request->class_duration_id,
+            'class_duration_id' => 1, // Default class duration ID
             'day_of_week' => $request->day_of_week,
+            'start_time' => $request->start_time,
             'effective_from' => $request->effective_from,
             'effective_to' => $request->effective_to,
             'notes' => $request->notes,
@@ -152,35 +153,73 @@ class ClassRoutineController extends Controller
                         ->with('success', 'Class schedule created successfully.');
     }
 
-    public function edit($id)
+    public function checkConflicts(Request $request)
+    {
+        $conflicts = [];
+
+        // Check for teacher time conflicts
+        if (ClassSchedule::hasTeacherTimeConflict(
+            $request->subject_allocation_id,
+            $request->start_time,
+            $request->day_of_week,
+            $request->effective_from
+        )) {
+            $conflicts[] = 'Teacher already has a class scheduled during this time period.';
+        }
+
+        // Check for venue time conflicts
+        if (ClassSchedule::hasVenueTimeConflict(
+            $request->venue_id,
+            $request->start_time,
+            $request->day_of_week,
+            $request->effective_from
+        )) {
+            $conflicts[] = 'Venue is already booked during this time period.';
+        }
+
+        return response()->json(['conflicts' => $conflicts]);
+    }
+
+    public function show($id)
     {
         $schedule = ClassSchedule::with([
             'academicYear', 'center', 'subjectAllocation.module', 
             'subjectAllocation.user', 'venue', 'classDuration'
         ])->findOrFail($id);
 
+        return view('ClassRoutine.show', compact('schedule'));
+    }
+
+    public function edit($id)
+    {
+        $schedule = ClassSchedule::with([
+            'academicYear', 'center', 'subjectAllocation.module', 
+            'subjectAllocation.user', 'venue', 'classDuration'
+        ])
+        ->findOrFail($id);
+
         $academicYears = AcademicYear::orderBy('academic_year', 'desc')->get();
         $centers = Center::orderBy('center_name')->get();
         $venues = Venue::with('center')->active()->orderBy('venue_name')->get();
-        $classDurations = ClassDuration::active()->notBreak()->ordered()->get();
         $subjectAllocations = SubjectAllocation::with(['module', 'user', 'center'])
-            ->where('academic_year_id', $schedule->academic_year_id)
-            ->orderBy('id')
-            ->get();
-
+                                               ->orderBy('id')
+                                               ->get();
         $daysOfWeek = [
             'monday' => 'Monday',
-            'tuesday' => 'Tuesday',
+            'tuesday' => 'Tuesday', 
             'wednesday' => 'Wednesday',
-            'thursday' => 'Thursday', 
+            'thursday' => 'Thursday',
             'friday' => 'Friday',
             'saturday' => 'Saturday',
             'sunday' => 'Sunday'
         ];
 
+        // Get default class duration for JavaScript
+        $defaultDuration = \App\Models\ClassDuration::getDefaultDuration();
+
         return view('ClassRoutine.edit', compact(
             'schedule', 'academicYears', 'centers', 'venues', 
-            'classDurations', 'subjectAllocations', 'daysOfWeek'
+            'subjectAllocations', 'daysOfWeek', 'defaultDuration'
         ));
     }
 
@@ -193,7 +232,7 @@ class ClassRoutineController extends Controller
             'center_id' => 'required|exists:centers,id',
             'subject_allocation_id' => 'required|exists:subject_allocations,id',
             'venue_id' => 'required|exists:venues,id',
-            'class_duration_id' => 'required|exists:class_durations,id',
+            'start_time' => 'required|date_format:H:i',
             'day_of_week' => 'required|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
             'effective_from' => 'required|date',
             'effective_to' => 'nullable|date|after_or_equal:effective_from',
@@ -201,9 +240,9 @@ class ClassRoutineController extends Controller
         ]);
 
         // Check for teacher conflicts (excluding current schedule)
-        if (ClassSchedule::hasTeacherConflict(
+        if (ClassSchedule::hasTeacherTimeConflict(
             $request->subject_allocation_id,
-            $request->class_duration_id,
+            $request->start_time,
             $request->day_of_week,
             $request->effective_from,
             $id
@@ -212,9 +251,9 @@ class ClassRoutineController extends Controller
         }
 
         // Check for venue conflicts (excluding current schedule)
-        if (ClassSchedule::hasVenueConflict(
+        if (ClassSchedule::hasVenueTimeConflict(
             $request->venue_id,
-            $request->class_duration_id,
+            $request->start_time,
             $request->day_of_week,
             $request->effective_from,
             $id
@@ -227,7 +266,7 @@ class ClassRoutineController extends Controller
             'center_id' => $request->center_id,
             'subject_allocation_id' => $request->subject_allocation_id,
             'venue_id' => $request->venue_id,
-            'class_duration_id' => $request->class_duration_id,
+            'start_time' => $request->start_time,
             'day_of_week' => $request->day_of_week,
             'effective_from' => $request->effective_from,
             'effective_to' => $request->effective_to,
@@ -255,7 +294,7 @@ class ClassRoutineController extends Controller
 
         $query = ClassSchedule::with([
             'academicYear', 'center', 'subjectAllocation.module',
-            'subjectAllocation.user', 'venue', 'classDuration'
+            'subjectAllocation.user', 'venue'
         ])
         ->active()
         ->current();
@@ -269,7 +308,7 @@ class ClassRoutineController extends Controller
         }
 
         $schedules = $query->orderBy('day_of_week')
-                          ->orderBy('class_duration_id')
+                          ->orderBy('start_time')
                           ->get();
 
         $academicYear = AcademicYear::find($selectedAcademicYear);

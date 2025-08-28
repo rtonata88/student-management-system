@@ -63,12 +63,13 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="subject_allocation_id">Subject Allocation <span class="text-danger">*</span></label>
+                                    <label for="subject_allocation_id">Subject <span class="text-danger">*</span></label>
                                     <select name="subject_allocation_id" id="subject_allocation_id" class="form-control" required>
-                                        <option value="">Select Subject Allocation</option>
+                                        <option value="">Select Subject</option>
                                         @foreach($subjectAllocations as $allocation)
                                             <option value="{{ $allocation->id }}" 
                                                     data-center="{{ $allocation->center_id }}"
+                                                    data-academic-year="{{ $allocation->academic_year_id }}"
                                                     {{ old('subject_allocation_id', $schedule->subject_allocation_id) == $allocation->id ? 'selected' : '' }}>
                                                 {{ $allocation->module->subject_name }} ({{ $allocation->module->subject_code }}) - 
                                                 {{ $allocation->center->center_name }} - 
@@ -103,7 +104,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="day_of_week">Day of Week <span class="text-danger">*</span></label>
                                     <select name="day_of_week" id="day_of_week" class="form-control" required>
@@ -116,17 +117,23 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="class_duration_id">Class Period <span class="text-danger">*</span></label>
-                                    <select name="class_duration_id" id="class_duration_id" class="form-control" required>
-                                        <option value="">Select Class Period</option>
-                                        @foreach($classDurations as $duration)
-                                            <option value="{{ $duration->id }}" {{ old('class_duration_id', $schedule->class_duration_id) == $duration->id ? 'selected' : '' }}>
-                                                {{ $duration->period_name }} ({{ $duration->time_range }})
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <label for="start_time">Start time <span class="text-danger">*</span></label>
+                                    <input type="time" name="start_time" id="start_time" 
+                                           class="form-control" 
+                                           value="{{ old('start_time', $schedule->start_time ? \Carbon\Carbon::parse($schedule->start_time)->format('H:i') : '') }}" 
+                                           step="300" pattern="[0-9]{2}:[0-9]{2}" required>
+                                    <small class="form-text text-muted">24-hour format (e.g., 07:00, 14:30)</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="end_time">End time</label>
+                                    <input type="time" name="end_time" id="end_time" 
+                                           class="form-control" readonly 
+                                           style="background-color: #f8f9fa; cursor: not-allowed;">
+                                    <small class="form-text text-muted">Auto-calculated (Start time + {{ $defaultDuration }} minutes)</small>
                                 </div>
                             </div>
                         </div>
@@ -156,7 +163,7 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                 <i class="fa fa-save"></i> Update Schedule
                             </button>
                             <a href="{{ route('class-routine.index') }}" class="btn btn-secondary">
@@ -172,21 +179,33 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const academicYearSelect = document.getElementById('academic_year_id');
     const centerSelect = document.getElementById('center_id');
     const subjectAllocationSelect = document.getElementById('subject_allocation_id');
     const venueSelect = document.getElementById('venue_id');
+    const startTimeInput = document.getElementById('start_time');
+    const endTimeInput = document.getElementById('end_time');
+    
+    // Default class duration in minutes
+    const defaultDuration = {{ $defaultDuration ?? 60 }};
 
     function filterOptions() {
+        const selectedAcademicYear = academicYearSelect.value;
         const selectedCenter = centerSelect.value;
         
-        // Filter subject allocations
+        // Filter subject allocations by both academic year and center
         Array.from(subjectAllocationSelect.options).forEach(option => {
             if (option.value === '') return;
             const optionCenter = option.getAttribute('data-center');
-            option.style.display = (!selectedCenter || optionCenter === selectedCenter) ? 'block' : 'none';
+            const optionAcademicYear = option.getAttribute('data-academic-year');
+            
+            const centerMatch = !selectedCenter || optionCenter === selectedCenter;
+            const yearMatch = !selectedAcademicYear || optionAcademicYear === selectedAcademicYear;
+            
+            option.style.display = (centerMatch && yearMatch) ? 'block' : 'none';
         });
 
-        // Filter venues
+        // Filter venues by center
         Array.from(venueSelect.options).forEach(option => {
             if (option.value === '') return;
             const optionCenter = option.getAttribute('data-center');
@@ -194,14 +213,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Reset selections if they're no longer valid
-        if (selectedCenter) {
+        if (selectedCenter || selectedAcademicYear) {
             const currentSubjectAllocation = subjectAllocationSelect.value;
             const currentVenue = venueSelect.value;
             
             if (currentSubjectAllocation) {
                 const subjectOption = subjectAllocationSelect.querySelector(`option[value="${currentSubjectAllocation}"]`);
-                if (subjectOption && subjectOption.getAttribute('data-center') !== selectedCenter) {
-                    subjectAllocationSelect.value = '';
+                if (subjectOption) {
+                    const centerMatch = !selectedCenter || subjectOption.getAttribute('data-center') === selectedCenter;
+                    const yearMatch = !selectedAcademicYear || subjectOption.getAttribute('data-academic-year') === selectedAcademicYear;
+                    if (!centerMatch || !yearMatch) {
+                        subjectAllocationSelect.value = '';
+                    }
                 }
             }
             
@@ -214,10 +237,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function calculateEndTime() {
+        const startTime = startTimeInput.value;
+        if (startTime) {
+            const [hours, minutes] = startTime.split(':').map(Number);
+            const startDate = new Date();
+            startDate.setHours(hours, minutes, 0, 0);
+            
+            const endDate = new Date(startDate.getTime() + (defaultDuration * 60000));
+            const endHours = String(endDate.getHours()).padStart(2, '0');
+            const endMinutes = String(endDate.getMinutes()).padStart(2, '0');
+            
+            endTimeInput.value = `${endHours}:${endMinutes}`;
+        } else {
+            endTimeInput.value = '';
+        }
+    }
+
+    academicYearSelect.addEventListener('change', filterOptions);
     centerSelect.addEventListener('change', filterOptions);
+    startTimeInput.addEventListener('change', calculateEndTime);
     
-    // Initial filter
+    // Initial setup
     filterOptions();
+    calculateEndTime();
 });
 </script>
 @endsection

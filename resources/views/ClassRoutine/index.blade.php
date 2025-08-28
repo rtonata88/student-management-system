@@ -6,20 +6,34 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fa fa-calendar"></i> Class Routine Management
-                    </h3>
-                    <div class="card-tools">
-                        @can('create-class-routine')
-                        <a href="{{ route('class-routine.create') }}" class="btn btn-primary btn-sm">
-                            <i class="fa fa-plus"></i> Add New Schedule
-                        </a>
-                        @endcan
-                        @can('print-class-routine')
-                        <a href="{{ route('class-routine.print', request()->all()) }}" target="_blank" class="btn btn-info btn-sm">
-                            <i class="fa fa-print"></i> Print Routine
-                        </a>
-                        @endcan
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="card-title mb-0">
+                                <i class="fa fa-calendar"></i> Class Routine Management
+                            </h4>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            @if(Auth::user()->hasPermission('view-venue'))
+                            <a href="{{ route('venues.index') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; margin-right: 5px; padding: 0.375rem 0.75rem;">
+                                <i class="fa fa-building"></i> Manage Venues
+                            </a>
+                            @endif
+                            @if(Auth::user()->hasPermission('view-class-duration'))
+                            <a href="{{ route('class-durations.index') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; margin-right: 5px; padding: 0.375rem 0.75rem;">
+                                <i class="fa fa-clock"></i> Class Duration
+                            </a>
+                            @endif
+                            @if(Auth::user()->hasPermission('create-class-routine'))
+                            <a href="{{ route('class-routine.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; margin-right: 5px; padding: 0.375rem 0.75rem;">
+                                <i class="fa fa-plus"></i> Add New Schedule
+                            </a>
+                            @endif
+                            @if(Auth::user()->hasPermission('print-class-routine'))
+                            <a href="{{ route('class-routine.print', request()->all()) }}" target="_blank" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                                <i class="fa fa-print"></i> Print Routine
+                            </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
 
@@ -63,10 +77,10 @@
                             <div class="col-md-3">
                                 <label>&nbsp;</label>
                                 <div>
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                         <i class="fa fa-filter"></i> Filter
                                     </button>
-                                    <a href="{{ route('class-routine.index') }}" class="btn btn-secondary">
+                                    <a href="{{ route('class-routine.index') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem; margin-left: 5px;">
                                         <i class="fa fa-refresh"></i> Reset
                                     </a>
                                 </div>
@@ -87,7 +101,8 @@
                                 <thead>
                                     <tr>
                                         <th>Day</th>
-                                        <th>Time</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
                                         <th>Subject</th>
                                         <th>Teacher</th>
                                         <th>Venue</th>
@@ -101,8 +116,10 @@
                                         <tr>
                                             <td>{{ $schedule->formatted_day }}</td>
                                             <td>
-                                                <strong>{{ $schedule->classDuration->period_name }}</strong><br>
-                                                <small class="text-muted">{{ $schedule->classDuration->time_range }}</small>
+                                                <strong>{{ $schedule->formatted_start_time }}</strong>
+                                            </td>
+                                            <td>
+                                                <strong>{{ $schedule->formatted_end_time }}</strong>
                                             </td>
                                             <td>
                                                 <strong>{{ $schedule->subject_name }}</strong><br>
@@ -129,24 +146,30 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="btn-group" role="group">
-                                                    @can('edit-class-routine')
+                                                <div class="d-flex gap-2">
+                                                    @if(Auth::user()->hasPermission('view-class-routine'))
+                                                    <a href="{{ route('class-routine.show', $schedule->id) }}" 
+                                                       class="btn btn-sm btn-info" title="View">
+                                                        <i class="fa fa-eye"></i> View
+                                                    </a>
+                                                    @endif
+                                                    @if(Auth::user()->hasPermission('edit-class-routine'))
                                                     <a href="{{ route('class-routine.edit', $schedule->id) }}" 
                                                        class="btn btn-sm btn-warning" title="Edit">
-                                                        <i class="fa fa-edit"></i>
+                                                        <i class="fa fa-edit"></i> Edit
                                                     </a>
-                                                    @endcan
-                                                    @can('delete-class-routine')
+                                                    @endif
+                                                    @if(Auth::user()->hasPermission('delete-class-routine'))
                                                     <form method="POST" action="{{ route('class-routine.destroy', $schedule->id) }}" 
                                                           style="display: inline;" 
-                                                          onsubmit="return confirm('Are you sure you want to delete this schedule?')">
+                                                          onsubmit="return confirm('Are you sure you want to delete this class schedule?\n\nSubject: {{ $schedule->subject_name }}\nTeacher: {{ $schedule->teacher_name }}\nDay: {{ $schedule->formatted_day }}\nTime: {{ $schedule->formatted_start_time }} - {{ $schedule->formatted_end_time }}\n\nThis action cannot be undone.')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-danger" title="Delete">
-                                                            <i class="fa fa-trash"></i>
+                                                            <i class="fa fa-trash"></i> Delete
                                                         </button>
                                                     </form>
-                                                    @endcan
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>
@@ -168,4 +191,5 @@
         </div>
     </div>
 </div>
+
 @endsection

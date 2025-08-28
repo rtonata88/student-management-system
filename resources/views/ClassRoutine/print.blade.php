@@ -133,16 +133,18 @@
             'sunday' => 'Sunday'
         ];
 
-        // Get all unique time slots
-        $timeSlots = $schedules->pluck('classDuration')->unique('id')->sortBy('sort_order');
+        // Get all unique time slots based on start_time
+        $timeSlots = $schedules->groupBy('start_time')->map(function($group) {
+            return $group->first();
+        })->sortBy('start_time');
         
         // Group schedules by day and time
         $timetableData = [];
         foreach($daysOfWeek as $day) {
             $timetableData[$day] = [];
             foreach($timeSlots as $timeSlot) {
-                $timetableData[$day][$timeSlot->id] = $schedules->filter(function($schedule) use ($day, $timeSlot) {
-                    return $schedule->day_of_week === $day && $schedule->class_duration_id === $timeSlot->id;
+                $timetableData[$day][$timeSlot->start_time] = $schedules->filter(function($schedule) use ($day, $timeSlot) {
+                    return $schedule->day_of_week === $day && $schedule->start_time === $timeSlot->start_time;
                 });
             }
         }
@@ -162,17 +164,16 @@
                 @foreach($timeSlots as $timeSlot)
                     <tr>
                         <td class="time-slot">
-                            <strong>{{ $timeSlot->period_name }}</strong><br>
-                            <small>{{ $timeSlot->time_range }}</small>
+                            <strong>{{ $timeSlot->time_range }}</strong>
                         </td>
                         @foreach($daysOfWeek as $day)
                             <td>
-                                @if($timetableData[$day][$timeSlot->id]->count() > 0)
-                                    @foreach($timetableData[$day][$timeSlot->id] as $schedule)
+                                @if($timetableData[$day][$timeSlot->start_time]->count() > 0)
+                                    @foreach($timetableData[$day][$timeSlot->start_time] as $schedule)
                                         <div class="class-item">
-                                            <div class="subject-name">{{ $schedule->subject_name }}</div>
-                                            <div class="teacher-name">{{ $schedule->teacher_name }}</div>
-                                            <div class="venue-name">{{ $schedule->venue->venue_name }}</div>
+                                            <div class="subject-name">{{ $schedule->subjectAllocation->module->module_name ?? 'N/A' }}</div>
+                                            <div class="teacher-name">{{ $schedule->subjectAllocation->user->name ?? 'N/A' }}</div>
+                                            <div class="venue-name">{{ $schedule->venue->venue_name ?? 'N/A' }}</div>
                                             @if($schedule->notes)
                                                 <div style="font-size: 7px; color: #999;">{{ Str::limit($schedule->notes, 30) }}</div>
                                             @endif
