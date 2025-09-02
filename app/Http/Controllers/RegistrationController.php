@@ -240,6 +240,9 @@ class RegistrationController extends Controller
         }
         
         ModuleRegistration::insert($enrolment);
+        
+        // Update student_subjects status to 'registered' for enrolled modules
+        $this->updateSubjectStatuses($request->student_id, $subjects);
     }
 
     private function createInvoice($subjects, $request){
@@ -467,6 +470,19 @@ class RegistrationController extends Controller
         }
 
         return $reference_number;
+    }
+
+    /**
+     * Update student_subjects status to 'registered' when modules are enrolled
+     */
+    private function updateSubjectStatuses($studentId, $subjects)
+    {
+        foreach ($subjects as $subject) {
+            DB::table('student_subjects')
+                ->where('student_id', $studentId)
+                ->where('subject_id', $subject->id)
+                ->update(['status' => 'registered', 'updated_at' => now()]);
+        }
     }
 
     private function chargeExtraMandatoryFees($fees, $academic_year, $reference_number, $request){

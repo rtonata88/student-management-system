@@ -171,25 +171,28 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <div class="btn-group" role="group">
-                                                        @if(Auth::user()->hasPermission('edit-examination-schedule'))
-                                                            <a href="{{ route('examination-schedule.edit', $schedule->id) }}" 
-                                                               class="btn btn-sm btn-outline-primary" title="Edit">
-                                                                <i class="fa fa-edit"></i>
-                                                            </a>
-                                                        @endif
-                                                        @if(Auth::user()->hasPermission('delete-examination-schedule'))
-                                                            <form action="{{ route('examination-schedule.destroy', $schedule->id) }}" 
-                                                                  method="POST" class="d-inline"
-                                                                  onsubmit="return confirm('Are you sure you want to delete this schedule?')">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </form>
-                                                        @endif
-                                                    </div>
+                                                    @if(Auth::user()->hasPermission('edit-examination-schedule'))
+                                                        <a href="{{ route('examination-schedule.edit', $schedule->id) }}" 
+                                                           class="btn btn-sm" 
+                                                           style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem; margin-right: 8px;" 
+                                                           title="Edit">
+                                                            <i class="fa fa-edit"></i> Edit
+                                                        </a>
+                                                    @endif
+                                                    @if(Auth::user()->hasPermission('delete-examination-schedule'))
+                                                        <form action="{{ route('examination-schedule.destroy', $schedule->id) }}" 
+                                                              method="POST" class="d-inline"
+                                                              onsubmit="return confirm('Are you sure you want to delete this schedule?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" 
+                                                                    class="btn btn-sm" 
+                                                                    style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;" 
+                                                                    title="Delete">
+                                                                <i class="fa fa-trash"></i> Delete
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

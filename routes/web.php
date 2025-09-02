@@ -38,6 +38,7 @@ Route::resource('/students', 'StudentController');
 Route::post('/students/filter', 'StudentController@filter')->name('students.filter');
 Route::post('/students/{id}/admission-status', 'StudentController@updateAdmissionStatus')->name('students.admission-status');
 Route::get('/students/{id}/admission-status', 'StudentController@getAdmissionStatus')->name('students.get-admission-status');
+Route::post('/students/verify-document/{documentId}', 'StudentController@verifyDocument')->name('students.verify-document');
 
 // Manual Admissions
 Route::get('/manual-admissions', 'ManualAdmissionsController@index')->name('manual-admissions.index');
@@ -97,6 +98,95 @@ Route::get('/account-summary/reports/download', 'AccountSummaryController@downlo
 
 Route::get('/aging/reports', 'InvoiceReportController@agingReport')->name('reports.finance.aging');
 Route::get('/aging/reports/export', 'InvoiceReportController@export')->name('reports.aging.export');
+
+// Online Application Routes (Public - no middleware)
+Route::get('/signup', 'OnlineApplicationController@showSignupForm')->name('online-application.signup');
+Route::post('/signup', 'OnlineApplicationController@createAccount')->name('online-application.create-account');
+
+// Protected Online Application Routes (Require authentication)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/student-info', 'OnlineApplicationController@showStudentInfoForm')->name('online-application.student-info');
+    Route::post('/student-info', 'OnlineApplicationController@storeStudentInfo')->name('online-application.store-student-info');
+    Route::get('/subject-selection', 'OnlineApplicationController@showSubjectSelection')->name('online-application.subject-selection');
+    Route::post('/subject-selection', 'OnlineApplicationController@storeSubjectSelection')->name('online-application.store-subject-selection');
+    Route::get('/document-upload', 'OnlineApplicationController@showDocumentUpload')->name('online-application.document-upload');
+    Route::post('/document-upload', 'OnlineApplicationController@uploadDocument')->name('online-application.upload-document');
+    Route::delete('/document/{id}', 'OnlineApplicationController@deleteDocument')->name('online-application.delete-document');
+    Route::get('/review', 'OnlineApplicationController@showReview')->name('online-application.review');
+    Route::post('/submit', 'OnlineApplicationController@submitApplication')->name('online-application.submit');
+    Route::get('/acknowledgement', 'OnlineApplicationController@showAcknowledgement')->name('online-application.acknowledgement');
+    Route::get('/download-acknowledgement', 'OnlineApplicationController@downloadAcknowledgement')->name('online-application.download-acknowledgement');
+});
+
+// Online Submissions (Admin) - Protected with permissions
+Route::middleware(['auth', 'permission:manage-online-submissions'])->group(function () {
+    Route::get('/online-submissions', 'OnlineSubmissionsController@index')->name('online-submissions.index');
+    Route::post('/online-submissions/filter', 'OnlineSubmissionsController@filter')->name('online-submissions.filter');
+    Route::get('/online-submissions/{id}', 'OnlineSubmissionsController@show')->name('online-submissions.show');
+    Route::post('/online-submissions/{id}/update-status', 'OnlineSubmissionsController@updateStatus')->name('online-submissions.update-status');
+    Route::get('/online-submissions/documents/{id}/download', 'OnlineSubmissionsController@downloadDocument')->name('online-submissions.download-document');
+    Route::post('/online-submissions/documents/{id}/verify', 'OnlineSubmissionsController@verifyDocument')->name('online-submissions.verify-document');
+});
+
+// Parent Portal Routes
+Route::group(['prefix' => 'parent-portal', 'middleware' => ['auth', 'user.type:parent']], function () {
+    Route::get('/dashboard', 'ParentPortalController@dashboard')->name('parent-portal.dashboard');
+    Route::get('/child/{studentId}/academic-records', 'ParentPortalController@childAcademicRecords')->name('parent-portal.child-academic-records');
+    Route::get('/child/{studentId}/payments', 'ParentPortalController@childPayments')->name('parent-portal.child-payments');
+});
+
+// Student Portal Routes - Protected with permissions
+Route::group(['prefix' => 'student-portal', 'middleware' => ['auth', 'user.type:student']], function () {
+    Route::get('/', 'StudentPortalController@index')->name('student-portal.index');
+    Route::get('/dashboard', 'StudentPortalController@dashboard')->name('student-portal.dashboard');
+    
+    // Profile Section
+    Route::get('/profile', 'StudentPortalController@profile')->name('student-portal.profile');
+    Route::get('/my-info', 'StudentPortalController@myInfo')->name('student-portal.my-info');
+    Route::get('/my-documents', 'StudentPortalController@myDocuments')->name('student-portal.my-documents');
+    Route::get('/my-applications', 'StudentPortalController@myApplications')->name('student-portal.my-applications');
+    
+    // Academics Section
+    Route::get('/academics', 'StudentPortalController@academics')->name('student-portal.academics');
+    Route::get('/academic-records', 'StudentPortalController@academicRecords')->name('student-portal.academic-records');
+    Route::get('/assignments', 'StudentPortalController@assignments')->name('student-portal.assignments');
+    Route::get('/grades', 'StudentPortalController@grades')->name('student-portal.grades');
+    Route::get('/ca-marks', 'StudentPortalController@caMarks')->name('student-portal.ca-marks');
+    Route::get('/exam-marks', 'StudentPortalController@examMarks')->name('student-portal.exam-marks');
+    Route::get('/class-routine', 'StudentPortalController@classRoutine')->name('student-portal.class-routine');
+    Route::get('/exam-timetable', 'StudentPortalController@examTimetable')->name('student-portal.exam-timetable');
+    Route::get('/academic-script', 'StudentPortalController@academicScript')->name('student-portal.academic-script');
+    Route::get('/proof-of-registration', 'StudentPortalController@proofOfRegistration')->name('student-portal.proof-of-registration');
+    
+    // Finance Section
+    Route::get('/my-payments', 'StudentPortalController@myPayments')->name('student-portal.my-payments');
+    Route::get('/financial-statement', 'StudentPortalController@financialStatement')->name('student-portal.financial-statement');
+    
+    // My Subjects
+    Route::get('/my-subjects', 'StudentPortalController@mySubjects')->name('student-portal.my-subjects');
+    
+    // Online Learning
+    Route::get('/online-learning', 'StudentPortalController@onlineLearning')->name('student-portal.online-learning');
+    
+    // Library Management
+    Route::get('/library-books', 'StudentPortalController@libraryBooks')->name('student-portal.library-books');
+    Route::get('/library-fines', 'StudentPortalController@libraryFines')->name('student-portal.library-fines');
+    Route::get('/borrow-history', 'StudentPortalController@borrowHistory')->name('student-portal.borrow-history');
+    
+    // Hostel Management
+    Route::get('/hostel-applications', 'StudentPortalController@hostelApplications')->name('student-portal.hostel-applications');
+    Route::get('/my-hostel-data', 'StudentPortalController@myHostelData')->name('student-portal.my-hostel-data');
+    
+    // Market Place
+    Route::get('/marketplace', 'StudentPortalController@marketplace')->name('student-portal.marketplace');
+    
+    // Support Centre
+    Route::get('/user-manuals', 'StudentPortalController@userManuals')->name('student-portal.user-manuals');
+    Route::get('/video-tutorials', 'StudentPortalController@videoTutorials')->name('student-portal.video-tutorials');
+    Route::get('/faq-help', 'StudentPortalController@faqHelp')->name('student-portal.faq-help');
+    Route::get('/quick-support', 'StudentPortalController@quickSupport')->name('student-portal.quick-support');
+    Route::get('/get-support', 'StudentPortalController@getSupport')->name('student-portal.get-support');
+});
 
 Route::get('/audit/reports', 'AuditReportController@index')->name('reports.audit');
 Route::get('/audit/show/{id}', 'AuditReportController@show')->name('reports.audit.show');

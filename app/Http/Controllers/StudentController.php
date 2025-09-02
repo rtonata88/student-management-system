@@ -8,9 +8,14 @@ use App\Center;
 use App\Http\Requests\NewStudent;
 use App\StudentGuardian;
 use App\AcademicYear;
+use App\User;
+use App\Module;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+
 class StudentController extends Controller
 {
     public function __construct()
@@ -62,31 +67,66 @@ class StudentController extends Controller
     public function create()
     {
         $centers = Center::pluck('center_name', 'id');
+        $subjects = Module::all();
         $preGeneratedStudentNumber = $this->generateAndReserveStudentNumber();
 
-        return view('Management.Students.Create', compact('centers', 'preGeneratedStudentNumber'));
+        return view('Management.Students.Create', compact('centers', 'subjects', 'preGeneratedStudentNumber'));
     }
 
     public function edit($id)
     {
         $student = Student::find($id);
         $centers = Center::pluck('center_name', 'id');
+        $subjects = Module::all();
+        $selectedSubjects = DB::table('student_subjects')
+            ->where('student_id', $id)
+            ->pluck('subject_id')
+            ->toArray();
+        $studentDocuments = DB::table('student_documents')
+            ->where('student_id', $id)
+            ->get();
         $returnUrl = request('return');
 
-        return view('Management.Students.Edit', compact('student', 'centers', 'returnUrl'));
+        return view('Management.Students.Edit', compact('student', 'centers', 'subjects', 'selectedSubjects', 'studentDocuments', 'returnUrl'));
     }
 
     public function show($id)
     {
         $student = Student::with('center')->find($id);
+        $studentSubjects = DB::table('student_subjects')
+            ->join('modules', 'student_subjects.subject_id', '=', 'modules.id')
+            ->where('student_subjects.student_id', $id)
+            ->select('student_subjects.*', 'modules.*')
+            ->get()
+            ->map(function ($item) {
+                $item->subject = (object) [
+                    'subject_name' => $item->subject_name,
+                    'subject_code' => $item->subject_code,
+                    'subject_fees' => $item->subject_fees,
+                    'credits' => $item->credits,
+                    'description' => $item->description
+                ];
+                return $item;
+            });
+        $studentDocuments = DB::table('student_documents')
+            ->where('student_id', $id)
+            ->get();
         $returnUrl = request('return');
 
-        return view('Management.Students.Show', compact('student', 'returnUrl'));
+        return view('Management.Students.Show', compact('student', 'studentSubjects', 'studentDocuments', 'returnUrl'));
     }
 
     public function store(NewStudent $request)
     {
         $data = $request->all();
+        
+        // Handle student photo upload
+        if ($request->hasFile('student_photo')) {
+            $photo = $request->file('student_photo');
+            $photoName = time() . '_' . $photo->getClientOriginalName();
+            $photoPath = $photo->storeAs('student_photos', $photoName, 'public');
+            $data['photo'] = $photoPath;
+        }
         
         // Use the reserved student number from the session or generate a new one
         if (session()->has('reserved_student_number')) {
@@ -118,9 +158,25 @@ class StudentController extends Controller
         
         $student = Student::create($data);
 
-        return redirect()->route('students.index')->with('message', 'Student created successfully');
+        // Handle subject selection
+        if ($request->has('subjects') && is_array($request->subjects)) {
+            foreach ($request->subjects as $subjectId) {
+                DB::table('student_subjects')->insert([
+                    'student_id' => $student->id,
+                    'subject_id' => $subjectId,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+        }
 
-        return redirect()->route('enrolment.showEnrollmentScreen', $student->id);
+        // Handle document uploads
+        $this->handleDocumentUploads($request, $student->id);
+
+        // Auto-create user account for the student
+        $this->createUserAccountForStudent($student, $data);
+
+        return redirect()->route('students.index')->with('message', 'Student created successfully');
     }
 
     public function update(Request $request, $id)
@@ -128,6 +184,19 @@ class StudentController extends Controller
         $student = Student::find($id);
 
         $data = $request->all();
+        
+        // Handle student photo upload
+        if ($request->hasFile('student_photo')) {
+            // Delete old photo if exists
+            if ($student->photo && Storage::disk('public')->exists($student->photo)) {
+                Storage::disk('public')->delete($student->photo);
+            }
+            
+            $photo = $request->file('student_photo');
+            $photoName = time() . '_' . $photo->getClientOriginalName();
+            $photoPath = $photo->storeAs('student_photos', $photoName, 'public');
+            $data['photo'] = $photoPath;
+        }
         
         // Only auto-assign center based on allocated number if center_id is not manually selected
         if (!isset($data['center_id']) && isset($data['student_number2'])) {
@@ -152,6 +221,27 @@ class StudentController extends Controller
 
         
         $student->update($data);
+
+        // Handle subject selection updates
+        if ($request->has('subjects')) {
+            // Delete existing subject selections
+            DB::table('student_subjects')->where('student_id', $student->id)->delete();
+            
+            // Add new subject selections
+            if (is_array($request->subjects)) {
+                foreach ($request->subjects as $subjectId) {
+                    DB::table('student_subjects')->insert([
+                        'student_id' => $student->id,
+                        'subject_id' => $subjectId,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+                }
+            }
+        }
+
+        // Handle document uploads
+        $this->handleDocumentUploads($request, $student->id);
 
         $student->guardian()->delete();
 
@@ -268,6 +358,118 @@ class StudentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update admission status'
+            ], 500);
+        }
+    }
+
+    /**
+     * Create user account for student when created via Management/Students/Create
+     */
+    private function createUserAccountForStudent($student, $data)
+    {
+        // Generate unique username from student number
+        $username = 'STU' . $student->student_number;
+        
+        // Ensure username is unique
+        $counter = 1;
+        $originalUsername = $username;
+        while (User::where('username', $username)->exists()) {
+            $username = $originalUsername . $counter;
+            $counter++;
+        }
+        
+        // Ensure email is unique
+        $email = $student->contact_email ?: $student->student_number . '@student.local';
+        $counter = 1;
+        $originalEmail = $email;
+        while (User::where('email', $email)->exists()) {
+            $emailParts = explode('@', $originalEmail);
+            $email = $emailParts[0] . $counter . '@' . $emailParts[1];
+            $counter++;
+        }
+        
+        // Create user account
+        $user = User::create([
+            'name' => trim($student->student_names . ' ' . $student->surname),
+            'username' => $username,
+            'email' => $email,
+            'password' => Hash::make('password123'), // Default password
+            'user_type' => 'student',
+        ]);
+
+        // Link student to user account
+        $student->update(['user_id' => $user->id]);
+        
+        return $user;
+    }
+
+    /**
+     * Handle document uploads for students
+     */
+    private function handleDocumentUploads(Request $request, $studentId)
+    {
+        if ($request->hasFile('document_files')) {
+            $documentFiles = $request->file('document_files');
+            $documentTypes = $request->input('document_types', []);
+            $documentNames = $request->input('document_names', []);
+
+            foreach ($documentFiles as $index => $file) {
+                if ($file && $file->isValid()) {
+                    $documentType = $documentTypes[$index] ?? 'other';
+                    $documentName = $documentNames[$index] ?? $file->getClientOriginalName();
+                    
+                    // Generate unique filename
+                    $fileName = time() . '_' . $index . '_' . $file->getClientOriginalName();
+                    $filePath = $file->storeAs('student_documents', $fileName, 'public');
+                    
+                    // Save document record to database
+                    DB::table('student_documents')->insert([
+                        'student_id' => $studentId,
+                        'document_type' => $documentType,
+                        'document_name' => $documentName,
+                        'file_name' => $file->getClientOriginalName(),
+                        'file_path' => $filePath,
+                        'file_type' => $file->getClientOriginalExtension(),
+                        'file_size' => $file->getSize(),
+                        'is_verified' => false,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+                }
+            }
+        }
+    }
+
+    /**
+     * Verify a student document
+     */
+    public function verifyDocument(Request $request, $documentId)
+    {
+        try {
+            $updated = DB::table('student_documents')
+                ->where('id', $documentId)
+                ->update([
+                    'is_verified' => true,
+                    'verified_at' => now(),
+                    'verified_by' => auth()->id(),
+                    'updated_at' => now()
+                ]);
+
+            if ($updated) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Document verified successfully'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Document not found'
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to verify document'
             ], 500);
         }
     }

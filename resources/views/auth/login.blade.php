@@ -390,8 +390,8 @@
                     {{ csrf_field() }}
                     
                     <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input class="form-input" type="text" required="" name="username" placeholder="Type your email">
+                        <label class="form-label">Username or Email</label>
+                        <input class="form-input" type="text" required="" name="username" placeholder="Enter your username or email">
                         @if ($errors->has('username'))
                         <div class="error-message">
                             <strong>{{ $errors->first('username') }}</strong>
@@ -421,7 +421,7 @@
                 </form>
                 
                 <div class="signup-link">
-                    DON'T HAVE AN ACCOUNT? <a href="#">SIGN UP</a>
+                    DON'T HAVE AN ACCOUNT? <a href="{{ route('online-application.signup') }}">SIGN UP</a>
                 </div>
                 
                 <div class="copyright">

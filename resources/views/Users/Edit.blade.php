@@ -356,6 +356,16 @@
                                             return 'STUDENT LETTERS MANAGEMENT';
                                         }
                                         
+                                        // Group online application permissions
+                                        if (in_array($permission->name, ['view-online-applications', 'create-online-applications', 'edit-online-applications', 'delete-online-applications', 'approve-online-applications', 'reject-online-applications', 'verify-application-documents', 'download-application-documents', 'manage-online-submissions'])) {
+                                            return 'ONLINE APPLICATIONS MANAGEMENT';
+                                        }
+                                        
+                                        // Group student portal permissions
+                                        if (in_array($permission->name, ['access-student-portal', 'view-student-profile', 'view-student-academics', 'view-student-finance', 'view-student-subjects', 'access-online-learning', 'view-library-management', 'view-hostel-management', 'access-marketplace'])) {
+                                            return 'STUDENT PORTAL ACCESS';
+                                        }
+                                        
                                         // Group student promotions permissions
                                         if (in_array($permission->name, ['view-student-promotions', 'create-student-promotions', 'edit-student-promotions', 'delete-student-promotions', 'promote-students', 'view-promotion-history', 'export-promotion-reports'])) {
                                             return 'STUDENT PROMOTIONS MANAGEMENT';

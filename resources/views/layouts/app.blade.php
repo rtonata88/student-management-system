@@ -90,6 +90,9 @@
           @permission('view-proof-of-registration')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/proof-of-registration"><span class="c-sidebar-nav-icon"></span> Proof of Registration</a></li>
           @endpermission
+          @permission('manage-online-submissions')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/online-submissions"><span class="c-sidebar-nav-icon"></span> Online Submissions</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/statement-of-results"><span class="c-sidebar-nav-icon"></span> Statement of Results</a></li>
         </ul>
       </li>
@@ -265,6 +268,16 @@
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/hostel-administration"><span class="c-sidebar-nav-icon"></span> Administration</a></li>
           @endpermission
         </ul>
+      </li>
+      @endpermission
+
+      @permission('access-student-portal')
+      <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="/student-portal">
+          <svg class="c-sidebar-nav-icon">
+            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
+          </svg> Student Portal
+        </a>
       </li>
       @endpermission
 

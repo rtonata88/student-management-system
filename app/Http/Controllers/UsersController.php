@@ -55,13 +55,15 @@ class UsersController extends Controller
     public function store(Request $requests)
     {
     	$validated = $this->validate($requests, [
-            'email' => 'required|max:255|unique:users',
+            'email' => 'required|max:255|unique:users|email',
+            'username' => 'required|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
         ]);
 
 		$data = $requests->all();
 		$data['username'] = Str::slug($requests->name, '.');
         $data['password'] = bcrypt($requests->password);
+        $data['user_type'] = 'staff'; // Ensure all users created via Users/Create are staff
     	$user = User::create($data);
     	Session::flash('message', 'User created successfully!!');
 
@@ -74,8 +76,8 @@ class UsersController extends Controller
     	$user = User::find($id);
 
     	$this->validate($requests, [
-            'email' => 'required|max:255|email|unique:users,id,'.$id,
-
+            'email' => 'required|max:255|email|unique:users,email,'.$id,
+            'username' => 'required|max:255|unique:users,username,'.$id,
         ]);
 
 		if(isset($requests->password)){

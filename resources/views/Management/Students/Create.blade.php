@@ -32,6 +32,18 @@
                 @endif
                 <table class="table table-responsive-sm table-bordered table-sm" style="width:100%">
                     <tr>
+                        <th style="background-color: rgba(227, 227, 227, 0.5)">Student Photo</th>
+                        <td>
+                            <div class="form-group mb-0">
+                                <input type="file" name="student_photo" id="student_photo" class="form-control input-no-border" accept="image/*" onchange="previewImage(this)">
+                                <small class="form-text text-muted">Upload student photo for profile and ID cards (JPG, PNG, GIF - Max 2MB)</small>
+                                <div id="image-preview" class="mt-2" style="display: none;">
+                                    <img id="preview-img" src="" alt="Student Photo Preview" style="max-width: 150px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px; padding: 5px;">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Student Number</th>
                         <td>
                             <input type="text" class="form-control input-no-border" value="{{$preGeneratedStudentNumber}}" readonly style="background-color: #f8f9fa; color: #6c757d;">
@@ -88,6 +100,144 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+        </div>
+
+        <!-- Subject Selection Section -->
+        <div class="card">
+            <div class="card-header">
+                <strong><i class="fas fa-book"></i> Subject Selection</strong>
+                <small class="text-muted ml-2">Select subjects for this student</small>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Available Subjects</label>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Code</th>
+                                    <th class="text-right">Monthly Fee</th>
+                                    <th class="text-center">Credits</th>
+                                    <th class="text-center">Select</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($subjects))
+                                    @foreach($subjects as $subject)
+                                        <tr class="subject-row" style="cursor: pointer; transition: all 0.3s ease;">
+                                            <td class="align-middle">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="subject-icon me-3" style="width: 35px; height: 35px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-right: 12px; font-size: 0.8rem;">
+                                                        {{ substr($subject->subject_name, 0, 1) }}
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0">{{ $subject->subject_name }}</h6>
+                                                        <small class="text-muted">{{ $subject->subject_code }}</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle">
+                                                <span class="badge badge-light" style="background: #f8f9fa; color: #495057; padding: 4px 8px; border-radius: 4px;">
+                                                    {{ $subject->subject_code }}
+                                                </span>
+                                            </td>
+                                            <td class="align-middle text-right">
+                                                <span style="font-weight: 600; color: #28a745;">
+                                                    N${{ number_format($subject->subject_fees ?? 0, 2) }}
+                                                </span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <span class="badge badge-info" style="background: #17a2b8; padding: 4px 8px; border-radius: 4px;">
+                                                    3
+                                                </span>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <input class="form-check-input subject-checkbox" type="checkbox" 
+                                                       name="subjects[]" value="{{ $subject->id }}" 
+                                                       id="subject_{{ $subject->id }}"
+                                                       style="width: 18px; height: 18px; cursor: pointer;">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">No subjects available</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="mt-3 p-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h6><i class="fas fa-calculator"></i> Subject Summary</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Selected Subjects:</strong> <span id="selected-count">0</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Total Monthly Fee:</strong> N$<span id="total-fee">0.00</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Document Upload Section -->
+        <div class="card">
+            <div class="card-header">
+                <strong><i class="fas fa-upload"></i> Document Upload</strong>
+                <small class="text-muted ml-2">Upload required documents for this student</small>
+            </div>
+            <div class="card-body">
+                <div id="document-upload-section">
+                    <div class="document-upload-item mb-3 p-3" style="border: 1px solid #dee2e6; border-radius: 8px; background: #f8f9fa;">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <label class="form-label">Document Type</label>
+                                    <select name="document_types[]" class="form-control form-control-sm">
+                                        <option value="">Select Document Type</option>
+                                        <option value="id_certificate">ID Certificate</option>
+                                        <option value="birth_certificate">Birth Certificate</option>
+                                        <option value="school_certificate">School Certificate</option>
+                                        <option value="proof_of_payment">Proof of Payment</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <label class="form-label">Document Name</label>
+                                    <input type="text" name="document_names[]" class="form-control form-control-sm" placeholder="Enter document name">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <label class="form-label">Choose File</label>
+                                    <input type="file" name="document_files[]" class="form-control-file form-control-sm" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-sm btn-outline-primary" id="add-document-btn">
+                    <i class="fas fa-plus"></i> Add Another Document
+                </button>
+                
+                <div class="mt-3">
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle"></i> Document Guidelines:</h6>
+                        <ul class="mb-0 small">
+                            <li>Maximum file size is 10MB per file</li>
+                            <li>Allowed file types: PDF, DOC, DOCX, JPG, JPEG, PNG</li>
+                            <li>Ensure all documents are clear and readable</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -169,7 +319,7 @@
             </div>-->
             <div class="card-footer">
                 @permission('add-student')
-                <button type="submit" class="btn btn-sm btn-success">Save</button>
+                <button type="submit" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">Save</button>
                 @endpermission
                 <a href="/students">Cancel</a>
             </div>
@@ -179,4 +329,145 @@
 </div>
 </div>
 {!! Form::close() !!}
+
+<script>
+function previewImage(input) {
+    const preview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+    
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        
+        // Check file size (2MB limit)
+        if (file.size > 2 * 1024 * 1024) {
+            alert('File size must be less than 2MB');
+            input.value = '';
+            preview.style.display = 'none';
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+// Subject selection functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('.subject-checkbox');
+    const selectedCountSpan = document.getElementById('selected-count');
+    const totalFeeSpan = document.getElementById('total-fee');
+    
+    function updateSummary() {
+        let selectedCount = 0;
+        let totalFee = 0;
+        
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                selectedCount++;
+                const row = checkbox.closest('.subject-row');
+                const feeText = row.querySelector('td:nth-child(3) span').textContent;
+                const fee = parseFloat(feeText.replace('N$', '').replace(',', ''));
+                totalFee += fee;
+                row.classList.add('selected');
+            } else {
+                checkbox.closest('.subject-row').classList.remove('selected');
+            }
+        });
+        
+        selectedCountSpan.textContent = selectedCount;
+        totalFeeSpan.textContent = totalFee.toFixed(2);
+    }
+    
+    // Individual checkbox change
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSummary);
+    });
+    
+    // Row click to toggle checkbox
+    document.querySelectorAll('.subject-row').forEach(row => {
+        row.addEventListener('click', function(e) {
+            if (e.target.type !== 'checkbox') {
+                const checkbox = row.querySelector('.subject-checkbox');
+                checkbox.checked = !checkbox.checked;
+                updateSummary();
+            }
+        });
+    });
+    
+    // Document upload functionality
+    const addDocumentBtn = document.getElementById('add-document-btn');
+    const documentSection = document.getElementById('document-upload-section');
+    
+    addDocumentBtn.addEventListener('click', function() {
+        const newDocumentItem = document.querySelector('.document-upload-item').cloneNode(true);
+        
+        // Clear the values in the cloned item
+        newDocumentItem.querySelectorAll('select, input').forEach(input => {
+            input.value = '';
+        });
+        
+        // Add remove button
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn btn-sm btn-outline-danger mt-2';
+        removeBtn.innerHTML = '<i class="fas fa-trash"></i> Remove';
+        removeBtn.addEventListener('click', function() {
+            newDocumentItem.remove();
+        });
+        
+        newDocumentItem.appendChild(removeBtn);
+        documentSection.appendChild(newDocumentItem);
+    });
+    
+    // File validation for document uploads
+    document.addEventListener('change', function(e) {
+        if (e.target.name === 'document_files[]') {
+            const file = e.target.files[0];
+            if (file) {
+                // Check file size (10MB limit)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File size must be less than 10MB');
+                    e.target.value = '';
+                    return;
+                }
+                
+                // Auto-fill document name if empty
+                const documentNameField = e.target.closest('.document-upload-item').querySelector('input[name="document_names[]"]');
+                if (!documentNameField.value) {
+                    documentNameField.value = file.name.replace(/\.[^/.]+$/, "");
+                }
+            }
+        }
+    });
+});
+</script>
+
+<style>
+.subject-row:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subject-row.selected {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-left: 4px solid #667eea;
+}
+
+.subject-row.selected h6 {
+    color: #667eea;
+    font-weight: 600;
+}
+
+.form-check-input:checked {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+</style>
 @endsection

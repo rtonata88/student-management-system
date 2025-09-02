@@ -65,15 +65,17 @@ class LoginController extends Controller
         //login in with username and username as password
         if(env('APP_ENV') == 'local')
         {   
-            if($user = User::where('username', $username)->first())
+            // Check if login is email or username
+            $field = filter_var($username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+            if($user = User::where($field, $username)->first())
             {
                 $user->password = bcrypt('Ndeya@321');
                 $user->save();
             }
-            if(Auth::attempt(['username' => $username, 'password' => 'Ndeya@321' ]))
+            if(Auth::attempt([$field => $username, 'password' => 'Ndeya@321' ]))
             {   
-                // staff Authentication passed...
-                return redirect('/welcome');
+                // Authentication passed - redirect based on user type
+                return $this->redirectBasedOnUserType();
             }
         }
         //FOR LOCAL TESTING PURPOSES ONLY
@@ -123,10 +125,13 @@ class LoginController extends Controller
      */
     protected function credentials(Request $request)
     {
-        $credentials = $request->only($this->username(), 'password');
+        $login = $request->input($this->username());
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         
-        // Customization: validate if user status is active (1)
-        return $credentials;
+        return [
+            $field => $login,
+            'password' => $request->password,
+        ];
     }
     /**
      * Get the failed login response instance.
@@ -144,5 +149,35 @@ class LoginController extends Controller
         return redirect()->back()
         ->withInput($request->only($this->username(), 'remember'))
         ->withErrors($errors);
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        return $this->redirectBasedOnUserType();
+    }
+
+    /**
+     * Redirect user based on their user type after successful login
+     */
+    protected function redirectBasedOnUserType()
+    {
+        $user = Auth::user();
+        
+        switch ($user->user_type) {
+            case 'student':
+                return redirect()->route('student-portal.dashboard');
+            case 'parent':
+                return redirect()->route('parent-portal.dashboard');
+            case 'staff':
+            default:
+                return redirect('/welcome');
+        }
     }
 }

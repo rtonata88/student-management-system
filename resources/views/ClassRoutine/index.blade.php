@@ -146,31 +146,36 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="d-flex gap-2">
-                                                    @if(Auth::user()->hasPermission('view-class-routine'))
-                                                    <a href="{{ route('class-routine.show', $schedule->id) }}" 
-                                                       class="btn btn-sm btn-info" title="View">
-                                                        <i class="fa fa-eye"></i> View
-                                                    </a>
-                                                    @endif
-                                                    @if(Auth::user()->hasPermission('edit-class-routine'))
-                                                    <a href="{{ route('class-routine.edit', $schedule->id) }}" 
-                                                       class="btn btn-sm btn-warning" title="Edit">
-                                                        <i class="fa fa-edit"></i> Edit
-                                                    </a>
-                                                    @endif
-                                                    @if(Auth::user()->hasPermission('delete-class-routine'))
-                                                    <form method="POST" action="{{ route('class-routine.destroy', $schedule->id) }}" 
-                                                          style="display: inline;" 
-                                                          onsubmit="return confirm('Are you sure you want to delete this class schedule?\n\nSubject: {{ $schedule->subject_name }}\nTeacher: {{ $schedule->teacher_name }}\nDay: {{ $schedule->formatted_day }}\nTime: {{ $schedule->formatted_start_time }} - {{ $schedule->formatted_end_time }}\n\nThis action cannot be undone.')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger" title="Delete">
-                                                            <i class="fa fa-trash"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                    @endif
-                                                </div>
+                                                @if(Auth::user()->hasPermission('view-class-routine'))
+                                                <a href="{{ route('class-routine.show', $schedule->id) }}" 
+                                                   class="btn btn-sm" 
+                                                   style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem; margin-right: 8px;" 
+                                                   title="View">
+                                                    <i class="fa fa-eye"></i> View
+                                                </a>
+                                                @endif
+                                                @if(Auth::user()->hasPermission('edit-class-routine'))
+                                                <a href="{{ route('class-routine.edit', $schedule->id) }}" 
+                                                   class="btn btn-sm" 
+                                                   style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem; margin-right: 8px;" 
+                                                   title="Update">
+                                                    <i class="fa fa-edit"></i> Update
+                                                </a>
+                                                @endif
+                                                @if(Auth::user()->hasPermission('delete-class-routine'))
+                                                <form method="POST" action="{{ route('class-routine.destroy', $schedule->id) }}" 
+                                                      style="display: inline;" 
+                                                      onsubmit="return confirm('Are you sure you want to delete this class schedule?\n\nSubject: {{ $schedule->subject_name }}\nTeacher: {{ $schedule->teacher_name }}\nDay: {{ $schedule->formatted_day }}\nTime: {{ $schedule->formatted_start_time }} - {{ $schedule->formatted_end_time }}\n\nThis action cannot be undone.')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" 
+                                                            class="btn btn-sm" 
+                                                            style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;" 
+                                                            title="Delete">
+                                                        <i class="fa fa-trash"></i> Delete
+                                                    </button>
+                                                </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
