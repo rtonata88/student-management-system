@@ -102,8 +102,8 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Create Block</button>
-                            <a href="{{ route('hostel.administration.blocks') }}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">Create Block</button>
+                            <a href="{{ route('hostel.administration.blocks') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">Cancel</a>
                         </div>
                     </form>
                 </div>

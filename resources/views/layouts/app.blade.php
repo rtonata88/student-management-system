@@ -219,7 +219,9 @@
           @permission('credit-memos')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/credit-memos"><span class="c-sidebar-nav-icon"></span> Credit Memos</a></li>
           @endpermission
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/student-blocks"><span class="c-sidebar-nav-icon"></span> Student Blocks</a></li>
+          @permission('view-student-blocks')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/student-blocks"><span class="c-sidebar-nav-icon"></span> Student Block</a></li>
+          @endpermission
           @permission('payments')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payments"><span class="c-sidebar-nav-icon"></span> Manual Payments</a></li>
           @endpermission
@@ -229,7 +231,6 @@
           @permission('invoice')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoices"><span class="c-sidebar-nav-icon"></span> Student Statement</a></li>
           @endpermission
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/block-exceptions"><span class="c-sidebar-nav-icon"></span> Block Exceptions</a></li>
         </ul>
       </li>
       @endpermission
@@ -249,9 +250,6 @@
           @endpermission
           @permission('fleet-trips-view')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.trips') }}"><span class="c-sidebar-nav-icon"></span> Trip Logs</a></li>
-          @endpermission
-          @permission('fleet-fuel-view')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.fuel') }}"><span class="c-sidebar-nav-icon"></span> Fuel Records</a></li>
           @endpermission
           @permission('fleet-services-view')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('fleet.services') }}"><span class="c-sidebar-nav-icon"></span> Vehicle Services</a></li>

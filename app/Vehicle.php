@@ -18,6 +18,7 @@ class Vehicle extends Model
         'seating_capacity',
         'fuel_capacity',
         'fuel_type',
+        'current_odometer',
         'status',
         'purchase_date',
         'purchase_price',
@@ -84,8 +85,17 @@ class Vehicle extends Model
     public function currentDriver()
     {
         return $this->hasOne(VehicleAssignment::class)
-                    ->whereNull('unassigned_date')
-                    ->where('is_primary', true)
+                    ->where(function($query) {
+                        $query->where('status', 'active')
+                              ->orWhere(function($q) {
+                                  $q->whereNull('status')
+                                    ->whereNull('unassigned_date');
+                              });
+                    })
+                    ->where(function($query) {
+                        $query->where('assignment_type', 'primary')
+                              ->orWhere('is_primary', true);
+                    })
                     ->with('driver');
     }
 

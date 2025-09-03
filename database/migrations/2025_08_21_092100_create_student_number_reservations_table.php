@@ -13,16 +13,17 @@ class CreateStudentNumberReservationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_number_reservations', function (Blueprint $table) {
-            $table->id();
-            $table->string('student_number')->unique();
-            $table->string('session_id');
-            $table->timestamp('reserved_at');
-            $table->timestamp('expires_at');
-            $table->timestamps();
-            
-            $table->index(['expires_at']);
-        });
+        if (!Schema::hasTable('student_number_reservations')) {
+            Schema::create('student_number_reservations', function (Blueprint $table) {
+                $table->id();
+                $table->string('student_number');
+                $table->string('session_id');
+                $table->timestamp('reserved_at');
+                $table->timestamp('expires_at');
+                $table->timestamps();
+                $table->index(['expires_at']);
+            });
+        }
     }
 
     /**

@@ -11,7 +11,7 @@
                     </h3>
                     @permission('fleet-fuel-create')
                     <div class="card-tools">
-                        <a href="{{ route('fleet.fuel.create') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('fleet.fuel.create') }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                             <i class="fas fa-plus"></i> Add Fuel Record
                         </a>
                     </div>
@@ -52,22 +52,22 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             @permission('fleet-fuel-view')
-                                            <a href="{{ route('fleet.fuel.show', $record->id) }}" class="btn btn-info btn-sm" title="View">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
+                                            <a href="{{ route('fleet.fuel.show', $record) }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
                                             @endpermission
                                             @permission('fleet-fuel-edit')
-                                            <a href="{{ route('fleet.fuel.edit', $record->id) }}" class="btn btn-warning btn-sm" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                            <a href="{{ route('fleet.fuel.edit', $record) }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
                                             @endpermission
                                             @permission('fleet-fuel-delete')
                                             <form action="{{ route('fleet.fuel.destroy', $record->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                <button type="submit" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;" onclick="return confirm('Are you sure?')">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
                                             </form>
                                             @endpermission
                                         </div>
@@ -80,7 +80,7 @@
                                             <i class="fas fa-gas-pump fa-3x text-muted mb-3"></i>
                                             <h5 class="text-muted">No fuel records found</h5>
                                             @permission('fleet-fuel-create')
-                                            <a href="{{ route('fleet.fuel.create') }}" class="btn btn-primary">
+                                            <a href="{{ route('fleet.fuel.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                                 <i class="fas fa-plus"></i> Add First Fuel Record
                                             </a>
                                             @endpermission

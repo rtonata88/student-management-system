@@ -157,6 +157,11 @@
                                             return 'CAPTURED PAYMENTS MANAGEMENT';
                                         }
                                         
+                                        // Group student block permissions
+                                        if (in_array($permission->name, ['view-student-blocks', 'create-student-blocks', 'edit-student-blocks', 'delete-student-blocks', 'block-students', 'unblock-students', 'bulk-block-students', 'bulk-unblock-students', 'manage-block-exceptions', 'view-block-history', 'export-student-blocks'])) {
+                                            return 'STUDENT BLOCK MANAGEMENT';
+                                        }
+                                        
                                         // Group reports
                                         if (in_array($permission->name, [
                                             // Existing reports

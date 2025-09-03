@@ -10,13 +10,24 @@
                         <i class="fas fa-user-plus"></i> Add New Driver
                     </h3>
                     <div class="card-tools">
-                        <a href="{{ route('fleet.drivers') }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('fleet.drivers') }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                             <i class="fas fa-arrow-left"></i> Back to Drivers
                         </a>
                     </div>
                 </div>
                 <form action="{{ route('fleet.drivers.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    
                     <div class="card-body">
                         <div class="row">
                             <!-- Personal Information -->
@@ -192,10 +203,10 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                             <i class="fas fa-save"></i> Save Driver
                         </button>
-                        <a href="{{ route('fleet.drivers') }}" class="btn btn-secondary">
+                        <a href="{{ route('fleet.drivers') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                             <i class="fas fa-times"></i> Cancel
                         </a>
                     </div>

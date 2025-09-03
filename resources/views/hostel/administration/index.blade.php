@@ -81,43 +81,43 @@
                         <div class="col-12">
                             <h5>Quick Actions</h5>
                             <div class="btn-group-vertical btn-group-lg d-block d-md-none" role="group">
-                                <a href="{{ route('hostel.administration.hostels') }}" class="btn btn-outline-primary mb-2">
+                                <a href="{{ route('hostel.administration.hostels') }}" class="btn mb-2" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-building"></i> Manage Hostels
                                 </a>
-                                <a href="{{ route('hostel.administration.blocks') }}" class="btn btn-outline-success mb-2">
+                                <a href="{{ route('hostel.administration.blocks') }}" class="btn mb-2" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-th-large"></i> Manage Blocks
                                 </a>
-                                <a href="{{ route('hostel.administration.rooms') }}" class="btn btn-outline-info mb-2">
+                                <a href="{{ route('hostel.administration.rooms') }}" class="btn mb-2" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-door-open"></i> Manage Rooms
                                 </a>
-                                <a href="{{ route('hostel.administration.allocations') }}" class="btn btn-outline-warning mb-2">
+                                <a href="{{ route('hostel.administration.allocations') }}" class="btn mb-2" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-users"></i> Student Allocations
                                 </a>
-                                <a href="{{ route('hostel.administration.payments') }}" class="btn btn-outline-secondary mb-2">
+                                <a href="{{ route('hostel.administration.payments') }}" class="btn mb-2" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-money-bill"></i> Payments
                                 </a>
-                                <a href="{{ route('hostel.administration.reports') }}" class="btn btn-outline-dark">
+                                <a href="{{ route('hostel.administration.reports') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-chart-bar"></i> Reports
                                 </a>
                             </div>
                             
                             <div class="btn-group d-none d-md-flex" role="group">
-                                <a href="{{ route('hostel.administration.hostels') }}" class="btn btn-outline-primary">
+                                <a href="{{ route('hostel.administration.hostels') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-building"></i> Manage Hostels
                                 </a>
-                                <a href="{{ route('hostel.administration.blocks') }}" class="btn btn-outline-success">
+                                <a href="{{ route('hostel.administration.blocks') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-th-large"></i> Manage Blocks
                                 </a>
-                                <a href="{{ route('hostel.administration.rooms') }}" class="btn btn-outline-info">
+                                <a href="{{ route('hostel.administration.rooms') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-door-open"></i> Manage Rooms
                                 </a>
-                                <a href="{{ route('hostel.administration.allocations') }}" class="btn btn-outline-warning">
+                                <a href="{{ route('hostel.administration.allocations') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-users"></i> Student Allocations
                                 </a>
-                                <a href="{{ route('hostel.administration.payments') }}" class="btn btn-outline-secondary">
+                                <a href="{{ route('hostel.administration.payments') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-money-bill"></i> Payments
                                 </a>
-                                <a href="{{ route('hostel.administration.reports') }}" class="btn btn-outline-dark">
+                                <a href="{{ route('hostel.administration.reports') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                     <i class="fas fa-chart-bar"></i> Reports
                                 </a>
                             </div>

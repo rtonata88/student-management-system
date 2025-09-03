@@ -11,13 +11,41 @@
                     </h3>
                     @permission('fleet-trips-create')
                     <div class="card-tools">
-                        <a href="{{ route('fleet.trips.create') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('fleet.trips.create') }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                             <i class="fas fa-plus"></i> Log New Trip
                         </a>
                     </div>
                     @endpermission
                 </div>
                 <div class="card-body">
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    <!-- Search Form -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <form method="GET" action="{{ route('fleet.trips') }}" class="form-inline">
+                                <div class="input-group" style="width: 100%; max-width: 400px;">
+                                    <input type="text" name="search" class="form-control" placeholder="Search by vehicle, driver, destination..." value="{{ request('search') }}">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 0 6px 6px 0; padding: 0.375rem 0.75rem;">
+                                            <i class="fas fa-search"></i> Search
+                                        </button>
+                                    </div>
+                                </div>
+                                @if(request('search'))
+                                    <a href="{{ route('fleet.trips') }}" class="btn btn-outline-secondary ml-2" style="border-radius: 6px; padding: 0.375rem 0.75rem;">
+                                        <i class="fas fa-times"></i> Clear
+                                    </a>
+                                @endif
+                            </form>
+                        </div>
+                    </div>
+
                     <!-- Filters -->
                     <div class="row mb-3">
                         <div class="col-md-3">
@@ -32,7 +60,7 @@
                             <select class="form-control" id="driver-filter">
                                 <option value="">All Drivers</option>
                                 @foreach($drivers as $driver)
-                                    <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                    <option value="{{ $driver->id }}">{{ $driver->full_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -43,7 +71,7 @@
                             <input type="date" class="form-control" id="date-to" placeholder="To Date">
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-secondary btn-block" id="filter-btn">
+                            <button type="button" class="btn btn-block" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;" id="filter-btn">
                                 <i class="fas fa-filter"></i> Filter
                             </button>
                         </div>
@@ -68,21 +96,41 @@
                                 @forelse($trips as $trip)
                                 <tr>
                                     <td>
-                                        <strong>{{ $trip->departure_date->format('M d, Y') }}</strong><br>
-                                        <small class="text-muted">{{ $trip->departure_time->format('H:i') }}</small>
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                @if($trip->departure_time)
+                                                    <strong>{{ \Carbon\Carbon::parse($trip->departure_time)->format('M d, Y') }}</strong>
+                                                    <small class="text-muted d-block">{{ \Carbon\Carbon::parse($trip->departure_time)->format('H:i') }}</small>
+                                                @else
+                                                    <span class="text-muted">Not set</span>
+                                                @endif
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
-                                        <strong>{{ $trip->vehicle->registration_number }}</strong><br>
-                                        <small class="text-muted">{{ $trip->vehicle->make }} {{ $trip->vehicle->model }}</small>
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <strong>{{ $trip->vehicle->registration_number }}</strong>
+                                                <small class="text-muted d-block">{{ $trip->vehicle->make }} {{ $trip->vehicle->model }}</small>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
-                                        <strong>{{ $trip->driver->name }}</strong><br>
-                                        <small class="text-muted">{{ $trip->driver->employee_id }}</small>
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <strong>{{ $trip->driver->full_name }}</strong>
+                                                <small class="text-muted d-block">{{ $trip->driver->employee_number }}</small>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
-                                        <strong>{{ $trip->origin }}</strong><br>
-                                        <i class="fas fa-arrow-down text-muted"></i><br>
-                                        <strong>{{ $trip->destination }}</strong>
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <strong>{{ $trip->origin ?: 'Start' }}</strong>
+                                                <i class="fas fa-arrow-right text-muted mx-1"></i>
+                                                <strong>{{ $trip->destination }}</strong>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
                                         @if($trip->distance_km)
@@ -92,10 +140,10 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($trip->arrival_date && $trip->arrival_time)
+                                        @if($trip->arrival_time && $trip->departure_time)
                                             @php
-                                                $departure = \Carbon\Carbon::parse($trip->departure_date->format('Y-m-d') . ' ' . $trip->departure_time->format('H:i:s'));
-                                                $arrival = \Carbon\Carbon::parse($trip->arrival_date->format('Y-m-d') . ' ' . $trip->arrival_time->format('H:i:s'));
+                                                $departure = \Carbon\Carbon::parse($trip->departure_time);
+                                                $arrival = \Carbon\Carbon::parse($trip->arrival_time);
                                                 $duration = $departure->diffInMinutes($arrival);
                                             @endphp
                                             <span class="badge badge-success">
@@ -106,37 +154,37 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($trip->fuel_consumed)
-                                            <span class="badge badge-primary">{{ number_format($trip->fuel_consumed, 1) }}L</span>
+                                        @if($trip->fuel_liters)
+                                            <span class="badge badge-primary">{{ number_format($trip->fuel_liters, 1) }}L</span>
                                         @else
                                             <span class="badge badge-secondary">Not Set</span>
                                         @endif
                                     </td>
                                     <td>
-                                        @if($trip->arrival_date && $trip->arrival_time)
+                                        @if($trip->arrival_time)
                                             <span class="badge badge-success">Completed</span>
                                         @else
                                             <span class="badge badge-warning">In Progress</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="btn-group" role="group">
+                                        <div class="d-flex gap-2">
                                             @permission('fleet-trips-view')
-                                            <a href="{{ route('fleet.trips.show', $trip->id) }}" class="btn btn-info btn-sm" title="View">
-                                                <i class="fas fa-eye"></i>
+                                            <a href="{{ route('fleet.trips.show', $trip) }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;" title="View">
+                                                <i class="fas fa-eye"></i> View
                                             </a>
                                             @endpermission
                                             @permission('fleet-trips-edit')
-                                            <a href="{{ route('fleet.trips.edit', $trip->id) }}" class="btn btn-warning btn-sm" title="Edit">
-                                                <i class="fas fa-edit"></i>
+                                            <a href="{{ route('fleet.trips.edit', $trip) }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;" title="Edit">
+                                                <i class="fas fa-edit"></i> Edit
                                             </a>
                                             @endpermission
                                             @permission('fleet-trips-delete')
-                                            <form action="{{ route('fleet.trips.destroy', $trip->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this trip log?')">
+                                            <form action="{{ route('fleet.trips.destroy', $trip->id) }}" method="POST" style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete">
-                                                    <i class="fas fa-trash"></i>
+                                                <button type="submit" class="btn btn-sm" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;" title="Delete" onclick="return confirm('Are you sure you want to delete this trip log?')">
+                                                    <i class="fas fa-trash"></i> Delete
                                                 </button>
                                             </form>
                                             @endpermission
@@ -150,7 +198,7 @@
                                             <i class="fas fa-route fa-3x text-muted mb-3"></i>
                                             <h5 class="text-muted">No trip logs found</h5>
                                             @permission('fleet-trips-create')
-                                            <a href="{{ route('fleet.trips.create') }}" class="btn btn-primary">
+                                            <a href="{{ route('fleet.trips.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                                 <i class="fas fa-plus"></i> Log First Trip
                                             </a>
                                             @endpermission
@@ -163,8 +211,15 @@
                     </div>
 
                     @if($trips->hasPages())
-                    <div class="d-flex justify-content-center">
-                        {{ $trips->links() }}
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <small class="text-muted">
+                                Showing {{ $trips->firstItem() }} to {{ $trips->lastItem() }} of {{ $trips->total() }} trips
+                            </small>
+                        </div>
+                        <div>
+                            {{ $trips->appends(request()->query())->links() }}
+                        </div>
                     </div>
                     @endif
                 </div>

@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Manage Hostels</h4>
-                    <a href="{{ route('hostel.administration.hostels.create') }}" class="btn btn-primary">
+                    <a href="{{ route('hostel.administration.hostels.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                         <i class="fas fa-plus"></i> Add New Hostel
                     </a>
                 </div>
@@ -62,16 +62,16 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             <a href="{{ route('hostel.administration.hostels.edit', $hostel) }}" 
-                                               class="btn btn-sm btn-outline-primary" title="Edit">
-                                                <i class="fas fa-edit"></i>
+                                               class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem; margin-right: 2px;" title="Edit">
+                                                <i class="fas fa-edit"></i> Edit
                                             </a>
                                             <a href="{{ route('hostel.administration.blocks', $hostel->id) }}" 
-                                               class="btn btn-sm btn-outline-success" title="View Blocks">
-                                                <i class="fas fa-th-large"></i>
+                                               class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem; margin-right: 2px;" title="View Blocks">
+                                                <i class="fas fa-th-large"></i> Blocks
                                             </a>
                                             <a href="{{ route('hostel.administration.rooms', ['blockId' => null]) }}?hostel={{ $hostel->id }}" 
-                                               class="btn btn-sm btn-outline-info" title="View Rooms">
-                                                <i class="fas fa-door-open"></i>
+                                               class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;" title="View Rooms">
+                                                <i class="fas fa-door-open"></i> Rooms
                                             </a>
                                         </div>
                                     </td>

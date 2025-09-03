@@ -13,19 +13,28 @@ class TripLog extends Model
         'trip_purpose',
         'destination',
         'departure_time',
+        'expected_return_time',
         'arrival_time',
         'odometer_start',
         'odometer_end',
         'distance_km',
-        'fuel_consumed',
-        'passengers_count',
-        'route_taken',
-        'remarks',
+        'fuel_type',
+        'fuel_liters',
+        'price_per_liter',
+        'total_fuel_cost',
+        'fuel_station',
+        'fuel_town_city',
+        'receipt_number',
+        'passenger_count',
+        'fuel_filled_up',
+        'fuel_receipt_path',
+        'notes',
         'status'
     ];
 
     protected $dates = [
         'departure_time',
+        'expected_return_time',
         'arrival_time'
     ];
 

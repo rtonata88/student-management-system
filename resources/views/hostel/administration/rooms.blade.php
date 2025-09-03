@@ -18,7 +18,7 @@
                             @endforeach
                         </select>
                         @endif
-                        <a href="{{ route('hostel.administration.rooms.create') }}" class="btn btn-primary">
+                        <a href="{{ route('hostel.administration.rooms.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                             <i class="fas fa-plus"></i> Add New Room
                         </a>
                     </div>
@@ -81,12 +81,12 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <button class="btn btn-sm btn-outline-primary" title="Edit">
-                                                <i class="fas fa-edit"></i>
+                                            <button class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem; margin-right: 2px;" title="Edit">
+                                                <i class="fas fa-edit"></i> Edit
                                             </button>
                                             <a href="{{ route('hostel.administration.beds', $room->id) }}" 
-                                               class="btn btn-sm btn-outline-success" title="View Beds">
-                                                <i class="fas fa-bed"></i>
+                                               class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;" title="View Beds">
+                                                <i class="fas fa-bed"></i> Beds
                                             </a>
                                         </div>
                                     </td>

@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Student Allocations</h4>
-                    <a href="{{ route('hostel.administration.allocations.create') }}" class="btn btn-primary">
+                    <a href="{{ route('hostel.administration.allocations.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                         <i class="fas fa-plus"></i> Allocate Student
                     </a>
                 </div>
@@ -63,12 +63,12 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <button class="btn btn-sm btn-outline-info" title="View Details">
-                                                <i class="fas fa-eye"></i>
+                                            <button class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem; margin-right: 2px;" title="View Details">
+                                                <i class="fas fa-eye"></i> View
                                             </button>
                                             @if($allocation->status == 'active')
-                                            <button class="btn btn-sm btn-outline-warning" title="Check Out">
-                                                <i class="fas fa-sign-out-alt"></i>
+                                            <button class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;" title="Check Out">
+                                                <i class="fas fa-sign-out-alt"></i> Check Out
                                             </button>
                                             @endif
                                         </div>

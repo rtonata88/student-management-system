@@ -21,7 +21,7 @@
                                 <div class="card-body">
                                     <p class="card-text">View vehicle usage statistics, mileage reports, and utilization rates.</p>
                                     @permission('fleet-reports-view')
-                                    <a href="{{ route('fleet.reports.vehicle-utilization') }}" class="btn btn-primary btn-block">
+                                    <a href="{{ route('fleet.reports.vehicle-utilization') }}" class="btn btn-block" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                         <i class="fas fa-eye"></i> View Report
                                     </a>
                                     @endpermission
@@ -38,7 +38,7 @@
                                 <div class="card-body">
                                     <p class="card-text">Analyze fuel consumption patterns, costs, and efficiency metrics.</p>
                                     @permission('fleet-reports-view')
-                                    <a href="{{ route('fleet.reports.fuel-consumption') }}" class="btn btn-success btn-block">
+                                    <a href="{{ route('fleet.reports.fuel-consumption') }}" class="btn btn-block" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                         <i class="fas fa-eye"></i> View Report
                                     </a>
                                     @endpermission
@@ -55,7 +55,7 @@
                                 <div class="card-body">
                                     <p class="card-text">Track maintenance schedules, costs, and upcoming service requirements.</p>
                                     @permission('fleet-reports-view')
-                                    <a href="{{ route('fleet.reports.maintenance') }}" class="btn btn-warning btn-block">
+                                    <a href="{{ route('fleet.reports.maintenance') }}" class="btn btn-block" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                         <i class="fas fa-eye"></i> View Report
                                     </a>
                                     @endpermission
@@ -72,7 +72,7 @@
                                 <div class="card-body">
                                     <p class="card-text">Evaluate driver performance, trip statistics, and safety records.</p>
                                     @permission('fleet-reports-view')
-                                    <a href="{{ route('fleet.reports.driver-performance') }}" class="btn btn-info btn-block">
+                                    <a href="{{ route('fleet.reports.driver-performance') }}" class="btn btn-block" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                         <i class="fas fa-eye"></i> View Report
                                     </a>
                                     @endpermission
@@ -89,7 +89,7 @@
                                 <div class="card-body">
                                     <p class="card-text">Comprehensive cost breakdown including fuel, maintenance, and operations.</p>
                                     @permission('fleet-reports-view')
-                                    <a href="{{ route('fleet.reports.cost-analysis') }}" class="btn btn-danger btn-block">
+                                    <a href="{{ route('fleet.reports.cost-analysis') }}" class="btn btn-block" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                         <i class="fas fa-eye"></i> View Report
                                     </a>
                                     @endpermission
@@ -106,7 +106,7 @@
                                 <div class="card-body">
                                     <p class="card-text">Detailed trip logs, routes, distances, and time analysis.</p>
                                     @permission('fleet-reports-view')
-                                    <a href="{{ route('fleet.reports.trip-summary') }}" class="btn btn-secondary btn-block">
+                                    <a href="{{ route('fleet.reports.trip-summary') }}" class="btn btn-block" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                         <i class="fas fa-eye"></i> View Report
                                     </a>
                                     @endpermission
@@ -121,38 +121,38 @@
                             <h5><i class="fas fa-tachometer-alt"></i> Quick Statistics</h5>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <div class="info-box bg-primary">
-                                        <span class="info-box-icon"><i class="fas fa-car"></i></span>
+                                    <div class="info-box" style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); color: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                        <span class="info-box-icon" style="color: white; opacity: 0.9;"><i class="fas fa-car"></i></span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">Total Vehicles</span>
-                                            <span class="info-box-number">{{ $totalVehicles }}</span>
+                                            <span class="info-box-text" style="color: white; font-weight: 500;">Total Vehicles</span>
+                                            <span class="info-box-number" style="color: white; font-size: 2rem; font-weight: bold;">{{ $totalVehicles }}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="info-box bg-success">
-                                        <span class="info-box-icon"><i class="fas fa-route"></i></span>
+                                    <div class="info-box" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); color: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                        <span class="info-box-icon" style="color: white; opacity: 0.9;"><i class="fas fa-route"></i></span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">Total Trips</span>
-                                            <span class="info-box-number">{{ $totalTrips }}</span>
+                                            <span class="info-box-text" style="color: white; font-weight: 500;">Total Trips</span>
+                                            <span class="info-box-number" style="color: white; font-size: 2rem; font-weight: bold;">{{ $totalTrips }}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="info-box bg-warning">
-                                        <span class="info-box-icon"><i class="fas fa-gas-pump"></i></span>
+                                    <div class="info-box" style="background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%); color: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                        <span class="info-box-icon" style="color: white; opacity: 0.9;"><i class="fas fa-gas-pump"></i></span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">Fuel Cost (MTD)</span>
-                                            <span class="info-box-number">${{ number_format($monthlyFuelCost, 0) }}</span>
+                                            <span class="info-box-text" style="color: white; font-weight: 500;">Fuel Cost (MTD)</span>
+                                            <span class="info-box-number" style="color: white; font-size: 2rem; font-weight: bold;">${{ number_format($monthlyFuelCost, 0) }}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="info-box bg-danger">
-                                        <span class="info-box-icon"><i class="fas fa-wrench"></i></span>
+                                    <div class="info-box" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                        <span class="info-box-icon" style="color: white; opacity: 0.9;"><i class="fas fa-wrench"></i></span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">Pending Services</span>
-                                            <span class="info-box-number">{{ $pendingServices }}</span>
+                                            <span class="info-box-text" style="color: white; font-weight: 500;">Pending Services</span>
+                                            <span class="info-box-number" style="color: white; font-size: 2rem; font-weight: bold;">{{ $pendingServices }}</span>
                                         </div>
                                     </div>
                                 </div>

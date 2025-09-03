@@ -21,7 +21,9 @@ class Driver extends Model
         'address',
         'date_of_birth',
         'emergency_contact_name',
-        'emergency_contact_phone'
+        'emergency_contact_phone',
+        'notes',
+        'photo'
     ];
 
     protected $dates = [
@@ -78,7 +80,15 @@ class Driver extends Model
      */
     public function getFullNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return trim($this->first_name . ' ' . $this->last_name);
+    }
+
+    /**
+     * Get name attribute (alias for full_name)
+     */
+    public function getNameAttribute()
+    {
+        return $this->getFullNameAttribute();
     }
 
     /**

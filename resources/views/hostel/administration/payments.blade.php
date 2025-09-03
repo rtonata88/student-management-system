@@ -8,10 +8,10 @@
                 <div class="card-header">
                     <h4 class="card-title">Hostel Payments</h4>
                     <div class="card-tools">
-                        <a href="{{ route('hostel.administration.payments.create') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('hostel.administration.payments.create') }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem; margin-right: 5px;">
                             <i class="fas fa-plus"></i> Record Payment
                         </a>
-                        <a href="{{ route('hostel.administration.index') }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('hostel.administration.index') }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;">
                             <i class="fas fa-arrow-left"></i> Back to Dashboard
                         </a>
                     </div>
@@ -80,12 +80,12 @@
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-info btn-sm" title="View Details" onclick="viewPayment({{ $payment->id }})">
-                                                    <i class="fas fa-eye"></i>
+                                                <button class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem; margin-right: 2px;" title="View Details" onclick="viewPayment({{ $payment->id }})">
+                                                    <i class="fas fa-eye"></i> View
                                                 </button>
                                                 @if($payment->status == 'pending')
-                                                <button class="btn btn-success btn-sm" title="Record Payment" onclick="recordPayment({{ $payment->id }})">
-                                                    <i class="fas fa-check"></i>
+                                                <button class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;" title="Record Payment" onclick="recordPayment({{ $payment->id }})">
+                                                    <i class="fas fa-check"></i> Record
                                                 </button>
                                                 @endif
                                             </div>
@@ -148,8 +148,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success">Record Payment</button>
+                    <button type="button" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem; margin-right: 5px;" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">Record Payment</button>
                 </div>
             </form>
         </div>

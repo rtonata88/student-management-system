@@ -8,7 +8,7 @@
                 <div class="card-header">
                     <h4 class="card-title">Record New Payment</h4>
                     <div class="card-tools">
-                        <a href="{{ route('hostel.administration.payments') }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('hostel.administration.payments') }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;">
                             <i class="fas fa-arrow-left"></i> Back to Payments
                         </a>
                     </div>
@@ -19,7 +19,7 @@
                             <h5><i class="icon fas fa-exclamation-triangle"></i> No Active Allocations</h5>
                             There are currently no active student allocations. You need to allocate students to hostel rooms first before recording payments.
                             <br><br>
-                            <a href="{{ route('hostel.administration.allocations.create') }}" class="btn btn-primary">
+                            <a href="{{ route('hostel.administration.allocations.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                 <i class="fas fa-plus"></i> Allocate Student to Room
                             </a>
                         </div>
@@ -142,8 +142,8 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Record Payment</button>
-                            <a href="{{ route('hostel.administration.payments') }}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">Record Payment</button>
+                            <a href="{{ route('hostel.administration.payments') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">Cancel</a>
                         </div>
                     </form>
                 </div>

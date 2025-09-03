@@ -9,7 +9,7 @@ class VehicleService extends Model
     protected $fillable = [
         'vehicle_id',
         'service_type',
-        'service_description',
+        'description',
         'service_date',
         'odometer_reading',
         'cost',

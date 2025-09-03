@@ -109,6 +109,34 @@ Route::middleware(['auth', 'permission:export-captured-payments'])->group(functi
     Route::post('/captured-payments/export', 'CapturedPaymentsController@export')->name('captured-payments.export');
 });
 
+// Student Block Routes - Protected with permissions
+Route::middleware(['auth', 'permission:view-student-blocks'])->group(function () {
+    Route::get('/student-blocks', 'StudentBlockController@index')->name('student-blocks.index');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/student-blocks/create', 'StudentBlockController@create')->name('student-blocks.create');
+    Route::post('/student-blocks', 'StudentBlockController@store')->name('student-blocks.store');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/student-blocks/bulk-block', 'StudentBlockController@bulkBlock')->name('student-blocks.bulk-block');
+    Route::post('student-blocks/bulk-block/process', 'StudentBlockController@processBulkBlock')->name('student-blocks.bulk-block.process');
+    Route::post('student-blocks/bulk-unblock/process', 'StudentBlockController@processBulkUnblock')->name('student-blocks.bulk-unblock.process');
+});
+
+Route::middleware(['auth', 'permission:unblock-students'])->group(function () {
+    Route::patch('/student-blocks/{id}/unblock', 'StudentBlockController@unblockStudent')->name('student-blocks.unblock');
+});
+
+Route::middleware(['auth', 'permission:manage-block-exceptions'])->group(function () {
+    Route::patch('/student-blocks/{id}/toggle-exception', 'StudentBlockController@toggleException')->name('student-blocks.toggle-exception');
+});
+
+Route::middleware(['auth', 'permission:delete-student-blocks'])->group(function () {
+    Route::delete('/student-blocks/{id}', 'StudentBlockController@destroy')->name('student-blocks.destroy');
+});
+
 Route::resource('/debit-memos', 'DebitMemoController');
 Route::post('/debit-memos/filter', 'DebitMemoController@filter')->name('debit-memos.filter');
 
@@ -487,6 +515,7 @@ Route::prefix('fleet-management')->name('fleet.')->middleware('permission:fleet-
     Route::get('/drivers', 'FleetManagementController@drivers')->name('drivers');
     Route::get('/drivers/create', 'FleetManagementController@createDriver')->name('drivers.create');
     Route::post('/drivers', 'FleetManagementController@storeDriver')->name('drivers.store');
+    Route::get('/drivers/{driver}', 'FleetManagementController@showDriver')->name('drivers.show');
     Route::get('/drivers/{driver}/edit', 'FleetManagementController@editDriver')->name('drivers.edit');
     Route::put('/drivers/{driver}', 'FleetManagementController@updateDriver')->name('drivers.update');
     Route::delete('/drivers/{driver}', 'FleetManagementController@destroyDriver')->name('drivers.destroy');
@@ -495,6 +524,10 @@ Route::prefix('fleet-management')->name('fleet.')->middleware('permission:fleet-
     Route::get('/trips', 'FleetManagementController@trips')->name('trips');
     Route::get('/trips/create', 'FleetManagementController@createTrip')->name('trips.create');
     Route::post('/trips', 'FleetManagementController@storeTrip')->name('trips.store');
+    Route::get('/trips/{trip}', 'FleetManagementController@showTrip')->name('trips.show');
+    Route::get('/trips/{trip}/edit', 'FleetManagementController@editTrip')->name('trips.edit');
+    Route::put('/trips/{trip}', 'FleetManagementController@updateTrip')->name('trips.update');
+    Route::delete('/trips/{trip}', 'FleetManagementController@destroyTrip')->name('trips.destroy');
     
     // Fuel Management
     Route::get('/fuel', 'FleetManagementController@fuel')->name('fuel');
@@ -505,11 +538,19 @@ Route::prefix('fleet-management')->name('fleet.')->middleware('permission:fleet-
     Route::get('/services', 'FleetManagementController@services')->name('services');
     Route::get('/services/create', 'FleetManagementController@createService')->name('services.create');
     Route::post('/services', 'FleetManagementController@storeService')->name('services.store');
+    Route::get('/services/{service}', 'FleetManagementController@showService')->name('services.show');
+    Route::get('/services/{service}/edit', 'FleetManagementController@editService')->name('services.edit');
+    Route::put('/services/{service}', 'FleetManagementController@updateService')->name('services.update');
+    Route::delete('/services/{service}', 'FleetManagementController@destroyService')->name('services.destroy');
     
     // Vehicle Assignments
     Route::get('/assignments', 'FleetManagementController@assignments')->name('assignments');
     Route::get('/assignments/create', 'FleetManagementController@createAssignment')->name('assignments.create');
     Route::post('/assignments', 'FleetManagementController@storeAssignment')->name('assignments.store');
+    Route::get('/assignments/{assignment}', 'FleetManagementController@showAssignment')->name('assignments.show');
+    Route::get('/assignments/{assignment}/edit', 'FleetManagementController@editAssignment')->name('assignments.edit');
+    Route::put('/assignments/{assignment}', 'FleetManagementController@updateAssignment')->name('assignments.update');
+    Route::delete('/assignments/{assignment}', 'FleetManagementController@destroyAssignment')->name('assignments.destroy');
     
     // Reports
     Route::get('/reports', 'FleetManagementController@reports')->name('reports');
