@@ -152,7 +152,9 @@
           @permission('view-module-allocations')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('module-allocations.index') }}"><span class="c-sidebar-nav-icon"></span> Module Allocation</a></li>
           @endpermission
+          @permission('view-marks-suppression')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/marks-suppression"><span class="c-sidebar-nav-icon"></span> Marks Suppression</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/examination-schedule"><span class="c-sidebar-nav-icon"></span> Examination Schedule</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/process-final-marks"><span class="c-sidebar-nav-icon"></span> Process Final Marks</a></li>
         </ul>
@@ -208,8 +210,8 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-dollar')}}"></use>
           </svg> Student Debtors</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          @permission('payments')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payments"><span class="c-sidebar-nav-icon"></span> Payments</a></li>
+          @permission('view-cashier')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/cashier"><span class="c-sidebar-nav-icon"></span> Cashier</a></li>
           @endpermission
           @permission('debit-memos')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/debit-memos"><span class="c-sidebar-nav-icon"></span> Debit Memos</a></li>
@@ -218,6 +220,12 @@
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/credit-memos"><span class="c-sidebar-nav-icon"></span> Credit Memos</a></li>
           @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/student-blocks"><span class="c-sidebar-nav-icon"></span> Student Blocks</a></li>
+          @permission('payments')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payments"><span class="c-sidebar-nav-icon"></span> Manual Payments</a></li>
+          @endpermission
+          @permission('view-captured-payments')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/captured-payments"><span class="c-sidebar-nav-icon"></span> Captured Payments</a></li>
+          @endpermission
           @permission('invoice')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/invoices"><span class="c-sidebar-nav-icon"></span> Student Statement</a></li>
           @endpermission

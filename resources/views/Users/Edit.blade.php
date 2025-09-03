@@ -27,13 +27,19 @@
                 {!! Form::model($user, array('route'=>array('users.update', $user->id), 'autocomplete'=>"none", 'class'=>'form-vertical form-material', 'method'=>'PATCH')) !!}
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             {{Form::label('name', 'Full Names')}}
                             {{Form::text('name', $user->name, ['class' => 'form-control', 'required'])}}
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            {{Form::label('username', 'Username')}}
+                            {{Form::text('username', $user->username, ['class' => 'form-control', 'required'])}}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="form-group">
                             {{Form::label('email', 'Email')}}
                             {{Form::text('email', $user->email, ['class' => 'form-control', 'required'])}}
@@ -139,6 +145,16 @@
                                         // Group finance related permissions
                                         if (in_array($permission->name, ['invoice', 'print-invoice', 'payments', 'add-payment', 'debit-memos', 'add-debit-order', 'credit-memos', 'add-credit-memos'])) {
                                             return 'FINANCE OPERATIONS';
+                                        }
+                                        
+                                        // Group cashier related permissions
+                                        if (in_array($permission->name, ['view-cashier', 'access-cashier', 'process-cashier-payments', 'view-cashier-receipts', 'print-cashier-receipts', 'manage-cashier-operations'])) {
+                                            return 'CASHIER OPERATIONS';
+                                        }
+                                        
+                                        // Group captured payments permissions
+                                        if (in_array($permission->name, ['view-captured-payments', 'search-captured-payments', 'reprint-payment-receipts', 'export-captured-payments', 'manage-captured-payments', 'void-payments'])) {
+                                            return 'CAPTURED PAYMENTS MANAGEMENT';
                                         }
                                         
                                         // Group reports
@@ -369,6 +385,11 @@
                                         // Group student promotions permissions
                                         if (in_array($permission->name, ['view-student-promotions', 'create-student-promotions', 'edit-student-promotions', 'delete-student-promotions', 'promote-students', 'view-promotion-history', 'export-promotion-reports'])) {
                                             return 'STUDENT PROMOTIONS MANAGEMENT';
+                                        }
+                                        
+                                        // Group marks suppression permissions
+                                        if (in_array($permission->name, ['view-marks-suppression', 'create-marks-suppression', 'edit-marks-suppression', 'delete-marks-suppression', 'toggle-marks-suppression', 'manage-marks-suppression'])) {
+                                            return 'MARKS SUPPRESSION MANAGEMENT';
                                         }
                                         
                                         // Group setup permissions

@@ -27,7 +27,10 @@ class DebitMemoController extends Controller
     public function filter(Request $request)
     {
         if (isset($request->student_number)) {
-            $student = Student::where('student_number2', $request->student_number)->first();
+            $student = Student::where(function($query) use ($request) {
+                $query->where('student_number2', $request->student_number)
+                      ->orWhere('student_number', $request->student_number);
+            })->first();
             if ($student) {
                 return redirect()->route('debit-memos.edit', $student->id);
             }

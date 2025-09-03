@@ -3,8 +3,8 @@
 <div class="c-subheader px-3">
     <!-- Breadcrumb-->
     <ol class="breadcrumb border-0 m-0">
-        <li class="breadcrumb-item">Management</li>
-        <li class="breadcrumb-item active"><a href="/payments">Payments </a></li>
+        <li class="breadcrumb-item">Finance</li>
+        <li class="breadcrumb-item active"><a href="/cashier">Cashier</a></li>
         <!-- Breadcrumb Menu-->
     </ol>
 </div>
@@ -16,13 +16,13 @@
         <div class="search-card">
             <div class="search-header">
                 <h4 class="search-title">
-                    <i class="fas fa-credit-card me-2"></i>
-                    Find Student for Payment
+                    <i class="fas fa-cash-register me-2"></i>
+                    Cashier - Find Student for Payment
                 </h4>
                 <p class="search-subtitle">Search by student number or name to process payment</p>
             </div>
             
-            {!! Form::open(array('route' => array('payments.filter'), 'method' => 'post', 'class'=> 'search-form')) !!}
+            {!! Form::open(array('route' => array('cashier.search'), 'method' => 'post', 'class'=> 'search-form')) !!}
             
             <div class="search-fields">
                 <div class="search-field-group">
@@ -76,10 +76,22 @@
             {{ Session::get('message') }}
         </div>
         @endif
+        @if(Session::has('success'))
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ Session::get('success') }}
+        </div>
+        @endif
+        @if(Session::has('error'))
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ Session::get('error') }}
+        </div>
+        @endif
         @if(isset($students))
         <div class="card">
             <div class="card-header">
-                <strong> Select student </strong>
+                <strong> Select student for payment processing </strong>
             </div>
             <div class="card-body">
                 <table class="table table-responsive-sm table-bordered table-striped table-hover table-sm" style="width:100%">
@@ -91,11 +103,13 @@
                             <th>Surname</th>
                             <th>DOB</th>
                             <th>Centre</th>
+                            <th>Balance</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($students as $student)
-                        <tr style="cursor: pointer" onclick="window.location='{{route('payments.edit', $student->id)}}'">
+                        <tr>
                             <td>{{$student->student_number}}</td>
                             <td>{{$student->student_number2}}</td>
                             <td>{{$student->student_names}}</td>
@@ -107,6 +121,20 @@
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif
+                            </td>
+                            <td>
+                                @if($student->balance > 0)
+                                    <span class="text-danger fw-bold">N$ {{number_format($student->balance, 2)}}</span>
+                                @elseif($student->balance < 0)
+                                    <span class="text-success fw-bold">-N$ {{number_format(abs($student->balance), 2)}}</span>
+                                @else
+                                    <span class="text-muted">N$ 0.00</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{route('cashier.payment-form', $student->id)}}" class="btn btn-gradient-primary btn-sm">
+                                    <i class="fas fa-credit-card me-1"></i>Process Payment
+                                </a>
                             </td>
                         </tr>
                         @endforeach
@@ -145,10 +173,10 @@ function clearForm() {
 }
 
 .search-card {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 20px;
     padding: 0;
-    box-shadow: 0 20px 40px rgba(40, 167, 69, 0.15);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
     overflow: hidden;
 }
 
@@ -268,7 +296,7 @@ function clearForm() {
 
 .btn-search {
     background: rgba(255, 255, 255, 0.9);
-    color: #28a745;
+    color: #667eea;
 }
 
 .btn-search:hover {
@@ -287,6 +315,20 @@ function clearForm() {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
+}
+
+.btn-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient-primary:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    color: white;
 }
 
 @media (max-width: 768px) {

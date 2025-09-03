@@ -13,6 +13,8 @@ use App\Payment;
 use App\ExaminationSchedule;
 use App\ClassRoutine;
 use App\StudentPromotion;
+use App\MarksSuppression;
+use App\AcademicYear;
 use Illuminate\Support\Facades\Auth;
 
 class StudentPortalController extends Controller
@@ -153,10 +155,28 @@ class StudentPortalController extends Controller
         $user = Auth::user();
         $student = Student::where('user_id', $user->id)->first();
         
+        if (!$student) {
+            return view('student-portal.academics.ca-marks', ['caMarks' => collect(), 'suppressed' => false]);
+        }
+
+        // Check if CA marks are suppressed
+        $currentAcademicYear = AcademicYear::where('active', 1)->first();
+        $suppressed = false;
+        
+        if ($currentAcademicYear && $student->intake && $student->campus && $student->study_mode) {
+            $suppressed = MarksSuppression::isMarksSuppressed(
+                $currentAcademicYear->id,
+                $student->intake,
+                $student->campus,
+                'CA',
+                $student->study_mode
+            );
+        }
+        
         // Get CA marks from module registrations or assessment system
         $caMarks = collect(); // Placeholder - implement based on your assessment system
         
-        return view('student-portal.academics.ca-marks', compact('caMarks'));
+        return view('student-portal.academics.ca-marks', compact('caMarks', 'suppressed'));
     }
 
     public function examMarks()
@@ -164,10 +184,28 @@ class StudentPortalController extends Controller
         $user = Auth::user();
         $student = Student::where('user_id', $user->id)->first();
         
+        if (!$student) {
+            return view('student-portal.academics.exam-marks', ['examMarks' => collect(), 'suppressed' => false]);
+        }
+
+        // Check if Exam marks are suppressed
+        $currentAcademicYear = AcademicYear::where('active', 1)->first();
+        $suppressed = false;
+        
+        if ($currentAcademicYear && $student->intake && $student->campus && $student->study_mode) {
+            $suppressed = MarksSuppression::isMarksSuppressed(
+                $currentAcademicYear->id,
+                $student->intake,
+                $student->campus,
+                'Exam Marks',
+                $student->study_mode
+            );
+        }
+        
         // Get exam marks from assessment system
         $examMarks = collect(); // Placeholder - implement based on your assessment system
         
-        return view('student-portal.academics.exam-marks', compact('examMarks'));
+        return view('student-portal.academics.exam-marks', compact('examMarks', 'suppressed'));
     }
 
     public function classRoutine()

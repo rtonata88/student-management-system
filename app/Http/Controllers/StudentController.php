@@ -28,6 +28,7 @@ class StudentController extends Controller
         $students = Student::with('center')
             ->leftJoin('student_admissions', 'students.id', '=', 'student_admissions.student_id')
             ->select('students.*', 'student_admissions.admission_status')
+            ->orderBy('students.created_at', 'desc')
             ->paginate(50);
         
         return view('Management.Students.Index', compact('students'));

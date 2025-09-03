@@ -32,7 +32,10 @@ class PaymentController extends Controller
     public function filter(Request $request)
     {
         if (isset($request->student_number)) {
-            $student = Student::where('student_number2', $request->student_number)->first();
+            $student = Student::where(function($query) use ($request) {
+                $query->where('student_number2', $request->student_number)
+                      ->orWhere('student_number', $request->student_number);
+            })->first();
             if ($student) {
                 return redirect()->route('payments.show', $student->id);
             }
@@ -193,24 +196,26 @@ class PaymentController extends Controller
             ]);
         }
         
-        for ($i = 0; $i < count($request->fee_id); $i++) {
-            $extra_charge_id = $request->fee_id[$i];
-            
-            if (isset($request->other_fee[$extra_charge_id])) {
-                if($request->other_fee[$extra_charge_id] > 0){
-                    Invoice::create(
-                        [
-                            'student_id' => $request->student_id,
-                            'reference_number' => $request->receipt_number,
-                            'model' => "StudentExtraCharge",
-                            'model_id' => $extra_charge_id,
-                            'financial_year' => $request->academic_year,
-                            'transaction_date' => $request->payment_date,
-                            'line_description' => $request->fee_description[$extra_charge_id]." - Payment",
-                            'debit_amount' => 0,
-                            'credit_amount' => $request->other_fee[$extra_charge_id]
-                        ]
-                    );
+        if (is_array($request->fee_id)) {
+            for ($i = 0; $i < count($request->fee_id); $i++) {
+                $extra_charge_id = $request->fee_id[$i];
+                
+                if (isset($request->other_fee[$extra_charge_id])) {
+                    if($request->other_fee[$extra_charge_id] > 0){
+                        Invoice::create(
+                            [
+                                'student_id' => $request->student_id,
+                                'reference_number' => $request->receipt_number,
+                                'model' => "StudentExtraCharge",
+                                'model_id' => $extra_charge_id,
+                                'financial_year' => $request->academic_year,
+                                'transaction_date' => $request->payment_date,
+                                'line_description' => $request->fee_description[$extra_charge_id]." - Payment",
+                                'debit_amount' => 0,
+                                'credit_amount' => $request->other_fee[$extra_charge_id]
+                            ]
+                        );
+                    }
                 }
             }
         }
@@ -218,25 +223,27 @@ class PaymentController extends Controller
 
     public function updateExtraChargePayment($request){
        
-        $extra_charges = StudentExtraCharge::where('student_id', $request->student_id)
-                                            ->whereIn('fee_id', $request->fee_id)
-                                            ->get();
+        if (is_array($request->fee_id)) {
+            $extra_charges = StudentExtraCharge::where('student_id', $request->student_id)
+                                                ->whereIn('fee_id', $request->fee_id)
+                                                ->get();
 
-        for($i=0; $i < count($request->fee_id); $i++){
+            for($i=0; $i < count($request->fee_id); $i++){
             
-            $extra_charge_id = $request->fee_id[$i];
-            
-            if (isset($request->other_fee[$extra_charge_id])) {
+                $extra_charge_id = $request->fee_id[$i];
+                
+                if (isset($request->other_fee[$extra_charge_id])) {
 
-                if ($request->other_fee[$extra_charge_id] > 0) {
-                    
-                    $current_amount = $extra_charges->where('fee_id', $extra_charge_id)->first()->amount_paid;
-                    
-                    StudentExtraCharge::where('student_id', $request->student_id)
-                                        ->where('fee_id',$extra_charge_id)
-                                        ->update([
-                                            'amount_paid' => $current_amount + $request->other_fee[$extra_charge_id],
-                                        ]);
+                    if ($request->other_fee[$extra_charge_id] > 0) {
+                        
+                        $current_amount = $extra_charges->where('fee_id', $extra_charge_id)->first()->amount_paid;
+                        
+                        StudentExtraCharge::where('student_id', $request->student_id)
+                                            ->where('fee_id',$extra_charge_id)
+                                            ->update([
+                                                'amount_paid' => $current_amount + $request->other_fee[$extra_charge_id],
+                                            ]);
+                    }
                 }
             }
         }
@@ -269,8 +276,8 @@ class PaymentController extends Controller
         $reference_number = rand(10000, 999999);
 
         $invoice = Invoice::where('reference_number', $reference_number)->first();
-        if (count($invoice) > 0) {
-            $this->generateInvoiceReferenceNumber();
+        if ($invoice) {
+            return $this->generateInvoiceReferenceNumber();
         }
 
         return $reference_number;

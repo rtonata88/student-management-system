@@ -39,6 +39,10 @@
                             <tbody>
                                 <tr>
                                     <th>Student number</th>
+                                    <td>{{$student->student_number}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Allocated number</th>
                                     <td>{{$student->student_number2}}</td>
                                 </tr>
                                 <tr>
@@ -107,7 +111,7 @@
             <div class="card-header">
                 @permission('add-payment')
                 <div class="float-left">
-                    <a href="{{route('payments.edit', $student->id)}}" class="btn btn-primary pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD PAYMENT</a>
+                    <a href="{{route('payments.edit', $student->id)}}" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;" class="btn pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"><span class="fa fa-plus"></span> ADD PAYMENT</a>
                 </div>
                 @endpermission
             </div>
@@ -116,6 +120,10 @@
                 <table class="table-sm" style="width:100%">
                     <tr>
                         <th style="width: 150px">Student number </th>
+                        <td>{{$student->student_number}}</td>
+                    </tr>
+                    <tr>
+                        <th style="width: 150px">Allocated number </th>
                         <td>{{$student->student_number2}}</td>
                     </tr>
                     <tr>

@@ -23,7 +23,13 @@
                 <div class="card-body">
                     <h4 class="header-title mb-3">Continuous Assessment Marks</h4>
                     
-                    @if($caMarks && $caMarks->count() > 0)
+                    @if(isset($suppressed) && $suppressed)
+                        <div class="alert alert-warning text-center">
+                            <i class="fas fa-ban fa-2x mb-3"></i>
+                            <h5>Marks Currently Suppressed</h5>
+                            <p class="mb-0">Your CA marks are currently suppressed by the administration. Please contact your academic office for more information.</p>
+                        </div>
+                    @elseif($caMarks && $caMarks->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>

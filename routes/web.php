@@ -69,8 +69,45 @@ Route::resource('/invoices', 'InvoiceController');
 Route::post('/invoices/filter', 'InvoiceController@filter')->name('invoices.filter');
 Route::get('/invoices/print/{student_id}', 'InvoiceController@print')->name('invoices.print');
 
+// Cashier Routes - Protected with permissions
+Route::middleware(['auth', 'permission:view-cashier'])->group(function () {
+    Route::get('/cashier', 'CashierController@index')->name('cashier.index');
+    Route::post('/cashier/search', 'CashierController@search')->name('cashier.search');
+});
+
+Route::middleware(['auth', 'permission:process-cashier-payments'])->group(function () {
+    Route::get('/cashier/payment/{student}', 'CashierController@paymentForm')->name('cashier.payment-form');
+    Route::post('/cashier/payment/{student}', 'CashierController@processPayment')->name('cashier.process-payment');
+});
+
+Route::middleware(['auth', 'permission:view-cashier-receipts'])->group(function () {
+    Route::get('/cashier/receipt/{payment}', 'CashierController@receipt')->name('cashier.receipt');
+});
+
+Route::middleware(['auth', 'permission:print-cashier-receipts'])->group(function () {
+    Route::get('/cashier/print/{payment}', 'CashierController@printReceipt')->name('cashier.print-receipt');
+});
+
 Route::resource('/payments', 'PaymentController');
 Route::post('/payments/filter', 'PaymentController@filter')->name('payments.filter');
+
+// Captured Payments Routes
+Route::middleware(['auth', 'permission:view-captured-payments'])->group(function () {
+    Route::get('/captured-payments', 'CapturedPaymentsController@index')->name('captured-payments.index');
+    Route::match(['GET', 'POST'], '/captured-payments/search', 'CapturedPaymentsController@search')->name('captured-payments.search');
+});
+
+Route::middleware(['auth', 'permission:reprint-payment-receipts'])->group(function () {
+    Route::post('/captured-payments/reprint', 'CapturedPaymentsController@reprintReceipt')->name('captured-payments.reprint');
+});
+
+Route::middleware(['auth', 'permission:void-payments'])->group(function () {
+    Route::post('/captured-payments/void', 'CapturedPaymentsController@voidPayment')->name('captured-payments.void');
+});
+
+Route::middleware(['auth', 'permission:export-captured-payments'])->group(function () {
+    Route::post('/captured-payments/export', 'CapturedPaymentsController@export')->name('captured-payments.export');
+});
 
 Route::resource('/debit-memos', 'DebitMemoController');
 Route::post('/debit-memos/filter', 'DebitMemoController@filter')->name('debit-memos.filter');
@@ -416,6 +453,9 @@ Route::get('/promotions/{student}/marks', 'PromotionsController@showMarks')->nam
 Route::post('/promotions/{student}/promote', 'PromotionsController@promote')->name('promotions.promote')->middleware('permission:promote-students');
 Route::get('/promotions/{student}/history', 'PromotionsController@history')->name('promotions.history')->middleware('permission:view-promotion-history');
 
+//Assessment Management - Process Final Marks
+Route::get('/process-final-marks', 'ProcessFinalMarksController@index')->name('process-final-marks.index');
+
 //Result Codes Management
 Route::resource('/result-codes', 'ResultCodeController');
 // Grading Scales Management
@@ -610,6 +650,16 @@ Route::put('/notice-board/{id}', 'NoticeBoardController@update')->name('notice-b
 Route::delete('/notice-board/{id}', 'NoticeBoardController@destroy')->name('notice-board.destroy')->middleware('permission:delete-notice');
 Route::get('/notice-board/{id}/toggle-publish', 'NoticeBoardController@togglePublish')->name('notice-board.toggle-publish')->middleware('permission:publish-notice');
 Route::post('/notice-board/{id}/remove-attachment', 'NoticeBoardController@removeAttachment')->name('notice-board.remove-attachment')->middleware('permission:manage-notice-attachments');
+
+// Marks Suppression Routes
+Route::get('/marks-suppression', 'MarksSuppressionController@index')->name('marks-suppression.index')->middleware('permission:view-marks-suppression');
+Route::get('/marks-suppression/create', 'MarksSuppressionController@create')->name('marks-suppression.create')->middleware('permission:create-marks-suppression');
+Route::post('/marks-suppression', 'MarksSuppressionController@store')->name('marks-suppression.store')->middleware('permission:create-marks-suppression');
+Route::get('/marks-suppression/{marksSuppression}', 'MarksSuppressionController@show')->name('marks-suppression.show')->middleware('permission:view-marks-suppression');
+Route::get('/marks-suppression/{marksSuppression}/edit', 'MarksSuppressionController@edit')->name('marks-suppression.edit')->middleware('permission:edit-marks-suppression');
+Route::put('/marks-suppression/{marksSuppression}', 'MarksSuppressionController@update')->name('marks-suppression.update')->middleware('permission:edit-marks-suppression');
+Route::delete('/marks-suppression/{marksSuppression}', 'MarksSuppressionController@destroy')->name('marks-suppression.destroy')->middleware('permission:delete-marks-suppression');
+Route::patch('/marks-suppression/{marksSuppression}/toggle', 'MarksSuppressionController@toggleSuppression')->name('marks-suppression.toggle')->middleware('permission:edit-marks-suppression');
 
 // Statement of Results - Under Development
 Route::get('/statement-of-results', function () {
