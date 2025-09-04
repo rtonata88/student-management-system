@@ -21,13 +21,111 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title mb-3">Weekly Class Schedule</h4>
-                    
-                    <div class="text-center py-4">
-                        <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
-                        <h5>No Class Routine Available</h5>
-                        <p class="text-muted">Your weekly class schedule will be displayed here.</p>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="header-title mb-0">
+                            <i class="fa fa-calendar"></i> My Weekly Class Schedule
+                        </h4>
+                        @if($routines->count() > 0)
+                            <a href="{{ route('student-portal.class-routine.download') }}" 
+                               class="btn" 
+                               style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;"
+                               target="_blank">
+                                <i class="fa fa-download"></i> Download PDF
+                            </a>
+                        @endif
                     </div>
+                    
+                    @if($routines->count() > 0)
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead style="background-color: #f8f9fa; color: #495057; font-weight: bold;">
+                                    <tr>
+                                        <th style="background-color: #e9ecef; color: #212529; font-weight: bold; padding: 12px;"><i class="fa fa-calendar-day"></i> Day</th>
+                                        <th style="background-color: #e9ecef; color: #212529; font-weight: bold; padding: 12px;"><i class="fa fa-clock"></i> Time</th>
+                                        <th style="background-color: #e9ecef; color: #212529; font-weight: bold; padding: 12px;"><i class="fa fa-book"></i> Subject</th>
+                                        <th style="background-color: #e9ecef; color: #212529; font-weight: bold; padding: 12px;"><i class="fa fa-user"></i> Teacher</th>
+                                        <th style="background-color: #e9ecef; color: #212529; font-weight: bold; padding: 12px;"><i class="fa fa-map-marker"></i> Venue</th>
+                                        <th style="background-color: #e9ecef; color: #212529; font-weight: bold; padding: 12px;"><i class="fa fa-info-circle"></i> Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $daysOrder = ['monday' => 1, 'tuesday' => 2, 'wednesday' => 3, 'thursday' => 4, 'friday' => 5, 'saturday' => 6, 'sunday' => 7];
+                                        $groupedRoutines = $routines->groupBy('day_of_week')->sortBy(function($group, $day) use ($daysOrder) {
+                                            return $daysOrder[strtolower($day)] ?? 8;
+                                        });
+                                    @endphp
+                                    
+                                    @foreach($groupedRoutines as $day => $dayRoutines)
+                                        @foreach($dayRoutines->sortBy('start_time') as $index => $routine)
+                                            <tr>
+                                                @if($index === 0)
+                                                    <td rowspan="{{ $dayRoutines->count() }}" class="align-middle">
+                                                        <strong class="text-primary">{{ ucfirst($routine->day_of_week) }}</strong>
+                                                    </td>
+                                                @endif
+                                                <td>
+                                                    <strong class="text-success">{{ $routine->formatted_start_time }}</strong>
+                                                    <span class="text-muted"> - </span>
+                                                    <strong class="text-danger">{{ $routine->formatted_end_time }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $routine->subject_name }}</strong><br>
+                                                    <small class="text-muted">{{ $routine->subject_code }}</small>
+                                                </td>
+                                                <td>
+                                                    <i class="fa fa-user-circle text-primary"></i>
+                                                    {{ $routine->teacher_name }}
+                                                </td>
+                                                <td>
+                                                    <i class="fa fa-building text-info"></i>
+                                                    {{ $routine->venue->venue_name ?? 'TBA' }}
+                                                    @if($routine->venue && $routine->venue->capacity)
+                                                        <br><small class="text-muted">
+                                                            <i class="fa fa-users"></i> Capacity: {{ $routine->venue->capacity }}
+                                                        </small>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($routine->classDuration)
+                                                        <span class="badge badge-info">
+                                                            {{ $routine->classDuration->duration_minutes ?? '60' }} mins
+                                                        </span>
+                                                    @else
+                                                        <span class="badge badge-secondary">Standard</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <div class="alert alert-info">
+                                <i class="fa fa-info-circle"></i>
+                                <strong>Note:</strong> This schedule shows classes for your registered subjects in the current academic year at your center.
+                                If you notice any discrepancies, please contact your academic advisor.
+                            </div>
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <i class="fas fa-calendar-alt fa-4x text-muted mb-4"></i>
+                            <h5 class="text-muted">No Class Schedule Available</h5>
+                            <p class="text-muted">
+                                Your weekly class schedule is not yet available. This could be because:
+                            </p>
+                            <ul class="list-unstyled text-muted">
+                                <li><i class="fa fa-circle text-warning"></i> Classes haven't been scheduled for this academic year</li>
+                                <li><i class="fa fa-circle text-warning"></i> You haven't registered for any subjects yet</li>
+                                <li><i class="fa fa-circle text-warning"></i> The schedule is still being prepared</li>
+                            </ul>
+                            <p class="text-muted mt-3">
+                                Please contact your academic advisor for more information.
+                            </p>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

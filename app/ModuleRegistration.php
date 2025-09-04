@@ -34,7 +34,7 @@ class ModuleRegistration extends Model
 
     public function subjectAllocation()
     {
-        return $this->belongsTo(SubjectAllocation::class, 'module_id');
+        return $this->belongsTo(SubjectAllocation::class, 'module_id', 'subject_id');
     }
 
     // public function registration()

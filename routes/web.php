@@ -219,16 +219,24 @@ Route::group(['prefix' => 'student-portal', 'middleware' => ['auth', 'user.type:
     Route::get('/ca-marks', 'StudentPortalController@caMarks')->name('student-portal.ca-marks');
     Route::get('/exam-marks', 'StudentPortalController@examMarks')->name('student-portal.exam-marks');
     Route::get('/class-routine', 'StudentPortalController@classRoutine')->name('student-portal.class-routine');
+    Route::get('/class-routine-download', 'StudentPortalController@downloadClassRoutine')->name('student-portal.class-routine.download');
     Route::get('/exam-timetable', 'StudentPortalController@examTimetable')->name('student-portal.exam-timetable');
+    Route::get('/exam-timetable-pdf', 'StudentPortalController@examTimetablePdf')->name('student-portal.exam-timetable-pdf');
     Route::get('/academic-script', 'StudentPortalController@academicScript')->name('student-portal.academic-script');
     Route::get('/proof-of-registration', 'StudentPortalController@proofOfRegistration')->name('student-portal.proof-of-registration');
+    Route::get('/proof-of-registration-download', 'StudentPortalController@downloadProofOfRegistration')->name('student-portal.academics.proof-of-registration.download');
     
     // Finance Section
+    Route::get('/finance', 'StudentPortalController@finance')->name('student-portal.finance');
     Route::get('/my-payments', 'StudentPortalController@myPayments')->name('student-portal.my-payments');
+    Route::get('/print-payment-receipt/{paymentId}/{paymentSource}', 'StudentPortalController@printPaymentReceipt')->name('student-portal.print-payment-receipt');
     Route::get('/financial-statement', 'StudentPortalController@financialStatement')->name('student-portal.financial-statement');
     
     // My Subjects
     Route::get('/my-subjects', 'StudentPortalController@mySubjects')->name('student-portal.my-subjects');
+    Route::get('/my-attendance/{allocation}', 'StudentPortalController@myAttendance')->name('student-portal.my-attendance');
+    Route::get('/subject-materials/{allocation}', 'StudentPortalController@subjectMaterials')->name('student-portal.subject-materials');
+    Route::get('/download-subject-material/{material}', 'StudentPortalController@downloadSubjectMaterial')->name('student-portal.download-subject-material');
     
     // Online Learning
     Route::get('/online-learning', 'StudentPortalController@onlineLearning')->name('student-portal.online-learning');

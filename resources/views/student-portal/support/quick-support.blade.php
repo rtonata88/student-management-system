@@ -28,8 +28,8 @@
                         <p class="text-muted">Get immediate assistance with your questions and technical issues.</p>
                         <div class="mt-4">
                             <p><strong>Contact Information:</strong></p>
-                            <p>Phone: +264 81 37 0 37 26</p>
-                            <p>Email: info@educims.com</p>
+                            <p>Phone: {{ $company->contact_number ?? 'N/A' }}</p>
+                            <p>Email: {{ $company->email ?? 'N/A' }}</p>
                         </div>
                     </div>
                 </div>

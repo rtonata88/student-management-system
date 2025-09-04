@@ -323,10 +323,10 @@
                 <div style="width: 50px; height: 50px; background: #4285f4; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-life-ring" style="font-size: 24px;"></i>
                 </div>
-                <h6 style="margin-bottom: 10px; font-weight: 600;">Support & Manuals</h6>
+                <h6 style="margin-bottom: 10px; font-weight: 600;">Report System Bugs</h6>
                 <p style="font-size: 12px; margin-bottom: 10px; opacity: 0.8;">+264 81 37 0 37 26<br>info@educims.com</p>
-                <a href="{{ route('student-portal.get-support') }}" class="btn btn-light btn-sm" style="border-radius: 20px; padding: 8px 20px; font-size: 12px; font-weight: 600;">
-                    Get Support
+                <a href="https://educims.com" target="_blank" class="btn btn-light btn-sm" style="border-radius: 20px; padding: 8px 20px; font-size: 12px; font-weight: 600;">
+                    Our Website
                 </a>
             </div>
         </div>

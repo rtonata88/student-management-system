@@ -23,6 +23,11 @@ class SubjectAllocation extends Model
         return $this->belongsTo(Module::class, 'subject_id');
     }
 
+    public function subject()
+    {
+        return $this->belongsTo(Module::class, 'subject_id');
+    }
+
     public function center()
     {
         return $this->belongsTo(Center::class);

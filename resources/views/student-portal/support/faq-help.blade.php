@@ -26,6 +26,12 @@
                         <i class="fas fa-question-circle fa-3x text-muted mb-3"></i>
                         <h5>FAQ & Help</h5>
                         <p class="text-muted">Find answers to common questions and get help with using the student portal.</p>
+                        
+                        <div class="mt-3">
+                            <a href="https://educims.com/contact.html" target="_blank" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                                <i class="fas fa-envelope"></i> Contact Support
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

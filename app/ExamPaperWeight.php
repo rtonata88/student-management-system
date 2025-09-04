@@ -35,7 +35,7 @@ class ExamPaperWeight extends Model
      */
     public function examination()
     {
-        return $this->belongsTo('App\Examination');
+        return $this->belongsTo('App\Examination', 'examination_id');
     }
 
     /**
