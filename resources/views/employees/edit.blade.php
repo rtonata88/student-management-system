@@ -35,27 +35,47 @@
                     <!-- Basic Employment Information -->
                     <div class="row mb-4">
                         <div class="col-md-12">
-                            <h6 class="border-bottom pb-2 mb-3">Employment Information</h6>
+                            <h6 class="border-bottom pb-2 mb-3"><strong>Employment Information</strong></h6>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="employee_number">Employee Number</label>
-                                <input type="text" class="form-control" id="employee_number" name="employee_number" 
-                                       value="{{ old('employee_number', $user->employeeProfile->employee_number ?? '') }}">
+                                @if(!$user->employeeProfile && $generatedEmployeeNumber)
+                                    <input type="text" class="form-control" id="employee_number" name="employee_number" 
+                                           value="{{ old('employee_number', $generatedEmployeeNumber) }}" readonly>
+                                    <small class="form-text text-muted">
+                                        <i class="fas fa-info-circle"></i> Auto-generated employee number
+                                    </small>
+                                @else
+                                    <input type="text" class="form-control" id="employee_number" name="employee_number" 
+                                           value="{{ old('employee_number', $user->employeeProfile->employee_number ?? '') }}">
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="department">Department</label>
-                                <input type="text" class="form-control" id="department" name="department" 
-                                       value="{{ old('department', $user->employeeProfile->department ?? '') }}">
+                                <select class="form-control" id="department" name="department">
+                                    <option value="">Select Department</option>
+                                    @foreach($departments as $department)
+                                        <option value="{{ $department->name }}" {{ old('department', $user->employeeProfile->department ?? '') == $department->name ? 'selected' : '' }}>
+                                            {{ $department->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="position">Position</label>
-                                <input type="text" class="form-control" id="position" name="position" 
-                                       value="{{ old('position', $user->employeeProfile->position ?? '') }}">
+                                <select class="form-control" id="position" name="position">
+                                    <option value="">Select Position</option>
+                                    @foreach($designations as $designation)
+                                        <option value="{{ $designation->name }}" {{ old('position', $user->employeeProfile->position ?? '') == $designation->name ? 'selected' : '' }}>
+                                            {{ $designation->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -80,8 +100,9 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="salary">Salary</label>
-                                <input type="number" step="0.01" class="form-control" id="salary" name="salary" 
-                                       value="{{ old('salary', $user->employeeProfile->salary ?? '') }}">
+                                <input type="number" step="0.01" min="0" class="form-control" id="salary" name="salary" 
+                                       value="{{ old('salary', $user->employeeProfile->salary ?? '') }}"
+                                       pattern="[0-9]+(\.[0-9]{1,2})?" title="Please enter a valid salary amount (numbers only, up to 2 decimal places)">
                             </div>
                         </div>
                     </div>
@@ -138,15 +159,48 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="nationality">Nationality</label>
-                                <input type="text" class="form-control" id="nationality" name="nationality" 
-                                       value="{{ old('nationality', $user->employeeProfile->nationality ?? '') }}">
+                                <select class="form-control" id="nationality" name="nationality">
+                                    <option value="">Select Nationality</option>
+                                    <option value="Namibia" {{ old('nationality', $user->employeeProfile->nationality ?? 'Namibia') == 'Namibia' ? 'selected' : '' }}>Namibia</option>
+                                    <option value="Angola" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Angola' ? 'selected' : '' }}>Angola</option>
+                                    <option value="Botswana" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Botswana' ? 'selected' : '' }}>Botswana</option>
+                                    <option value="Comoros" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Comoros' ? 'selected' : '' }}>Comoros</option>
+                                    <option value="Democratic Republic of Congo" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Democratic Republic of Congo' ? 'selected' : '' }}>Democratic Republic of Congo</option>
+                                    <option value="Eswatini" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Eswatini' ? 'selected' : '' }}>Eswatini</option>
+                                    <option value="Lesotho" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Lesotho' ? 'selected' : '' }}>Lesotho</option>
+                                    <option value="Madagascar" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Madagascar' ? 'selected' : '' }}>Madagascar</option>
+                                    <option value="Malawi" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Malawi' ? 'selected' : '' }}>Malawi</option>
+                                    <option value="Mauritius" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Mauritius' ? 'selected' : '' }}>Mauritius</option>
+                                    <option value="Mozambique" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Mozambique' ? 'selected' : '' }}>Mozambique</option>
+                                    <option value="Seychelles" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Seychelles' ? 'selected' : '' }}>Seychelles</option>
+                                    <option value="South Africa" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'South Africa' ? 'selected' : '' }}>South Africa</option>
+                                    <option value="Tanzania" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Tanzania' ? 'selected' : '' }}>Tanzania</option>
+                                    <option value="Zambia" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Zambia' ? 'selected' : '' }}>Zambia</option>
+                                    <option value="Zimbabwe" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Zimbabwe' ? 'selected' : '' }}>Zimbabwe</option>
+                                    <option value="Africa" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'Africa' ? 'selected' : '' }}>Africa</option>
+                                    <option value="International" {{ old('nationality', $user->employeeProfile->nationality ?? '') == 'International' ? 'selected' : '' }}>International</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="home_language">Home Language</label>
-                                <input type="text" class="form-control" id="home_language" name="home_language" 
-                                       value="{{ old('home_language', $user->employeeProfile->home_language ?? '') }}">
+                                <select class="form-control" id="home_language" name="home_language">
+                                    <option value="">Select Home Language</option>
+                                    <option value="English" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'English' ? 'selected' : '' }}>English</option>
+                                    <option value="Afrikaans" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Afrikaans' ? 'selected' : '' }}>Afrikaans</option>
+                                    <option value="Oshiwambo" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Oshiwambo' ? 'selected' : '' }}>Oshiwambo</option>
+                                    <option value="Otjiherero" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Otjiherero' ? 'selected' : '' }}>Otjiherero</option>
+                                    <option value="Nama/Damara" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Nama/Damara' ? 'selected' : '' }}>Nama/Damara</option>
+                                    <option value="Rukwangali" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Rukwangali' ? 'selected' : '' }}>Rukwangali</option>
+                                    <option value="Silozi" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Silozi' ? 'selected' : '' }}>Silozi</option>
+                                    <option value="Setswana" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Setswana' ? 'selected' : '' }}>Setswana</option>
+                                    <option value="Oshikwanyama" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Oshikwanyama' ? 'selected' : '' }}>Oshikwanyama</option>
+                                    <option value="Thimbukushu" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Thimbukushu' ? 'selected' : '' }}>Thimbukushu</option>
+                                    <option value="German" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'German' ? 'selected' : '' }}>German</option>
+                                    <option value="Portuguese" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Portuguese' ? 'selected' : '' }}>Portuguese</option>
+                                    <option value="Others" {{ old('home_language', $user->employeeProfile->home_language ?? '') == 'Others' ? 'selected' : '' }}>Others</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -163,27 +217,43 @@
                     <!-- Contact Information -->
                     <div class="row mb-4">
                         <div class="col-md-12">
-                            <h6 class="border-bottom pb-2 mb-3">Contact Information</h6>
+                            <h6 class="border-bottom pb-2 mb-3"><strong>Contact Information</strong></h6>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="personal_email">Personal Email</label>
                                 <input type="email" class="form-control" id="personal_email" name="personal_email" 
-                                       value="{{ old('personal_email', $user->employeeProfile->personal_email ?? '') }}">
+                                       value="{{ old('personal_email', $user->employeeProfile->personal_email ?? $user->email) }}"
+                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" 
+                                       title="Please enter a valid email address">
+                                <small class="form-text text-muted">Defaults to user account email: {{ $user->email }}</small>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="work_phone">Work Phone</label>
-                                <input type="text" class="form-control" id="work_phone" name="work_phone" 
-                                       value="{{ old('work_phone', $user->employeeProfile->work_phone ?? '') }}">
+                                <input type="tel" class="form-control" id="work_phone" name="work_phone" 
+                                       value="{{ old('work_phone', $user->employeeProfile->work_phone ?? '') }}"
+                                       pattern="^\+264[0-9]{8,9}$" placeholder="+264XXXXXXXX"
+                                       title="Phone number must start with +264 followed by 8-9 digits">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="personal_phone">Personal Phone</label>
-                                <input type="text" class="form-control" id="personal_phone" name="personal_phone" 
-                                       value="{{ old('personal_phone', $user->employeeProfile->personal_phone ?? '') }}">
+                                <input type="tel" class="form-control" id="personal_phone" name="personal_phone" 
+                                       value="{{ old('personal_phone', $user->employeeProfile->personal_phone ?? '') }}"
+                                       pattern="^\+264[0-9]{8,9}$" placeholder="+264XXXXXXXX"
+                                       title="Phone number must start with +264 followed by 8-9 digits">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="alternative_personal_phone">Alternative Personal Phone</label>
+                                <input type="tel" class="form-control" id="alternative_personal_phone" name="alternative_personal_phone" 
+                                       value="{{ old('alternative_personal_phone', $user->employeeProfile->alternative_personal_phone ?? '') }}"
+                                       pattern="^\+264[0-9]{8,9}$" placeholder="+264XXXXXXXX"
+                                       title="Phone number must start with +264 followed by 8-9 digits">
                             </div>
                         </div>
                     </div>
@@ -191,7 +261,7 @@
                     <!-- Emergency Contact -->
                     <div class="row mb-4">
                         <div class="col-md-12">
-                            <h6 class="border-bottom pb-2 mb-3">Emergency Contact</h6>
+                            <h6 class="border-bottom pb-2 mb-3"><strong>Emergency Contact</strong></h6>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
@@ -203,15 +273,25 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="emergency_contact_phone">Emergency Contact Phone</label>
-                                <input type="text" class="form-control" id="emergency_contact_phone" name="emergency_contact_phone" 
-                                       value="{{ old('emergency_contact_phone', $user->employeeProfile->emergency_contact_phone ?? '') }}">
+                                <input type="tel" class="form-control" id="emergency_contact_phone" name="emergency_contact_phone" 
+                                       value="{{ old('emergency_contact_phone', $user->employeeProfile->emergency_contact_phone ?? '') }}"
+                                       pattern="^\+264[0-9]{8,9}$" placeholder="+264XXXXXXXX"
+                                       title="Phone number must start with +264 followed by 8-9 digits">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="emergency_contact_relationship">Relationship</label>
-                                <input type="text" class="form-control" id="emergency_contact_relationship" name="emergency_contact_relationship" 
-                                       value="{{ old('emergency_contact_relationship', $user->employeeProfile->emergency_contact_relationship ?? '') }}">
+                                <select class="form-control" id="emergency_contact_relationship" name="emergency_contact_relationship">
+                                    <option value="">Select Relationship</option>
+                                    <option value="Spouse" {{ old('emergency_contact_relationship', $user->employeeProfile->emergency_contact_relationship ?? '') == 'Spouse' ? 'selected' : '' }}>Spouse</option>
+                                    <option value="Parent" {{ old('emergency_contact_relationship', $user->employeeProfile->emergency_contact_relationship ?? '') == 'Parent' ? 'selected' : '' }}>Parent</option>
+                                    <option value="Family Member" {{ in_array(old('emergency_contact_relationship', $user->employeeProfile->emergency_contact_relationship ?? ''), ['Sister', 'Brother', 'Aunt', 'Uncle', 'Cousin', 'Grandparent', 'Mother', 'Father', 'Son', 'Daughter', 'Child', 'Family Member']) ? 'selected' : '' }}>Family Member</option>
+                                    <option value="Guardian" {{ old('emergency_contact_relationship', $user->employeeProfile->emergency_contact_relationship ?? '') == 'Guardian' ? 'selected' : '' }}>Guardian</option>
+                                    <option value="Friend" {{ old('emergency_contact_relationship', $user->employeeProfile->emergency_contact_relationship ?? '') == 'Friend' ? 'selected' : '' }}>Friend</option>
+                                    <option value="Colleague" {{ old('emergency_contact_relationship', $user->employeeProfile->emergency_contact_relationship ?? '') == 'Colleague' ? 'selected' : '' }}>Colleague</option>
+                                    <option value="Other" {{ old('emergency_contact_relationship', $user->employeeProfile->emergency_contact_relationship ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -219,7 +299,7 @@
                     <!-- Address Information -->
                     <div class="row mb-4">
                         <div class="col-md-12">
-                            <h6 class="border-bottom pb-2 mb-3">Address Information</h6>
+                            <h6 class="border-bottom pb-2 mb-3"><strong>Address Information</strong></h6>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -233,32 +313,102 @@
                                 <textarea class="form-control" id="postal_address" name="postal_address" rows="3">{{ old('postal_address', $user->employeeProfile->postal_address ?? '') }}</textarea>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                    </div>
+
+                    <!-- Second row for city and region fields -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="residential_city">Residential City</label>
-                                <input type="text" class="form-control" id="residential_city" name="residential_city" 
-                                       value="{{ old('residential_city', $user->employeeProfile->residential_city ?? '') }}">
+                                <select class="form-control" id="residential_city" name="residential_city">
+                                    <option value="">Select City/Town</option>
+                                    <option value="Windhoek" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Windhoek' ? 'selected' : '' }}>Windhoek</option>
+                                    <option value="Swakopmund" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Swakopmund' ? 'selected' : '' }}>Swakopmund</option>
+                                    <option value="Walvis Bay" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Walvis Bay' ? 'selected' : '' }}>Walvis Bay</option>
+                                    <option value="Oshakati" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Oshakati' ? 'selected' : '' }}>Oshakati</option>
+                                    <option value="Rundu" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Rundu' ? 'selected' : '' }}>Rundu</option>
+                                    <option value="Rehoboth" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Rehoboth' ? 'selected' : '' }}>Rehoboth</option>
+                                    <option value="Katima Mulilo" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Katima Mulilo' ? 'selected' : '' }}>Katima Mulilo</option>
+                                    <option value="Otjiwarongo" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Otjiwarongo' ? 'selected' : '' }}>Otjiwarongo</option>
+                                    <option value="Ondangwa" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Ondangwa' ? 'selected' : '' }}>Ondangwa</option>
+                                    <option value="Okahandja" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Okahandja' ? 'selected' : '' }}>Okahandja</option>
+                                    <option value="Ongwediva" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Ongwediva' ? 'selected' : '' }}>Ongwediva</option>
+                                    <option value="Otavi" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Otavi' ? 'selected' : '' }}>Otavi</option>
+                                    <option value="Grootfontein" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Grootfontein' ? 'selected' : '' }}>Grootfontein</option>
+                                    <option value="Tsumeb" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Tsumeb' ? 'selected' : '' }}>Tsumeb</option>
+                                    <option value="Gobabis" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Gobabis' ? 'selected' : '' }}>Gobabis</option>
+                                    <option value="Henties Bay" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Henties Bay' ? 'selected' : '' }}>Henties Bay</option>
+                                    <option value="Mariental" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Mariental' ? 'selected' : '' }}>Mariental</option>
+                                    <option value="Keetmanshoop" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Keetmanshoop' ? 'selected' : '' }}>Keetmanshoop</option>
+                                    <option value="Aranos" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Aranos' ? 'selected' : '' }}>Aranos</option>
+                                    <option value="Lüderitz" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Lüderitz' ? 'selected' : '' }}>Lüderitz</option>
+                                    <option value="Oranjemund" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Oranjemund' ? 'selected' : '' }}>Oranjemund</option>
+                                    <option value="Karasburg" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Karasburg' ? 'selected' : '' }}>Karasburg</option>
+                                    <option value="Outapi" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Outapi' ? 'selected' : '' }}>Outapi</option>
+                                    <option value="Opuwo" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Opuwo' ? 'selected' : '' }}>Opuwo</option>
+                                    <option value="Otjinene" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Otjinene' ? 'selected' : '' }}>Otjinene</option>
+                                    <option value="Usakos" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Usakos' ? 'selected' : '' }}>Usakos</option>
+                                    <option value="Karibib" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Karibib' ? 'selected' : '' }}>Karibib</option>
+                                    <option value="Maltahöhe" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Maltahöhe' ? 'selected' : '' }}>Maltahöhe</option>
+                                    <option value="Bethanie" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Bethanie' ? 'selected' : '' }}>Bethanie</option>
+                                    <option value="Khorixas" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Khorixas' ? 'selected' : '' }}>Khorixas</option>
+                                    <option value="Other" {{ old('residential_city', $user->employeeProfile->residential_city ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="residential_province">Residential Province</label>
-                                <input type="text" class="form-control" id="residential_province" name="residential_province" 
-                                       value="{{ old('residential_province', $user->employeeProfile->residential_province ?? '') }}">
+                                <label for="residential_province">Residential Region</label>
+                                <select class="form-control" id="residential_province" name="residential_province">
+                                    <option value="">Select Region</option>
+                                    <option value="Erongo" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Erongo' ? 'selected' : '' }}>Erongo</option>
+                                    <option value="Hardap" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Hardap' ? 'selected' : '' }}>Hardap</option>
+                                    <option value="Karas" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Karas' ? 'selected' : '' }}>Karas</option>
+                                    <option value="Kavango East" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Kavango East' ? 'selected' : '' }}>Kavango East</option>
+                                    <option value="Kavango West" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Kavango West' ? 'selected' : '' }}>Kavango West</option>
+                                    <option value="Khomas" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Khomas' ? 'selected' : '' }}>Khomas</option>
+                                    <option value="Kunene" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Kunene' ? 'selected' : '' }}>Kunene</option>
+                                    <option value="Ohangwena" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Ohangwena' ? 'selected' : '' }}>Ohangwena</option>
+                                    <option value="Omaheke" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Omaheke' ? 'selected' : '' }}>Omaheke</option>
+                                    <option value="Omusati" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Omusati' ? 'selected' : '' }}>Omusati</option>
+                                    <option value="Oshana" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Oshana' ? 'selected' : '' }}>Oshana</option>
+                                    <option value="Oshikoto" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Oshikoto' ? 'selected' : '' }}>Oshikoto</option>
+                                    <option value="Otjozondjupa" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Otjozondjupa' ? 'selected' : '' }}>Otjozondjupa</option>
+                                    <option value="Zambezi" {{ old('residential_province', $user->employeeProfile->residential_province ?? '') == 'Zambezi' ? 'selected' : '' }}>Zambezi</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                    </div>
+
+                    <!-- Third row for postal fields -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="postal_city">Postal City</label>
                                 <input type="text" class="form-control" id="postal_city" name="postal_city" 
                                        value="{{ old('postal_city', $user->employeeProfile->postal_city ?? '') }}">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="postal_province">Postal Province</label>
-                                <input type="text" class="form-control" id="postal_province" name="postal_province" 
-                                       value="{{ old('postal_province', $user->employeeProfile->postal_province ?? '') }}">
+                                <label for="postal_province">Postal Region</label>
+                                <select class="form-control" id="postal_province" name="postal_province">
+                                    <option value="">Select Region</option>
+                                    <option value="Erongo" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Erongo' ? 'selected' : '' }}>Erongo</option>
+                                    <option value="Hardap" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Hardap' ? 'selected' : '' }}>Hardap</option>
+                                    <option value="Karas" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Karas' ? 'selected' : '' }}>Karas</option>
+                                    <option value="Kavango East" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Kavango East' ? 'selected' : '' }}>Kavango East</option>
+                                    <option value="Kavango West" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Kavango West' ? 'selected' : '' }}>Kavango West</option>
+                                    <option value="Khomas" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Khomas' ? 'selected' : '' }}>Khomas</option>
+                                    <option value="Kunene" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Kunene' ? 'selected' : '' }}>Kunene</option>
+                                    <option value="Ohangwena" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Ohangwena' ? 'selected' : '' }}>Ohangwena</option>
+                                    <option value="Omaheke" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Omaheke' ? 'selected' : '' }}>Omaheke</option>
+                                    <option value="Omusati" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Omusati' ? 'selected' : '' }}>Omusati</option>
+                                    <option value="Oshana" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Oshana' ? 'selected' : '' }}>Oshana</option>
+                                    <option value="Oshikoto" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Oshikoto' ? 'selected' : '' }}>Oshikoto</option>
+                                    <option value="Otjozondjupa" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Otjozondjupa' ? 'selected' : '' }}>Otjozondjupa</option>
+                                    <option value="Zambezi" {{ old('postal_province', $user->employeeProfile->postal_province ?? '') == 'Zambezi' ? 'selected' : '' }}>Zambezi</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -280,13 +430,26 @@
                     <!-- Banking Information -->
                     <div class="row mb-4">
                         <div class="col-md-12">
-                            <h6 class="border-bottom pb-2 mb-3">Banking Information</h6>
+                            <h6 class="border-bottom pb-2 mb-3"><strong>Banking Information</strong></h6>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="bank_name">Bank Name</label>
-                                <input type="text" class="form-control" id="bank_name" name="bank_name" 
-                                       value="{{ old('bank_name', $user->employeeProfile->bank_name ?? '') }}">
+                                <select class="form-control" id="bank_name" name="bank_name">
+                                    <option value="">Select Bank</option>
+                                    <option value="Bank Windhoek" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'Bank Windhoek' ? 'selected' : '' }}>Bank Windhoek</option>
+                                    <option value="First National Bank (FNB)" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'First National Bank (FNB)' ? 'selected' : '' }}>First National Bank (FNB)</option>
+                                    <option value="Standard Bank Namibia" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'Standard Bank Namibia' ? 'selected' : '' }}>Standard Bank Namibia</option>
+                                    <option value="Nedbank Namibia" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'Nedbank Namibia' ? 'selected' : '' }}>Nedbank Namibia</option>
+                                    <option value="Banco Nacional de Angola (BNA)" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'Banco Nacional de Angola (BNA)' ? 'selected' : '' }}>Banco Nacional de Angola (BNA)</option>
+                                    <option value="Letshego Bank Namibia" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'Letshego Bank Namibia' ? 'selected' : '' }}>Letshego Bank Namibia</option>
+                                    <option value="SME Bank" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'SME Bank' ? 'selected' : '' }}>SME Bank</option>
+                                    <option value="Agribank of Namibia" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'Agribank of Namibia' ? 'selected' : '' }}>Agribank of Namibia</option>
+                                    <option value="Development Bank of Namibia" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'Development Bank of Namibia' ? 'selected' : '' }}>Development Bank of Namibia</option>
+                                    <option value="Bank of Namibia" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'Bank of Namibia' ? 'selected' : '' }}>Bank of Namibia</option>
+                                    <option value="Capricorn Group" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'Capricorn Group' ? 'selected' : '' }}>Capricorn Group</option>
+                                    <option value="Other" {{ old('bank_name', $user->employeeProfile->bank_name ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -330,7 +493,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="uif_number">UIF Number</label>
+                                <label for="uif_number">Social Security Number</label>
                                 <input type="text" class="form-control" id="uif_number" name="uif_number" 
                                        value="{{ old('uif_number', $user->employeeProfile->uif_number ?? '') }}">
                             </div>

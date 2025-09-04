@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\User;
+use Illuminate\Support\Facades\DB;
+use App\Student;
 use App\Role;
 use App\Permission;
+use App\User;
 
 use Session;
-use Hash;
-use DB;
+use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
@@ -23,10 +24,23 @@ class UsersController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
-    	$users = User::select('name', 'username', 'email')->get();
+    public function index(Request $request){
+        $query = User::with('employeeProfile')
+            ->where('user_type', 'staff');
 
-    	return view('Users.Index', compact('users'));
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('username', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $users = $query->paginate(10);
+        
+        return view('Users.Index', compact('users'));
     }
 
     public function create(){
@@ -46,10 +60,30 @@ class UsersController extends Controller
     	return view('Users.Edit', compact('user', 'roles', 'assigned_roles', 'permissions', 'assigned_permissions', 'user_permissions'));
     }
 
-    public function show($username)
+    public function show(Request $request)
     {
-		$user = User::where('username', $username)->first();
-    	return view('Users.Show', compact('user'));
+        // Show all non-staff users with search and pagination
+        $query = User::where('user_type', '!=', 'staff');
+
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('username', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $users = $query->paginate(15);
+        
+        return view('Users.Show', compact('users'));
+    }
+
+    public function showSingle($username)
+    {
+        $user = User::where('username', $username)->first();
+        return view('Users.ShowSingle', compact('user'));
     }
 
     public function store(Request $requests)
@@ -101,6 +135,26 @@ class UsersController extends Controller
     	return redirect('/users');
     }
 
+    public function showChangePassword($username)
+    {
+        $user = User::with('employeeProfile')->where('username', $username)->first();
+        return view('Users.ChangePassword', compact('user'));
+    }
+
+    public function updatePassword(Request $request, $username)
+    {
+        $user = User::where('username', $username)->first();
+        
+        $this->validate($request, [
+            'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+        ]);
+
+        $user->update(['password' => Hash::make($request->password)]);
+        
+        Session::flash('message', 'Password updated successfully!');
+        return redirect('/users');
+    }
+
     public function disableEnableUser($id){
     	$user = User::find($id);
 
@@ -113,5 +167,86 @@ class UsersController extends Controller
 
 		Session::flash('message', 'User record updated successfully!!!');
     	return redirect('/users');
+    }
+
+    public function resetStudents(Request $request)
+    {
+        $currentYear = date('Y');
+        
+        // Build the query with proper joins
+        $query = User::select(
+                        'users.id',
+                        'users.name',
+                        'users.username',
+                        'users.email',
+                        'users.user_type',
+                        'students.student_number',
+                        'students.student_number2 as allocated_number',
+                        'students.photo',
+                        'centers.center_name',
+                        'registrations.id as current_registration_id'
+                    )
+                    ->whereIn('users.user_type', ['student', 'parent'])
+                    ->leftJoin('students', function($join) {
+                        $join->on('users.username', '=', DB::raw("CONCAT('STU', students.student_number)"));
+                    })
+                    ->leftJoin('centers', 'students.center_id', '=', 'centers.id')
+                    ->leftJoin('registrations', function($join) use ($currentYear) {
+                        $join->on('students.id', '=', 'registrations.student_id')
+                             ->where('registrations.academic_year', '=', $currentYear);
+                    });
+
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('users.name', 'LIKE', "%{$search}%")
+                  ->orWhere('users.username', 'LIKE', "%{$search}%")
+                  ->orWhere('users.email', 'LIKE', "%{$search}%")
+                  ->orWhere('students.student_number', 'LIKE', "%{$search}%")
+                  ->orWhere('students.student_number2', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $students = $query->orderByRaw('registrations.id IS NULL ASC')
+                          ->orderBy('users.name', 'ASC')
+                          ->paginate(15);
+        
+        return view('Users.ResetStudents', compact('students'));
+    }
+
+    public function showStudentPasswordReset($username)
+    {
+        $user = User::where('username', $username)
+                   ->where('user_type', 'student')
+                   ->first();
+        
+        if (!$user) {
+            Session::flash('error', 'Student not found!');
+            return redirect()->route('users.reset-students');
+        }
+        
+        return view('Users.StudentPasswordReset', compact('user'));
+    }
+
+    public function updateStudentPassword(Request $request, $username)
+    {
+        $user = User::where('username', $username)
+                   ->where('user_type', 'student')
+                   ->first();
+        
+        if (!$user) {
+            Session::flash('error', 'Student not found!');
+            return redirect()->route('users.reset-students');
+        }
+        
+        $this->validate($request, [
+            'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+        ]);
+
+        $user->update(['password' => Hash::make($request->password)]);
+        
+        Session::flash('message', 'Student password updated successfully!');
+        return redirect()->route('users.reset-students');
     }
 }

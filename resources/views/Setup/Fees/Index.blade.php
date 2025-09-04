@@ -15,8 +15,8 @@
         <div class="card">
             <div class="card-header">
                 @permission('add-fees')
-                <a href="/fees/create" class="btn btn-primary">
-                    Add New
+                <a href="/fees/create" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                    <i class="fas fa-plus"></i> Add New
                 </a>
                 @endpermission
             </div>
@@ -47,7 +47,7 @@
                             <td>{{$fee->charge_type}}</td>
                             <td>
                                 @permission('edit-fees')
-                                <a href="/fees/{{$fee->id}}/edit"> <span class="fa fa-pencil"></span> Edit</a>
+                                <a href="/fees/{{$fee->id}}/edit" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;"> <i class="fas fa-edit"></i> Edit</a>
                                 @endpermission
                             </td>
                         </tr>

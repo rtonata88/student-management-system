@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\FixedAsset;
-use App\Models\FixedAssetCategory;
+use App\Models\AssetCategory;
+use App\Models\Department;
+use App\User;
+use App\Center;
 use App\Models\FixedAssetMaintenance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -61,7 +64,7 @@ class FixedAssetController extends Controller
         }
 
         $assets = $query->orderBy('created_at', 'desc')->paginate(15);
-        $categories = FixedAssetCategory::active()->orderBy('name')->get();
+        $categories = AssetCategory::active()->orderBy('name')->get();
 
         // Dashboard statistics
         $stats = [
@@ -80,8 +83,12 @@ class FixedAssetController extends Controller
      */
     public function create()
     {
-        $categories = FixedAssetCategory::active()->orderBy('name')->get();
-        return view('fixed-assets.create', compact('categories'));
+        $categories = AssetCategory::active()->orderBy('name')->get();
+        $staffUsers = User::where('user_type', 'staff')->orderBy('name')->get();
+        $departments = Department::active()->orderBy('name')->get();
+        $centers = Center::orderBy('center_name')->get();
+
+        return view('fixed-assets.create', compact('categories', 'staffUsers', 'departments', 'centers'));
     }
 
     /**
@@ -92,12 +99,14 @@ class FixedAssetController extends Controller
         $request->validate([
             'asset_tag' => 'required|string|unique:fixed_assets,asset_tag',
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:fixed_asset_categories,id',
+            'category_id' => 'required|exists:asset_categories,id',
             'purchase_cost' => 'required|numeric|min:0',
             'purchase_date' => 'required|date',
-            'location' => 'required|string|max:255',
+            'location' => 'required|string|max:255|in:' . Center::pluck('center_name')->implode(','),
             'condition' => 'required|in:excellent,good,fair,poor,damaged',
-            'status' => 'required|in:active,inactive,disposed,lost,stolen,maintenance'
+            'status' => 'required|in:active,inactive,disposed,lost,stolen,maintenance',
+            'assigned_to' => 'nullable|exists:users,id',
+            'department' => 'nullable|exists:departments,id'
         ]);
 
         $asset = FixedAsset::create($request->all());
@@ -123,8 +132,12 @@ class FixedAssetController extends Controller
      */
     public function edit(FixedAsset $fixedAsset)
     {
-        $categories = FixedAssetCategory::active()->orderBy('name')->get();
-        return view('fixed-assets.edit', compact('fixedAsset', 'categories'));
+        $categories = AssetCategory::active()->orderBy('name')->get();
+        $staffUsers = User::where('user_type', 'staff')->orderBy('name')->get();
+        $departments = Department::active()->orderBy('name')->get();
+        $centers = Center::orderBy('center_name')->get();
+
+        return view('fixed-assets.edit', compact('fixedAsset', 'categories', 'staffUsers', 'departments', 'centers'));
     }
 
     /**
@@ -135,12 +148,14 @@ class FixedAssetController extends Controller
         $request->validate([
             'asset_tag' => 'required|string|unique:fixed_assets,asset_tag,' . $fixedAsset->id,
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:fixed_asset_categories,id',
+            'category_id' => 'required|exists:asset_categories,id',
             'purchase_cost' => 'required|numeric|min:0',
             'purchase_date' => 'required|date',
-            'location' => 'required|string|max:255',
+            'location' => 'required|string|max:255|in:' . Center::pluck('center_name')->implode(','),
             'condition' => 'required|in:excellent,good,fair,poor,damaged',
-            'status' => 'required|in:active,inactive,disposed,lost,stolen,maintenance'
+            'status' => 'required|in:active,inactive,disposed,lost,stolen,maintenance',
+            'assigned_to' => 'nullable|exists:users,id',
+            'department' => 'nullable|exists:departments,id'
         ]);
 
         $fixedAsset->update($request->all());

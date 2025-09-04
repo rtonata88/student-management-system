@@ -92,7 +92,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="d-flex gap-2">
+                                        <div class="d-flex" style="gap: 0.5rem;">
                                             @permission('fleet-services-edit')
                                             <a href="{{ route('fleet.services.edit', $service) }}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;" title="Edit">
                                                 <i class="fas fa-edit"></i> Edit

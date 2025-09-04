@@ -44,9 +44,10 @@
         }
         
         .student-portal-sidebar .c-sidebar-nav-link:hover {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white !important;
             transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
         
         .c-sidebar-nav-link:hover .c-sidebar-nav-icon {
@@ -66,8 +67,9 @@
 
         /* Keep dropdown open when child is active */
         .c-sidebar .c-sidebar-nav-dropdown.c-show > .c-sidebar-nav-dropdown-toggle {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%) !important;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
             color: #fff !important;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
         
         /* Header account dropdown to match admin theme */
@@ -90,7 +92,9 @@
         
         .student-portal-sidebar .c-sidebar-nav-dropdown-items .c-sidebar-nav-link:hover {
             color: white;
-            background-color: rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
         
         .c-header {

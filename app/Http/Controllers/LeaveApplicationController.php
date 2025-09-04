@@ -60,21 +60,43 @@ class LeaveApplicationController extends Controller
     {
         $request->validate([
             'leave_type_id' => 'required|exists:leave_types,id',
-            'start_date' => 'required|date|after_or_equal:today',
+            'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'required|string|max:1000',
             'is_half_day' => 'boolean',
-            'half_day_period' => 'required_if:is_half_day,1|in:morning,afternoon',
+            'half_day_period' => 'nullable|required_if:is_half_day,true|in:morning,afternoon',
             'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048'
         ]);
 
         $startDate = Carbon::parse($request->start_date);
         $endDate = Carbon::parse($request->end_date);
         
-        // Calculate total days
+        // Check for overlapping leave dates
+        $overlappingLeave = LeaveRequest::where('user_id', Auth::id())
+            ->whereIn('status', ['pending', 'approved'])
+            ->where(function($query) use ($startDate, $endDate) {
+                $query->whereBetween('start_date', [$startDate, $endDate])
+                      ->orWhereBetween('end_date', [$startDate, $endDate])
+                      ->orWhere(function($q) use ($startDate, $endDate) {
+                          $q->where('start_date', '<=', $startDate)
+                            ->where('end_date', '>=', $endDate);
+                      });
+            })
+            ->first();
+
+        if ($overlappingLeave) {
+            return back()->withInput()->withErrors([
+                'start_date' => 'You already have a leave request for overlapping dates (' . 
+                               $overlappingLeave->start_date->format('M d, Y') . ' to ' . 
+                               $overlappingLeave->end_date->format('M d, Y') . '). ' .
+                               'Status: ' . ucfirst($overlappingLeave->status)
+            ]);
+        }
+        
+        // Calculate total days - database expects integer, so convert 0.5 to 1 for half days
         $totalDays = $startDate->diffInDays($endDate) + 1;
         if ($request->is_half_day) {
-            $totalDays = 0.5;
+            $totalDays = 1; // Store as 1 in database, but track as half day with is_half_day flag
         }
 
         $leaveRequest = new LeaveRequest();
@@ -97,10 +119,21 @@ class LeaveApplicationController extends Controller
             $leaveRequest->attachment = $path;
         }
 
-        $leaveRequest->save();
-
-        return redirect()->route('leave-applications.index')
-                        ->with('success', 'Leave application submitted successfully.');
+        try {
+            // Debug: Log all request data
+            \Log::info('Leave Application Store Request Data:', $request->all());
+            
+            $leaveRequest->save();
+            
+            \Log::info('Leave Application saved successfully with ID: ' . $leaveRequest->id);
+            
+            return redirect()->route('leave-applications.index')->with('success', 'Leave application submitted successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Error saving leave application: ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
+            
+            return back()->withInput()->with('error', 'Failed to save leave application. Please try again.');
+        }
     }
 
     /**
@@ -145,21 +178,44 @@ class LeaveApplicationController extends Controller
 
         $request->validate([
             'leave_type_id' => 'required|exists:leave_types,id',
-            'start_date' => 'required|date|after_or_equal:today',
+            'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'required|string|max:1000',
             'is_half_day' => 'boolean',
-            'half_day_period' => 'required_if:is_half_day,1|in:morning,afternoon',
+            'half_day_period' => 'nullable|required_if:is_half_day,true|in:morning,afternoon',
             'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048'
         ]);
 
         $startDate = Carbon::parse($request->start_date);
         $endDate = Carbon::parse($request->end_date);
         
-        // Calculate total days
+        // Check for overlapping leave dates (excluding current application being updated)
+        $overlappingLeave = LeaveRequest::where('user_id', Auth::id())
+            ->where('id', '!=', $leaveApplication->id)
+            ->whereIn('status', ['pending', 'approved'])
+            ->where(function($query) use ($startDate, $endDate) {
+                $query->whereBetween('start_date', [$startDate, $endDate])
+                      ->orWhereBetween('end_date', [$startDate, $endDate])
+                      ->orWhere(function($q) use ($startDate, $endDate) {
+                          $q->where('start_date', '<=', $startDate)
+                            ->where('end_date', '>=', $endDate);
+                      });
+            })
+            ->first();
+
+        if ($overlappingLeave) {
+            return back()->withInput()->withErrors([
+                'start_date' => 'You already have a leave request for overlapping dates (' . 
+                               $overlappingLeave->start_date->format('M d, Y') . ' to ' . 
+                               $overlappingLeave->end_date->format('M d, Y') . '). ' .
+                               'Status: ' . ucfirst($overlappingLeave->status)
+            ]);
+        }
+        
+        // Calculate total days - database expects integer, so convert 0.5 to 1 for half days
         $totalDays = $startDate->diffInDays($endDate) + 1;
         if ($request->is_half_day) {
-            $totalDays = 0.5;
+            $totalDays = 1; // Store as 1 in database, but track as half day with is_half_day flag
         }
 
         $leaveApplication->leave_type_id = $request->leave_type_id;

@@ -20,13 +20,21 @@
                     <small class="text-muted">Items at or below minimum stock levels requiring attention</small>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('inventories.index') }}" class="btn btn-outline-primary btn-sm">
+                    <a href="{{ route('inventories.index') }}" class="btn btn-outline-secondary btn-sm">
+                        <svg class="c-icon c-icon-sm mr-1">
+                            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-left')}}"></use>
+                        </svg>
+                        Back to Inventory
+                    </a>
+                    <a href="{{ route('inventories.index') }}" class="btn btn-sm" 
+                       style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                         <svg class="c-icon c-icon-sm mr-1">
                             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-layers')}}"></use>
                         </svg>
-                        All Items
+                        View All Items
                     </a>
-                    <a href="{{ route('inventories.create') }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('inventories.create') }}" class="btn btn-sm"
+                       style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                         <svg class="c-icon c-icon-sm mr-1">
                             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-plus')}}"></use>
                         </svg>
@@ -140,7 +148,8 @@
                                         <p class="text-muted">
                                             No items are currently below minimum stock levels. Great job maintaining inventory!
                                         </p>
-                                        <a href="{{ route('inventories.index') }}" class="btn btn-outline-primary">
+                                        <a href="{{ route('inventories.index') }}" class="btn"
+                                           style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                             View All Items
                                         </a>
                                     </div>

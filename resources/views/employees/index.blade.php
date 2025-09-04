@@ -103,7 +103,7 @@
                     <tbody>
                         @foreach($users as $user)
                         <tr>
-                            <td class="text-center">
+                            <td class="text-center align-middle">
                                 @if($user->employeeProfile && $user->employeeProfile->profile_photo)
                                     <img src="{{ asset('storage/' . $user->employeeProfile->profile_photo) }}" 
                                          alt="Profile Photo" 
@@ -116,31 +116,31 @@
                                     </div>
                                 @endif
                             </td>
-                            <td>{{$user->name}}</td>
-                            <td>{{$user->username}}</td>
-                            <td>{{$user->email}}</td>
-                            <td>
+                            <td class="align-middle">{{$user->name}}</td>
+                            <td class="align-middle">{{$user->username}}</td>
+                            <td class="align-middle">{{$user->email}}</td>
+                            <td class="align-middle">
                                 @if($user->employeeProfile)
                                     {{ $user->employeeProfile->employee_number ?? 'N/A' }}
                                 @else
                                     <span class="text-muted">No Profile</span>
                                 @endif
                             </td>
-                            <td>
+                            <td class="align-middle">
                                 @if($user->employeeProfile)
                                     {{ $user->employeeProfile->department ?? 'N/A' }}
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif
                             </td>
-                            <td>
+                            <td class="align-middle">
                                 @if($user->employeeProfile)
                                     {{ $user->employeeProfile->position ?? 'N/A' }}
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif
                             </td>
-                            <td>
+                            <td class="align-middle">
                                 @if($user->employeeProfile)
                                     @if($user->employeeProfile->is_active)
                                         <span class="badge badge-success">Active</span>
@@ -151,7 +151,7 @@
                                     <span class="badge badge-warning">No Profile</span>
                                 @endif
                             </td>
-                            <td class="text-center">
+                            <td class="text-center align-middle">
                                 @if($user->employeeProfile)
                                 <a href="{{route('employees.show', $user->id)}}" title="View Profile" class="btn btn-info btn-sm mr-1">
                                     View

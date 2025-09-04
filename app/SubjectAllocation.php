@@ -39,11 +39,11 @@ class SubjectAllocation extends Model
         return $this->hasMany(AssessmentType::class,'subject_id','subject_id');
     }
 
-    // //registered students
-    // public function moduleRegistrations()
-    // {
-    //     return $this->hasMany(ModuleRegistration::class, 'module_id')->where('registration_status','Registered');
-    // }
+    //registered students
+    public function moduleRegistrations()
+    {
+        return $this->hasMany(ModuleRegistration::class, 'module_id', 'subject_id');
+    }
 
     // //count of registered students
     // public function getCountOfStudents()

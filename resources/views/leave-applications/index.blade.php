@@ -29,7 +29,7 @@
                                                value="{{ request('search') }}">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-primary" type="submit">
-                                                <i class="cil-magnifying-glass"></i>
+                                                <i class="cil-magnifying-glass"></i> Search
                                             </button>
                                         </div>
                                     </div>
@@ -112,27 +112,25 @@
                                                 </td>
                                                 <td>{{ $application->created_at->format('M d, Y') }}</td>
                                                 <td>
-                                                    <div class="btn-group" role="group">
-                                                        <a href="{{ route('leave-applications.show', $application) }}" 
-                                                           class="btn btn-sm btn-info" title="View Details">
-                                                            <i class="cil-eye"></i>
+                                                    <a href="{{ route('leave-applications.show', $application) }}" 
+                                                       class="btn btn-sm btn-info me-1" title="View Details">
+                                                        <i class="cil-eye"></i> View
+                                                    </a>
+                                                    
+                                                    @if($application->status === 'pending')
+                                                        <a href="{{ route('leave-applications.edit', $application) }}" 
+                                                           class="btn btn-sm btn-warning me-1" title="Edit">
+                                                            <i class="cil-pencil"></i> Edit
                                                         </a>
                                                         
-                                                        @if($application->status === 'pending')
-                                                            <a href="{{ route('leave-applications.edit', $application) }}" 
-                                                               class="btn btn-sm btn-warning" title="Edit">
-                                                                <i class="cil-pencil"></i>
-                                                            </a>
-                                                            
-                                                            <form method="POST" action="{{ route('leave-applications.cancel', $application) }}" style="display: inline;">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-sm btn-secondary" title="Cancel" 
-                                                                        onclick="return confirm('Are you sure you want to cancel this application?')">
-                                                                    <i class="cil-ban"></i>
-                                                                </button>
-                                                            </form>
-                                                        @endif
-                                                    </div>
+                                                        <form method="POST" action="{{ route('leave-applications.cancel', $application) }}" style="display: inline;">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-sm btn-secondary" title="Cancel" 
+                                                                    onclick="return confirm('Are you sure you want to cancel this application?')">
+                                                                <i class="cil-ban"></i> Cancel
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

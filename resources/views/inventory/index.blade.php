@@ -14,77 +14,57 @@
     <div class="col-md-12 col-xs-12">
         <!-- Dashboard Statistics -->
         <div class="row mb-4">
-            <div class="col-md-2 col-sm-6 mb-3">
-                <div class="card text-white bg-primary">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="h4 mb-0">{{ $stats['total_items'] }}</div>
-                                <div class="small">Total Items</div>
-                            </div>
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-layers')}}"></use>
-                            </svg>
+            <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="stats-card stats-card-purple">
+                    <div class="stats-card-body">
+                        <div class="stats-number">{{ $stats['total_items'] }}</div>
+                        <div class="stats-label">Total Items</div>
+                        <div class="stats-icon">
+                            <i class="fas fa-layer-group"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 col-sm-6 mb-3">
-                <div class="card text-white bg-success">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="h4 mb-0">${{ number_format($stats['total_value'], 2) }}</div>
-                                <div class="small">Total Value</div>
-                            </div>
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-dollar')}}"></use>
-                            </svg>
+            <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="stats-card stats-card-green">
+                    <div class="stats-card-body">
+                        <div class="stats-number">${{ number_format($stats['total_value'], 0) }}</div>
+                        <div class="stats-label">Total Value</div>
+                        <div class="stats-icon">
+                            <i class="fas fa-dollar-sign"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 col-sm-6 mb-3">
-                <div class="card text-white bg-warning">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="h4 mb-0">{{ $stats['low_stock_items'] }}</div>
-                                <div class="small">Low Stock</div>
-                            </div>
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-warning')}}"></use>
-                            </svg>
+            <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="stats-card stats-card-pink">
+                    <div class="stats-card-body">
+                        <div class="stats-number">{{ $stats['low_stock_items'] }}</div>
+                        <div class="stats-label">Low Stock</div>
+                        <div class="stats-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 col-sm-6 mb-3">
-                <div class="card text-white bg-danger">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="h4 mb-0">{{ $stats['expired_items'] }}</div>
-                                <div class="small">Expired</div>
-                            </div>
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-clock')}}"></use>
-                            </svg>
+            <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="stats-card stats-card-red">
+                    <div class="stats-card-body">
+                        <div class="stats-number">{{ $stats['expired_items'] }}</div>
+                        <div class="stats-label">Expired</div>
+                        <div class="stats-icon">
+                            <i class="fas fa-clock"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 col-sm-6 mb-3">
-                <div class="card text-white bg-info">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="h4 mb-0">{{ $stats['categories'] }}</div>
-                                <div class="small">Categories</div>
-                            </div>
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-folder')}}"></use>
-                            </svg>
+            <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="stats-card stats-card-blue">
+                    <div class="stats-card-body">
+                        <div class="stats-number">{{ $stats['categories'] }}</div>
+                        <div class="stats-label">Categories</div>
+                        <div class="stats-icon">
+                            <i class="fas fa-folder"></i>
                         </div>
                     </div>
                 </div>
@@ -393,25 +373,74 @@
     color: white !important;
 }
 
-/* Dashboard cards */
-.bg-primary {
-    background: var(--primary-gradient) !important;
+/* Modern Stats Cards */
+.stats-card {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+    height: 120px;
 }
 
-.bg-success {
-    background: var(--success-gradient) !important;
+.stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
-.bg-warning {
-    background: var(--warning-gradient) !important;
+.stats-card-body {
+    padding: 24px;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.bg-danger {
-    background: var(--danger-gradient) !important;
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+    line-height: 1;
 }
 
-.bg-info {
-    background: var(--info-gradient) !important;
+.stats-label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stats-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Card Color Variants */
+.stats-card-purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stats-card-green {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+}
+
+.stats-card-pink {
+    background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+}
+
+.stats-card-red {
+    background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);
+}
+
+.stats-card-blue {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
 }
 
 /* Table styling */

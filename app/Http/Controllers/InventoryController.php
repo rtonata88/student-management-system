@@ -108,7 +108,7 @@ class InventoryController extends Controller
             'expiry_date' => 'nullable|date|after:today',
             'barcode' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'specifications' => 'nullable|json',
+            'specifications' => 'nullable|string',
         ]);
 
         $item = InventoryItem::create($request->all());
@@ -172,7 +172,7 @@ class InventoryController extends Controller
             'expiry_date' => 'nullable|date',
             'barcode' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'specifications' => 'nullable|json',
+            'specifications' => 'nullable|string',
             'status' => 'required|in:active,inactive,discontinued',
         ]);
 

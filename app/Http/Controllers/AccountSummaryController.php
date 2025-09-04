@@ -120,7 +120,7 @@ class AccountSummaryController extends Controller
 
     private function getExtraCharges($academic_year)
     {
-        return OtherFeesSummary::selectRaw('student_id, sum((outstanding + debit_memos) - credit_memos) outstanding')
+        return OtherFeesSummary::selectRaw('student_id, sum(outstanding) outstanding')
                                 ->where('academic_year', $academic_year)
                                 ->groupBy('student_id')
                                 ->get();
@@ -128,7 +128,7 @@ class AccountSummaryController extends Controller
 
     private function getExtraChargesDetails($academic_year)
     {
-        return OtherFeesSummary::selectRaw('student_id, fee_id, fee_description, (amount_paid + credit_memos) as amount_paid, (outstanding + debit_memos) as outstanding')
+        return OtherFeesSummary::selectRaw('student_id, fee_id, fee_description, amount_paid, outstanding')
             ->where('academic_year', $academic_year)
             ->get();
     }

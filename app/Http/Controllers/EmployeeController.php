@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\EmployeeProfile;
+use App\Models\Department;
+use App\Models\Designation;
 use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
@@ -16,7 +18,7 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with('employeeProfile');
+        $query = User::with('employeeProfile')->where('user_type', 'staff');
         
         // Search functionality
         if ($request->filled('search')) {
@@ -88,7 +90,20 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $user = User::with('employeeProfile')->findOrFail($id);
-        return view('employees.edit', compact('user'));
+        
+        // Generate employee number if creating new profile
+        $generatedEmployeeNumber = null;
+        if (!$user->employeeProfile) {
+            $generatedEmployeeNumber = EmployeeProfile::generateEmployeeNumber();
+        }
+        
+        // Get active departments for dropdown
+        $departments = Department::active()->orderBy('name')->get();
+        
+        // Get active designations for position dropdown
+        $designations = Designation::active()->orderBy('name')->get();
+        
+        return view('employees.edit', compact('user', 'generatedEmployeeNumber', 'departments', 'designations'));
     }
 
     /**
@@ -108,10 +123,12 @@ class EmployeeController extends Controller
             'position' => 'nullable|string|max:255',
             'employment_type' => 'nullable|string|max:255',
             'hire_date' => 'nullable|date',
-            'salary' => 'nullable|numeric|min:0',
-            'personal_email' => 'nullable|email|max:255',
-            'work_phone' => 'nullable|string|max:255',
-            'personal_phone' => 'nullable|string|max:255',
+            'salary' => 'nullable|numeric|min:0|regex:/^[0-9]+(\.[0-9]{1,2})?$/',
+            'personal_email' => 'nullable|email:rfc,dns|max:255',
+            'work_phone' => 'nullable|string|max:255|regex:/^\+264[0-9]{8,9}$/',
+            'personal_phone' => 'nullable|string|max:255|regex:/^\+264[0-9]{8,9}$/',
+            'alternative_personal_phone' => 'nullable|string|max:255|regex:/^\+264[0-9]{8,9}$/',
+            'emergency_contact_phone' => 'nullable|string|max:255|regex:/^\+264[0-9]{8,9}$/',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -131,6 +148,10 @@ class EmployeeController extends Controller
             $user->employeeProfile->update($data);
         } else {
             $data['user_id'] = $user->id;
+            // Auto-generate employee number if not provided
+            if (empty($data['employee_number'])) {
+                $data['employee_number'] = EmployeeProfile::generateEmployeeNumber();
+            }
             EmployeeProfile::create($data);
         }
 

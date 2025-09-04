@@ -15,8 +15,8 @@
         <div class="card">
             <div class="card-header">
                 @permission('add-academic-years')
-                <a href="{{route('academic-year.create')}}" class="btn btn-primary">
-                    Add New
+                <a href="{{route('academic-year.create')}}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                    <i class="fas fa-plus"></i> Add New
                 </a>
                 @endpermission
             </div>
@@ -55,7 +55,7 @@
                             </td>
                             <td>
                                 @permission('edit-academic-years')
-                                <a href="{{route('academic-year.status', $academic_year->id)}}"> <span class="fa fa-pencil"></span> Update status</a>
+                                <a href="{{route('academic-year.status', $academic_year->id)}}" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;"> <i class="fas fa-edit"></i> Update status</a>
                                 @endpermission
                             </td>
                         </tr>

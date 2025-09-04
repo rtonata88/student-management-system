@@ -51,5 +51,10 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasOne(EmployeeProfile::class);
     }
+
+    public function employeePayrollSetting()
+    {
+        return $this->hasOne(\App\Models\EmployeePayrollSetting::class, 'user_id');
+    }
     
 }

@@ -15,6 +15,21 @@
                     <div class="card-body">
                         <form method="POST" action="{{ route('leave-management.store') }}" enctype="multipart/form-data">
                             @csrf
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
                             
                             <div class="row">
                                 <div class="col-md-6">
@@ -129,7 +144,7 @@
                             </div>
                             
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary gradient-btn">
+                                <button type="submit" class="btn btn-primary gradient-btn" onclick="console.log('Form submitting...'); return true;">
                                     <i class="cil-check"></i> Create Leave Request
                                 </button>
                                 <a href="{{ route('leave-management.index') }}" class="btn btn-secondary">
@@ -151,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const halfDayPeriodContainer = document.getElementById('half_day_period_container');
     const endDateInput = document.getElementById('end_date');
     const startDateInput = document.getElementById('start_date');
+    const form = document.querySelector('form');
     
     function toggleHalfDay() {
         if (halfDayCheckbox.checked) {
@@ -162,6 +178,8 @@ document.addEventListener('DOMContentLoaded', function() {
             endDateContainer.style.display = 'block';
             halfDayPeriodContainer.style.display = 'none';
             endDateInput.required = true;
+            // Clear half day period when not half day
+            document.getElementById('half_day_period').value = '';
         }
     }
     
@@ -170,6 +188,34 @@ document.addEventListener('DOMContentLoaded', function() {
         if (halfDayCheckbox.checked) {
             endDateInput.value = startDateInput.value;
         }
+    });
+    
+    // Debug form submission
+    form.addEventListener('submit', function(e) {
+        console.log('Form submit event triggered');
+        console.log('Form action:', form.action);
+        console.log('Form method:', form.method);
+        
+        // Check required fields
+        const userSelect = document.getElementById('user_id');
+        const leaveTypeSelect = document.getElementById('leave_type_id');
+        const reasonTextarea = document.getElementById('reason');
+        
+        console.log('User ID:', userSelect.value);
+        console.log('Leave Type ID:', leaveTypeSelect.value);
+        console.log('Start Date:', startDateInput.value);
+        console.log('End Date:', endDateInput.value);
+        console.log('Reason:', reasonTextarea.value);
+        console.log('Is Half Day:', halfDayCheckbox.checked);
+        
+        if (!userSelect.value || !leaveTypeSelect.value || !startDateInput.value || !endDateInput.value || !reasonTextarea.value) {
+            console.log('Missing required fields!');
+            alert('Please fill in all required fields');
+            e.preventDefault();
+            return false;
+        }
+        
+        console.log('Form validation passed, submitting...');
     });
     
     // Initialize on page load

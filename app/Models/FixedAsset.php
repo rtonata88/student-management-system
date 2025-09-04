@@ -52,7 +52,7 @@ class FixedAsset extends Model
      */
     public function category()
     {
-        return $this->belongsTo(FixedAssetCategory::class, 'category_id');
+        return $this->belongsTo(AssetCategory::class, 'category_id');
     }
 
     /**

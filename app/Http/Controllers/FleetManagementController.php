@@ -308,12 +308,14 @@ class FleetManagementController extends Controller
         $drivers = Driver::all();
         
         // Statistics for summary cards
-        $totalTrips = TripLog::count();
-        $totalDistance = TripLog::sum('distance_km') ?? 0;
-        $totalFuelConsumed = TripLog::sum('fuel_liters') ?? 0;
-        $activeTrips = TripLog::whereNull('arrival_time')->count();
+        $stats = [
+            'total_trips' => TripLog::count(),
+            'total_distance' => TripLog::sum('distance_km') ?? 0,
+            'fuel_consumed' => TripLog::sum('fuel_liters') ?? 0,
+            'active_trips' => TripLog::whereNull('arrival_time')->count()
+        ];
         
-        return view('fleet.trips.index', compact('trips', 'vehicles', 'drivers', 'totalTrips', 'totalDistance', 'totalFuelConsumed', 'activeTrips'));
+        return view('fleet.trips.index', compact('trips', 'vehicles', 'drivers', 'stats'));
     }
 
     public function createTrip()

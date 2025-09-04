@@ -36,9 +36,16 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="asset_tag">Asset Tag <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="asset_tag" name="asset_tag" 
-                                       value="{{ old('asset_tag') }}" required>
-                                <small class="form-text text-muted">Unique identifier for the asset</small>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="asset_tag" name="asset_tag" 
+                                           value="{{ old('asset_tag') }}" required>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-primary" onclick="generateAssetTag()" title="Generate Asset Tag">
+                                            <i class="fas fa-dice mr-1"></i> Generate
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">Unique identifier for the asset (e.g., AST-20250904-0001)</small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -94,8 +101,16 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="serial_number">Serial Number</label>
-                                <input type="text" class="form-control" id="serial_number" name="serial_number" 
-                                       value="{{ old('serial_number') }}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="serial_number" name="serial_number" 
+                                           value="{{ old('serial_number') }}">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-primary" onclick="generateSerialNumber()" title="Generate Serial Number">
+                                            <i class="fas fa-barcode mr-1"></i> Generate
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">Unique serial number for the asset (e.g., SN-20250904-A1B2C3)</small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -177,22 +192,40 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="location">Location <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="location" name="location" 
-                                       value="{{ old('location') }}" required>
+                                <select class="form-control" id="location" name="location" required>
+                                    <option value="">Select Location</option>
+                                    @foreach($centers as $center)
+                                        <option value="{{ $center->center_name }}" {{ old('location') == $center->center_name ? 'selected' : '' }}>
+                                            {{ $center->center_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="department">Department</label>
-                                <input type="text" class="form-control" id="department" name="department" 
-                                       value="{{ old('department') }}">
+                                <select class="form-control" id="department" name="department">
+                                    <option value="">Select Department</option>
+                                    @foreach($departments as $department)
+                                    <option value="{{ $department->id }}" {{ old('department') == $department->id ? 'selected' : '' }}>
+                                        {{ $department->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="assigned_to">Assigned To</label>
-                                <input type="text" class="form-control" id="assigned_to" name="assigned_to" 
-                                       value="{{ old('assigned_to') }}">
+                                <select class="form-control" id="assigned_to" name="assigned_to">
+                                    <option value="">Select Staff Member</option>
+                                    @foreach($staffUsers as $user)
+                                    <option value="{{ $user->id }}" {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -244,7 +277,7 @@
                             <div class="form-group">
                                 <label for="last_maintenance_date">Last Maintenance Date</label>
                                 <input type="date" class="form-control" id="last_maintenance_date" name="last_maintenance_date" 
-                                       value="{{ old('last_maintenance_date') }}">
+                                       value="{{ old('last_maintenance_date') }}" onchange="calculateNextMaintenanceDate()">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -288,3 +321,114 @@
     </div>
 </div>
 @endsection
+
+<script>
+function generateAssetTag() {
+    // Generate asset tag in format: AST-YYYYMMDD-XXXX
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const dateStr = year + month + day;
+    
+    // Generate random 4-digit number
+    const randomNum = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+    
+    const assetTag = `AST-${dateStr}-${randomNum}`;
+    document.getElementById('asset_tag').value = assetTag;
+}
+
+function generateSerialNumber() {
+    // Generate serial number in format: SN-YYYYMMDD-XXXXXX (6 random alphanumeric characters)
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const dateStr = year + month + day;
+    
+    // Generate random 6-character alphanumeric string
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let randomStr = '';
+    for (let i = 0; i < 6; i++) {
+        randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    
+    const serialNumber = `SN-${dateStr}-${randomStr}`;
+    document.getElementById('serial_number').value = serialNumber;
+}
+
+function calculateNextMaintenanceDate() {
+    const lastMaintenanceInput = document.getElementById('last_maintenance_date');
+    const nextMaintenanceInput = document.getElementById('next_maintenance_date');
+    
+    if (lastMaintenanceInput.value) {
+        // Parse the last maintenance date
+        const lastMaintenanceDate = new Date(lastMaintenanceInput.value);
+        
+        // Add 365 days
+        const nextMaintenanceDate = new Date(lastMaintenanceDate);
+        nextMaintenanceDate.setDate(nextMaintenanceDate.getDate() + 365);
+        
+        // Format the date as YYYY-MM-DD for the date input
+        const year = nextMaintenanceDate.getFullYear();
+        const month = String(nextMaintenanceDate.getMonth() + 1).padStart(2, '0');
+        const day = String(nextMaintenanceDate.getDate()).padStart(2, '0');
+        
+        nextMaintenanceInput.value = `${year}-${month}-${day}`;
+    } else {
+        // Clear the next maintenance date if last maintenance date is cleared
+        nextMaintenanceInput.value = '';
+    }
+}
+</script>
+
+<style>
+/* Standard gradient button styling */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --primary-color: #667eea;
+}
+
+.btn-primary {
+    background: var(--primary-gradient) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    color: white !important;
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    background: transparent !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary-gradient) !important;
+    border-color: transparent !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Input group button styling */
+.input-group-append .btn-outline-primary {
+    border-left: none !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+/* Section headers */
+h6 {
+    color: #333 !important;
+    font-weight: 600 !important;
+}
+</style>

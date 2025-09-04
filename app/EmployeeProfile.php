@@ -27,6 +27,7 @@ class EmployeeProfile extends Model
         'personal_email',
         'work_phone',
         'personal_phone',
+        'alternative_personal_phone',
         'emergency_contact_name',
         'emergency_contact_phone',
         'emergency_contact_relationship',
@@ -118,5 +119,22 @@ class EmployeeProfile extends Model
     public function scopeByDepartment($query, $department)
     {
         return $query->where('department', $department);
+    }
+
+    /**
+     * Generate a unique employee number in format 1011xxx
+     */
+    public static function generateEmployeeNumber()
+    {
+        do {
+            // Generate random 3-digit number (001-999)
+            $randomNumber = str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
+            $employeeNumber = '1011' . $randomNumber;
+            
+            // Check if this number already exists
+            $exists = self::where('employee_number', $employeeNumber)->exists();
+        } while ($exists);
+        
+        return $employeeNumber;
     }
 }

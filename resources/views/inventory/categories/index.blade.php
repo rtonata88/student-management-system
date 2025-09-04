@@ -23,7 +23,9 @@
                             </svg>
                             Inventory Categories
                         </h4>
-                        <a href="{{ route('inventory-categories.create') }}" class="btn btn-primary">
+                        <a href="{{ route('inventory-categories.create') }}" 
+                           class="btn btn-sm"
+                           style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-plus')}}"></use>
                             </svg>
@@ -79,29 +81,35 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <div class="btn-group" role="group">
-                                                <a href="{{ route('inventory-categories.show', $category) }}" class="btn btn-sm btn-outline-info" title="View">
+                                            <div>
+                                                <a href="{{ route('inventory-categories.show', $category) }}" 
+                                                   class="btn btn-sm me-2" 
+                                                   style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;" 
+                                                   title="View">
                                                     <svg class="c-icon">
                                                         <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-magnifying-glass')}}"></use>
                                                     </svg>
                                                 </a>
-                                                <a href="{{ route('inventory-categories.edit', $category) }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <a href="{{ route('inventory-categories.edit', $category) }}" 
+                                                   class="btn btn-sm me-2" 
+                                                   style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;" 
+                                                   title="Edit">
                                                     <svg class="c-icon">
                                                         <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
                                                     </svg>
                                                 </a>
                                                 @if($category->items_count == 0)
-                                                <form action="{{ route('inventory-categories.destroy', $category) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this category?')">
+                                                <form action="{{ route('inventory-categories.destroy', $category) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this category?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
                                                         <svg class="c-icon">
                                                             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-trash')}}"></use>
                                                         </svg>
                                                     </button>
                                                 </form>
                                                 @else
-                                                <button class="btn btn-sm btn-outline-danger" disabled title="Cannot delete category with items">
+                                                <button class="btn btn-sm btn-secondary" disabled title="Cannot delete category with items">
                                                     <svg class="c-icon">
                                                         <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-trash')}}"></use>
                                                     </svg>
@@ -124,7 +132,9 @@
                             <i class="fa fa-tags fa-3x text-muted mb-3"></i>
                             <h5 class="text-muted">No Categories Found</h5>
                             <p class="text-muted">Start by creating your first inventory category.</p>
-                            <a href="{{ route('inventory-categories.create') }}" class="btn btn-primary">
+                            <a href="{{ route('inventory-categories.create') }}" 
+                               class="btn btn-sm"
+                               style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                 <i class="fa fa-plus"></i> Create Category
                             </a>
                         </div>

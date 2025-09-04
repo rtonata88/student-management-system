@@ -7,9 +7,14 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Manage Hostels</h4>
-                    <a href="{{ route('hostel.administration.hostels.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
-                        <i class="fas fa-plus"></i> Add New Hostel
-                    </a>
+                    <div class="d-flex" style="gap: 10px;">
+                        <a href="{{ route('hostel.administration.index') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+                        <a href="{{ route('hostel.administration.hostels.create') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                            <i class="fas fa-plus"></i> Add New Hostel
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     @if(session('success'))

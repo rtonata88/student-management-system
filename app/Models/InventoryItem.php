@@ -72,7 +72,7 @@ class InventoryItem extends Model
      */
     public function scopeLowStock($query)
     {
-        return $query->whereRaw('quantity_in_stock <= minimum_stock_level');
+        return $query->whereRaw('quantity_in_stock < minimum_stock_level');
     }
 
     /**
@@ -104,7 +104,7 @@ class InventoryItem extends Model
      */
     public function getIsLowStockAttribute()
     {
-        return $this->quantity_in_stock <= $this->minimum_stock_level;
+        return $this->quantity_in_stock < $this->minimum_stock_level;
     }
 
     /**

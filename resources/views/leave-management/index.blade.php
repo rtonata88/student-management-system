@@ -29,7 +29,7 @@
                                                value="{{ request('search') }}">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-primary" type="submit">
-                                                <i class="cil-magnifying-glass"></i>
+                                                <i class="cil-magnifying-glass"></i> Search
                                             </button>
                                         </div>
                                     </div>
@@ -68,7 +68,7 @@
                                 
                                 <div class="col-md-1">
                                     <a href="{{ route('leave-management.index') }}" class="btn btn-outline-secondary">
-                                        <i class="cil-x"></i>
+                                        <i class="cil-x"></i> Clear
                                     </a>
                                 </div>
                             </div>
@@ -130,34 +130,32 @@
                                                 </td>
                                                 <td>{{ $request->created_at->format('M d, Y') }}</td>
                                                 <td>
-                                                    <div class="btn-group" role="group">
-                                                        <a href="{{ route('leave-management.show', $request) }}" 
-                                                           class="btn btn-sm btn-info" title="View Details">
-                                                            <i class="cil-eye"></i>
-                                                        </a>
+                                                    <a href="{{ route('leave-management.show', $request) }}" 
+                                                       class="btn btn-sm btn-info me-1" title="View Details">
+                                                        <i class="cil-eye"></i> View
+                                                    </a>
+                                                    
+                                                    @if($request->status === 'pending')
+                                                        <form method="POST" action="{{ route('leave-management.approve', $request) }}" style="display: inline;">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-sm btn-success me-1" title="Approve">
+                                                                <i class="cil-check"></i> Approve
+                                                            </button>
+                                                        </form>
                                                         
-                                                        @if($request->status === 'pending')
-                                                            <form method="POST" action="{{ route('leave-management.approve', $request) }}" style="display: inline;">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-sm btn-success" title="Approve">
-                                                                    <i class="cil-check"></i>
-                                                                </button>
-                                                            </form>
-                                                            
-                                                            <form method="POST" action="{{ route('leave-management.reject', $request) }}" style="display: inline;">
-                                                                @csrf
-                                                                <input type="hidden" name="admin_comments" value="Rejected by admin">
-                                                                <button type="submit" class="btn btn-sm btn-danger" title="Reject">
-                                                                    <i class="cil-x"></i>
-                                                                </button>
-                                                            </form>
-                                                        @endif
-                                                        
-                                                        <a href="{{ route('leave-management.edit', $request) }}" 
-                                                           class="btn btn-sm btn-warning" title="Edit">
-                                                            <i class="cil-pencil"></i>
-                                                        </a>
-                                                    </div>
+                                                        <form method="POST" action="{{ route('leave-management.reject', $request) }}" style="display: inline;">
+                                                            @csrf
+                                                            <input type="hidden" name="admin_comments" value="Rejected by admin">
+                                                            <button type="submit" class="btn btn-sm btn-danger me-1" title="Reject">
+                                                                <i class="cil-x"></i> Reject
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                    
+                                                    <a href="{{ route('leave-management.edit', $request) }}" 
+                                                       class="btn btn-sm btn-warning" title="Edit">
+                                                        <i class="cil-pencil"></i> Edit
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach

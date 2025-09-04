@@ -13,77 +13,57 @@
 
         <!-- Dashboard Statistics -->
         <div class="row mb-4">
-            <div class="col-md-2 col-sm-6 mb-3">
-                <div class="card text-white bg-primary">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="h4 mb-0">{{ $stats['total_assets'] }}</div>
-                                <div class="small">Total Assets</div>
-                            </div>
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-briefcase')}}"></use>
-                            </svg>
+            <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="stats-card stats-card-purple">
+                    <div class="stats-card-body">
+                        <div class="stats-number">{{ $stats['total_assets'] }}</div>
+                        <div class="stats-label">Total Assets</div>
+                        <div class="stats-icon">
+                            <i class="fas fa-briefcase"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 col-sm-6 mb-3">
-                <div class="card text-white bg-success">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="h4 mb-0">{{ $stats['active_assets'] }}</div>
-                                <div class="small">Active Assets</div>
-                            </div>
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-check')}}"></use>
-                            </svg>
+            <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="stats-card stats-card-green">
+                    <div class="stats-card-body">
+                        <div class="stats-number">{{ $stats['active_assets'] }}</div>
+                        <div class="stats-label">Active Assets</div>
+                        <div class="stats-icon">
+                            <i class="fas fa-check-circle"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 col-sm-6 mb-3">
-                <div class="card text-white bg-warning">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="h4 mb-0">{{ $stats['maintenance_due'] }}</div>
-                                <div class="small">Maintenance Due</div>
-                            </div>
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-settings')}}"></use>
-                            </svg>
+            <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="stats-card stats-card-orange">
+                    <div class="stats-card-body">
+                        <div class="stats-number">{{ $stats['maintenance_due'] }}</div>
+                        <div class="stats-label">Maintenance Due</div>
+                        <div class="stats-icon">
+                            <i class="fas fa-cog"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 col-sm-6 mb-3">
-                <div class="card text-white bg-danger">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="h4 mb-0">{{ $stats['warranty_expired'] }}</div>
-                                <div class="small">Warranty Expired</div>
-                            </div>
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-clock')}}"></use>
-                            </svg>
+            <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="stats-card stats-card-red">
+                    <div class="stats-card-body">
+                        <div class="stats-number">{{ $stats['warranty_expired'] }}</div>
+                        <div class="stats-label">Warranty Expired</div>
+                        <div class="stats-icon">
+                            <i class="fas fa-clock"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6 mb-3">
-                <div class="card text-white bg-info">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="h4 mb-0">${{ number_format($stats['total_value'], 2) }}</div>
-                                <div class="small">Total Asset Value</div>
-                            </div>
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-dollar')}}"></use>
-                            </svg>
+            <div class="col-xl-4 col-md-8 col-sm-12 mb-3">
+                <div class="stats-card stats-card-blue">
+                    <div class="stats-card-body">
+                        <div class="stats-number">${{ number_format($stats['total_value'], 0) }}</div>
+                        <div class="stats-label">Total Asset Value</div>
+                        <div class="stats-icon">
+                            <i class="fas fa-dollar-sign"></i>
                         </div>
                     </div>
                 </div>
@@ -98,30 +78,22 @@
                 </div>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                        <a href="{{ route('fixed-asset-categories.index') }}" class="btn btn-outline-secondary">
-                            <svg class="c-icon mr-2">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-folder-open')}}"></use>
-                            </svg>
+                        <a href="{{ route('fixed-asset-categories.index') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-folder-open mr-2"></i>
                             Categories
                         </a>
                         <a href="{{ route('fixed-assets.create') }}" class="btn btn-primary">
-                            <svg class="c-icon mr-2">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-plus')}}"></use>
-                            </svg>
+                            <i class="fas fa-plus mr-2"></i>
                             Add Asset
                         </a>
                     </div>
                     <div class="btn-group" role="group">
-                        <a href="{{ route('fixed-assets.maintenance-due') }}" class="btn btn-outline-secondary">
-                            <svg class="c-icon mr-2">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-settings')}}"></use>
-                            </svg>
+                        <a href="{{ route('fixed-assets.maintenance-due') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-cog mr-2"></i>
                             Maintenance Due
                         </a>
-                        <a href="{{ route('fixed-assets.warranty-expired') }}" class="btn btn-outline-secondary">
-                            <svg class="c-icon mr-2">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-clock')}}"></use>
-                            </svg>
+                        <a href="{{ route('fixed-assets.warranty-expired') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-clock mr-2"></i>
                             Warranty Expired
                         </a>
                     </div>
@@ -145,9 +117,8 @@
                                        value="{{ request('search') }}">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary" type="submit">
-                                        <svg class="c-icon">
-                                            <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-search')}}"></use>
-                                        </svg>
+                                        <i class="fas fa-search"></i>
+                                        <span class="ml-1">Search</span>
                                     </button>
                                 </div>
                             </div>
@@ -184,7 +155,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">Filter</button>
-                                <a href="{{ route('fixed-assets.index') }}" class="btn btn-outline-secondary">Clear</a>
+                                <a href="{{ route('fixed-assets.index') }}" class="btn btn-outline-primary">Clear</a>
                             </div>
                         </div>
                     </div>
@@ -238,7 +209,7 @@
                                 </td>
                                 <td>
                                     <div>
-                                        <strong>{{ $asset->location }}</strong>
+                                        <strong>{{ preg_replace('/\s+\d+$/', '', $asset->location) }}</strong>
                                         @if($asset->department)
                                         <br><small class="text-muted">{{ $asset->department }}</small>
                                         @endif
@@ -272,20 +243,17 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('fixed-assets.show', $asset) }}" class="btn btn-sm btn-outline-secondary" title="View">
-                                            <svg class="c-icon">
-                                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-magnifying-glass')}}"></use>
-                                            </svg>
+                                        <a href="{{ route('fixed-assets.show', $asset) }}" class="btn btn-sm btn-outline-primary" title="View">
+                                            <i class="fas fa-eye"></i>
+                                            <span class="d-none d-md-inline ml-1">View</span>
                                         </a>
-                                        <a href="{{ route('fixed-assets.edit', $asset) }}" class="btn btn-sm btn-outline-secondary" title="Edit">
-                                            <svg class="c-icon">
-                                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-pencil')}}"></use>
-                                            </svg>
+                                        <a href="{{ route('fixed-assets.edit', $asset) }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                            <span class="d-none d-md-inline ml-1">Edit</span>
                                         </a>
-                                        <a href="{{ route('fixed-assets.schedule-maintenance', $asset) }}" class="btn btn-sm btn-outline-secondary" title="Schedule Maintenance">
-                                            <svg class="c-icon">
-                                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-settings')}}"></use>
-                                            </svg>
+                                        <a href="{{ route('fixed-assets.schedule-maintenance', $asset) }}" class="btn btn-sm btn-outline-primary" title="Schedule Maintenance">
+                                            <i class="fas fa-cog"></i>
+                                            <span class="d-none d-md-inline ml-1">Maintenance</span>
                                         </a>
                                     </div>
                                 </td>
@@ -328,3 +296,137 @@
     </div>
 </div>
 @endsection
+
+<style>
+/* Modern Stats Cards */
+.stats-card {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+    height: 120px;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.stats-card-body {
+    padding: 24px;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+    line-height: 1;
+}
+
+.stats-label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stats-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Card Color Variants */
+.stats-card-purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stats-card-green {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+}
+
+.stats-card-orange {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+}
+
+.stats-card-red {
+    background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);
+}
+
+.stats-card-blue {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+/* Standard gradient button styling */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --primary-color: #667eea;
+}
+
+.btn-primary {
+    background: var(--primary-gradient) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    color: white !important;
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    background: transparent !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary-gradient) !important;
+    border-color: transparent !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Small button variants */
+.btn-sm.btn-outline-primary {
+    border-width: 1px !important;
+}
+
+.btn-sm.btn-outline-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* Input group button styling */
+.input-group-append .btn-outline-primary {
+    border-left: none !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+/* Button group spacing */
+.d-flex.gap-2 > * {
+    margin-right: 0.5rem;
+}
+
+.d-flex.gap-2 > *:last-child {
+    margin-right: 0;
+}
+</style>

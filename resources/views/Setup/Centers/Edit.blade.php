@@ -34,9 +34,9 @@
           </div>
           <hr>
           @permission('edit-centers')
-          <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Save</button>
+          <button type="submit" class="btn" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;"><i class="fas fa-save"></i> Save</button>
           @endpermission
-          <a href="/centers" class="btn"><span class="fa fa-ban"></span> Cancel</a>
+          <a href="/centers" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;"><i class="fas fa-times"></i> Cancel</a>
         </div>
       </div>
       {!! Form::close() !!}

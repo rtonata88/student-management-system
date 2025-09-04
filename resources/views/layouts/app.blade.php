@@ -279,7 +279,7 @@
 
       @permission('access-student-portal')
       <li class="c-sidebar-nav-item">
-        <a class="c-sidebar-nav-link" href="/student-portal">
+        <a class="c-sidebar-nav-link" href="/student-portal-administration">
           <svg class="c-sidebar-nav-icon">
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
           </svg> Student Portal
@@ -334,128 +334,117 @@
           </svg> System Reports</a>
         <ul class="c-sidebar-nav-dropdown-items">
           
-          {{-- Existing Core Reports --}}
+          {{-- All Reports Sorted Alphabetically --}}
           @permission('finance-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.account-summary.index')}}"><span class="c-sidebar-nav-icon"></span> Account Summary</a></li>
+          @endpermission
+          @permission('academic-performance-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'academic-performance'])}}"><span class="c-sidebar-nav-icon"></span> Academic Performance</a></li>
+          @endpermission
+          @permission('academic-transcript-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'academic-transcript'])}}"><span class="c-sidebar-nav-icon"></span> Academic Transcript</a></li>
+          @endpermission
+          @permission('asset-management-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'asset-management'])}}"><span class="c-sidebar-nav-icon"></span> Asset Management</a></li>
+          @endpermission
+          @permission('assessment-analysis-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'assessment-analysis'])}}"><span class="c-sidebar-nav-icon"></span> Assessment Analysis</a></li>
+          @endpermission
+          @permission('attendance-summary-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'attendance-summary'])}}"><span class="c-sidebar-nav-icon"></span> Attendance Summary</a></li>
           @endpermission
           @permission('finance-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.audit')}}"><span class="c-sidebar-nav-icon"></span> Audit Report</a></li>
           @endpermission
+          @permission('class-schedule-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'class-schedule'])}}"><span class="c-sidebar-nav-icon"></span> Class Schedule</a></li>
+          @endpermission
+          @permission('curriculum-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'curriculum'])}}"><span class="c-sidebar-nav-icon"></span> Curriculum Report</a></li>
+          @endpermission
+          @permission('employee-attendance-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'employee-attendance'])}}"><span class="c-sidebar-nav-icon"></span> Employee Attendance</a></li>
+          @endpermission
+          @permission('employee-performance-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'employee-performance'])}}"><span class="c-sidebar-nav-icon"></span> Employee Performance</a></li>
+          @endpermission
+          @permission('enrollment-statistics-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'enrollment-statistics'])}}"><span class="c-sidebar-nav-icon"></span> Enrollment Statistics</a></li>
+          @endpermission
+          @permission('exam-results-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'exam-results'])}}"><span class="c-sidebar-nav-icon"></span> Exam Results</a></li>
+          @endpermission
+          @permission('exam-schedule-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'exam-schedule'])}}"><span class="c-sidebar-nav-icon"></span> Exam Schedule</a></li>
+          @endpermission
+          @permission('fee-collection-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'fee-collection'])}}"><span class="c-sidebar-nav-icon"></span> Fee Collection</a></li>
+          @endpermission
+          @permission('fee-defaulters-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'fee-defaulters'])}}"><span class="c-sidebar-nav-icon"></span> Fee Defaulters</a></li>
+          @endpermission
           @permission('finance-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.finance.index')}}"><span class="c-sidebar-nav-icon"></span> Finance</a></li>
+          @endpermission
+          @permission('fleet-utilization-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'fleet-utilization'])}}"><span class="c-sidebar-nav-icon"></span> Fleet Utilization</a></li>
+          @endpermission
+          @permission('fuel-consumption-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'fuel-consumption'])}}"><span class="c-sidebar-nav-icon"></span> Fuel Consumption</a></li>
+          @endpermission
+          @permission('hostel-fee-collection-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'hostel-fee-collection'])}}"><span class="c-sidebar-nav-icon"></span> Hostel Fee Collection</a></li>
+          @endpermission
+          @permission('hostel-occupancy-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'hostel-occupancy'])}}"><span class="c-sidebar-nav-icon"></span> Hostel Occupancy</a></li>
+          @endpermission
+          @permission('inventory-stock-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'inventory-stock'])}}"><span class="c-sidebar-nav-icon"></span> Inventory Stock</a></li>
+          @endpermission
+          @permission('leave-summary-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'leave-summary'])}}"><span class="c-sidebar-nav-icon"></span> Leave Summary</a></li>
+          @endpermission
+          @permission('low-stock-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'low-stock'])}}"><span class="c-sidebar-nav-icon"></span> Low Stock</a></li>
+          @endpermission
+          @permission('maintenance-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'maintenance'])}}"><span class="c-sidebar-nav-icon"></span> Maintenance Report</a></li>
+          @endpermission
+          @permission('outstanding-balances-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'outstanding-balances'])}}"><span class="c-sidebar-nav-icon"></span> Outstanding Balances</a></li>
           @endpermission
           @permission('finance-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.payments.index')}}"><span class="c-sidebar-nav-icon"></span> Payments</a></li>
           @endpermission
+          @permission('payroll-summary-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'payroll-summary'])}}"><span class="c-sidebar-nav-icon"></span> Payroll Summary</a></li>
+          @endpermission
+          @permission('registration-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'registration'])}}"><span class="c-sidebar-nav-icon"></span> Registration Report</a></li>
+          @endpermission
+          @permission('revenue-analysis-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'revenue-analysis'])}}"><span class="c-sidebar-nav-icon"></span> Revenue Analysis</a></li>
+          @endpermission
+          @permission('room-utilization-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'room-utilization'])}}"><span class="c-sidebar-nav-icon"></span> Room Utilization</a></li>
+          @endpermission
+          @permission('student-demographics-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'student-demographics'])}}"><span class="c-sidebar-nav-icon"></span> Student Demographics</a></li>
+          @endpermission
           @permission('student-report')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.students.index')}}"><span class="c-sidebar-nav-icon"></span> Student Registration</a></li>
           @endpermission
-
-          {{-- Academic Reports --}}
-          @permission('academic-performance-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Academic Performance</a></li>
-          @endpermission
-          @permission('assessment-analysis-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Assessment Analysis</a></li>
-          @endpermission
-          @permission('attendance-summary-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Attendance Summary</a></li>
-          @endpermission
-
-          {{-- Employee & HR Reports --}}
-          @permission('employee-attendance-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Employee Attendance</a></li>
-          @endpermission
-          @permission('employee-performance-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Employee Performance</a></li>
-          @endpermission
-          @permission('leave-summary-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Leave Summary</a></li>
-          @endpermission
-          @permission('payroll-summary-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Payroll Summary</a></li>
-          @endpermission
-
-          {{-- Examination Reports --}}
-          @permission('exam-results-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Exam Results</a></li>
-          @endpermission
-          @permission('exam-schedule-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Exam Schedule</a></li>
-          @endpermission
-
-          {{-- Financial Reports --}}
-          @permission('fee-collection-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Fee Collection</a></li>
-          @endpermission
-          @permission('fee-defaulters-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Fee Defaulters</a></li>
-          @endpermission
-          @permission('outstanding-balances-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Outstanding Balances</a></li>
-          @endpermission
-          @permission('revenue-analysis-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Revenue Analysis</a></li>
-          @endpermission
-
-          {{-- Fleet Management Reports --}}
-          @permission('fleet-utilization-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Fleet Utilization</a></li>
-          @endpermission
-          @permission('fleet-fuel-consumption-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Fuel Consumption</a></li>
-          @endpermission
-          @permission('vehicle-service-history-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Vehicle Service History</a></li>
-          @endpermission
-
-          {{-- Hostel Reports --}}
-          @permission('hostel-occupancy-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Hostel Occupancy</a></li>
-          @endpermission
-          @permission('hostel-fee-collection-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Hostel Fee Collection</a></li>
-          @endpermission
-
-          {{-- Inventory Reports --}}
-          @permission('inventory-stock-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Inventory Stock</a></li>
-          @endpermission
-          @permission('low-stock-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Low Stock</a></li>
-          @endpermission
-
-          {{-- Student Reports --}}
-          @permission('student-academic-transcript')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Student Transcripts</a></li>
-          @endpermission
-          @permission('student-demographics-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Student Demographics</a></li>
-          @endpermission
-          @permission('enrollment-statistics-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Enrollment Statistics</a></li>
-          @endpermission
-
-          {{-- System & Administrative Reports --}}
-          @permission('audit-trail-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Audit Trail</a></li>
-          @endpermission
           @permission('system-activity-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> System Activity</a></li>
-          @endpermission
-          @permission('user-activity-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> User Activity</a></li>
-          @endpermission
-
-          {{-- Timetable Reports --}}
-          @permission('class-schedule-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Class Schedule</a></li>
-          @endpermission
-          @permission('room-utilization-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Room Utilization</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'system-activity'])}}"><span class="c-sidebar-nav-icon"></span> System Activity</a></li>
           @endpermission
           @permission('timetable-conflicts-report')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="#"><span class="c-sidebar-nav-icon"></span> Timetable Conflicts</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'timetable-conflicts'])}}"><span class="c-sidebar-nav-icon"></span> Timetable Conflicts</a></li>
+          @endpermission
+          @permission('user-activity-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'user-activity'])}}"><span class="c-sidebar-nav-icon"></span> User Activity</a></li>
+          @endpermission
+          @permission('vehicle-service-history-report')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('reports.coming-soon', ['report' => 'vehicle-service-history'])}}"><span class="c-sidebar-nav-icon"></span> Vehicle Service History</a></li>
           @endpermission
 
         </ul>
@@ -502,12 +491,21 @@
           @permission('subjects')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/subjects"><span class="c-sidebar-nav-icon"></span>Subjects</a></li>
           @endpermission
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/departments"><span class="c-sidebar-nav-icon"></span> Departments</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/designations"><span class="c-sidebar-nav-icon"></span> Designations</a></li>
+          @permission('view-departments')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('departments.index') }}"><span class="c-sidebar-nav-icon"></span> Departments</a></li>
+          @endpermission
+          @permission('view-leave-types')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('leave-types.index') }}"><span class="c-sidebar-nav-icon"></span> Leave Types</a></li>
+          @endpermission
+          @permission('view-designations')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('designations.index') }}"><span class="c-sidebar-nav-icon"></span> Designations</a></li>
+          @endpermission
           @permission('academic-years')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route('academic-year.index')}}"><span class="c-sidebar-nav-icon"></span>Academic Years</a></li>
           @endpermission
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/asset-categories"><span class="c-sidebar-nav-icon"></span> Asset Categories</a></li>
+          @permission('view-asset-categories')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('asset-categories.index') }}"><span class="c-sidebar-nav-icon"></span> Asset Categories</a></li>
+          @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/inventory-categories"><span class="c-sidebar-nav-icon"></span> Inventory Categories</a></li>
         </ul>
       </li>
@@ -520,11 +518,11 @@
           </svg> Academic Structure</a>
         <ul class="c-sidebar-nav-dropdown-items">
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/assessments"><span class="c-sidebar-nav-icon"></span> Assessments</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/assessment-weights"><span class="c-sidebar-nav-icon"></span> Assessment Weights</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/examinations"><span class="c-sidebar-nav-icon"></span> Examinations</a></li>
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/exam-paper-weights"><span class="c-sidebar-nav-icon"></span> Exam Paper Weights</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/result-codes"><span class="c-sidebar-nav-icon"></span> Result Codes</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/grading-scales"><span class="c-sidebar-nav-icon"></span> Grading Scales</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/assessment-weights"><span class="c-sidebar-nav-icon"></span> Assessment Weights</a></li>
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/exam-paper-weights"><span class="c-sidebar-nav-icon"></span> Exam Paper Weights</a></li>
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/promotional-statuses"><span class="c-sidebar-nav-icon"></span> Promotional Statuses</a></li>
         </ul>
       </li>
@@ -1011,6 +1009,147 @@
 </style>
 
 @yield('scripts')
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to find the active menu item using multiple methods
+    function findActiveMenuItem() {
+        // Try different selectors to find the active menu item
+        let activeMenuItem = document.querySelector('.c-sidebar-nav-link.c-active');
+        
+        if (!activeMenuItem) {
+            // Try looking for items with active class
+            activeMenuItem = document.querySelector('.c-sidebar-nav-item.c-active .c-sidebar-nav-link');
+        }
+        
+        if (!activeMenuItem) {
+            // Try looking for highlighted items (different background color)
+            const currentUrl = window.location.pathname;
+            const menuLinks = document.querySelectorAll('.c-sidebar-nav-link');
+            
+            menuLinks.forEach(function(link) {
+                const href = link.getAttribute('href');
+                if (href && (currentUrl.includes(href) || href.includes(currentUrl.split('/')[1]))) {
+                    if (href !== '/' && href.length > 1) { // Avoid matching root
+                        activeMenuItem = link;
+                    }
+                }
+            });
+        }
+        
+        return activeMenuItem;
+    }
+    
+    // Function to scroll to active menu item and keep it visible
+    function scrollToActiveMenuItem() {
+        const sidebar = document.querySelector('.c-sidebar');
+        const activeMenuItem = findActiveMenuItem();
+        
+        console.log('Active menu item found:', activeMenuItem); // Debug log
+        
+        if (sidebar && activeMenuItem) {
+            // Ensure parent dropdown is expanded first
+            const parentDropdown = activeMenuItem.closest('.c-sidebar-nav-dropdown');
+            if (parentDropdown) {
+                parentDropdown.classList.add('c-show');
+                const dropdownToggle = parentDropdown.querySelector('.c-sidebar-nav-dropdown-toggle');
+                if (dropdownToggle) {
+                    dropdownToggle.classList.add('c-active');
+                }
+            }
+            
+            // Wait a moment for dropdown to expand, then scroll
+            setTimeout(function() {
+                // Scroll the sidebar container to show the active item
+                const sidebarNav = document.querySelector('.c-sidebar-nav');
+                if (sidebarNav) {
+                    const activeItemRect = activeMenuItem.getBoundingClientRect();
+                    const sidebarRect = sidebarNav.getBoundingClientRect();
+                    
+                    // Calculate the position to scroll to
+                    const itemOffsetTop = activeMenuItem.offsetTop;
+                    const sidebarHeight = sidebarNav.clientHeight;
+                    const itemHeight = activeMenuItem.offsetHeight;
+                    
+                    // Center the item in the sidebar view
+                    const scrollTop = itemOffsetTop - (sidebarHeight / 2) + (itemHeight / 2);
+                    
+                    sidebarNav.scrollTo({
+                        top: Math.max(0, scrollTop),
+                        behavior: 'smooth'
+                    });
+                }
+            }, 100);
+        }
+    }
+    
+    // Function to expand parent dropdown if active item is inside it
+    function expandActiveDropdown() {
+        const activeMenuItem = findActiveMenuItem();
+        
+        if (activeMenuItem) {
+            // Find parent dropdown
+            const parentDropdown = activeMenuItem.closest('.c-sidebar-nav-dropdown');
+            
+            if (parentDropdown) {
+                // Add the show class to expand the dropdown
+                parentDropdown.classList.add('c-show');
+                
+                // Also add active class to the dropdown toggle
+                const dropdownToggle = parentDropdown.querySelector('.c-sidebar-nav-dropdown-toggle');
+                if (dropdownToggle) {
+                    dropdownToggle.classList.add('c-active');
+                }
+            }
+        }
+    }
+    
+    // Execute functions
+    expandActiveDropdown();
+    
+    // Wait a bit for any animations to complete, then scroll
+    setTimeout(function() {
+        scrollToActiveMenuItem();
+    }, 200);
+    
+    // Also handle when dropdowns are toggled
+    document.querySelectorAll('.c-sidebar-nav-dropdown-toggle').forEach(function(toggle) {
+        toggle.addEventListener('click', function() {
+            // Small delay to allow dropdown animation to complete
+            setTimeout(function() {
+                scrollToActiveMenuItem();
+            }, 300);
+        });
+    });
+    
+    // Store scroll position when clicking menu items
+    document.querySelectorAll('.c-sidebar-nav-link').forEach(function(link) {
+        link.addEventListener('click', function() {
+            const sidebarNav = document.querySelector('.c-sidebar-nav');
+            if (sidebarNav) {
+                localStorage.setItem('sidebarScrollPosition', sidebarNav.scrollTop);
+            }
+        });
+    });
+    
+    // Restore scroll position on page load
+    window.addEventListener('load', function() {
+        const savedScrollPosition = localStorage.getItem('sidebarScrollPosition');
+        const sidebarNav = document.querySelector('.c-sidebar-nav');
+        
+        if (savedScrollPosition && sidebarNav) {
+            setTimeout(function() {
+                sidebarNav.scrollTop = parseInt(savedScrollPosition);
+            }, 100);
+        }
+        
+        // Also try the active menu item method as backup
+        setTimeout(function() {
+            scrollToActiveMenuItem();
+        }, 500);
+    });
+});
+</script>
 
 </body>
 

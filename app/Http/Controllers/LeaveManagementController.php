@@ -60,7 +60,7 @@ class LeaveManagementController extends Controller
      */
     public function create()
     {
-        $users = User::orderBy('name')->get();
+        $users = User::where('user_type', 'staff')->orderBy('name')->get();
         $leaveTypes = LeaveType::active()->get();
         
         return view('leave-management.create', compact('users', 'leaveTypes'));
@@ -71,52 +71,62 @@ class LeaveManagementController extends Controller
      */
     public function store(Request $request)
     {
+        // Debug: Log all request data
+        \Log::info('Leave Management Store Request Data:', $request->all());
+        
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'leave_type_id' => 'required|exists:leave_types,id',
-            'start_date' => 'required|date|after_or_equal:today',
+            'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'required|string|max:1000',
             'is_half_day' => 'boolean',
-            'half_day_period' => 'required_if:is_half_day,1|in:morning,afternoon',
+            'half_day_period' => 'nullable|required_if:is_half_day,true|in:morning,afternoon',
             'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048'
         ]);
 
         $startDate = Carbon::parse($request->start_date);
         $endDate = Carbon::parse($request->end_date);
         
-        // Calculate total days
+        // Calculate total days - database expects integer, so convert 0.5 to 1 for half days
         $totalDays = $startDate->diffInDays($endDate) + 1;
         if ($request->is_half_day) {
-            $totalDays = 0.5;
+            $totalDays = 1; // Store as 1 in database, but track as half day with is_half_day flag
         }
 
-        $leaveRequest = new LeaveRequest();
-        $leaveRequest->user_id = $request->user_id;
-        $leaveRequest->leave_type_id = $request->leave_type_id;
-        $leaveRequest->start_date = $startDate;
-        $leaveRequest->end_date = $endDate;
-        $leaveRequest->total_days = $totalDays;
-        $leaveRequest->reason = $request->reason;
-        $leaveRequest->status = 'approved'; // Admin-created leaves are auto-approved
-        $leaveRequest->approved_by = Auth::id();
-        $leaveRequest->approved_at = now();
-        $leaveRequest->created_by = Auth::id();
-        $leaveRequest->is_half_day = $request->boolean('is_half_day');
-        $leaveRequest->half_day_period = $request->half_day_period;
+        try {
+            $leaveRequest = new LeaveRequest();
+            $leaveRequest->user_id = $request->user_id;
+            $leaveRequest->leave_type_id = $request->leave_type_id;
+            $leaveRequest->start_date = $startDate;
+            $leaveRequest->end_date = $endDate;
+            $leaveRequest->total_days = $totalDays;
+            $leaveRequest->reason = $request->reason;
+            $leaveRequest->status = 'approved'; // Admin-created leaves are auto-approved
+            $leaveRequest->approved_by = Auth::id();
+            $leaveRequest->approved_at = now();
+            $leaveRequest->created_by = Auth::id();
+            $leaveRequest->is_half_day = $request->boolean('is_half_day');
+            $leaveRequest->half_day_period = $request->half_day_period;
 
-        // Handle file upload
-        if ($request->hasFile('attachment')) {
-            $file = $request->file('attachment');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('leave_attachments', $filename, 'public');
-            $leaveRequest->attachment = $path;
+            // Handle file upload
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('leave_attachments', $filename, 'public');
+                $leaveRequest->attachment = $path;
+            }
+
+            $leaveRequest->save();
+            
+            return redirect()->route('leave-management.index')
+                            ->with('success', 'Leave request created successfully for ' . $leaveRequest->user->name);
+        } catch (\Exception $e) {
+            \Log::error('Leave request creation failed: ' . $e->getMessage());
+            return redirect()->back()
+                            ->withInput()
+                            ->with('error', 'Failed to create leave request. Please try again.');
         }
-
-        $leaveRequest->save();
-
-        return redirect()->route('leave-management.index')
-                        ->with('success', 'Leave request created successfully for ' . $leaveRequest->user->name);
     }
 
     /**
@@ -170,7 +180,7 @@ class LeaveManagementController extends Controller
      */
     public function edit(LeaveRequest $leaveRequest)
     {
-        $users = User::orderBy('name')->get();
+        $users = User::where('user_type', 'staff')->orderBy('name')->get();
         $leaveTypes = LeaveType::active()->get();
         
         return view('leave-management.edit', compact('leaveRequest', 'users', 'leaveTypes'));

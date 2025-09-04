@@ -7,9 +7,12 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Manage Hostel Blocks</h4>
-                    <div>
+                    <div class="d-flex align-items-center" style="gap: 10px;">
+                        <a href="{{ route('hostel.administration.index') }}" class="btn" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
                         @if($hostels->count() > 1)
-                        <select class="form-control d-inline-block mr-2" style="width: auto;" onchange="filterByHostel(this.value)">
+                        <select class="form-control" style="width: auto;" onchange="filterByHostel(this.value)">
                             <option value="">All Hostels</option>
                             @foreach($hostels as $hostel)
                             <option value="{{ $hostel->id }}" {{ $hostelId == $hostel->id ? 'selected' : '' }}>

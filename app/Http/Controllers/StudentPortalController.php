@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Student;
 use App\OnlineApplication;
 use App\ApplicationDocument;
@@ -44,7 +45,7 @@ class StudentPortalController extends Controller
 
         if ($student) {
             $stats['total_subjects'] = ModuleRegistration::where('student_id', $student->id)->count();
-            $stats['total_payments'] = Payment::where('student_id', $student->id)->sum('amount_paid');
+            $stats['total_payments'] = Payment::where('student_id', $student->id)->sum('payment_amount');
             $stats['exam_schedules'] = ExaminationSchedule::whereHas('subjectAllocation', function($query) use ($student) {
                 $query->whereHas('moduleRegistrations', function($q) use ($student) {
                     $q->where('student_id', $student->id);
@@ -120,7 +121,9 @@ class StudentPortalController extends Controller
     public function myInfo()
     {
         $user = Auth::user();
-        $student = Student::where('user_id', $user->id)->first();
+        $student = Student::where('user_id', $user->id)
+            ->with(['center', 'currentRegistration', 'registration'])
+            ->first();
         
         return view('student-portal.my-info', compact('student'));
     }
@@ -128,16 +131,25 @@ class StudentPortalController extends Controller
     public function myDocuments()
     {
         $user = Auth::user();
-        $application = OnlineApplication::where('user_id', $user->id)->first();
-        $documents = $application ? $application->documents : collect();
+        $student = Student::where('user_id', $user->id)->first();
         
-        return view('student-portal.my-documents', compact('documents'));
+        $documents = collect();
+        if ($student) {
+            $documents = DB::table('student_documents')
+                ->where('student_id', $student->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+        
+        return view('student-portal.my-documents', compact('documents', 'student'));
     }
 
     public function myApplications()
     {
         $user = Auth::user();
-        $applications = OnlineApplication::where('user_id', $user->id)->get();
+        $applications = OnlineApplication::where('user_id', $user->id)
+            ->with(['subjects', 'student.center'])
+            ->get();
         
         return view('student-portal.my-applications', compact('applications'));
     }
@@ -296,7 +308,7 @@ class StudentPortalController extends Controller
         
         if ($student) {
             $payments = Payment::where('student_id', $student->id)->get();
-            $totalPaid = $payments->sum('amount_paid');
+            $totalPaid = $payments->sum('payment_amount');
             // Calculate total owed based on subject fees
             $registrations = ModuleRegistration::where('student_id', $student->id)
                 ->with('subjectAllocation.subject')
@@ -320,7 +332,7 @@ class StudentPortalController extends Controller
         $subjects = collect();
         if ($student) {
             $subjects = ModuleRegistration::where('student_id', $student->id)
-                ->with(['subjectAllocation.subject', 'subjectAllocation.teacher'])
+                ->with(['subjectAllocation.module', 'subjectAllocation.user'])
                 ->get();
         }
         

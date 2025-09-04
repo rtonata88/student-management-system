@@ -13,6 +13,27 @@
                     </div>
                     
                     <div class="card-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
                         <form method="POST" action="{{ route('leave-applications.store') }}" enctype="multipart/form-data">
                             @csrf
                             
@@ -113,7 +134,7 @@
                             </div>
                             
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary gradient-btn">
+                                <button type="submit" class="btn btn-primary gradient-btn" id="submitBtn">
                                     <i class="cil-check"></i> Submit Application
                                 </button>
                                 <a href="{{ route('leave-applications.index') }}" class="btn btn-secondary">
@@ -133,8 +154,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const halfDayCheckbox = document.getElementById('is_half_day');
     const endDateContainer = document.getElementById('end_date_container');
     const halfDayPeriodContainer = document.getElementById('half_day_period_container');
+    const halfDayPeriodSelect = document.getElementById('half_day_period');
     const endDateInput = document.getElementById('end_date');
     const startDateInput = document.getElementById('start_date');
+    const submitBtn = document.getElementById('submitBtn');
+    const form = document.querySelector('form');
     
     function toggleHalfDay() {
         if (halfDayCheckbox.checked) {
@@ -146,6 +170,8 @@ document.addEventListener('DOMContentLoaded', function() {
             endDateContainer.style.display = 'block';
             halfDayPeriodContainer.style.display = 'none';
             endDateInput.required = true;
+            // Clear half day period when unchecked
+            halfDayPeriodSelect.value = '';
         }
     }
     
@@ -154,6 +180,24 @@ document.addEventListener('DOMContentLoaded', function() {
         if (halfDayCheckbox.checked) {
             endDateInput.value = startDateInput.value;
         }
+    });
+    
+    // Debug form submission
+    form.addEventListener('submit', function(e) {
+        console.log('Form submitting...');
+        console.log('Form data:', new FormData(form));
+        
+        // Log all form values for debugging
+        const formData = new FormData(form);
+        for (let [key, value] of formData.entries()) {
+            console.log(key + ': ' + value);
+        }
+    });
+    
+    submitBtn.addEventListener('click', function(e) {
+        console.log('Submit button clicked');
+        console.log('Half day checked:', halfDayCheckbox.checked);
+        console.log('Half day period:', halfDayPeriodSelect.value);
     });
     
     // Initialize on page load

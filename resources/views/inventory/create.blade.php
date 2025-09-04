@@ -35,13 +35,22 @@
                     <div class="row">
                         <!-- Basic Information -->
                         <div class="col-md-6">
-                            <h6 class="text-primary mb-3">Basic Information</h6>
+                            <h6 class="text-primary mb-3" style="color: #000000 !important; font-weight: bold !important;">Basic Information</h6>
                             
                             <div class="form-group">
                                 <label for="item_code">Item Code <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="item_code" name="item_code" 
-                                       value="{{ old('item_code') }}" required>
-                                <small class="form-text text-muted">Unique identifier for the item</small>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="item_code" name="item_code" 
+                                           value="{{ old('item_code') }}" required>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn" id="generateCodeBtn" 
+                                                title="Generate Random Code" onclick="generateRandomCode()"
+                                                style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                                            <i class="fas fa-dice me-1"></i> Generate
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">Unique identifier for the item. Click the dice icon to generate a random code.</small>
                             </div>
 
                             <div class="form-group">
@@ -69,19 +78,34 @@
 
                             <div class="form-group">
                                 <label for="barcode">Barcode</label>
-                                <input type="text" class="form-control" id="barcode" name="barcode" 
-                                       value="{{ old('barcode') }}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="barcode" name="barcode" 
+                                           value="{{ old('barcode') }}">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn" id="generateBarcodeBtn" 
+                                                title="Generate Random Barcode" onclick="generateRandomBarcode()"
+                                                style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
+                                            <i class="fas fa-barcode me-1"></i> Generate
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Stock & Pricing -->
                         <div class="col-md-6">
-                            <h6 class="text-primary mb-3">Stock & Pricing</h6>
+                            <h6 class="text-primary mb-3" style="color: #000000 !important; font-weight: bold !important;">Stock & Pricing</h6>
                             
                             <div class="form-group">
                                 <label for="unit_of_measure">Unit of Measure <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="unit_of_measure" name="unit_of_measure" 
-                                       value="{{ old('unit_of_measure') }}" placeholder="e.g., pieces, boxes, liters" required>
+                                <select class="form-control" id="unit_of_measure" name="unit_of_measure" required>
+                                    <option value="">Select Unit of Measure</option>
+                                    <option value="Bags" {{ old('unit_of_measure') == 'Bags' ? 'selected' : '' }}>Bags</option>
+                                    <option value="Liters" {{ old('unit_of_measure') == 'Liters' ? 'selected' : '' }}>Liters</option>
+                                    <option value="Boxes" {{ old('unit_of_measure') == 'Boxes' ? 'selected' : '' }}>Boxes</option>
+                                    <option value="Pieces" {{ old('unit_of_measure') == 'Pieces' ? 'selected' : '' }}>Pieces</option>
+                                    <option value="Kilograms" {{ old('unit_of_measure') == 'Kilograms' ? 'selected' : '' }}>Kilograms</option>
+                                </select>
                             </div>
 
                             <div class="form-group">
@@ -129,7 +153,7 @@
                     <div class="row">
                         <!-- Additional Information -->
                         <div class="col-md-6">
-                            <h6 class="text-primary mb-3">Additional Information</h6>
+                            <h6 class="text-primary mb-3" style="color: #000000 !important; font-weight: bold !important;">Additional Information</h6>
                             
                             <div class="form-group">
                                 <label for="supplier">Supplier</label>
@@ -146,13 +170,13 @@
 
                         <!-- Specifications -->
                         <div class="col-md-6">
-                            <h6 class="text-primary mb-3">Specifications (Optional)</h6>
+                            <h6 class="text-primary mb-3" style="color: #000000 !important; font-weight: bold !important;">Specifications (Optional)</h6>
                             
                             <div class="form-group">
                                 <label for="specifications">Technical Specifications</label>
                                 <textarea class="form-control" id="specifications" name="specifications" rows="4" 
-                                          placeholder='{"color": "blue", "size": "large", "material": "plastic"}'>{{ old('specifications') }}</textarea>
-                                <small class="form-text text-muted">Enter as JSON format for structured data</small>
+                                          placeholder='Color: Blue, Size: Large, Material: Plastic, Weight: 2kg'>{{ old('specifications') }}</textarea>
+                                <small class="form-text text-muted">Enter any technical details or specifications (optional)</small>
                             </div>
                         </div>
                     </div>
@@ -165,7 +189,8 @@
                                 </svg>
                                 Back to List
                             </a>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn" 
+                                    style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.375rem 0.75rem;">
                                 <svg class="c-icon c-icon-sm mr-1">
                                     <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-save')}}"></use>
                                 </svg>
@@ -224,7 +249,8 @@
 }
 
 .text-primary {
-    color: var(--primary-color) !important;
+    color: #000000 !important;
+    font-weight: bold !important;
 }
 
 .form-control:focus {
@@ -232,9 +258,72 @@
     box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
 }
 
-h6 {
-    font-weight: 600;
+h6, h6.text-primary, .text-primary h6 {
+    font-weight: bold !important;
+    color: #000000 !important;
     border-bottom: 2px solid #e9ecef;
     padding-bottom: 0.5rem;
 }
+
+#generateCodeBtn {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    transition: all 0.3s ease;
+}
+
+#generateCodeBtn:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+    transform: scale(1.05);
+}
 </style>
+
+<script>
+function generateRandomCode() {
+    // Generate a random code with format: INV-YYYYMMDD-XXXX
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const randomNum = Math.floor(Math.random() * 9999) + 1;
+    const randomStr = String(randomNum).padStart(4, '0');
+    
+    const generatedCode = `INV-${year}${month}${day}-${randomStr}`;
+    
+    // Set the generated code in the input field
+    document.getElementById('item_code').value = generatedCode;
+    
+    // Add a subtle animation to show the code was generated
+    const input = document.getElementById('item_code');
+    input.style.background = '#e8f5e8';
+    setTimeout(() => {
+        input.style.background = '';
+    }, 1000);
+    
+    // Focus on the input so user can edit if needed
+    input.focus();
+    input.select();
+}
+
+function generateRandomBarcode() {
+    // Generate a random 13-digit barcode (EAN-13 format)
+    let barcode = '';
+    for (let i = 0; i < 13; i++) {
+        barcode += Math.floor(Math.random() * 10);
+    }
+    
+    // Set the generated barcode in the input field
+    document.getElementById('barcode').value = barcode;
+    
+    // Add a subtle animation to show the barcode was generated
+    const input = document.getElementById('barcode');
+    input.style.background = '#e8f5e8';
+    setTimeout(() => {
+        input.style.background = '';
+    }, 1000);
+    
+    // Focus on the input so user can edit if needed
+    input.focus();
+    input.select();
+}
+</script>

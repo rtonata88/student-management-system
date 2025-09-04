@@ -31,8 +31,7 @@ class LeaveRequest extends Model
         'start_date' => 'date',
         'end_date' => 'date',
         'approved_at' => 'datetime',
-        'is_half_day' => 'boolean',
-        'total_days' => 'integer'
+        'is_half_day' => 'boolean'
     ];
 
     /**
@@ -48,7 +47,7 @@ class LeaveRequest extends Model
      */
     public function leaveType()
     {
-        return $this->belongsTo(LeaveType::class);
+        return $this->belongsTo(\App\Models\LeaveType::class);
     }
 
     /**
@@ -98,7 +97,7 @@ class LeaveRequest extends Model
     {
         switch ($this->status) {
             case 'pending':
-                return 'badge-warning';
+                return 'badge-danger';
             case 'approved':
                 return 'badge-success';
             case 'rejected':

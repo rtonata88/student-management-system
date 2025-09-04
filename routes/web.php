@@ -253,9 +253,15 @@ Route::group(['prefix' => 'student-portal', 'middleware' => ['auth', 'user.type:
     Route::get('/get-support', 'StudentPortalController@getSupport')->name('student-portal.get-support');
 });
 
+// Student Portal Administration Routes
+Route::get('/student-portal-administration', 'StudentPortalAdministrationController@index')->name('student-portal-administration.index')->middleware(['auth', 'permission:access-student-portal']);
+
 Route::get('/audit/reports', 'AuditReportController@index')->name('reports.audit');
 Route::get('/audit/show/{id}', 'AuditReportController@show')->name('reports.audit.show');
 Route::post('/audit/reports/search', 'AuditReportController@search')->name('reports.audit.search');
+
+// Coming Soon Reports Route
+Route::get('/reports/coming-soon/{report}', 'ReportsComingSoonController@show')->name('reports.coming-soon');
 
 //Ajax URLs
 Route::get('get-subjects', 'HomeController@fetchSubjects');
@@ -269,7 +275,16 @@ Route::resource('/academic-year', 'AcademicYearController');
 Route::get('/academic-year/status/{id}', 'AcademicYearController@updateStatus')->name('academic-year.status');
 
 //Access Management - setups
-Route::resource('/users','UsersController');
+Route::resource('/users','UsersController', ['except' => ['show']]);
+Route::get('/users/show', 'UsersController@show')->name('users.show')->middleware('permission:view-student-passwords');
+Route::get('/users/{username}/details', 'UsersController@showSingle')->name('users.details');
+Route::get('/users/{username}/change-password', 'UsersController@showChangePassword')->name('users.change-password');
+Route::put('/users/{username}/update-password', 'UsersController@updatePassword')->name('users.update-password');
+
+// Student Password Management
+Route::get('/users/reset-students', 'UsersController@resetStudents')->name('users.reset-students')->middleware('permission:view-student-passwords');
+Route::get('/users/{username}/reset-student-password', 'UsersController@showStudentPasswordReset')->name('users.reset-student-password')->middleware('permission:reset-student-passwords');
+Route::put('/users/{username}/update-student-password', 'UsersController@updateStudentPassword')->name('users.update-student-password')->middleware('permission:reset-student-passwords');
 Route::resource('/roles','RolesController');
 
 //Employee Management
@@ -301,9 +316,45 @@ Route::delete('/leave-applications/{leaveApplication}', 'LeaveApplicationControl
 Route::post('/leave-applications/{leaveApplication}/cancel', 'LeaveApplicationController@cancel')->name('leave-applications.cancel');
 
 //Payroll Management
-Route::get('/payroll-management', function () {
-    return view('payroll.coming-soon');
-})->name('payroll-management.index');
+Route::middleware(['permission:access-payroll-system'])->group(function () {
+    // Dashboard
+    Route::get('/payroll', 'PayrollController@index')->name('payroll.index');
+    Route::get('/payroll-management', 'PayrollController@index')->name('payroll-management.index');
+    
+    // Payroll Periods
+    Route::get('/payroll/periods', 'PayrollController@periods')->name('payroll.periods');
+    Route::get('/payroll/periods/create', 'PayrollController@createPeriod')->name('payroll.periods.create');
+    Route::post('/payroll/periods', 'PayrollController@storePeriod')->name('payroll.periods.store');
+    Route::get('/payroll/periods/{period}/edit', 'PayrollController@editPeriod')->name('payroll.periods.edit');
+    Route::patch('/payroll/periods/{period}', 'PayrollController@updatePeriod')->name('payroll.periods.update');
+    Route::delete('/payroll/periods/{period}', 'PayrollController@deletePeriod')->name('payroll.periods.destroy');
+    Route::post('/payroll/periods/{period}/process', 'PayrollController@processPeriod')->name('payroll.periods.process');
+    
+    // Employee Payroll Settings
+    Route::get('/payroll/employees', 'PayrollController@employees')->name('payroll.employees.index');
+    Route::get('/payroll/employees/create', 'PayrollController@createEmployee')->name('payroll.employees.create');
+    Route::post('/payroll/employees', 'PayrollController@storeEmployee')->name('payroll.employees.store');
+    Route::get('/payroll/employees/{employee}/edit', 'PayrollController@editEmployee')->name('payroll.employees.edit');
+    Route::patch('/payroll/employees/{employee}', 'PayrollController@updateEmployee')->name('payroll.employees.update');
+    
+    // Pay Slips
+    Route::get('/payroll/pay-slips', 'PayrollController@paySlips')->name('payroll.pay-slips');
+    Route::get('/payroll/pay-slips/{paySlip}', 'PayrollController@showPaySlip')->name('payroll.pay-slips.show');
+    Route::get('/payroll/pay-slips/{paySlip}/print', 'PayrollController@printPaySlip')->name('payroll.pay-slips.print');
+    Route::get('/payroll/pay-slips/{paySlip}/download', 'PayrollController@downloadPaySlip')->name('payroll.pay-slips.download');
+    Route::post('/payroll/pay-slips/{paySlip}/approve', 'PayrollController@approvePaySlip')->name('payroll.pay-slips.approve');
+    
+    // Payroll Items
+    Route::get('/payroll/items', 'PayrollController@items')->name('payroll.items');
+    Route::get('/payroll/items/create', 'PayrollController@createItem')->name('payroll.items.create');
+    Route::post('/payroll/items', 'PayrollController@storeItem')->name('payroll.items.store');
+    Route::get('/payroll/items/{item}/edit', 'PayrollController@editItem')->name('payroll.items.edit');
+    Route::patch('/payroll/items/{item}', 'PayrollController@updateItem')->name('payroll.items.update');
+    Route::delete('/payroll/items/{item}', 'PayrollController@deleteItem')->name('payroll.items.destroy');
+    
+    // Reports
+    Route::get('/payroll/reports', 'PayrollController@reports')->name('payroll.reports');
+});
 
 //Inventory Management
 Route::resource('/inventories', 'InventoryController');
@@ -701,6 +752,54 @@ Route::get('/marks-suppression/{marksSuppression}/edit', 'MarksSuppressionContro
 Route::put('/marks-suppression/{marksSuppression}', 'MarksSuppressionController@update')->name('marks-suppression.update')->middleware('permission:edit-marks-suppression');
 Route::delete('/marks-suppression/{marksSuppression}', 'MarksSuppressionController@destroy')->name('marks-suppression.destroy')->middleware('permission:delete-marks-suppression');
 Route::patch('/marks-suppression/{marksSuppression}/toggle', 'MarksSuppressionController@toggleSuppression')->name('marks-suppression.toggle')->middleware('permission:edit-marks-suppression');
+
+// Department Management Routes
+Route::group(['prefix' => 'departments', 'middleware' => ['auth', 'permission:view-departments']], function () {
+    Route::get('/', 'DepartmentController@index')->name('departments.index');
+    Route::get('/create', 'DepartmentController@create')->name('departments.create')->middleware('permission:create-departments');
+    Route::post('/', 'DepartmentController@store')->name('departments.store')->middleware('permission:create-departments');
+    Route::get('/{department}', 'DepartmentController@show')->name('departments.show');
+    Route::get('/{department}/edit', 'DepartmentController@edit')->name('departments.edit')->middleware('permission:edit-departments');
+    Route::put('/{department}', 'DepartmentController@update')->name('departments.update')->middleware('permission:edit-departments');
+    Route::delete('/{department}', 'DepartmentController@destroy')->name('departments.destroy')->middleware('permission:delete-departments');
+    Route::patch('/{department}/toggle-status', 'DepartmentController@toggleStatus')->name('departments.toggle-status')->middleware('permission:toggle-department-status');
+});
+
+// Designation Management Routes
+Route::group(['prefix' => 'designations', 'middleware' => ['auth', 'permission:view-designations']], function () {
+    Route::get('/', 'DesignationController@index')->name('designations.index');
+    Route::get('/create', 'DesignationController@create')->name('designations.create')->middleware('permission:create-designations');
+    Route::post('/', 'DesignationController@store')->name('designations.store')->middleware('permission:create-designations');
+    Route::get('/{designation}', 'DesignationController@show')->name('designations.show');
+    Route::get('/{designation}/edit', 'DesignationController@edit')->name('designations.edit')->middleware('permission:edit-designations');
+    Route::put('/{designation}', 'DesignationController@update')->name('designations.update')->middleware('permission:edit-designations');
+    Route::delete('/{designation}', 'DesignationController@destroy')->name('designations.destroy')->middleware('permission:delete-designations');
+    Route::patch('/{designation}/toggle-status', 'DesignationController@toggleStatus')->name('designations.toggle-status')->middleware('permission:toggle-designation-status');
+});
+
+// Asset Category Management Routes
+Route::group(['prefix' => 'asset-categories', 'middleware' => ['auth', 'permission:view-asset-categories']], function () {
+    Route::get('/', 'AssetCategoryController@index')->name('asset-categories.index');
+    Route::get('/create', 'AssetCategoryController@create')->name('asset-categories.create')->middleware('permission:create-asset-categories');
+    Route::post('/', 'AssetCategoryController@store')->name('asset-categories.store')->middleware('permission:create-asset-categories');
+    Route::get('/{assetCategory}', 'AssetCategoryController@show')->name('asset-categories.show');
+    Route::get('/{assetCategory}/edit', 'AssetCategoryController@edit')->name('asset-categories.edit')->middleware('permission:edit-asset-categories');
+    Route::put('/{assetCategory}', 'AssetCategoryController@update')->name('asset-categories.update')->middleware('permission:edit-asset-categories');
+    Route::delete('/{assetCategory}', 'AssetCategoryController@destroy')->name('asset-categories.destroy')->middleware('permission:delete-asset-categories');
+    Route::patch('/{assetCategory}/toggle-status', 'AssetCategoryController@toggleStatus')->name('asset-categories.toggle-status')->middleware('permission:toggle-asset-category-status');
+});
+
+// Leave Type Management Routes
+Route::group(['prefix' => 'leave-types', 'middleware' => ['auth', 'permission:view-leave-types']], function () {
+    Route::get('/', 'LeaveTypeController@index')->name('leave-types.index');
+    Route::get('/create', 'LeaveTypeController@create')->name('leave-types.create')->middleware('permission:create-leave-types');
+    Route::post('/', 'LeaveTypeController@store')->name('leave-types.store')->middleware('permission:create-leave-types');
+    Route::get('/{leaveType}', 'LeaveTypeController@show')->name('leave-types.show');
+    Route::get('/{leaveType}/edit', 'LeaveTypeController@edit')->name('leave-types.edit')->middleware('permission:edit-leave-types');
+    Route::put('/{leaveType}', 'LeaveTypeController@update')->name('leave-types.update')->middleware('permission:edit-leave-types');
+    Route::delete('/{leaveType}', 'LeaveTypeController@destroy')->name('leave-types.destroy')->middleware('permission:delete-leave-types');
+    Route::patch('/{leaveType}/toggle-status', 'LeaveTypeController@toggleStatus')->name('leave-types.toggle-status')->middleware('permission:toggle-leave-type-status');
+});
 
 // Statement of Results - Under Development
 Route::get('/statement-of-results', function () {

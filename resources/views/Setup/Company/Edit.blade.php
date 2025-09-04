@@ -57,7 +57,7 @@
             </div>
             <div class="card-footer">
                 @permission('edit-company')
-                <button type="submit" class="btn btn-sm btn-success">Save</button>
+                <button type="submit" class="btn btn-sm" style="background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); color: white; border: none; border-radius: 6px; padding: 0.25rem 0.5rem;">Save</button>
                 @endpermission
                 <a href="{{route('company.show', 1)}}">Cancel</a>
             </div>

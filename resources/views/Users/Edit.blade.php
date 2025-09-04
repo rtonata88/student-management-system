@@ -302,6 +302,11 @@
                                             return 'USER MANAGEMENT';
                                         }
                                         
+                                        // Group student password management permissions
+                                        if (in_array($permission->name, ['view-student-passwords', 'reset-student-passwords', 'manage-student-passwords'])) {
+                                            return 'STUDENT PASSWORDS MANAGEMENT';
+                                        }
+                                        
                                         // Group assessment type permissions
                                         if (in_array($permission->name, ['assessments', 'add-assessment-types', 'edit-assessment-types', 'delete-assessment-types'])) {
                                             return 'ASSESSMENT TYPES MANAGEMENT';
@@ -395,6 +400,31 @@
                                         // Group marks suppression permissions
                                         if (in_array($permission->name, ['view-marks-suppression', 'create-marks-suppression', 'edit-marks-suppression', 'delete-marks-suppression', 'toggle-marks-suppression', 'manage-marks-suppression'])) {
                                             return 'MARKS SUPPRESSION MANAGEMENT';
+                                        }
+                                        
+                                        // Group department management permissions
+                                        if (in_array($permission->name, ['view-departments', 'create-departments', 'edit-departments', 'delete-departments', 'manage-departments', 'toggle-department-status'])) {
+                                            return 'DEPARTMENT MANAGEMENT';
+                                        }
+                                        
+                                        // Group designation management permissions
+                                        if (in_array($permission->name, ['view-designations', 'create-designations', 'edit-designations', 'delete-designations', 'manage-designations', 'toggle-designation-status'])) {
+                                            return 'DESIGNATION MANAGEMENT';
+                                        }
+                                        
+                                        // Group asset category management permissions
+                                        if (in_array($permission->name, ['view-asset-categories', 'create-asset-categories', 'edit-asset-categories', 'delete-asset-categories', 'manage-asset-categories', 'toggle-asset-category-status'])) {
+                                            return 'ASSET CATEGORY MANAGEMENT';
+                                        }
+                                        
+                                        // Group leave type management permissions
+                                        if (in_array($permission->name, ['view-leave-types', 'create-leave-types', 'edit-leave-types', 'delete-leave-types', 'manage-leave-types', 'toggle-leave-type-status'])) {
+                                            return 'LEAVE TYPE MANAGEMENT';
+                                        }
+                                        
+                                        // Group payroll management permissions
+                                        if (in_array($permission->name, ['view-payroll-dashboard', 'view-payroll-periods', 'create-payroll-periods', 'edit-payroll-periods', 'delete-payroll-periods', 'process-payroll', 'view-employee-payroll', 'edit-employee-payroll', 'manage-employee-salaries', 'view-payroll-items', 'create-payroll-items', 'edit-payroll-items', 'delete-payroll-items', 'view-pay-slips', 'generate-pay-slips', 'approve-pay-slips', 'print-pay-slips', 'download-pay-slips', 'email-pay-slips', 'view-payroll-reports', 'generate-payroll-reports', 'export-payroll-reports', 'manage-tax-settings', 'generate-tax-reports', 'generate-bank-transfers', 'view-bank-transfers', 'manage-payroll', 'access-payroll-system'])) {
+                                            return 'PAYROLL MANAGEMENT';
                                         }
                                         
                                         // Group setup permissions

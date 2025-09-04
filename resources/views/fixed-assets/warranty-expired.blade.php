@@ -19,13 +19,13 @@
                     <small class="text-muted">Assets with expired or expiring warranties requiring attention</small>
                 </div>
                 <div class="btn-group" role="group">
-                    <a href="{{ route('fixed-assets.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('fixed-assets.index') }}" class="btn btn-outline-primary">
                         <svg class="c-icon mr-2">
                             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-arrow-left')}}"></use>
                         </svg>
                         Back to Assets
                     </a>
-                    <a href="{{ route('fixed-assets.maintenance-due') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('fixed-assets.maintenance-due') }}" class="btn btn-outline-primary">
                         <svg class="c-icon mr-2">
                             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-settings')}}"></use>
                         </svg>
@@ -158,7 +158,7 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('fixed-assets.show', $asset) }}" class="btn btn-sm btn-outline-secondary" title="View Details">
+                                        <a href="{{ route('fixed-assets.show', $asset) }}" class="btn btn-sm btn-outline-primary" title="View Details">
                                             <svg class="c-icon">
                                                 <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-magnifying-glass')}}"></use>
                                             </svg>
@@ -197,13 +197,13 @@
                 <!-- Export Options -->
                 <div class="mt-4">
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-outline-secondary" onclick="window.print()">
+                        <button type="button" class="btn btn-outline-primary" onclick="window.print()">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-print')}}"></use>
                             </svg>
                             Print Report
                         </button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="exportToCSV()">
+                        <button type="button" class="btn btn-outline-primary" onclick="exportToCSV()">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-cloud-download')}}"></use>
                             </svg>
@@ -253,3 +253,51 @@ function exportToCSV() {
 }
 </script>
 @endsection
+
+<style>
+/* Standard gradient button styling */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --primary-color: #667eea;
+}
+
+.btn-primary {
+    background: var(--primary-gradient) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    color: white !important;
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    background: transparent !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary-gradient) !important;
+    border-color: transparent !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Small button variants */
+.btn-sm.btn-outline-primary {
+    border-width: 1px !important;
+}
+
+.btn-sm.btn-outline-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+</style>
