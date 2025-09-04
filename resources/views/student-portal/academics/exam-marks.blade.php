@@ -200,16 +200,17 @@
             </div>
         </div>
     @else
+        <!-- No registrations/modules - student has only applied -->
         <div class="row">
             <div class="col-12">
                 <div class="card" style="background: white; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: none;">
                     <div class="card-body text-center py-5">
-                        <i class="fas fa-graduation-cap fa-4x text-muted mb-4"></i>
-                        <h5 class="text-muted mb-3">No Exam Marks Available</h5>
-                        <p class="text-muted mb-4">Your examination results will appear here once they are published by your lecturers.</p>
+                        <i class="fas fa-file-alt fa-4x text-muted mb-4"></i>
+                        <h5 class="text-muted mb-3">No Subject Registrations</h5>
+                        <p class="text-muted mb-4">You are not currently registered for any subjects. Exam marks will be available once you have been admitted and registered for subjects.</p>
                         <div class="alert alert-info" role="alert">
                             <i class="fas fa-info-circle"></i>
-                            <strong>Note:</strong> Exam marks are published after marking and moderation processes are complete.
+                            <strong>Note:</strong> If you have submitted an application, please wait for admission approval and subject registration to view your exam marks.
                         </div>
                     </div>
                 </div>

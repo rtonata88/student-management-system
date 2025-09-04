@@ -133,7 +133,7 @@
         
         .login-link {
             text-align: center;
-            margin-top: 2rem;
+            margin-top: 1rem;
             font-size: 0.875rem;
             color: #6b7280;
         }
@@ -178,6 +178,14 @@
         <div class="signup-header">
             <h1 class="signup-title">Create Student Account</h1>
             <p class="signup-subtitle">Join our educational community</p>
+            <div style="margin-top: 1rem;">
+                <a href="{{ route('online-application.manual') }}" target="_blank" 
+                   style="display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s;"
+                   onmouseover="this.style.background='rgba(255,255,255,0.3)'"
+                   onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                    <i class="fas fa-download"></i> How to apply manual
+                </a>
+            </div>
         </div>
         
         <form class="signup-form" action="{{ route('online-application.create-account') }}" method="POST">
@@ -237,13 +245,13 @@
             
             <div class="password-info">
                 <p class="password-info-text">
-                    The system will prompt all students to update their default passwords when they login for the first time.
+                    Please ensure that you provide an active email address to which you have regular access, as your admission letter and all official communications will be sent to that address.
                 </p>
             </div>
             
             <button type="submit" class="signup-button">Create Account</button>
             
-            <div class="login-link">
+            <div class="login-link" style="margin-top: 1rem;">
                 Already have an account? <a href="{{ route('login') }}">Sign In</a>
             </div>
         </form>

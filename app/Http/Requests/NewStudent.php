@@ -25,7 +25,7 @@ class NewStudent extends FormRequest
     {
         return [
             'student_number2' => 'required|unique:students',
-
+            'date_of_birth' => 'required|string|regex:/^[0-9]{8}$/|size:8',
         ];
     }
 

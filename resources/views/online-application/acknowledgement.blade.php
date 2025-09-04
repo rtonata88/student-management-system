@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.student-portal')
 
 @section('content')
 <div class="container-fluid">
@@ -68,11 +68,8 @@
 
                     <div class="mt-4">
                         <a href="{{ route('student-portal.index') }}" 
-                           class="btn btn-outline-primary btn-lg mr-3">
+                           class="btn btn-outline-primary btn-lg">
                             <i class="fas fa-tachometer-alt"></i> Go to Student Portal
-                        </a>
-                        <a href="{{ route('login') }}" class="btn btn-secondary btn-lg">
-                            <i class="fas fa-sign-out-alt"></i> Ok, got it!
                         </a>
                     </div>
                 </div>

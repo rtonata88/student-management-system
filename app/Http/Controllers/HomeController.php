@@ -39,7 +39,7 @@ class HomeController extends Controller
 
         //dd($user->hasPermissionTo('access-dashboard'));
         if (!$user->hasPermission('dashboard')) {
-            return view('start-page');
+            return redirect('/start-page');
         }
         $academic_year = AcademicYear::where('status', 1)->first()->academic_year;
 
@@ -52,7 +52,33 @@ class HomeController extends Controller
         $total_payments = $this->totalPayments($academic_year, $registered_students);
         $learners_per_subject = $this->learnersPerSubject($academic_year);
 
-        return view('home', compact('registered_learners', 'total_invoices', 'total_payments', 'learners_per_subject'));
+        $total_outstanding = 0;
+        $total_credit_memos = 0;
+        $total_debit_memos = 0;
+        $net_outstanding = 0;
+        $activity_team_reports = 0;
+        $activity_reports = 0;
+        $media_coverage_reports = 0;
+        $event_reports = 0;
+        $activity_types = 0;
+
+        return view('home', compact('registered_learners', 'total_invoices', 'total_payments', 'total_outstanding', 'total_credit_memos', 'total_debit_memos', 'net_outstanding', 'academic_year', 'activity_team_reports', 'activity_reports', 'media_coverage_reports', 'event_reports', 'activity_types', 'learners_per_subject'));
+    }
+
+    /**
+     * Show the start page with proper permission context.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function startPage()
+    {
+        // Ensure user is authenticated and permissions are loaded
+        $user = Auth::user();
+        
+        // Load user permissions and roles to ensure sidebar displays correctly
+        $user->load('permissions', 'roles');
+        
+        return view('start-page');
     }
 
     /**

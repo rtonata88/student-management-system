@@ -167,6 +167,7 @@ Route::get('/aging/reports/export', 'InvoiceReportController@export')->name('rep
 // Online Application Routes (Public - no middleware)
 Route::get('/signup', 'OnlineApplicationController@showSignupForm')->name('online-application.signup');
 Route::post('/signup', 'OnlineApplicationController@createAccount')->name('online-application.create-account');
+Route::get('/application-manual', 'OnlineApplicationController@downloadApplicationManual')->name('online-application.manual');
 
 // Protected Online Application Routes (Require authentication)
 Route::middleware(['auth'])->group(function () {
@@ -554,9 +555,7 @@ Route::group(['middleware' => ['auth']], function () {
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('promotional-statuses', 'PromotionalStatusController');
 });
-Route::get('/start-page', function(){
-    return view('start-page');
-});
+Route::get('/start-page', 'HomeController@startPage')->middleware('auth');
 
 //Fleet Management Routes
 Route::prefix('fleet-management')->name('fleet.')->middleware('permission:fleet-management')->group(function () {

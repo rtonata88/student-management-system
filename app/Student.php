@@ -9,7 +9,7 @@ class Student extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['student_number2','student_number', 'surname', 'student_names', 'initials', 'center_id', 'gender', 'contact_number', 'contact_email', 'date_of_birth', 'id_number', 'birth_certificate', 'photo'];
+    protected $fillable = ['user_id', 'student_number2','student_number', 'surname', 'student_names', 'initials', 'center_id', 'gender', 'contact_number', 'contact_email', 'date_of_birth', 'id_number', 'birth_certificate', 'photo'];
 
     public function guardian(){
         return $this->hasMany(StudentGuardian::class);
@@ -49,6 +49,11 @@ class Student extends Model implements Auditable
 
     public function promotions(){
         return $this->hasMany(StudentPromotion::class);
+    }
+
+    // Relationship with User model
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
     // Accessor to get admission status directly from the student model

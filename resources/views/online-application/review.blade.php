@@ -394,7 +394,7 @@
                                 </a>
                             @endif
                             
-                            <a href="{{ route('online-application.document-upload') }}" class="btn btn-secondary btn-lg" style="padding: 0.75rem 2rem;">
+                            <a href="{{ route('online-application.student-info') }}" class="btn btn-secondary btn-lg" style="padding: 0.75rem 2rem;">
                                 <i class="fas fa-arrow-left"></i> Back
                             </a>
                         </div>

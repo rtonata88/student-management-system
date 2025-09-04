@@ -13,8 +13,12 @@
                     @if($examSchedules->isEmpty())
                         <div class="alert alert-info text-center">
                             <i class="fas fa-calendar-times fa-3x mb-3"></i>
-                            <h5>No Exam Schedules Found</h5>
-                            <p>You don't have any scheduled examinations at the moment.</p>
+                            <h5>No Subject Registrations</h5>
+                            <p>You are not currently registered for any subjects. Exam schedules will be available once you have been admitted and registered for subjects.</p>
+                            <div class="alert alert-info mt-3" role="alert">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Note:</strong> If you have submitted an application, please wait for admission approval and subject registration to view your exam timetable.
+                            </div>
                         </div>
                     @else
                         <!-- Filter and Actions -->

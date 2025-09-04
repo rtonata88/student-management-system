@@ -30,8 +30,24 @@
                                     <small class="ml-2">Registration {{ $application->application_number }}</small>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <span class="badge badge-success mr-2" style="font-size: 0.9rem; padding: 6px 12px;">
-                                        Registered
+                                    @php
+                                        $statusClass = match($application->status) {
+                                            'under_review' => 'badge-warning',
+                                            'approved' => 'badge-info', 
+                                            'registered' => 'badge-success',
+                                            'rejected' => 'badge-danger',
+                                            default => 'badge-secondary'
+                                        };
+                                        $statusText = match($application->status) {
+                                            'under_review' => 'Under Review',
+                                            'approved' => 'Approved', 
+                                            'registered' => 'Registered',
+                                            'rejected' => 'Rejected',
+                                            default => ucfirst($application->status)
+                                        };
+                                    @endphp
+                                    <span class="badge {{ $statusClass }} mr-2" style="font-size: 0.9rem; padding: 6px 12px;">
+                                        {{ $statusText }}
                                     </span>
                                     <i class="fas fa-chevron-down" id="arrow-{{ $index }}"></i>
                                 </div>
@@ -63,9 +79,9 @@
                                     <strong>{{ $application->student && $application->student->center ? $application->student->center->center_name : 'Not specified' }}</strong>
                                 </div>
                                 <div class="mb-2">
-                                    <small class="text-muted">Registration Status:</small><br>
-                                    <span class="badge badge-success">
-                                        Registered
+                                    <small class="text-muted">Application Status:</small><br>
+                                    <span class="badge {{ $statusClass }}">
+                                        {{ $statusText }}
                                     </span>
                                 </div>
                             </div>

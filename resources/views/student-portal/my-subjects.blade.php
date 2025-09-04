@@ -102,9 +102,13 @@
             <div class="col-12">
                 <div class="card" style="background: white; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: none;">
                     <div class="card-body text-center py-5">
-                        <i class="fas fa-book fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted mb-3">No Subjects Found</h5>
-                        <p class="text-muted mb-0">You are not currently registered for any subjects.</p>
+                        <i class="fas fa-book fa-4x text-muted mb-4"></i>
+                        <h5 class="text-muted mb-3">No Subject Registrations</h5>
+                        <p class="text-muted mb-4">You are not currently registered for any subjects. Subject information will be available once you have been admitted and registered for subjects.</p>
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Note:</strong> If you have submitted an application, please wait for admission approval and subject registration to view your subjects.
+                        </div>
                     </div>
                 </div>
             </div>

@@ -153,7 +153,24 @@ class StudentPortalController extends Controller
         
         $applications = collect();
         if ($student) {
-            // Get all student's registrations
+            // First, get online applications (for students who have applied but not yet registered)
+            $onlineApplications = OnlineApplication::where('user_id', $user->id)->get();
+            
+            foreach ($onlineApplications as $onlineApp) {
+                $applicationData = (object) [
+                    'id' => $onlineApp->id,
+                    'application_number' => $onlineApp->application_number,
+                    'status' => $onlineApp->status, // Use actual status from online application
+                    'created_at' => $onlineApp->created_at,
+                    'updated_at' => $onlineApp->updated_at,
+                    'academic_year' => $onlineApp->academic_year,
+                    'student' => $student,
+                    'subjects' => $onlineApp->subjects ?? collect()
+                ];
+                $applications->push($applicationData);
+            }
+            
+            // Then, get registrations (for students who have been admitted and registered)
             $registrations = $student->registration->sortByDesc('academic_year');
             
             foreach ($registrations as $registration) {

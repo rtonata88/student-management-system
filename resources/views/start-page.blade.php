@@ -285,31 +285,14 @@
                     <div class="p-3 d-flex align-items-center">
                         <div class="p-3 mfe-3">
                             <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
+                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}}"></use>
                             </svg>
                         </div>
                         <div>
                             <a href="/payment/reports">
-                                <div class="text-value text-primary">Payments</div>
+                                <div class="text-value text-primary">Payment Reports</div>
                             </a>
-                            <div class="text-muted small">View a list of all payments in a date range</div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <a href="/audit/reports">
-                <div class="col-md-4 col-sm-12 main-menu-item">
-                    <div class="p-3 d-flex align-items-center">
-                        <div class="p-3 mfe-3">
-                            <svg class="c-icon c-icon-xl">
-                                <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-chart')}}"></use>
-                            </svg>
-                        </div>
-                        <div>
-                            <a href="/audit/reports">
-                                <div class="text-value text-primary">Audit Report</div>
-                            </a>
-                            <div class="text-muted small">See who changed what on the system</div>
+                            <div class="text-muted small">View detailed payment history and analytics</div>
                         </div>
                     </div>
                 </div>

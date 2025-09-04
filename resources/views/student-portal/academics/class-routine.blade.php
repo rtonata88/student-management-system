@@ -112,18 +112,12 @@
                     @else
                         <div class="text-center py-5">
                             <i class="fas fa-calendar-alt fa-4x text-muted mb-4"></i>
-                            <h5 class="text-muted">No Class Schedule Available</h5>
-                            <p class="text-muted">
-                                Your weekly class schedule is not yet available. This could be because:
-                            </p>
-                            <ul class="list-unstyled text-muted">
-                                <li><i class="fa fa-circle text-warning"></i> Classes haven't been scheduled for this academic year</li>
-                                <li><i class="fa fa-circle text-warning"></i> You haven't registered for any subjects yet</li>
-                                <li><i class="fa fa-circle text-warning"></i> The schedule is still being prepared</li>
-                            </ul>
-                            <p class="text-muted mt-3">
-                                Please contact your academic advisor for more information.
-                            </p>
+                            <h5 class="text-muted">No Subject Registrations</h5>
+                            <p class="text-muted mb-4">You are not currently registered for any subjects. Class schedules will be available once you have been admitted and registered for subjects.</p>
+                            <div class="alert alert-info" role="alert">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Note:</strong> If you have submitted an application, please wait for admission approval and subject registration to view your class routine.
+                            </div>
                         </div>
                     @endif
                 </div>

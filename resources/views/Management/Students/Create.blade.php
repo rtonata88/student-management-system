@@ -84,7 +84,16 @@
                     <tr>
                         <th style="background-color: rgba(227, 227, 227, 0.5)">Date of Birth</th>
                         <td>
-                            {{Form::date('date_of_birth', null, ['class' => 'form-control input-no-border', 'placeholder'=>'Date of birth'])}}
+                            <div class="input-group">
+                                <input type="text" name="date_of_birth" id="date_of_birth_admin" class="form-control input-no-border" placeholder="DDMMYYYY" pattern="[0-9]{8}" maxlength="8">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="openDatePickerAdmin()">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </button>
+                                </div>
+                                <input type="date" id="date_picker_helper_admin" style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" onchange="formatDateToDDMMYYYYAdmin(this.value)">
+                            </div>
+                            <small class="form-text text-muted">Enter date in DDMMYYYY format (e.g., 04092025) or use calendar picker</small>
                         </td>
                     </tr>
                     <tr>
@@ -445,6 +454,44 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+});
+
+// Date picker functions for admin
+function openDatePickerAdmin() {
+    const datePicker = document.getElementById('date_picker_helper_admin');
+    datePicker.focus();
+    datePicker.click();
+    
+    // For mobile devices and some browsers
+    if (datePicker.showPicker) {
+        datePicker.showPicker();
+    }
+}
+
+function formatDateToDDMMYYYYAdmin(dateValue) {
+    if (dateValue) {
+        // Convert YYYY-MM-DD to DDMMYYYY
+        const dateParts = dateValue.split('-');
+        const year = dateParts[0];
+        const month = dateParts[1];
+        const day = dateParts[2];
+        
+        document.getElementById('date_of_birth_admin').value = day + month + year;
+    }
+}
+
+// Handle direct typing in the date field to ensure proper format
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('date_of_birth_admin');
+    if (dateInput) {
+        dateInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 8) {
+                value = value.substring(0, 8);
+            }
+            e.target.value = value;
+        });
+    }
 });
 </script>
 

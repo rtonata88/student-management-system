@@ -20,7 +20,7 @@ class User extends Authenticatable implements Auditable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password' , 'username'
+        'name', 'email', 'password' , 'username', 'user_type'
     ];
 
     /**
@@ -55,6 +55,53 @@ class User extends Authenticatable implements Auditable
     public function employeePayrollSetting()
     {
         return $this->hasOne(\App\Models\EmployeePayrollSetting::class, 'user_id');
+    }
+
+    /**
+     * Boot method to handle model events
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Assign default student permissions when user is created
+        static::created(function ($user) {
+            if ($user->user_type === 'student') {
+                $user->assignDefaultStudentPermissions();
+            }
+        });
+
+        // Assign default student permissions when user_type is updated to student
+        static::updated(function ($user) {
+            if ($user->isDirty('user_type') && $user->user_type === 'student') {
+                $user->assignDefaultStudentPermissions();
+            }
+        });
+    }
+
+    /**
+     * Assign default permissions for student users
+     */
+    public function assignDefaultStudentPermissions()
+    {
+        $studentPermissions = [
+            'access-student-portal',
+            'view-student-profile',
+            'view-student-academics',
+            'view-student-finance',
+            'view-student-subjects',
+            'access-online-learning',
+            'view-library-management',
+            'view-hostel-management',
+            'access-marketplace'
+        ];
+
+        foreach ($studentPermissions as $permissionName) {
+            $permission = Permission::where('name', $permissionName)->first();
+            if ($permission && !$this->hasPermission($permissionName)) {
+                $this->attachPermission($permission);
+            }
+        }
     }
     
 }

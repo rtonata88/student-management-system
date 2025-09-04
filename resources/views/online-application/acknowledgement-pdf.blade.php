@@ -104,13 +104,13 @@
 <body>
     <div class="header">
         <div class="company-info">
-            <div class="company-name">{{ config('app.name', 'Educims') }}</div>
+            <div class="company-name">{{ $company->company_name ?? config('app.name', 'Educims') }}</div>
             <div class="company-address">
-                Tutorial Excellence Center<br>
-                123 Education Street<br>
-                Academic City, AC 12345<br>
-                Phone: (011) 123-4567<br>
-                Email: info@educims.com
+                {{ $company->address1 ?? 'Tutorial Excellence Center' }}<br>
+                {{ $company->address2 ?? '123 Education Street' }}<br>
+                {{ $company->address3 ?? 'Academic City, AC 12345' }}<br>
+                Phone: {{ $company->contact_number ?? '(011) 123-4567' }}<br>
+                Email: {{ $company->email ?? 'info@educims.com' }}
             </div>
         </div>
         <div class="company-logo">
@@ -130,12 +130,9 @@
         {{ $student->contact_number ?? 'Contact not provided' }}
     </div>
 
-    <div class="reference">
-        <strong>REF: APPLICATION ACKNOWLEDGEMENT - {{ $application->application_number }}</strong>
-    </div>
 
     <div class="letter-content">
-        <h3>APPLICATION ACKNOWLEDGEMENT LETTER</h3>
+        <h3 style="text-align: center;">APPLICATION ACKNOWLEDGEMENT LETTER</h3>
         
         <p>Dear {{ $student->student_names ?? $application->user->name }},</p>
         
@@ -175,7 +172,7 @@
         
         <p><strong>Next Steps:</strong></p>
         <ul>
-            <li>Your application will be reviewed within 5-7 business days</li>
+            <li>Your application will be reviewed within reasonable time</li>
             <li>You will receive an email notification once your application status changes</li>
             <li>If approved, you will receive enrollment instructions and payment details</li>
             <li>You can check your application status anytime through your student portal</li>
@@ -190,7 +187,7 @@
         
         <p>If you have any questions or concerns, please don't hesitate to contact our admissions office.</p>
         
-        <p>Thank you for choosing {{ config('app.name', 'Educims') }} for your educational journey.</p>
+        <p>Thank you for choosing {{ $company->company_name ?? config('app.name', 'Educims') }} for your educational journey.</p>
         
         <p>Yours sincerely,</p>
     </div>
@@ -198,7 +195,7 @@
     <div class="signature-section">
         <div class="signature-line"></div>
         <p><strong>Admissions Officer</strong><br>
-        {{ config('app.name', 'Educims') }}</p>
+        {{ $company->company_name ?? config('app.name', 'Educims') }}</p>
         
         <div class="stamp-box">
             OFFICIAL STAMP
