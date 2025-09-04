@@ -567,9 +567,9 @@
           <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-help')}}"></use>
         </svg>
       </div>
-      <h6 class="support-title">Report Bugs</h6>
+      <h6 class="support-title">Report System Bugs</h6>
       <p class="support-subtitle">+264 81 37 0 37 26<br>info@educims.com</p>
-      <a href="https://educims.com/support.html" target="_blank" class="support-btn" style="display: inline-block; text-decoration: none; text-align: center;">Get Support</a>
+      <a href="https://educims.com" target="_blank" class="support-btn" style="display: inline-block; text-decoration: none; text-align: center;">Our Website</a>
     </div>
     
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
