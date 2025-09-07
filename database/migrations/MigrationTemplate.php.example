@@ -1,0 +1,198 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+
+/**
+ * MIGRATION TEMPLATE FOR SAFE MIGRATIONS
+ * 
+ * This template ensures migrations are:
+ * - Idempotent (can be run multiple times safely)
+ * - Non-destructive (preserves existing data)
+ * - Properly handles foreign key constraints
+ * - Includes proper existence checks
+ * 
+ * Copy this template for new migrations and follow the patterns below
+ */
+class ExampleMigrationTemplate extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        // PATTERN 1: Creating new tables
+        $this->createTableSafely();
+        
+        // PATTERN 2: Adding columns to existing tables
+        $this->addColumnsSafely();
+        
+        // PATTERN 3: Adding foreign key constraints
+        $this->addForeignKeysSafely();
+        
+        // PATTERN 4: Data migrations
+        $this->migrateDataSafely();
+        
+        // PATTERN 5: Creating permissions
+        $this->createPermissionsSafely();
+    }
+
+    private function createTableSafely()
+    {
+        // ALWAYS check if table exists before creating
+        if (!Schema::hasTable('example_table')) {
+            Schema::create('example_table', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->unsignedInteger('user_id'); // Use correct data types
+                $table->timestamps();
+                
+                // Add indexes but NOT foreign keys here
+                $table->index('user_id');
+            });
+        }
+    }
+
+    private function addColumnsSafely()
+    {
+        // ALWAYS check if column exists before adding
+        if (Schema::hasTable('existing_table') && !Schema::hasColumn('existing_table', 'new_column')) {
+            Schema::table('existing_table', function (Blueprint $table) {
+                $table->string('new_column')->nullable()->after('existing_column');
+            });
+        }
+    }
+
+    private function addForeignKeysSafely()
+    {
+        // Add foreign keys AFTER ensuring data integrity
+        if (Schema::hasTable('example_table')) {
+            // Clean up invalid references first
+            DB::table('example_table')
+                ->whereNotExists(function ($query) {
+                    $query->select(DB::raw(1))
+                          ->from('users')
+                          ->whereRaw('users.id = example_table.user_id');
+                })
+                ->delete(); // or ->update(['user_id' => null]);
+
+            // Check if foreign key doesn't already exist
+            if (!$this->foreignKeyExists('example_table', 'example_table_user_id_foreign')) {
+                Schema::table('example_table', function (Blueprint $table) {
+                    $table->foreign('user_id')
+                          ->references('id')
+                          ->on('users')
+                          ->onDelete('cascade'); // or 'set null'
+                });
+            }
+        }
+    }
+
+    private function migrateDataSafely()
+    {
+        // Data migrations should be idempotent
+        if (Schema::hasTable('example_table')) {
+            // Example: Set default values for new columns
+            DB::table('example_table')
+                ->whereNull('new_column')
+                ->update(['new_column' => 'default_value']);
+        }
+    }
+
+    private function createPermissionsSafely()
+    {
+        // Use updateOrCreate to avoid duplicates
+        $permissions = [
+            [
+                'name' => 'view-example',
+                'display_name' => 'View Example',
+                'description' => 'Allow user to view example records'
+            ],
+            [
+                'name' => 'create-example',
+                'display_name' => 'Create Example',
+                'description' => 'Allow user to create example records'
+            ]
+        ];
+
+        foreach ($permissions as $permission) {
+            \App\Permission::updateOrCreate(
+                ['name' => $permission['name']],
+                [
+                    'display_name' => $permission['display_name'],
+                    'description' => $permission['description']
+                ]
+            );
+        }
+    }
+
+    private function foreignKeyExists($table, $keyName)
+    {
+        try {
+            $keys = DB::select("
+                SELECT CONSTRAINT_NAME 
+                FROM information_schema.KEY_COLUMN_USAGE 
+                WHERE TABLE_NAME = ? 
+                AND TABLE_SCHEMA = ? 
+                AND CONSTRAINT_NAME = ?
+            ", [$table, config('database.connections.mysql.database'), $keyName]);
+
+            return count($keys) > 0;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        // Make down migrations safe too
+        if (Schema::hasTable('example_table')) {
+            // Drop foreign keys first
+            Schema::table('example_table', function (Blueprint $table) {
+                try {
+                    $table->dropForeign(['user_id']);
+                } catch (\Exception $e) {
+                    // Foreign key doesn't exist, continue
+                }
+            });
+            
+            // Then drop table
+            Schema::dropIfExists('example_table');
+        }
+    }
+}
+
+/**
+ * CRITICAL RULES FOR MIGRATIONS:
+ * 
+ * 1. ALWAYS use Schema::hasTable() before creating tables
+ * 2. ALWAYS use Schema::hasColumn() before adding columns
+ * 3. ALWAYS clean up invalid foreign key references before adding constraints
+ * 4. ALWAYS use correct data types that match referenced tables
+ * 5. NEVER assume tables or columns exist
+ * 6. ALWAYS make migrations idempotent (can run multiple times)
+ * 7. ALWAYS use try-catch for operations that might fail
+ * 8. ALWAYS use updateOrCreate for permissions to avoid duplicates
+ * 9. ALWAYS check foreign key existence before creating
+ * 10. ALWAYS use proper onDelete actions (cascade, set null, restrict)
+ * 
+ * DATA TYPE MATCHING:
+ * - students.id = unsigned int
+ * - users.id = unsigned int  
+ * - modules.id = unsigned int
+ * - academic_years.id = unsigned int
+ * - Most other tables = unsigned bigint
+ * 
+ * FOREIGN KEY NAMING CONVENTION:
+ * {table}_{column}_foreign
+ * Example: students_center_id_foreign
+ */
