@@ -25,9 +25,9 @@ class MasterMigrationCleanup extends Migration
         $this->fixStudentSubjectsForeignKeys();
         $this->createMarksSuppressionTable();
         $this->comprehensiveDataCleanup();
+        $this->addMissingTripLogsColumns();
         $this->fixAllDuplicateColumns();
         $this->fixAllDropColumnIssues();
-        $this->addMissingTripLogsColumns();
     }
 
     private function fixStudentsCenterIdData()
@@ -631,14 +631,22 @@ class MasterMigrationCleanup extends Migration
     {
         if (!Schema::hasTable('trip_logs')) return;
 
-        // Add fuel_consumed column if it doesn't exist but is referenced by other migrations
+        // Add fuel_consumed column if it doesn't exist (it should exist from original table creation)
         if (!Schema::hasColumn('trip_logs', 'fuel_consumed')) {
             try {
                 Schema::table('trip_logs', function (Blueprint $table) {
+                    // Based on original table structure, fuel_consumed comes after end_odometer
                     $table->decimal('fuel_consumed', 8, 2)->nullable()->after('end_odometer');
                 });
             } catch (\Exception $e) {
-                // Skip if column can't be added
+                // Try without positioning if that fails
+                try {
+                    Schema::table('trip_logs', function (Blueprint $table) {
+                        $table->decimal('fuel_consumed', 8, 2)->nullable();
+                    });
+                } catch (\Exception $e2) {
+                    // Skip if column can't be added at all
+                }
             }
         }
 
@@ -646,7 +654,12 @@ class MasterMigrationCleanup extends Migration
         if (!Schema::hasColumn('trip_logs', 'fuel_cost_per_liter')) {
             try {
                 Schema::table('trip_logs', function (Blueprint $table) {
-                    $table->decimal('fuel_cost_per_liter', 8, 2)->nullable()->after('fuel_consumed');
+                    // Position after fuel_consumed if it exists, otherwise at end
+                    if (Schema::hasColumn('trip_logs', 'fuel_consumed')) {
+                        $table->decimal('fuel_cost_per_liter', 8, 2)->nullable()->after('fuel_consumed');
+                    } else {
+                        $table->decimal('fuel_cost_per_liter', 8, 2)->nullable();
+                    }
                 });
             } catch (\Exception $e) {
                 // Skip if column can't be added
