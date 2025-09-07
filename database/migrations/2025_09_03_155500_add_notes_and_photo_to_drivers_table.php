@@ -13,10 +13,28 @@ class AddNotesAndPhotoToDriversTable extends Migration
      */
     public function up()
     {
-        Schema::table('drivers', function (Blueprint $table) {
-            $table->text('notes')->nullable()->after('emergency_contact_phone');
-            $table->string('photo')->nullable()->after('notes');
-        });
+        if (Schema::hasTable('drivers')) {
+            // Add emergency_contact_phone if it doesn't exist
+            if (!Schema::hasColumn('drivers', 'emergency_contact_phone')) {
+                Schema::table('drivers', function (Blueprint $table) {
+                    $table->string('emergency_contact_phone')->nullable()->after('phone');
+                });
+            }
+            
+            // Add notes if it doesn't exist
+            if (!Schema::hasColumn('drivers', 'notes')) {
+                Schema::table('drivers', function (Blueprint $table) {
+                    $table->text('notes')->nullable()->after('emergency_contact_phone');
+                });
+            }
+            
+            // Add photo if it doesn't exist
+            if (!Schema::hasColumn('drivers', 'photo')) {
+                Schema::table('drivers', function (Blueprint $table) {
+                    $table->string('photo')->nullable()->after('notes');
+                });
+            }
+        }
     }
 
     /**
@@ -26,8 +44,26 @@ class AddNotesAndPhotoToDriversTable extends Migration
      */
     public function down()
     {
-        Schema::table('drivers', function (Blueprint $table) {
-            $table->dropColumn(['notes', 'photo']);
-        });
+        if (Schema::hasTable('drivers')) {
+            Schema::table('drivers', function (Blueprint $table) {
+                $columnsToRemove = [];
+                
+                if (Schema::hasColumn('drivers', 'photo')) {
+                    $columnsToRemove[] = 'photo';
+                }
+                
+                if (Schema::hasColumn('drivers', 'notes')) {
+                    $columnsToRemove[] = 'notes';
+                }
+                
+                if (Schema::hasColumn('drivers', 'emergency_contact_phone')) {
+                    $columnsToRemove[] = 'emergency_contact_phone';
+                }
+                
+                if (!empty($columnsToRemove)) {
+                    $table->dropColumn($columnsToRemove);
+                }
+            });
+        }
     }
 }

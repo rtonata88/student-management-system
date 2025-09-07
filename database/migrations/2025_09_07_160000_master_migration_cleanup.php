@@ -397,9 +397,16 @@ class MasterMigrationCleanup extends Migration
     {
         if (!Schema::hasTable('drivers')) return;
 
+        // Add emergency_contact_phone if it doesn't exist
+        if (!Schema::hasColumn('drivers', 'emergency_contact_phone')) {
+            Schema::table('drivers', function (Blueprint $table) {
+                $table->string('emergency_contact_phone')->nullable()->after('phone');
+            });
+        }
+
         if (!Schema::hasColumn('drivers', 'notes')) {
             Schema::table('drivers', function (Blueprint $table) {
-                $table->text('notes')->nullable()->after('status');
+                $table->text('notes')->nullable()->after('emergency_contact_phone');
             });
         }
 
