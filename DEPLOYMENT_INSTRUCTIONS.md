@@ -52,6 +52,23 @@ cd /home/educimso/elite.educims.org/student-management-system
 /opt/cpanel/ea-php81/root/usr/bin/php artisan migrate
 ```
 
+## 🚨 EMERGENCY FIX FOR LIVE SERVER
+
+**If you're getting "fuel_consumed" or "route_taken" column errors, run this IMMEDIATELY:**
+
+```bash
+# Navigate to project directory
+cd /home/educimso/elite.educims.org/student-management-system
+
+# Upload the emergency fix migration file:
+# 2025_09_07_183600_emergency_fix_trip_logs_columns.php
+
+# Run the emergency migration
+/opt/cpanel/ea-php81/root/usr/bin/php artisan migrate
+
+# This will add ALL missing trip_logs columns at once
+```
+
 ### Step 4: Rebuild Caches
 ```bash
 # Rebuild optimized caches
