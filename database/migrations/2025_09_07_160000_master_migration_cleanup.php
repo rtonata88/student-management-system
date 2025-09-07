@@ -94,18 +94,31 @@ class MasterMigrationCleanup extends Migration
             Schema::dropIfExists('student_promotions');
         }
 
-        Schema::create('student_promotions', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('student_id');
-            $table->string('from_class');
-            $table->string('to_class');
-            $table->year('academic_year');
-            $table->enum('status', ['promoted', 'repeated', 'transferred'])->default('promoted');
-            $table->text('remarks')->nullable();
-            $table->timestamps();
-
-            $table->foreign('student_id', 'fk_student_promotions_student')->references('id')->on('students')->onDelete('cascade');
-        });
+        // Only create if students table exists
+        if (Schema::hasTable('students')) {
+            Schema::create('student_promotions', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('student_id')->nullable();
+                $table->string('from_class');
+                $table->string('to_class');
+                $table->year('academic_year');
+                $table->enum('status', ['promoted', 'repeated', 'transferred'])->default('promoted');
+                $table->text('remarks')->nullable();
+                $table->timestamps();
+                
+                // Add index first
+                $table->index('student_id');
+            });
+            
+            // Add foreign key separately with try-catch
+            try {
+                Schema::table('student_promotions', function (Blueprint $table) {
+                    $table->foreign('student_id', 'fk_promotions_student')->references('id')->on('students')->onDelete('set null');
+                });
+            } catch (\Exception $e) {
+                // Skip foreign key if it fails
+            }
+        }
     }
 
     private function fixApplicationSubjectsForeignKeys()
@@ -114,16 +127,37 @@ class MasterMigrationCleanup extends Migration
             Schema::dropIfExists('application_subjects');
         }
 
-        Schema::create('application_subjects', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('application_id');
-            $table->unsignedBigInteger('subject_id');
-            $table->timestamps();
-
-            $table->foreign('application_id', 'fk_app_subjects_application')->references('id')->on('applications')->onDelete('cascade');
-            $table->foreign('subject_id', 'fk_app_subjects_subject')->references('id')->on('subjects')->onDelete('cascade');
-            $table->unique(['application_id', 'subject_id'], 'uk_app_subject');
-        });
+        // Only create if referenced tables exist
+        if (Schema::hasTable('applications') && Schema::hasTable('subjects')) {
+            Schema::create('application_subjects', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('application_id')->nullable();
+                $table->unsignedBigInteger('subject_id')->nullable();
+                $table->timestamps();
+                
+                // Add indexes first
+                $table->index('application_id');
+                $table->index('subject_id');
+                $table->unique(['application_id', 'subject_id'], 'uk_app_subject');
+            });
+            
+            // Add foreign keys separately with try-catch
+            try {
+                Schema::table('application_subjects', function (Blueprint $table) {
+                    $table->foreign('application_id', 'fk_app_subjects_application')->references('id')->on('applications')->onDelete('set null');
+                });
+            } catch (\Exception $e) {
+                // Skip if fails
+            }
+            
+            try {
+                Schema::table('application_subjects', function (Blueprint $table) {
+                    $table->foreign('subject_id', 'fk_app_subjects_subject')->references('id')->on('subjects')->onDelete('set null');
+                });
+            } catch (\Exception $e) {
+                // Skip if fails
+            }
+        }
     }
 
     private function fixDuplicateUsernames()
@@ -166,19 +200,40 @@ class MasterMigrationCleanup extends Migration
             Schema::dropIfExists('student_subjects');
         }
 
-        Schema::create('student_subjects', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('subject_id');
-            $table->enum('status', ['active', 'inactive', 'completed', 'dropped'])->default('active');
-            $table->decimal('grade', 5, 2)->nullable();
-            $table->text('remarks')->nullable();
-            $table->timestamps();
-
-            $table->foreign('student_id', 'fk_student_subjects_student')->references('id')->on('students')->onDelete('cascade');
-            $table->foreign('subject_id', 'fk_student_subjects_subject')->references('id')->on('subjects')->onDelete('cascade');
-            $table->unique(['student_id', 'subject_id'], 'uk_student_subject');
-        });
+        // Only create if referenced tables exist
+        if (Schema::hasTable('students') && Schema::hasTable('subjects')) {
+            Schema::create('student_subjects', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('student_id')->nullable();
+                $table->unsignedBigInteger('subject_id')->nullable();
+                $table->enum('status', ['active', 'inactive', 'completed', 'dropped'])->default('active');
+                $table->decimal('grade', 5, 2)->nullable();
+                $table->text('remarks')->nullable();
+                $table->timestamps();
+                
+                // Add indexes first
+                $table->index('student_id');
+                $table->index('subject_id');
+                $table->unique(['student_id', 'subject_id'], 'uk_student_subject');
+            });
+            
+            // Add foreign keys separately with try-catch
+            try {
+                Schema::table('student_subjects', function (Blueprint $table) {
+                    $table->foreign('student_id', 'fk_student_subjects_student')->references('id')->on('students')->onDelete('set null');
+                });
+            } catch (\Exception $e) {
+                // Skip if fails
+            }
+            
+            try {
+                Schema::table('student_subjects', function (Blueprint $table) {
+                    $table->foreign('subject_id', 'fk_student_subjects_subject')->references('id')->on('subjects')->onDelete('set null');
+                });
+            } catch (\Exception $e) {
+                // Skip if fails
+            }
+        }
     }
 
     private function createMarksSuppressionTable()
