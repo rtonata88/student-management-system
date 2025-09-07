@@ -31,6 +31,14 @@ class SyncStudentsWithUsersAndFixUserTypes extends Migration
             // Generate unique username from student number
             $username = 'STU' . $student->student_number;
             
+            // Ensure username is unique
+            $counter = 1;
+            $originalUsername = $username;
+            while (DB::table('users')->where('username', $username)->exists()) {
+                $username = $originalUsername . '_' . $counter;
+                $counter++;
+            }
+            
             // Create user account for each student
             $userId = DB::table('users')->insertGetId([
                 'name' => trim($student->student_names . ' ' . $student->surname),
