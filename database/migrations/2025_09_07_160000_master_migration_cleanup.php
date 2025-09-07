@@ -26,6 +26,7 @@ class MasterMigrationCleanup extends Migration
         $this->createMarksSuppressionTable();
         $this->comprehensiveDataCleanup();
         $this->fixAllDuplicateColumns();
+        $this->fixAllDropColumnIssues();
     }
 
     private function fixStudentsCenterIdData()
@@ -517,6 +518,47 @@ class MasterMigrationCleanup extends Migration
             Schema::table('student_extra_charges', function (Blueprint $table) {
                 $table->decimal('amount_paid', 15, 2)->after('amount')->default(0.00);
             });
+        }
+    }
+
+    private function fixAllDropColumnIssues()
+    {
+        // Safely handle all potential drop column operations
+        $this->safeDropColumnsFromTables();
+    }
+
+    private function safeDropColumnsFromTables()
+    {
+        // Handle drop column operations that might cause errors
+        $dropOperations = [
+            'trip_logs' => [
+                'route_taken',
+                'departure_date',
+                'arrival_date',
+                'passengers_count'
+            ]
+        ];
+
+        foreach ($dropOperations as $table => $columns) {
+            if (!Schema::hasTable($table)) continue;
+
+            $columnsToDrop = [];
+            foreach ($columns as $column) {
+                if (Schema::hasColumn($table, $column)) {
+                    $columnsToDrop[] = $column;
+                }
+            }
+
+            if (!empty($columnsToDrop)) {
+                try {
+                    Schema::table($table, function (Blueprint $table) use ($columnsToDrop) {
+                        $table->dropColumn($columnsToDrop);
+                    });
+                } catch (\Exception $e) {
+                    // Skip if column is referenced by foreign key or index
+                    continue;
+                }
+            }
         }
     }
 
