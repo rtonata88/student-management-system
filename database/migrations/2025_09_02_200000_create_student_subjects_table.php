@@ -13,15 +13,15 @@ class CreateStudentSubjectsTable extends Migration
      */
     public function up()
     {
+        // This migration is now handled by 2025_09_07_145000_fix_student_subjects_foreign_keys.php
+        // to properly handle data type mismatches in foreign key constraints
         if (!Schema::hasTable('student_subjects')) {
             Schema::create('student_subjects', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->unsignedInteger('student_id');
-                $table->unsignedBigInteger('subject_id');
+                $table->unsignedInteger('student_id'); // matches students.id (unsigned int)
+                $table->unsignedInteger('subject_id'); // matches modules.id (unsigned int)
                 $table->timestamps();
 
-                $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-                $table->foreign('subject_id')->references('id')->on('modules')->onDelete('cascade');
                 $table->unique(['student_id', 'subject_id']);
             });
         }
