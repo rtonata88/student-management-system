@@ -64,7 +64,12 @@ class MasterMigrationCleanup extends Migration
                 })
                 ->update(['head_invigilator_id' => null]);
 
-            if (!$this->foreignKeyExists('examination_schedules', 'examination_schedules_head_invigilator_id_foreign')) {
+            // Check if foreign key exists with any name format
+            $hasHeadInvigilatorFK = $this->foreignKeyExists('examination_schedules', 'examination_schedules_head_invigilator_id_foreign') ||
+                                   $this->foreignKeyExists('examination_schedules', 'head_invigilator_id_foreign') ||
+                                   $this->checkForeignKeyByColumn('examination_schedules', 'head_invigilator_id');
+            
+            if (!$hasHeadInvigilatorFK) {
                 Schema::table('examination_schedules', function (Blueprint $table) {
                     $table->foreign('head_invigilator_id')
                           ->references('id')
@@ -571,6 +576,24 @@ class MasterMigrationCleanup extends Migration
                 AND TABLE_SCHEMA = ? 
                 AND CONSTRAINT_NAME = ?
             ", [$table, config('database.connections.mysql.database'), $keyName]);
+
+            return count($keys) > 0;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    private function checkForeignKeyByColumn($table, $column)
+    {
+        try {
+            $keys = DB::select("
+                SELECT CONSTRAINT_NAME 
+                FROM information_schema.KEY_COLUMN_USAGE 
+                WHERE TABLE_NAME = ? 
+                AND TABLE_SCHEMA = ? 
+                AND COLUMN_NAME = ?
+                AND REFERENCED_TABLE_NAME IS NOT NULL
+            ", [$table, config('database.connections.mysql.database'), $column]);
 
             return count($keys) > 0;
         } catch (\Exception $e) {
