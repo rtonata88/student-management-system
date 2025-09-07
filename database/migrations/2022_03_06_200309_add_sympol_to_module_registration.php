@@ -16,10 +16,14 @@ class AddSympolToModuleRegistration extends Migration
     {
     {
     {
-        Schema::table('module_registrations', function (Blueprint $table) {
+        if (Schema::hasTable('module_registrations') && !Schema::hasColumn('module_registrations', 'subject_symbol')) {
+            if (Schema::hasTable('module_registrations') && !Schema::hasColumn('module_registrations', 'system')) {
+            Schema::table('module_registrations', function (Blueprint $table) {
             $table->string('subject_symbol')->nullable()->after('cancellation_date');
             $table->string('system')->nullable()->after('subject_symbol');
         });
+        }
+        }
     }
 
     /**

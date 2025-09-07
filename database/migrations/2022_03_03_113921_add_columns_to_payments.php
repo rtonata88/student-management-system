@@ -16,9 +16,11 @@ class AddColumnsToPayments extends Migration
     {
     {
     {
-        Schema::table('payments', function (Blueprint $table) {
+        if (Schema::hasTable('payments') && !Schema::hasColumn('payments', 'receipt_number')) {
+            Schema::table('payments', function (Blueprint $table) {
             $table->string('receipt_number')->after('id');
         });
+        }
     }
 
     /**

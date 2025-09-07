@@ -16,9 +16,11 @@ class AddPaidAmountToExtraCharges extends Migration
     {
     {
     {
-        Schema::table('student_extra_charges', function (Blueprint $table) {
+        if (Schema::hasTable('student_extra_charges') && !Schema::hasColumn('student_extra_charges', 'amount_paid')) {
+            Schema::table('student_extra_charges', function (Blueprint $table) {
             $table->decimal('amount_paid', 15, 2)->after('amount')->default(0.00);
         });
+        }
     }
 
     /**

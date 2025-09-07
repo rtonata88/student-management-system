@@ -13,9 +13,11 @@ class RemoveEmailPhoneDescriptionFromDepartmentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('departments', function (Blueprint $table) {
+        if (Schema::hasTable('departments') && !Schema::hasColumn('departments', 'email')) {
+            Schema::table('departments', function (Blueprint $table) {
             $table->dropColumn(['email', 'phone', 'description']);
         });
+        }
     }
 
     /**

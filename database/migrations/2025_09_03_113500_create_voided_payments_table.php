@@ -13,7 +13,8 @@ class CreateVoidedPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('voided_payments', function (Blueprint $table) {
+        if (!Schema::hasTable('voided_payments')) {
+            Schema::create('voided_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('original_payment_id');
             $table->string('payment_source'); // 'Cashier' or 'Manual'
@@ -35,6 +36,7 @@ class CreateVoidedPaymentsTable extends Migration
             $table->index('original_payment_id');
             $table->index('voided_by');
         });
+        }
     }
 
     /**

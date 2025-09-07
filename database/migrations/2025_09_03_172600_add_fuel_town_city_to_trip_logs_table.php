@@ -13,9 +13,11 @@ class AddFuelTownCityToTripLogsTable extends Migration
      */
     public function up()
     {
-        Schema::table('trip_logs', function (Blueprint $table) {
+        if (Schema::hasTable('trip_logs') && !Schema::hasColumn('trip_logs', 'fuel_town_city')) {
+            Schema::table('trip_logs', function (Blueprint $table) {
             $table->string('fuel_town_city')->nullable()->after('fuel_station');
         });
+        }
     }
 
     /**

@@ -16,11 +16,13 @@ class AddColumnsToDebitMemos extends Migration
     {
     {
     {
-        Schema::table('debit_memos', function (Blueprint $table) {
+        if (Schema::hasTable('debit_memos') && !Schema::hasColumn('debit_memos', 'debit_type')) {
+            Schema::table('debit_memos', function (Blueprint $table) {
             $table->string('debit_type')->after('transaction_date');
             $table->string('model')->after('debit_type');
             $table->integer('model_id')->after('model');
         });
+        }
     }
 
     /**

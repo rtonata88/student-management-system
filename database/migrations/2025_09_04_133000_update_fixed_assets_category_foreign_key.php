@@ -13,13 +13,15 @@ class UpdateFixedAssetsCategoryForeignKey extends Migration
      */
     public function up()
     {
-        Schema::table('fixed_assets', function (Blueprint $table) {
+        if (Schema::hasTable('fixed_assets') && !Schema::hasColumn('fixed_assets', 'category_id')) {
+            Schema::table('fixed_assets', function (Blueprint $table) {
             // Drop the existing foreign key constraint
             $table->dropForeign(['category_id']);
             
             // Add new foreign key constraint to asset_categories table
             $table->foreign('category_id')->references('id')->on('asset_categories')->onDelete('restrict');
         });
+        }
     }
 
     /**

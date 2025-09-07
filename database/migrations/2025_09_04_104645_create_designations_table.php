@@ -13,20 +13,22 @@ class CreateDesignationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('designations', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('code', 10)->unique();
-            $table->string('level')->nullable(); // e.g., Entry, Mid, Senior, Executive
-            $table->text('description')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('designations')) {
+            Schema::create('designations', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('code', 10)->unique();
+                $table->string('level')->nullable(); // e.g., Entry, Mid, Senior, Executive
+                $table->text('description')->nullable();
+                $table->boolean('is_active')->default(true);
+                $table->unsignedBigInteger('created_by')->nullable();
+                $table->unsignedBigInteger('updated_by')->nullable();
+                $table->timestamps();
 
-            $table->index('created_by');
-            $table->index('updated_by');
-        });
+                $table->index('created_by');
+                $table->index('updated_by');
+            });
+        }
     }
 
     /**

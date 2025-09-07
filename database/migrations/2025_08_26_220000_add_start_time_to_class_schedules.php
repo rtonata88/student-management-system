@@ -13,9 +13,11 @@ class AddStartTimeToClassSchedules extends Migration
      */
     public function up()
     {
-        Schema::table('class_schedules', function (Blueprint $table) {
+        if (Schema::hasTable('class_schedules') && !Schema::hasColumn('class_schedules', 'start_time')) {
+            Schema::table('class_schedules', function (Blueprint $table) {
             $table->time('start_time')->nullable()->after('day_of_week');
         });
+        }
     }
 
     /**

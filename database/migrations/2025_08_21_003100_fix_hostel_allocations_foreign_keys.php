@@ -14,6 +14,7 @@ class FixHostelAllocationsForeignKeys extends Migration
     public function up()
     {
         if (Schema::hasTable('hostel_allocations')) {
+            if (Schema::hasTable('hostel_allocations') && !Schema::hasColumn('hostel_allocations', 'student_id')) {
             Schema::table('hostel_allocations', function (Blueprint $table) {
                 // Drop existing foreign key constraints if they exist
                 try {
@@ -33,9 +34,13 @@ class FixHostelAllocationsForeignKeys extends Migration
                 $table->foreign('allocated_by')->references('id')->on('users');
             });
         }
+        }
+        }
+        }
         
         // Also fix hostel_payments table if it exists
         if (Schema::hasTable('hostel_payments')) {
+            if (Schema::hasTable('hostel_payments') && !Schema::hasColumn('hostel_payments', 'student_id')) {
             Schema::table('hostel_payments', function (Blueprint $table) {
                 try {
                     $table->dropForeign(['student_id']);
@@ -50,6 +55,7 @@ class FixHostelAllocationsForeignKeys extends Migration
         
         // Also fix hostel_visitors table if it exists
         if (Schema::hasTable('hostel_visitors')) {
+            if (Schema::hasTable('hostel_visitors') && !Schema::hasColumn('hostel_visitors', 'student_id')) {
             Schema::table('hostel_visitors', function (Blueprint $table) {
                 try {
                     $table->dropForeign(['student_id']);

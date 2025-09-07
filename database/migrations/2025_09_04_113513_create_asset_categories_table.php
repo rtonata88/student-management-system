@@ -13,7 +13,8 @@ class CreateAssetCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('asset_categories', function (Blueprint $table) {
+        if (!Schema::hasTable('asset_categories')) {
+            Schema::create('asset_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('code', 10)->unique();
@@ -28,6 +29,7 @@ class CreateAssetCategoriesTable extends Migration
             $table->index('updated_by');
             $table->index('is_active');
         });
+        }
     }
 
     /**

@@ -25,9 +25,13 @@ class EnsureUsernameEmailUniqueness extends Migration
             // Check if username unique constraint exists
             $usernameIndexExists = DB::select("SHOW INDEX FROM users WHERE Key_name = 'users_username_unique'");
             if (empty($usernameIndexExists)) {
-                Schema::table('users', function (Blueprint $table) {
+                if (Schema::hasTable('users') && !Schema::hasColumn('users', 'username')) {
+            if (Schema::hasTable('users') && !Schema::hasColumn('users', 'email')) {
+            Schema::table('users', function (Blueprint $table) {
                     $table->unique('username');
                 });
+        }
+        }
             }
             
             // Check if email unique constraint exists

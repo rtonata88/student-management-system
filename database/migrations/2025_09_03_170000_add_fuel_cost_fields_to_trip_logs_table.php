@@ -13,7 +13,8 @@ class AddFuelCostFieldsToTripLogsTable extends Migration
      */
     public function up()
     {
-        Schema::table('trip_logs', function (Blueprint $table) {
+        if (Schema::hasTable('trip_logs') && !Schema::hasColumn('trip_logs', 'fuel_type')) {
+            Schema::table('trip_logs', function (Blueprint $table) {
             // Add fuel cost related fields
             $table->string('fuel_type')->nullable()->after('fuel_consumed');
             $table->decimal('price_per_liter', 8, 3)->nullable()->after('fuel_type');
@@ -21,6 +22,7 @@ class AddFuelCostFieldsToTripLogsTable extends Migration
             $table->string('fuel_station')->nullable()->after('total_fuel_cost');
             $table->string('receipt_number')->nullable()->after('fuel_station');
         });
+        }
     }
 
     /**

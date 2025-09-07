@@ -13,11 +13,13 @@ class AddFuelReceiptFieldsToTripLogsTable extends Migration
      */
     public function up()
     {
-        Schema::table('trip_logs', function (Blueprint $table) {
+        if (Schema::hasTable('trip_logs') && !Schema::hasColumn('trip_logs', 'fuel_filled_up')) {
+            Schema::table('trip_logs', function (Blueprint $table) {
             // Add fuel fill-up question and receipt upload field
             $table->enum('fuel_filled_up', ['yes', 'no'])->nullable()->after('passenger_count');
             $table->string('fuel_receipt_path')->nullable()->after('receipt_number');
         });
+        }
     }
 
     /**

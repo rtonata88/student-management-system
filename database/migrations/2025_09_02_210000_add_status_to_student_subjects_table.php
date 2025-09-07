@@ -13,9 +13,11 @@ class AddStatusToStudentSubjectsTable extends Migration
      */
     public function up()
     {
-        Schema::table('student_subjects', function (Blueprint $table) {
+        if (Schema::hasTable('student_subjects') && !Schema::hasColumn('student_subjects', 'status')) {
+            Schema::table('student_subjects', function (Blueprint $table) {
             $table->enum('status', ['applied', 'admitted', 'registered'])->default('applied')->after('subject_id');
         });
+        }
     }
 
     /**

@@ -13,7 +13,8 @@ class CreateCashierPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cashier_payments', function (Blueprint $table) {
+        if (!Schema::hasTable('cashier_payments')) {
+            Schema::create('cashier_payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('student_id');
             $table->string('receipt_number')->unique();
@@ -31,6 +32,7 @@ class CreateCashierPaymentsTable extends Migration
             $table->index(['student_id', 'payment_date']);
             $table->index('receipt_number');
         });
+        }
     }
 
     /**
