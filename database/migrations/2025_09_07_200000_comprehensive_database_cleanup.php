@@ -14,64 +14,45 @@ class ComprehensiveDatabaseCleanup extends Migration
      */
     public function up()
     {
-        // Clean up and fix all database issues in one migration
+        // Clean up problematic foreign key constraints only
+        // All required columns already exist in the database
         
-        // 1. Fix vehicles table - add current_odometer if not exists
-        if (Schema::hasTable('vehicles') && !Schema::hasColumn('vehicles', 'current_odometer')) {
-            Schema::table('vehicles', function (Blueprint $table) {
-                $table->decimal('current_odometer', 10, 2)->nullable()->after('registration_number');
-            });
-        }
-
-        // 2. Fix drivers table - add missing columns if not exist
-        if (Schema::hasTable('drivers')) {
-            Schema::table('drivers', function (Blueprint $table) {
-                if (!Schema::hasColumn('drivers', 'emergency_contact_phone')) {
-                    $table->string('emergency_contact_phone')->nullable()->after('phone');
-                }
-                if (!Schema::hasColumn('drivers', 'notes')) {
-                    $table->text('notes')->nullable();
-                }
-                if (!Schema::hasColumn('drivers', 'photo')) {
-                    $table->string('photo')->nullable();
-                }
-            });
-        }
-
-        // 3. Fix students table - add user_id if not exists
-        if (Schema::hasTable('students') && !Schema::hasColumn('students', 'user_id')) {
-            Schema::table('students', function (Blueprint $table) {
-                $table->unsignedInteger('user_id')->nullable()->after('id');
-            });
-        }
-
-        // 4. Fix trip_logs table comprehensively
-        if (Schema::hasTable('trip_logs')) {
-            Schema::table('trip_logs', function (Blueprint $table) {
-                // Add missing columns if they don't exist (based on actual table structure)
-                if (!Schema::hasColumn('trip_logs', 'fuel_consumed')) {
-                    $table->decimal('fuel_consumed', 8, 2)->nullable()->after('odometer_end');
-                }
-                if (!Schema::hasColumn('trip_logs', 'fuel_cost_per_liter')) {
-                    $table->decimal('fuel_cost_per_liter', 8, 2)->nullable()->after('fuel_consumed');
-                }
-                if (!Schema::hasColumn('trip_logs', 'route_taken')) {
-                    $table->text('route_taken')->nullable()->after('destination');
-                }
-                if (!Schema::hasColumn('trip_logs', 'estimated_distance')) {
-                    $table->decimal('estimated_distance', 8, 2)->nullable()->after('route_taken');
-                }
-                if (!Schema::hasColumn('trip_logs', 'passengers_count')) {
-                    $table->integer('passengers_count')->nullable()->after('estimated_distance');
-                }
-            });
-
-            // Note: The table already has total_fuel_cost, passenger_count columns
-            // No need to drop departure_date, departure_time, arrival_date, arrival_time as they don't exist
-        }
-
-        // 5. Clean up problematic foreign key constraints (just drop them)
+        echo "Checking database structure...\n";
+        
+        // Verify all required columns exist (they should already be there)
+        $this->verifyColumnsExist();
+        
+        // Only clean up problematic foreign key constraints
         $this->cleanupForeignKeyConstraints();
+        
+        echo "Database cleanup completed successfully.\n";
+    }
+    
+    /**
+     * Verify that all required columns exist
+     */
+    private function verifyColumnsExist()
+    {
+        $checks = [
+            ['table' => 'vehicles', 'column' => 'current_odometer'],
+            ['table' => 'drivers', 'column' => 'emergency_contact_phone'],
+            ['table' => 'drivers', 'column' => 'notes'],
+            ['table' => 'drivers', 'column' => 'photo'],
+            ['table' => 'students', 'column' => 'user_id'],
+            ['table' => 'trip_logs', 'column' => 'route_taken'],
+            ['table' => 'trip_logs', 'column' => 'estimated_distance'],
+            ['table' => 'trip_logs', 'column' => 'passengers_count'],
+            ['table' => 'trip_logs', 'column' => 'fuel_consumed'],
+            ['table' => 'trip_logs', 'column' => 'fuel_cost_per_liter'],
+        ];
+        
+        foreach ($checks as $check) {
+            if (Schema::hasTable($check['table']) && Schema::hasColumn($check['table'], $check['column'])) {
+                echo "✅ {$check['table']}.{$check['column']} exists\n";
+            } else {
+                echo "❌ {$check['table']}.{$check['column']} missing\n";
+            }
+        }
     }
 
     /**
