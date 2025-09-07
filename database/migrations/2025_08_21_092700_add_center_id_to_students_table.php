@@ -13,12 +13,13 @@ class AddCenterIdToStudentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('students', function (Blueprint $table) {
-            if (!Schema::hasColumn('students', 'center_id')) {
-                $table->unsignedInteger('center_id')->after('student_names');
-                $table->foreign('center_id')->references('id')->on('centers')->onDelete('cascade');
-            }
-        });
+        // This migration is now handled by 2025_09_07_120000_fix_students_center_id_data.php
+        // to properly handle existing data before adding foreign key constraints
+        if (!Schema::hasColumn('students', 'center_id')) {
+            Schema::table('students', function (Blueprint $table) {
+                $table->unsignedInteger('center_id')->nullable()->after('student_names');
+            });
+        }
     }
 
     /**
