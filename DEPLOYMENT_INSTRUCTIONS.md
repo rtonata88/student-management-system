@@ -70,12 +70,16 @@ php artisan migrate
 - Recreates `student_subjects` table with correct constraints
 - Creates `marks_suppressions` table if missing
 - Adds missing foreign key constraints safely
+- Fixes all duplicate column issues across 18+ tables
+- Handles all drop column operations safely
 
 ### ✅ Safety Features
 - Checks if tables/columns exist before creating
 - Checks if foreign keys exist before adding
 - Idempotent - safe to run multiple times
 - Comprehensive data cleanup before adding constraints
+- No Doctrine DBAL package requirements
+- Exception handling for foreign key constraints
 
 ## Post-Deployment Verification
 

@@ -46,7 +46,6 @@ class MasterMigrationCleanup extends Migration
 
         if (!$this->foreignKeyExists('students', 'students_center_id_foreign')) {
             Schema::table('students', function (Blueprint $table) {
-                $table->unsignedInteger('center_id')->nullable(false)->change();
                 $table->foreign('center_id')->references('id')->on('centers')->onDelete('cascade');
             });
         }
