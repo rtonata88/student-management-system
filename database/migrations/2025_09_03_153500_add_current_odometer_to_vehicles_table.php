@@ -13,9 +13,11 @@ class AddCurrentOdometerToVehiclesTable extends Migration
      */
     public function up()
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            $table->integer('current_odometer')->default(0)->after('license_expiry');
-        });
+        if (Schema::hasTable('vehicles') && !Schema::hasColumn('vehicles', 'current_odometer')) {
+            Schema::table('vehicles', function (Blueprint $table) {
+                $table->integer('current_odometer')->default(0)->after('license_expiry');
+            });
+        }
     }
 
     /**
@@ -25,8 +27,10 @@ class AddCurrentOdometerToVehiclesTable extends Migration
      */
     public function down()
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            $table->dropColumn('current_odometer');
-        });
+        if (Schema::hasTable('vehicles') && Schema::hasColumn('vehicles', 'current_odometer')) {
+            Schema::table('vehicles', function (Blueprint $table) {
+                $table->dropColumn('current_odometer');
+            });
+        }
     }
 }
