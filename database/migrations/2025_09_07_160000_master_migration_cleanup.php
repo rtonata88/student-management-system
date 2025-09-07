@@ -27,6 +27,7 @@ class MasterMigrationCleanup extends Migration
         $this->comprehensiveDataCleanup();
         $this->fixAllDuplicateColumns();
         $this->fixAllDropColumnIssues();
+        $this->addMissingTripLogsColumns();
     }
 
     private function fixStudentsCenterIdData()
@@ -598,7 +599,8 @@ class MasterMigrationCleanup extends Migration
                 'route_taken',
                 'departure_date',
                 'arrival_date',
-                'passengers_count'
+                'passengers_count',
+                'fuel_consumed'
             ]
         ];
 
@@ -621,6 +623,33 @@ class MasterMigrationCleanup extends Migration
                     // Skip if column is referenced by foreign key or index
                     continue;
                 }
+            }
+        }
+    }
+
+    private function addMissingTripLogsColumns()
+    {
+        if (!Schema::hasTable('trip_logs')) return;
+
+        // Add fuel_consumed column if it doesn't exist but is referenced by other migrations
+        if (!Schema::hasColumn('trip_logs', 'fuel_consumed')) {
+            try {
+                Schema::table('trip_logs', function (Blueprint $table) {
+                    $table->decimal('fuel_consumed', 8, 2)->nullable()->after('end_odometer');
+                });
+            } catch (\Exception $e) {
+                // Skip if column can't be added
+            }
+        }
+
+        // Add fuel_cost_per_liter column if it doesn't exist but is referenced
+        if (!Schema::hasColumn('trip_logs', 'fuel_cost_per_liter')) {
+            try {
+                Schema::table('trip_logs', function (Blueprint $table) {
+                    $table->decimal('fuel_cost_per_liter', 8, 2)->nullable()->after('fuel_consumed');
+                });
+            } catch (\Exception $e) {
+                // Skip if column can't be added
             }
         }
     }
