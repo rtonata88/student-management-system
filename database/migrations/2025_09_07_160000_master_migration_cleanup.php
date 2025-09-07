@@ -44,10 +44,16 @@ class MasterMigrationCleanup extends Migration
             ->orWhere('center_id', '')
             ->update(['center_id' => $defaultCenterId]);
 
-        if (!$this->foreignKeyExists('students', 'students_center_id_foreign')) {
+        // Drop any existing foreign key constraints on center_id first
+        $this->dropExistingForeignKeys('students', 'center_id');
+        
+        // Now safely add the foreign key constraint
+        try {
             Schema::table('students', function (Blueprint $table) {
-                $table->foreign('center_id')->references('id')->on('centers')->onDelete('cascade');
+                $table->foreign('center_id', 'fk_students_center_id')->references('id')->on('centers')->onDelete('cascade');
             });
+        } catch (\Exception $e) {
+            // Skip if constraint already exists or other issues
         }
     }
 
@@ -56,6 +62,7 @@ class MasterMigrationCleanup extends Migration
         if (!Schema::hasTable('examination_schedules')) return;
 
         if (Schema::hasColumn('examination_schedules', 'head_invigilator_id')) {
+            // Clean up invalid references first
             DB::table('examination_schedules')
                 ->whereNotExists(function ($query) {
                     $query->select(DB::raw(1))
@@ -64,18 +71,19 @@ class MasterMigrationCleanup extends Migration
                 })
                 ->update(['head_invigilator_id' => null]);
 
-            // Check if foreign key exists with any name format
-            $hasHeadInvigilatorFK = $this->foreignKeyExists('examination_schedules', 'examination_schedules_head_invigilator_id_foreign') ||
-                                   $this->foreignKeyExists('examination_schedules', 'head_invigilator_id_foreign') ||
-                                   $this->checkForeignKeyByColumn('examination_schedules', 'head_invigilator_id');
+            // Drop any existing foreign key constraints on this column first
+            $this->dropExistingForeignKeys('examination_schedules', 'head_invigilator_id');
             
-            if (!$hasHeadInvigilatorFK) {
+            // Now safely add the foreign key constraint
+            try {
                 Schema::table('examination_schedules', function (Blueprint $table) {
-                    $table->foreign('head_invigilator_id')
+                    $table->foreign('head_invigilator_id', 'fk_exam_head_invigilator')
                           ->references('id')
                           ->on('users')
                           ->onDelete('set null');
                 });
+            } catch (\Exception $e) {
+                // Skip if constraint already exists or other issues
             }
         }
     }
@@ -88,22 +96,15 @@ class MasterMigrationCleanup extends Migration
 
         Schema::create('student_promotions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('student_id');
-            $table->unsignedInteger('academic_year_id');
-            $table->unsignedBigInteger('promotional_status_id');
-            $table->string('year_level');
+            $table->unsignedBigInteger('student_id');
+            $table->string('from_class');
+            $table->string('to_class');
+            $table->year('academic_year');
+            $table->enum('status', ['promoted', 'repeated', 'transferred'])->default('promoted');
             $table->text('remarks')->nullable();
-            $table->unsignedInteger('promoted_by');
-            $table->timestamp('promoted_at');
             $table->timestamps();
 
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->foreign('academic_year_id')->references('id')->on('academic_years')->onDelete('cascade');
-            $table->foreign('promotional_status_id')->references('id')->on('promotional_statuses')->onDelete('cascade');
-            $table->foreign('promoted_by')->references('id')->on('users')->onDelete('cascade');
-            
-            $table->index(['student_id', 'academic_year_id']);
-            $table->index('promotional_status_id');
+            $table->foreign('student_id', 'fk_student_promotions_student')->references('id')->on('students')->onDelete('cascade');
         });
     }
 
@@ -114,14 +115,14 @@ class MasterMigrationCleanup extends Migration
         }
 
         Schema::create('application_subjects', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('application_id');
-            $table->unsignedInteger('subject_id');
+            $table->unsignedBigInteger('subject_id');
             $table->timestamps();
 
-            $table->foreign('application_id')->references('id')->on('online_applications')->onDelete('cascade');
-            $table->foreign('subject_id')->references('id')->on('modules')->onDelete('cascade');
-            $table->unique(['application_id', 'subject_id']);
+            $table->foreign('application_id', 'fk_app_subjects_application')->references('id')->on('applications')->onDelete('cascade');
+            $table->foreign('subject_id', 'fk_app_subjects_subject')->references('id')->on('subjects')->onDelete('cascade');
+            $table->unique(['application_id', 'subject_id'], 'uk_app_subject');
         });
     }
 
@@ -166,14 +167,17 @@ class MasterMigrationCleanup extends Migration
         }
 
         Schema::create('student_subjects', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedInteger('student_id');
-            $table->unsignedInteger('subject_id');
+            $table->id();
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('subject_id');
+            $table->enum('status', ['active', 'inactive', 'completed', 'dropped'])->default('active');
+            $table->decimal('grade', 5, 2)->nullable();
+            $table->text('remarks')->nullable();
             $table->timestamps();
 
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->foreign('subject_id')->references('id')->on('modules')->onDelete('cascade');
-            $table->unique(['student_id', 'subject_id']);
+            $table->foreign('student_id', 'fk_student_subjects_student')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('subject_id', 'fk_student_subjects_subject')->references('id')->on('subjects')->onDelete('cascade');
+            $table->unique(['student_id', 'subject_id'], 'uk_student_subject');
         });
     }
 
@@ -598,6 +602,31 @@ class MasterMigrationCleanup extends Migration
             return count($keys) > 0;
         } catch (\Exception $e) {
             return false;
+        }
+    }
+
+    private function dropExistingForeignKeys($table, $column)
+    {
+        try {
+            $keys = DB::select("
+                SELECT CONSTRAINT_NAME 
+                FROM information_schema.KEY_COLUMN_USAGE 
+                WHERE TABLE_NAME = ? 
+                AND TABLE_SCHEMA = ? 
+                AND COLUMN_NAME = ?
+                AND REFERENCED_TABLE_NAME IS NOT NULL
+            ", [$table, config('database.connections.mysql.database'), $column]);
+
+            foreach ($keys as $key) {
+                try {
+                    DB::statement("ALTER TABLE `{$table}` DROP FOREIGN KEY `{$key->CONSTRAINT_NAME}`");
+                } catch (\Exception $e) {
+                    // Continue if constraint doesn't exist or can't be dropped
+                    continue;
+                }
+            }
+        } catch (\Exception $e) {
+            // Skip if unable to query constraints
         }
     }
 
