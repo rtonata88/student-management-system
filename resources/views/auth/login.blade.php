@@ -379,7 +379,14 @@
         
         <!-- Login Section -->
         <div class="login-section">
-            <img src="{{asset('assets/Logo.png')}}" alt="School Logo" class="top-logo">
+            @php
+                $company = \App\CompanySetup::first();
+            @endphp
+            @if($company && $company->logo)
+                <img src="{{asset('storage/'.$company->logo)}}" alt="{{$company->company_name ?? 'School'}} Logo" class="top-logo">
+            @else
+                <img src="{{asset('assets/Logo.png')}}" alt="School Logo" class="top-logo">
+            @endif
             <div class="login-form-container">
                 <div class="login-header">
                     <h1 class="login-title">Sign in</h1>
