@@ -18,34 +18,18 @@ This document provides the **FINAL** deployment instructions using our new compr
 
 **DO NOT upload any other migration files** - they have been removed and replaced.
 
-## 🚀 Server Deployment Steps
+## 🚀 Server Deployment Steps (Git-Based)
 
-### Step 1: Upload the Single Migration File
-Upload `2025_09_07_200000_comprehensive_database_cleanup.php` to your server's `database/migrations/` directory.
-
-### Step 2: Upload Fixed Controller Files
-
-Upload the following controller files that have been fixed for case sensitivity and query issues:
-
+### Step 1: Pull Latest Changes from Git Repository
 ```bash
-# Upload these files to the server:
-app/Http/Controllers/ExamPermitsController.php
-app/Http/Controllers/ModuleAllocationController.php
-app/Http/Controllers/PromotionsController.php
-app/Http/Controllers/MarksSuppressionController.php
-app/Http/Controllers/ProcessFinalMarksController.php
-app/Http/Controllers/SubjectAllocationController.php
+# Navigate to your project directory
+cd /home/educimso/elite.educims.org/student-management-system
+
+# Pull the latest changes (includes all fixes)
+git pull https://github.com/rtonata88/student-management-system.git
 ```
 
-**Fixed Issues:**
-- **ExamPermitsController**: Fixed SQL ambiguity errors with subject_id columns
-- **ModuleAllocationController**: Fixed subject_id column errors in queries
-- **PromotionsController**: Fixed promoted_at column error in history query
-- **MarksSuppressionController**: Fixed case sensitivity in view paths (assessments → Assessments)
-- **ProcessFinalMarksController**: Fixed case sensitivity in view paths
-- **SubjectAllocationController**: Fixed case sensitivity in view paths
-
-### Step 3: Clear Laravel Caches
+### Step 2: Clear Laravel Caches
 ```bash
 # Navigate to your project directory
 cd /home/educimso/elite.educims.org/student-management-system
@@ -57,10 +41,10 @@ cd /home/educimso/elite.educims.org/student-management-system
 /opt/cpanel/ea-php81/root/usr/bin/php artisan view:clear
 ```
 
-### Step 4: Run the Comprehensive Migration
+### Step 3: Run All Migrations
 ```bash
-# Run the single comprehensive migration (this fixes EVERYTHING)
-/opt/cpanel/ea-php81/root/usr/bin/php artisan migrate --path=database/migrations/2025_09_07_200000_comprehensive_database_cleanup.php
+# Run all migrations (this fixes EVERYTHING including sidebar permissions)
+/opt/cpanel/ea-php81/root/usr/bin/php artisan migrate
 ```
 
 ### Step 4: Rebuild Caches
@@ -70,41 +54,36 @@ cd /home/educimso/elite.educims.org/student-management-system
 /opt/cpanel/ea-php81/root/usr/bin/php artisan config:cache
 ```
 
-## ✅ What This Single Migration Fixes
+## ✅ What These Migrations Fix
 
-### ✅ **Duplicate Column Errors:**
-- `current_odometer` in vehicles table
-- `emergency_contact_phone` in drivers table
-- All column existence conflicts resolved
+### ✅ **Database Issues (2025_09_07_200000_comprehensive_database_cleanup.php):**
+- **Duplicate Column Errors:** `current_odometer` in vehicles table, `emergency_contact_phone` in drivers table
+- **Missing Columns Added:** `user_id` to students table, `notes` and `photo` to drivers table, `fuel_consumed`, `route_taken`, `estimated_distance`, `passengers_count` to trip_logs table
+- **Foreign Key Issues:** Removes all problematic foreign key constraints, prevents data type mismatch errors
+- **Technical Benefits:** No Doctrine DBAL dependency required, idempotent - safe to run multiple times
 
-### ✅ **Missing Columns Added:**
-- `user_id` to students table
-- `notes` and `photo` to drivers table
-- `fuel_consumed`, `route_taken`, `estimated_distance`, `passengers_count` to trip_logs table
+### ✅ **Permission Issues (2025_09_07_210000_update_sidebar_permissions.php):**
+- **HR Menu Permissions:** Adds missing `@permission('access-payroll-system')` wrapper to Payroll Management menu
+- **Sidebar Consistency:** Ensures all HR menu items properly check permissions before displaying
+- **User Experience:** Fixes issue where Payroll showed but other HR items didn't based on user permissions
 
-### ✅ **Foreign Key Issues:**
-- Removes all problematic foreign key constraints
-- Prevents data type mismatch errors
-- No more constraint formation errors
-
-### ✅ **Route Issues:**
-- Cache clearing resolves `users.change-password` route errors
-- Fixes `online-application.signup` route not found
-- All routes properly accessible
-
-### ✅ **Technical Benefits:**
-- **No Doctrine DBAL dependency** required
-- **Idempotent** - safe to run multiple times
-- **Exception handling** prevents migration failures
-- **Existence checks** prevent duplicate operations
+### ✅ **Controller Fixes (via Git Pull):**
+- **ExamPermitsController:** Fixed SQL ambiguity errors with subject_id columns
+- **ModuleAllocationController:** Fixed subject_id column errors in queries
+- **PromotionsController:** Fixed promoted_at column error in history query
+- **MarksSuppressionController:** Fixed case sensitivity in view paths (assessments → Assessments)
+- **ProcessFinalMarksController:** Fixed case sensitivity in view paths
+- **SubjectAllocationController:** Fixed case sensitivity in view paths
 
 ## 🎉 Expected Results
 
-After running this migration, you should have:
+After running these migrations, you should have:
 - ✅ No more duplicate column errors
 - ✅ No more foreign key constraint errors  
 - ✅ No more "column not found" errors
 - ✅ All routes working properly
+- ✅ HR menu permissions working correctly
+- ✅ All sidebar menus displaying based on user permissions
 - ✅ Clean, error-free Laravel application
 
 ## 🔍 Verification Commands

@@ -302,7 +302,9 @@
           @permission('view-leave-applications')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('leave-applications.index') }}"><span class="c-sidebar-nav-icon"></span> Leave Applications</a></li>
           @endpermission
+          @permission('access-payroll-system')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payroll-management"><span class="c-sidebar-nav-icon"></span> Payroll Management</a></li>
+          @endpermission
         </ul>
       </li>
       @endpermission
