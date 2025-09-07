@@ -32,7 +32,19 @@ class AccountSummaryController extends Controller
 
         $centers = Center::pluck('center_name', 'id');
         
-        $financial_year = AcademicYear::where('status', 1)->first()->academic_year;
+        $financial_year = AcademicYear::where('status', 1)->first();
+        
+        if (!$financial_year) {
+            return view('Reports.AccountSummary.Index', compact('financial_years', 'centers'))
+                ->with('account_summary', collect())
+                ->with('extra_charges', collect())
+                ->with('payments', collect())
+                ->with('totals', ['tuition_fees' => 0, 'other_fees' => 0, 'payable_amount' => 0, 'course_balance' => 0])
+                ->with('invoices', collect())
+                ->with('report_request', null);
+        }
+        
+        $financial_year = $financial_year->academic_year;
                 
         $account_summary = $this->getAccountSummary($financial_year);
         
@@ -63,37 +75,39 @@ class AccountSummaryController extends Controller
 
     public function search(Request $request)
     {
-        $financial_years = AcademicYear::pluck('academic_year', 'academic_year');
+        try {
+            $financial_years = AcademicYear::pluck('academic_year', 'academic_year');
+            $centers = Center::pluck('center_name', 'id');
 
-        $centers = Center::pluck('center_name', 'id');
+            $financial_year = $request->financial_year ?? AcademicYear::where('status', 1)->first()->academic_year;
 
-        $financial_year = AcademicYear::where('status', 1)->first()->academic_year;
+            // Get account summary with filters
+            $account_summary = AccountSummary::selectRaw('student_id, center_id, student_number2, student_names, contact_number, surname, sum((payable_to_date + debit_memos) - credit_memos) tuition_fees_payable')
+                                ->where('academic_year', $financial_year);
 
-        $registrations = Registration::with('student', 'center');
-        
-        if(isset($request->financial_year)){
-             $registrations =  $registrations->where('academic_year', $request->financial_year);
+            if ($request->filled('center_id')) {
+                $account_summary = $account_summary->where('center_id', $request->center_id);
+            }
+
+            $account_summary = $account_summary->groupBy('student_id', 'center_id', 'student_number2', 'student_names', 'contact_number', 'surname')
+                                              ->get();
+
+            $extra_charges = $this->getExtraCharges($financial_year);
+            $payments = $this->getPaymentsToDate();
+            $invoices = $this->getInvoices($financial_year);
+            $totals = $this->totals($account_summary, $extra_charges, $payments, $invoices);
+            $report_request = ReportRequest::where('report_type', 'AccountSummary')->first();
+
+            $modules = Module::select('id','subject_name')->get();
+
+            session()->put('account_summary', $account_summary);
+            session()->put('modules', $modules);
+
+            return view('Reports.AccountSummary.Index', compact('financial_years', 'centers', 'account_summary', 'extra_charges', 'payments', 'totals', 'invoices', 'report_request'));
+            
+        } catch (\Exception $e) {
+            return redirect()->route('reports.account-summary.index')->with('error', 'An error occurred while searching: ' . $e->getMessage());
         }
-
-        if (isset($request->center_id)) {
-            $registrations =  $registrations->where('center_id', $request->center_id);
-        }
-
-        if (isset($request->registration_status)) {
-            $registrations =  $registrations->where('registration_status', $request->registration_status);
-        }
-
-        $registrations = $registrations->get();
-
-        $registrations = $this->getAccountSummary($registrations, $financial_year);
-
-        $modules = Module::select('id','subject_name')->get();
-
-        session()->put('account_summary', $registrations);
-
-        session()->put('modules', $modules);
-
-        return view('Reports.AccountSummary.Index', compact('financial_years', 'centers', 'registrations'));
     }
 
     private function getPaymentsToDate(){
@@ -114,7 +128,7 @@ class AccountSummaryController extends Controller
     private function accountSummary($academic_year){
         return AccountSummary::selectRaw('student_id, center_id, student_number2, student_names, contact_number, surname, sum((payable_to_date + debit_memos) - credit_memos) tuition_fees_payable')
                             ->where('academic_year', $academic_year)
-                                ->groupBy('student_id', 'center_id', 'student_number2', 'student_names', 'surname')
+                                ->groupBy('student_id', 'center_id', 'student_number2', 'student_names', 'contact_number', 'surname')
                                 ->get();
     }
 

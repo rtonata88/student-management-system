@@ -158,6 +158,7 @@ Route::get('/accounting/reports/export', 'InvoiceReportController@export')->name
 
 Route::get('/account-summary/reports', 'AccountSummaryController@index')->name('reports.account-summary.index');
 Route::post('/account-summary/reports/search', 'AccountSummaryController@search')->name('reports.account-summary.search');
+Route::get('/account-summary/reports/search', 'AccountSummaryController@index')->name('reports.account-summary.search.get');
 Route::get('/account-summary/reports/export', 'AccountSummaryController@export')->name('reports.account-summary.export');
 Route::get('/account-summary/reports/download', 'AccountSummaryController@download')->name('download.account-summary-report');
 

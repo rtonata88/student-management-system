@@ -127,6 +127,12 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script>
+// Fallback if CDN fails
+if (typeof Highcharts === 'undefined') {
+    console.error('Highcharts failed to load from CDN');
+}
+</script>
 <script src="{{asset('js/charts.js')}}"></script>
 @endpush
 @endsection

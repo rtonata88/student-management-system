@@ -17,20 +17,35 @@
                 <strong>Report filter</strong>
             </div>
             <div class="card-body">
-                {!! Form::open(array('route' => array('reports.account-summary.search'), 'method' => 'post', 'class'=> 'form-vertical form-material')) !!}
+                <form action="{{ route('reports.account-summary.search') }}" method="POST" class="form-vertical form-material">
+                    @csrf
                 <div class="form-group">
                     <label class="text-right control-label col-form-label">Financial year</label>
-                    {{Form::select('financial_year', $financial_years, date('Y'), ['class' => 'form-control form-control-sm select', 'placeholder'=>"All years"])}}
+                    <select name="financial_year" class="form-control form-control-sm select">
+                        <option value="">All years</option>
+                        @foreach($financial_years as $key => $year)
+                            <option value="{{ $key }}" {{ $key == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <label class="text-right control-label col-form-label">Registration status</label>
-                    {{Form::select('registration_status', ['Registered' => 'Registered', 'Canceled' => 'Cancelled'], null, ['class' => 'form-control form-control-sm select','placeholder'=>"Show all"])}}
+                    <select name="registration_status" class="form-control form-control-sm select">
+                        <option value="">Show all</option>
+                        <option value="Registered">Registered</option>
+                        <option value="Canceled">Cancelled</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <label class="text-right control-label col-form-label">Center</label>
-                    {{Form::select('center_id', $centers, null, ['class' => 'form-control form-control-sm select','placeholder'=>"Show all"])}}
+                    <select name="center_id" class="form-control form-control-sm select">
+                        <option value="">Show all</option>
+                        @foreach($centers as $key => $center)
+                            <option value="{{ $key }}">{{ $center }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <hr>
@@ -38,7 +53,7 @@
                     <button type="submit" class="btn btn-success btn-sm">Search</button>
                     <a href="{{route('reports.account-summary.index')}}" class="btn btn-sm">Clear</a>
                 </div>
-                {!! Form::close() !!}
+                </form>
             </div>
         </div>
     </div>
@@ -54,7 +69,7 @@
                     {{ Session::get('success') }}
                 </div>
                 @endif
-                @if($account_summary)
+                @if(isset($account_summary) && $account_summary)
                 <strong>{{$account_summary->count()}} Results Found</strong>, <a href="{{route('reports.account-summary.export')}}">Export to excel</a>
                 <div class="alert alert-info">
                     <strong>Please note: </strong> The report will be automatically generated on the 1st of every month by the system. Nevertheless, you can also generate it at any other time by clicking the "Export to Excel" link above on an ad-hoc basis.
@@ -63,7 +78,7 @@
                 <div class="alert alert-warning">
                     Exporting of this report may take up to 10 minutes due to the amount of calculations involved. As soon as its done doing the calculations, the downloaded file will be available in the table below.
                 </div>
-                @if($report_request)
+                @if(isset($report_request) && $report_request)
                 <div class="alert alert-warning">
                     <table class="table table-bordered">
                         <tr>
@@ -120,6 +135,7 @@
                             <th>{{number_format($totals['course_balance'], 2, '.',',')}}</th>
                         </tr>
 
+                        @if(isset($account_summary) && $account_summary->count() > 0)
                         @foreach($account_summary->take(10) as $summary)
                         <?php
                         $payment = $payments->where('student_id', $summary->student_id)->first()->payments ?? 0;
@@ -139,12 +155,13 @@
                             <td>{{number_format($course_balance, 2, '.',',')}}</td>
                         </tr>
                         @endforeach
+                        @endif
                         <tr>
                             <th colspan="3">TOTAL</th>
-                            <th>{{number_format($totals['tuition_fees'], 2, '.',',')}}</th>
-                            <th>{{number_format($totals['other_fees'], 2, '.',',')}}</th>
-                            <th>{{number_format($totals['payable_amount'], 2, '.',',')}}</th>
-                            <th>{{number_format($totals['course_balance'], 2, '.',',')}}</th>
+                            <th>{{isset($totals) ? number_format($totals['tuition_fees'], 2, '.',',') : '0.00'}}</th>
+                            <th>{{isset($totals) ? number_format($totals['other_fees'], 2, '.',',') : '0.00'}}</th>
+                            <th>{{isset($totals) ? number_format($totals['payable_amount'], 2, '.',',') : '0.00'}}</th>
+                            <th>{{isset($totals) ? number_format($totals['course_balance'], 2, '.',',') : '0.00'}}</th>
                         </tr>
                     </tbody>
                 </table>
