@@ -25,7 +25,31 @@ class ComprehensiveDatabaseCleanup extends Migration
         // Only clean up problematic foreign key constraints
         $this->cleanupForeignKeyConstraints();
         
-        echo "Database cleanup completed successfully.\n";
+        // Add missing status column to trip_logs table
+        if (Schema::hasTable('trip_logs') && !Schema::hasColumn('trip_logs', 'status')) {
+            try {
+                Schema::table('trip_logs', function (Blueprint $table) {
+                    $table->enum('status', ['ongoing', 'completed', 'cancelled'])->default('ongoing')->after('notes');
+                });
+                echo "✅ Added status column to trip_logs table\n";
+            } catch (Exception $e) {
+                echo "⚠️ Could not add status column to trip_logs: " . $e->getMessage() . "\n";
+            }
+        }
+
+        // Add missing distance_km column to trip_logs table
+        if (Schema::hasTable('trip_logs') && !Schema::hasColumn('trip_logs', 'distance_km')) {
+            try {
+                Schema::table('trip_logs', function (Blueprint $table) {
+                    $table->decimal('distance_km', 8, 2)->nullable()->after('status');
+                });
+                echo "✅ Added distance_km column to trip_logs table\n";
+            } catch (Exception $e) {
+                echo "⚠️ Could not add distance_km column to trip_logs: " . $e->getMessage() . "\n";
+            }
+        }
+
+        echo "✅ Database cleanup completed successfully!\n";
     }
     
     /**
@@ -44,6 +68,8 @@ class ComprehensiveDatabaseCleanup extends Migration
             ['table' => 'trip_logs', 'column' => 'passengers_count'],
             ['table' => 'trip_logs', 'column' => 'fuel_consumed'],
             ['table' => 'trip_logs', 'column' => 'fuel_cost_per_liter'],
+            ['table' => 'trip_logs', 'column' => 'status'],
+            ['table' => 'trip_logs', 'column' => 'distance_km'],
         ];
         
         foreach ($checks as $check) {

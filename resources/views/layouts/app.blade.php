@@ -293,13 +293,13 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-people')}}"></use>
           </svg> Human Resources</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          @permission('employee-bio')
+          @permission('view-employee-bio')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/employee-bio"><span class="c-sidebar-nav-icon"></span> Employee Bio</a></li>
           @endpermission
-          @permission('leave-management')
+          @permission('view-leave-management')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('leave-management.index') }}"><span class="c-sidebar-nav-icon"></span> Leave Management</a></li>
           @endpermission
-          @permission('leave-applications')
+          @permission('view-leave-applications')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('leave-applications.index') }}"><span class="c-sidebar-nav-icon"></span> Leave Applications</a></li>
           @endpermission
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/payroll-management"><span class="c-sidebar-nav-icon"></span> Payroll Management</a></li>

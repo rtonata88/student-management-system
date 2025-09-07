@@ -123,7 +123,7 @@ class ModuleAllocationController extends Controller
 
         // Check if allocation already exists
         $existingAllocation = SubjectAllocation::where('subject_allocations.user_id', $request->teacher_id)
-            ->where('subject_allocations.subject_id', $request->module_id)
+            ->where('subject_allocations.module_id', $request->module_id)
             ->where('subject_allocations.center_id', $request->center_id)
             ->where('subject_allocations.academic_year_id', $request->academic_year_id)
             ->first();
@@ -135,7 +135,7 @@ class ModuleAllocationController extends Controller
 
         SubjectAllocation::create([
             'user_id' => $request->teacher_id,
-            'subject_id' => $request->module_id,
+            'module_id' => $request->module_id,
             'center_id' => $request->center_id,
             'academic_year_id' => $request->academic_year_id
         ]);
@@ -194,7 +194,7 @@ class ModuleAllocationController extends Controller
 
         // Check if allocation already exists (excluding current record)
         $existingAllocation = SubjectAllocation::where('subject_allocations.user_id', $request->teacher_id)
-            ->where('subject_allocations.subject_id', $request->module_id)
+            ->where('subject_allocations.module_id', $request->module_id)
             ->where('subject_allocations.center_id', $request->center_id)
             ->where('subject_allocations.academic_year_id', $request->academic_year_id)
             ->where('subject_allocations.id', '!=', $id)
@@ -207,7 +207,7 @@ class ModuleAllocationController extends Controller
 
         $allocation->update([
             'user_id' => $request->teacher_id,
-            'subject_id' => $request->module_id,
+            'module_id' => $request->module_id,
             'center_id' => $request->center_id,
             'academic_year_id' => $request->academic_year_id
         ]);
