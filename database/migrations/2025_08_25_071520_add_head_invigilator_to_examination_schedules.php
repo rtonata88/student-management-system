@@ -13,12 +13,11 @@ class AddHeadInvigilatorToExaminationSchedules extends Migration
      */
     public function up()
     {
+        // This migration is now handled by 2025_09_07_140000_fix_examination_schedules_foreign_keys.php
+        // to properly handle existing data before adding foreign key constraints
         if (Schema::hasTable('examination_schedules') && !Schema::hasColumn('examination_schedules', 'head_invigilator_id')) {
             Schema::table('examination_schedules', function (Blueprint $table) {
                 $table->unsignedBigInteger('head_invigilator_id')->nullable()->after('class_duration_id');
-                
-                // Add foreign key constraint
-                $table->foreign('head_invigilator_id')->references('id')->on('users')->onDelete('set null');
                 
                 // Add index for better performance
                 $table->index(['head_invigilator_id', 'exam_date', 'class_duration_id']);
