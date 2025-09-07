@@ -294,9 +294,9 @@ class PromotionsController extends Controller
 
         $student = Student::with('center')->findOrFail($studentId);
         
-        $promotions = StudentPromotion::where('student_id', $studentId)
+        $promotions = StudentPromotion::where('student_promotions.student_id', $studentId)
             ->with(['academicYear', 'promotionalStatus', 'promotedBy'])
-            ->orderBy('promoted_at', 'desc')
+            ->orderBy('student_promotions.promoted_at', 'desc')
             ->get();
 
         return view('promotions.history', compact('student', 'promotions'));

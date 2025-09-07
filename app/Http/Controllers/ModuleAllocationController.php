@@ -122,10 +122,10 @@ class ModuleAllocationController extends Controller
         ]);
 
         // Check if allocation already exists
-        $existingAllocation = SubjectAllocation::where('user_id', $request->teacher_id)
-            ->where('subject_id', $request->module_id)
-            ->where('center_id', $request->center_id)
-            ->where('academic_year_id', $request->academic_year_id)
+        $existingAllocation = SubjectAllocation::where('subject_allocations.user_id', $request->teacher_id)
+            ->where('subject_allocations.subject_id', $request->module_id)
+            ->where('subject_allocations.center_id', $request->center_id)
+            ->where('subject_allocations.academic_year_id', $request->academic_year_id)
             ->first();
 
         if ($existingAllocation) {
@@ -193,11 +193,11 @@ class ModuleAllocationController extends Controller
         $allocation = SubjectAllocation::findOrFail($id);
 
         // Check if allocation already exists (excluding current record)
-        $existingAllocation = SubjectAllocation::where('user_id', $request->teacher_id)
-            ->where('subject_id', $request->module_id)
-            ->where('center_id', $request->center_id)
-            ->where('academic_year_id', $request->academic_year_id)
-            ->where('id', '!=', $id)
+        $existingAllocation = SubjectAllocation::where('subject_allocations.user_id', $request->teacher_id)
+            ->where('subject_allocations.subject_id', $request->module_id)
+            ->where('subject_allocations.center_id', $request->center_id)
+            ->where('subject_allocations.academic_year_id', $request->academic_year_id)
+            ->where('subject_allocations.id', '!=', $id)
             ->first();
 
         if ($existingAllocation) {

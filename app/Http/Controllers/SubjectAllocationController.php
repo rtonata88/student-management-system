@@ -22,7 +22,7 @@ class SubjectAllocationController extends Controller
      */
     public function index()
     {
-        return view('assessments.subject-allocations.search');
+        return view('Assessments.Subject-Allocations.search');
     }
 
     public function filter(Request $request)

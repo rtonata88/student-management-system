@@ -23,7 +23,29 @@ This document provides the **FINAL** deployment instructions using our new compr
 ### Step 1: Upload the Single Migration File
 Upload `2025_09_07_200000_comprehensive_database_cleanup.php` to your server's `database/migrations/` directory.
 
-### Step 2: Clear Laravel Caches
+### Step 2: Upload Fixed Controller Files
+
+Upload the following controller files that have been fixed for case sensitivity and query issues:
+
+```bash
+# Upload these files to the server:
+app/Http/Controllers/ExamPermitsController.php
+app/Http/Controllers/ModuleAllocationController.php
+app/Http/Controllers/PromotionsController.php
+app/Http/Controllers/MarksSuppressionController.php
+app/Http/Controllers/ProcessFinalMarksController.php
+app/Http/Controllers/SubjectAllocationController.php
+```
+
+**Fixed Issues:**
+- **ExamPermitsController**: Fixed SQL ambiguity errors with subject_id columns
+- **ModuleAllocationController**: Fixed subject_id column errors in queries
+- **PromotionsController**: Fixed promoted_at column error in history query
+- **MarksSuppressionController**: Fixed case sensitivity in view paths (assessments → Assessments)
+- **ProcessFinalMarksController**: Fixed case sensitivity in view paths
+- **SubjectAllocationController**: Fixed case sensitivity in view paths
+
+### Step 3: Clear Laravel Caches
 ```bash
 # Navigate to your project directory
 cd /home/educimso/elite.educims.org/student-management-system
@@ -35,7 +57,7 @@ cd /home/educimso/elite.educims.org/student-management-system
 /opt/cpanel/ea-php81/root/usr/bin/php artisan view:clear
 ```
 
-### Step 3: Run the Comprehensive Migration
+### Step 4: Run the Comprehensive Migration
 ```bash
 # Run the single comprehensive migration (this fixes EVERYTHING)
 /opt/cpanel/ea-php81/root/usr/bin/php artisan migrate --path=database/migrations/2025_09_07_200000_comprehensive_database_cleanup.php

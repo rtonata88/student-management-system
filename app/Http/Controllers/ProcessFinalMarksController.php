@@ -13,6 +13,6 @@ class ProcessFinalMarksController extends Controller
      */
     public function index()
     {
-        return view('assessments.process-final-marks.index');
+        return view('Assessments.process-final-marks.index');
     }
 }

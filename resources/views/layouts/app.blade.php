@@ -104,7 +104,7 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-user-follow')}}"></use>
           </svg> Admissions</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          @permission('manual-admissions')
+          @permission('view-manual-admissions')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/manual-admissions"><span class="c-sidebar-nav-icon"></span> Manual Admissions</a></li>
           @endpermission
         </ul>

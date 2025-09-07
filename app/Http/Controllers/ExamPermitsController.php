@@ -56,9 +56,9 @@ class ExamPermitsController extends Controller
         // Get examination schedules for the student's registered modules
         $moduleIds = $student->registered_modules->pluck('module_id');
         $examSchedules = ExaminationSchedule::where(function($query) use ($moduleIds) {
-            $query->whereIn('subject_id', $moduleIds)
+            $query->whereIn('examination_schedules.subject_id', $moduleIds)
                   ->orWhereHas('subjectAllocation', function($subQuery) use ($moduleIds) {
-                      $subQuery->whereIn('subject_id', $moduleIds);
+                      $subQuery->whereIn('subject_allocations.subject_id', $moduleIds);
                   });
         })
         ->with(['subject', 'subjectAllocation.module', 'venue', 'classDuration', 'examination', 'center'])
@@ -81,9 +81,9 @@ class ExamPermitsController extends Controller
         // Get examination schedules for the student's registered modules
         $moduleIds = $student->registered_modules->pluck('module_id');
         $examSchedules = ExaminationSchedule::where(function($query) use ($moduleIds) {
-            $query->whereIn('subject_id', $moduleIds)
+            $query->whereIn('examination_schedules.subject_id', $moduleIds)
                   ->orWhereHas('subjectAllocation', function($subQuery) use ($moduleIds) {
-                      $subQuery->whereIn('subject_id', $moduleIds);
+                      $subQuery->whereIn('subject_allocations.subject_id', $moduleIds);
                   });
         })
         ->with(['subject', 'subjectAllocation.module', 'venue', 'classDuration', 'examination', 'center'])
@@ -110,9 +110,9 @@ class ExamPermitsController extends Controller
         // Get examination schedules for the student's registered modules
         $moduleIds = $student->registered_modules->pluck('module_id');
         $examSchedules = ExaminationSchedule::where(function($query) use ($moduleIds) {
-            $query->whereIn('subject_id', $moduleIds)
+            $query->whereIn('examination_schedules.subject_id', $moduleIds)
                   ->orWhereHas('subjectAllocation', function($subQuery) use ($moduleIds) {
-                      $subQuery->whereIn('subject_id', $moduleIds);
+                      $subQuery->whereIn('subject_allocations.subject_id', $moduleIds);
                   });
         })
         ->with(['subject', 'subjectAllocation.module', 'venue', 'classDuration', 'examination', 'center'])

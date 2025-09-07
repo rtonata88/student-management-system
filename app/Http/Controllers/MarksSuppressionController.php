@@ -47,7 +47,7 @@ class MarksSuppressionController extends Controller
         $campuses = \DB::table('centers')->distinct()->pluck('center_name')->filter()->sort();
         $markTypes = \DB::table('examinations')->where('active', 1)->pluck('name')->toArray();
 
-        return view('assessments.marks-suppression.index', compact(
+        return view('Assessments.marks-suppression.index', compact(
             'suppressions', 
             'academicYears', 
             'campuses', 
@@ -65,7 +65,7 @@ class MarksSuppressionController extends Controller
         $campuses = \DB::table('centers')->distinct()->pluck('center_name')->filter()->sort();
         $markTypes = \DB::table('examinations')->where('active', 1)->pluck('name')->toArray();
 
-        return view('assessments.marks-suppression.create', compact(
+        return view('Assessments.marks-suppression.create', compact(
             'academicYears', 
             'campuses', 
             'markTypes'
@@ -116,7 +116,7 @@ class MarksSuppressionController extends Controller
     public function show(MarksSuppression $marksSuppression)
     {
 
-        return view('assessments.marks-suppression.show', compact('marksSuppression'));
+        return view('Assessments.marks-suppression.show', compact('marksSuppression'));
     }
 
     /**
@@ -129,7 +129,7 @@ class MarksSuppressionController extends Controller
         $campuses = \DB::table('centers')->distinct()->pluck('center_name')->filter()->sort();
         $markTypes = \DB::table('examinations')->where('active', 1)->pluck('name')->toArray();
 
-        return view('assessments.marks-suppression.edit', compact(
+        return view('Assessments.marks-suppression.edit', compact(
             'marksSuppression',
             'academicYears', 
             'campuses', 
