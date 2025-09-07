@@ -12,6 +12,9 @@ class ManualAdmissionsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('permission:manual-admissions-view')->only(['index', 'filter']);
+        $this->middleware('permission:manual-admissions-edit')->only(['updateAdmissionStatus', 'getAdmissionStatus']);
+        $this->middleware('permission:manual-admissions-reports')->only(['generateAdmissionLetter']);
     }
 
     public function index()

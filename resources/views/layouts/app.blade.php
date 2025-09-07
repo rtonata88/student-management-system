@@ -104,8 +104,8 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-user-follow')}}"></use>
           </svg> Admissions</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          @permission('view-manual-admissions')
-          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/manual-admissions"><span class="c-sidebar-nav-icon"></span> Manual Admissions</a></li>
+          @permission('manual-admissions-view')
+          <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/manual-admissions"><span class="c-sidebar-nav-icon"></span> View Admissions</a></li>
           @endpermission
         </ul>
       </li>
@@ -293,13 +293,13 @@
             <use xlink:href="{{asset('new/node_modules/@coreui/icons/sprites/free.svg#cil-people')}}"></use>
           </svg> Human Resources</a>
         <ul class="c-sidebar-nav-dropdown-items">
-          @permission('view-employee-bio')
+          @permission('employee-bio-view')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/employee-bio"><span class="c-sidebar-nav-icon"></span> Employee Bio</a></li>
           @endpermission
-          @permission('view-leave-management')
+          @permission('leave-management-view')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('leave-management.index') }}"><span class="c-sidebar-nav-icon"></span> Leave Management</a></li>
           @endpermission
-          @permission('view-leave-applications')
+          @permission('leave-application-view')
           <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('leave-applications.index') }}"><span class="c-sidebar-nav-icon"></span> Leave Applications</a></li>
           @endpermission
           @permission('access-payroll-system')
