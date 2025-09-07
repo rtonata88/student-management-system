@@ -52,22 +52,28 @@ cd /home/educimso/elite.educims.org/student-management-system
 /opt/cpanel/ea-php81/root/usr/bin/php artisan migrate
 ```
 
-## 🚨 EMERGENCY FIX FOR LIVE SERVER
+## 🚨 EMERGENCY FIX FOR LIVE SERVER - TRIP_LOGS COLUMNS
 
-**If you're getting "fuel_consumed" or "route_taken" column errors, run this IMMEDIATELY:**
+**If you're getting "fuel_consumed" or "route_taken" column errors, upload ONE of these files:**
 
+**Option 1 - Emergency Fix (Recommended):**
 ```bash
-# Navigate to project directory
+# Upload: 2025_09_07_183600_emergency_fix_trip_logs_columns.php
+# OR
+# Upload: 2025_09_07_184500_comprehensive_trip_logs_fix.php
+
 cd /home/educimso/elite.educims.org/student-management-system
-
-# Upload the emergency fix migration file:
-# 2025_09_07_183600_emergency_fix_trip_logs_columns.php
-
-# Run the emergency migration
 /opt/cpanel/ea-php81/root/usr/bin/php artisan migrate
-
-# This will add ALL missing trip_logs columns at once
 ```
+
+**What these migrations fix:**
+- ✅ `fuel_consumed` column (causing current error)
+- ✅ `route_taken` column 
+- ✅ `estimated_distance` column
+- ✅ `passengers_count` column
+- ✅ `notes` column
+- ✅ All fuel-related columns
+- ✅ **100% safe with existence checks**
 
 ### Step 4: Rebuild Caches
 ```bash
