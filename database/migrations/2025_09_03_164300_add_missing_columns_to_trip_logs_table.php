@@ -48,7 +48,7 @@ class AddMissingColumnsToTripLogsTable extends Migration
             
             // Add missing columns if they don't exist
             if (!Schema::hasColumn('trip_logs', 'estimated_distance')) {
-                $table->decimal('estimated_distance', 8, 2)->nullable()->after('route_taken');
+                $table->decimal('estimated_distance', 8, 2)->nullable()->after('end_odometer');
             }
             if (!Schema::hasColumn('trip_logs', 'passenger_count')) {
                 $table->integer('passenger_count')->nullable()->after('estimated_distance');

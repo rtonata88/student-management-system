@@ -423,7 +423,7 @@ class MasterMigrationCleanup extends Migration
 
         $columnsToAdd = [
             'expected_return_time' => ['type' => 'datetime', 'nullable' => true, 'after' => 'departure_time'],
-            'estimated_distance' => ['type' => 'decimal', 'precision' => [8, 2], 'nullable' => true, 'after' => 'route_taken'],
+            'estimated_distance' => ['type' => 'decimal', 'precision' => [8, 2], 'nullable' => true, 'after' => 'end_odometer'],
             'passenger_count' => ['type' => 'integer', 'nullable' => true, 'after' => 'estimated_distance'],
             'fuel_cost_per_liter' => ['type' => 'decimal', 'precision' => [8, 2], 'nullable' => true, 'after' => 'fuel_consumed'],
             'total_fuel_cost' => ['type' => 'decimal', 'precision' => [10, 2], 'nullable' => true, 'after' => 'fuel_cost_per_liter'],
