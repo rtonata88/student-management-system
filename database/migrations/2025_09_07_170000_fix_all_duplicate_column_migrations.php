@@ -152,6 +152,13 @@ class FixAllDuplicateColumnMigrations extends Migration
     {
         if (!Schema::hasTable('trip_logs')) return;
 
+        // Fix route_taken first (required for other columns)
+        if (!Schema::hasColumn('trip_logs', 'route_taken')) {
+            Schema::table('trip_logs', function (Blueprint $table) {
+                $table->text('route_taken')->nullable()->after('destination');
+            });
+        }
+
         // Fix expected_return_time
         if (!Schema::hasColumn('trip_logs', 'expected_return_time')) {
             Schema::table('trip_logs', function (Blueprint $table) {
@@ -166,10 +173,17 @@ class FixAllDuplicateColumnMigrations extends Migration
             });
         }
 
-        // Fix passenger_count
-        if (!Schema::hasColumn('trip_logs', 'passenger_count')) {
+        // Fix passengers_count
+        if (!Schema::hasColumn('trip_logs', 'passengers_count')) {
             Schema::table('trip_logs', function (Blueprint $table) {
-                $table->integer('passenger_count')->nullable()->after('estimated_distance');
+                $table->integer('passengers_count')->nullable()->after('estimated_distance');
+            });
+        }
+
+        // Fix notes
+        if (!Schema::hasColumn('trip_logs', 'notes')) {
+            Schema::table('trip_logs', function (Blueprint $table) {
+                $table->text('notes')->nullable()->after('passengers_count');
             });
         }
 
